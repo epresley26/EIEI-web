@@ -35,12 +35,17 @@
     async function loadPosts() {
       const container = document.getElementById('blogCards');
       container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Loading posts...</p>';
+      if (!window.firebaseDB) {
+        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Firebase is not initialized. Please check your Firebase config in components/firebase-init.js.</p>';
+        return;
+      }
       try {
         const snap = await window.firebaseDB.collection('posts').orderBy('createdAt', 'desc').get();
         const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderPosts(posts);
       } catch (e) {
-        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Unable to load posts right now.</p>';
+        console.error('Blog load error:', e);
+        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Unable to load posts. Check Firestore rules (public read) and your Firebase config.</p>';
       }
     }
 

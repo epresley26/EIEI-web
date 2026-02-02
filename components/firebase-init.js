@@ -11,7 +11,8 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const storage = firebase.storage();
+// Initialize Storage only if SDK is loaded on the page
+const storage = typeof firebase.storage === 'function' ? firebase.storage() : null;
 
 // Export for use in other scripts
 window.firebaseApp = firebase;
