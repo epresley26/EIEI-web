@@ -40,8 +40,16 @@
         return;
       }
       try {
-        const snap = await window.firebaseDB.collection('posts').orderBy('createdAt', 'desc').get();
-        const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        let snap;
+        try {
+          snap = await window.firebaseDB.collection('posts').orderBy('createdAt', 'desc').get();
+        } catch (orderErr) {
+          console.warn('Order by createdAt failed, falling back:', orderErr);
+          snap = await window.firebaseDB.collection('posts').get();
+        }
+        let posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        posts = posts.sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
+        console.log('Loaded posts:', posts.length);
         renderPosts(posts);
       } catch (e) {
         console.error('Blog load error:', e);
@@ -57,7 +65,10 @@
         return;
       }
       posts.forEach(post => {
-        const img = post.imageUrl || 'images/service1.svg';
+        let img = post.imageUrl || 'images/service1.svg';
+        if (img && img.includes('thumbnail') && img.includes('=s')) {
+          img = img.replace(/=s\d+/, '=s600');
+        }
         const excerpt = post.excerpt || (post.content ? post.content.slice(0, 140) + '…' : '');
         const card = document.createElement('div');
         card.className = 'card reveal';
@@ -69,6 +80,19 @@
         `;
         container.appendChild(card);
       });
+    }
+    function toMillis(value) {
+      if (!value) return 0;
+      try {
+        if (typeof value.toMillis === 'function') return value.toMillis();
+        if (typeof value.toDate === 'function') return value.toDate().getTime();
+        if (value instanceof Date) return value.getTime();
+        const d = new Date(value);
+        const t = d.getTime();
+        return isNaN(t) ? 0 : t;
+      } catch (_) {
+        return 0;
+      }
     }
 
     function escapeHtml(str) {
