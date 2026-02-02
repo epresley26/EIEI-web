@@ -86,7 +86,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Fix for content hidden behind fixed nav */
 .admin-container {
-  margin-top: 130px;
+  margin-top: calc(var(--header-height) + 20px);
 }
 /* ABOUT PAGE CARDS & LAYOUT */
 .card {
@@ -107,7 +107,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  margin-top: 100px;
+  margin-top: calc(var(--header-height) + 10px);
   margin-bottom: 40px;
 }
 
@@ -150,7 +150,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1.2rem 0.5rem 1rem 0.5rem;
   }
   .accomplishments-main {
-    margin-top: 80px;
+    margin-top: calc(var(--header-height) - 20px);
   }
 }
 
@@ -223,6 +223,7 @@ h1, h2, h3, h4, h5, h6 {
   --card-bg: #ffffff;
   --border: rgba(0,0,0,0.08);
   --placeholder: #999;
+  --header-height: 96px; /* offset for fixed header */
 }
 
 [data-theme="dark"] {
@@ -247,6 +248,7 @@ body {
   color: var(--text);
   transition: background 0.4s, color 0.4s;
   position: relative;
+  padding-top: var(--header-height);
 }
 
 body::before {
@@ -303,6 +305,8 @@ body::before {
 /* NAV */
 .nav {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   backdrop-filter: blur(20px);
   background: #1a2a47;

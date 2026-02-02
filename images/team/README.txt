@@ -1,1 +1,0 @@
-This folder contains team member images for the About Us page. Images are named according to the team member's name or role.

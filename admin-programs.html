@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EIEI Admin - Programs Management</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+  <script src="components/firebase-init.js"></script>
   <link rel="stylesheet" href="style.css" />
   <script src="https://accounts.google.com/gsi/client"></script>
   <style>
@@ -362,6 +367,8 @@
         <div class="admin-tabs">
           <button class="admin-tab active" onclick="switchTab('programs')">Programs</button>
           <button class="admin-tab" onclick="switchTab('gallery')">Gallery Images</button>
+          <button class="admin-tab" onclick="switchTab('team')">Team</button>
+          <button class="admin-tab" onclick="switchTab('blog')">Blog</button>
         </div>
 
         <!-- PROGRAMS TAB -->
@@ -407,18 +414,75 @@
             <div class="gallery-preview" id="galleryPreview"></div>
           </div>
         </div>
+
+        <!-- TEAM TAB -->
+        <div id="team" class="tab-content">
+          <div class="upload-section">
+            <h2>Team Member Management</h2>
+            <button class="primary-btn" onclick="openAddTeamModal()" style="margin-bottom: 2rem;">+ Add New Team Member</button>
+            <div class="success-message" id="teamSuccessMessage"></div>
+            <div class="error-message" id="teamErrorMessage"></div>
+            <div id="teamList" class="programs-list">
+              <p style="grid-column: 1/-1; color: var(--text-muted);">Loading team members...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOG TAB -->
+        <div id="blog" class="tab-content">
+          <div class="upload-section">
+            <h2>Blog & News Management</h2>
+            <button class="primary-btn" onclick="openAddBlogModal()" style="margin-bottom: 2rem;">+ Write New Post</button>
+            <div class="success-message" id="blogSuccessMessage"></div>
+            <div class="error-message" id="blogErrorMessage"></div>
+            <div id="blogList" class="programs-list">
+              <p style="grid-column: 1/-1; color: var(--text-muted);">Loading posts...</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="loginPrompt" style="text-align: center; padding: 2rem;">
         <h2 style="color: var(--brand-blue); margin-bottom: 1rem;">Sign in with Google</h2>
-        <p style="color: var(--text-muted); margin-bottom: 2rem;">Please sign in to manage programs and gallery images</p>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Please sign in to manage programs, gallery images, team, and blog</p>
+        <div id="oauthError" class="error-message" style="display:none;">
+          <!-- Populated by diagnostics -->
+        </div>
         <div id="googleSignInButton"></div>
+        <div style="margin-top:1rem;color:var(--text-muted);font-size:0.9rem;" id="oauthHelp"></div>
       </div>
     </div>
   </div>
 
   <!-- ADD/EDIT PROGRAM MODAL -->
   <div id="programModal" class="modal">
+      <!-- ADD/EDIT TEAM MEMBER MODAL -->
+      <div id="teamModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="teamModalTitle">Add New Team Member</h2>
+            <button class="close-btn" onclick="closeTeamModal()">×</button>
+          </div>
+          <form id="teamForm">
+            <div class="form-group">
+              <label for="teamName">Name *</label>
+              <input type="text" id="teamName" required>
+            </div>
+            <div class="form-group">
+              <label for="teamRole">Role *</label>
+              <input type="text" id="teamRole" required>
+            </div>
+            <div class="form-group">
+              <label for="teamImage">Image *</label>
+              <input type="file" id="teamImage" accept="image/*" required>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="primary-btn">Save Member</button>
+              <button type="button" class="secondary-btn" onclick="closeTeamModal()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="modalTitle">Add New Program</h2>
@@ -476,6 +540,38 @@
     </div>
   </div>
 
+  <!-- ADD/EDIT BLOG MODAL -->
+  <div id="blogModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="blogModalTitle">Write New Post</h2>
+        <button class="close-btn" onclick="closeBlogModal()">×</button>
+      </div>
+      <form id="blogForm">
+        <div class="form-group">
+          <label for="postTitle">Title *</label>
+          <input type="text" id="postTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="postExcerpt">Excerpt *</label>
+          <textarea id="postExcerpt" required placeholder="Short summary shown on cards"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="postContent">Content *</label>
+          <textarea id="postContent" required style="min-height:200px" placeholder="Full post content"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="postImageUrl">Image URL</label>
+          <input type="url" id="postImageUrl" placeholder="https://example.com/image.jpg">
+        </div>
+        <div class="button-group">
+          <button type="submit" class="primary-btn">Publish</button>
+          <button type="button" class="secondary-btn" onclick="closeBlogModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     const CLIENT_ID = '35109919396-prtb83ncq3t7j7h4c3qg1bs6q9e8hgkl.apps.googleusercontent.com';
     const GALLERY_FOLDER_ID = '1bjif6GZ65LnWx_X3vOnWR-xGeQHmC0N_';
@@ -486,17 +582,24 @@
     let programs = [];
     let editingProgramId = null;
 
-    // Initialize Google Sign-In
+    // Initialize Google Sign-In with environment diagnostics
     function initializeGoogleSignIn() {
-      google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: handleCredentialResponse
-      });
+      const ok = validateOAuthEnvironment();
+      if (!ok) return;
 
-      google.accounts.id.renderButton(
-        document.getElementById('googleSignInButton'),
-        { theme: 'outline', size: 'large' }
-      );
+      try {
+        google.accounts.id.initialize({
+          client_id: CLIENT_ID,
+          callback: handleCredentialResponse
+        });
+
+        google.accounts.id.renderButton(
+          document.getElementById('googleSignInButton'),
+          { theme: 'outline', size: 'large' }
+        );
+      } catch (e) {
+        showOauthError('Google Sign-In SDK failed to initialize. Ensure the SDK script loaded and origin is authorized.');
+      }
 
       checkAuthStatus();
     }
@@ -514,6 +617,8 @@
           showAdminPanel();
           loadPrograms();
           loadGalleryImages();
+          // Lazy-load other sections after auth
+          // Team and Blog tabs load on demand via switchTab override
         }
       });
 
@@ -544,6 +649,36 @@
       accessToken = null;
       localStorage.removeItem('adminAuthToken');
       location.reload();
+    }
+
+    // Diagnostics helpers
+    function showOauthError(message, help) {
+      const err = document.getElementById('oauthError');
+      err.textContent = '✗ ' + message;
+      err.classList.add('show');
+      err.style.display = 'block';
+      if (help) document.getElementById('oauthHelp').innerHTML = help;
+    }
+
+    function validateOAuthEnvironment() {
+      // Must be served over http(s)
+      if (window.location.protocol === 'file:') {
+        showOauthError('This page is opened via file://. Google OAuth requires http(s) origin.',
+          'Run a local server, e.g.:<br><code>python3 -m http.server 5500</code> then visit <strong>http://localhost:5500/admin-programs.html</strong>');
+        return false;
+      }
+      // Client ID sanity
+      if (!CLIENT_ID || !CLIENT_ID.endsWith('.apps.googleusercontent.com')) {
+        showOauthError('Invalid or missing OAuth Client ID.',
+          'Set a valid Web application Client ID in the code.');
+        return false;
+      }
+      // Informative tip: origin must be in Authorized JavaScript origins
+      const origin = window.location.origin;
+      document.getElementById('oauthHelp').innerHTML = `Origin detected: <strong>${origin}</strong><br>
+        Ensure this exact origin is added under <em>Authorized JavaScript origins</em> for your OAuth client in Google Cloud Console.<br>
+        Also set Consent Screen to <em>Testing</em> and add your account as a <em>Test User</em>.`;
+      return true;
     }
 
     // TAB SWITCHING
@@ -985,6 +1120,254 @@
 
     // Initialize when page loads
     window.addEventListener('load', initializeGoogleSignIn);
+
+    // --- BLOG POSTS (Firestore) ---
+    let blogPosts = [];
+    let editingPostId = null;
+
+    async function loadBlogPosts() {
+      const list = document.getElementById('blogList');
+      list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Loading posts...</p>';
+      try {
+        const snap = await window.firebaseDB.collection('posts').orderBy('createdAt','desc').get();
+        blogPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderBlogList();
+      } catch (e) {
+        list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Error loading posts.</p>';
+      }
+    }
+
+    function renderBlogList() {
+      const list = document.getElementById('blogList');
+      list.innerHTML = '';
+      if (!blogPosts.length) {
+        list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">No posts yet.</p>';
+        return;
+      }
+      blogPosts.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'program-card';
+        const img = p.imageUrl || 'images/service1.svg';
+        const excerpt = p.excerpt || (p.content ? p.content.slice(0, 120) + '…' : '');
+        card.innerHTML = `
+          <img src="${img}" alt="${p.title}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:1rem;">
+          <h3>${p.title}</h3>
+          <p>${excerpt}</p>
+          <div class="program-actions">
+            <button class="edit-btn" onclick="openEditBlogModal('${p.id}')">Edit</button>
+            <button class="delete-btn" onclick="deleteBlogPost('${p.id}')">Delete</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function openAddBlogModal() {
+      editingPostId = null;
+      document.getElementById('blogModalTitle').textContent = 'Write New Post';
+      document.getElementById('blogForm').reset();
+      document.getElementById('blogModal').classList.add('active');
+    }
+
+    function openEditBlogModal(id) {
+      const p = blogPosts.find(x => x.id === id);
+      if (!p) return;
+      editingPostId = id;
+      document.getElementById('blogModalTitle').textContent = 'Edit Post';
+      document.getElementById('postTitle').value = p.title || '';
+      document.getElementById('postExcerpt').value = p.excerpt || '';
+      document.getElementById('postContent').value = p.content || '';
+      document.getElementById('postImageUrl').value = p.imageUrl || '';
+      document.getElementById('blogModal').classList.add('active');
+    }
+
+    function closeBlogModal() {
+      document.getElementById('blogModal').classList.remove('active');
+      editingPostId = null;
+    }
+
+    document.getElementById('blogForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('postTitle').value.trim();
+      const excerpt = document.getElementById('postExcerpt').value.trim();
+      const content = document.getElementById('postContent').value.trim();
+      const imageUrl = document.getElementById('postImageUrl').value.trim() || null;
+      if (!title || !excerpt || !content) {
+        showBlogError('Please fill in all required fields.');
+        return;
+      }
+      try {
+        if (editingPostId) {
+          await window.firebaseDB.collection('posts').doc(editingPostId).update({ title, excerpt, content, imageUrl });
+          showBlogSuccess('Post updated!');
+        } else {
+          await window.firebaseDB.collection('posts').add({ title, excerpt, content, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+          showBlogSuccess('Post published!');
+        }
+        closeBlogModal();
+        loadBlogPosts();
+      } catch (e) {
+        showBlogError('Error saving post.');
+      }
+    });
+
+    async function deleteBlogPost(id) {
+      if (!confirm('Delete this post?')) return;
+      try {
+        await window.firebaseDB.collection('posts').doc(id).delete();
+        showBlogSuccess('Post deleted!');
+        loadBlogPosts();
+      } catch (e) {
+        showBlogError('Error deleting post.');
+      }
+    }
+
+    function showBlogSuccess(msg) {
+      const el = document.getElementById('blogSuccessMessage');
+      el.textContent = '✓ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+    function showBlogError(msg) {
+      const el = document.getElementById('blogErrorMessage');
+      el.textContent = '✗ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    // Load posts when Blog tab is activated
+    const _switchTabOrig = switchTab;
+    switchTab = function(tabName) {
+      _switchTabOrig(tabName);
+      if (tabName === 'blog') loadBlogPosts();
+    }
+    // --- TEAM CRUD WITH FIREBASE ---
+    let teamMembers = [];
+    let editingTeamId = null;
+
+    // Load team members from Firestore
+    async function loadTeamMembers() {
+      const teamList = document.getElementById('teamList');
+      teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Loading team members...</p>';
+      try {
+        const snapshot = await window.firebaseDB.collection('team').get();
+        teamMembers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderTeamList();
+      } catch (e) {
+        teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Error loading team members.</p>';
+      }
+    }
+
+    function renderTeamList() {
+      const teamList = document.getElementById('teamList');
+      teamList.innerHTML = '';
+      if (!teamMembers.length) {
+        teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">No team members added yet.</p>';
+        return;
+      }
+      teamMembers.forEach(member => {
+        const card = document.createElement('div');
+        card.className = 'program-card';
+        card.innerHTML = `
+          <img src="${member.imageUrl || ''}" alt="${member.name}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:1rem;">
+          <h3>${member.name}</h3>
+          <p>${member.role}</p>
+          <div class="program-actions">
+            <button class="edit-btn" onclick="openEditTeamModal('${member.id}')">Edit</button>
+            <button class="delete-btn" onclick="deleteTeamMember('${member.id}')">Delete</button>
+          </div>
+        `;
+        teamList.appendChild(card);
+      });
+    }
+
+    function openAddTeamModal() {
+      editingTeamId = null;
+      document.getElementById('teamModalTitle').textContent = 'Add New Team Member';
+      document.getElementById('teamForm').reset();
+      document.getElementById('teamModal').classList.add('active');
+    }
+
+    function openEditTeamModal(id) {
+      const member = teamMembers.find(m => m.id === id);
+      if (!member) return;
+      editingTeamId = id;
+      document.getElementById('teamModalTitle').textContent = 'Edit Team Member';
+      document.getElementById('teamName').value = member.name;
+      document.getElementById('teamRole').value = member.role;
+      document.getElementById('teamImage').value = '';
+      document.getElementById('teamModal').classList.add('active');
+    }
+
+    function closeTeamModal() {
+      document.getElementById('teamModal').classList.remove('active');
+      editingTeamId = null;
+    }
+
+    document.getElementById('teamForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('teamName').value.trim();
+      const role = document.getElementById('teamRole').value.trim();
+      const imageFile = document.getElementById('teamImage').files[0];
+      if (!name || !role || (!editingTeamId && !imageFile)) {
+        showTeamError('All fields are required.');
+        return;
+      }
+      try {
+        let imageUrl = null;
+        if (imageFile) {
+          const storageRef = window.firebaseStorage.ref().child('team/' + Date.now() + '_' + imageFile.name);
+          await storageRef.put(imageFile);
+          imageUrl = await storageRef.getDownloadURL();
+        }
+        if (editingTeamId) {
+          // Update
+          const updateData = { name, role };
+          if (imageUrl) updateData.imageUrl = imageUrl;
+          await window.firebaseDB.collection('team').doc(editingTeamId).update(updateData);
+          showTeamSuccess('Team member updated!');
+        } else {
+          // Add
+          await window.firebaseDB.collection('team').add({ name, role, imageUrl });
+          showTeamSuccess('Team member added!');
+        }
+        closeTeamModal();
+        loadTeamMembers();
+      } catch (e) {
+        showTeamError('Error saving team member.');
+      }
+    });
+
+    async function deleteTeamMember(id) {
+      if (!confirm('Delete this team member?')) return;
+      try {
+        await window.firebaseDB.collection('team').doc(id).delete();
+        showTeamSuccess('Team member deleted!');
+        loadTeamMembers();
+      } catch (e) {
+        showTeamError('Error deleting team member.');
+      }
+    }
+
+    function showTeamSuccess(msg) {
+      const el = document.getElementById('teamSuccessMessage');
+      el.textContent = '✓ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+    function showTeamError(msg) {
+      const el = document.getElementById('teamErrorMessage');
+      el.textContent = '✗ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    // Load team members when Team tab is activated
+    const originalSwitchTab = switchTab;
+    switchTab = function(tabName) {
+      originalSwitchTab(tabName);
+      if (tabName === 'team') loadTeamMembers();
+    }
   </script>
 
 </body>

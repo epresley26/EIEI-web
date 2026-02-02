@@ -12,6 +12,7 @@ function createHeader() {
           <a href="index.html" class="nav-home" id="navHome">Home</a>
           <a href="about.html">About</a>
           <a href="services.html">Services</a>
+          <a href="blog.html">Blog</a>
           <a href="career-opportunities.html">Careers</a>
           <a href="contact-us.html">Contact</a>
           <a href="admin-programs.html" class="nav-btn nav-login">EIEI Portal</a>
