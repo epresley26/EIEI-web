@@ -191,9 +191,46 @@ function handleNewsletterSignup(event) {
   const email = form.querySelector(".newsletter-input").value.trim();
   
   if (email) {
-    console.log("Newsletter signup:", { email });
-    form.reset();
-    alert("🎉 Thank you for subscribing! Check your email for updates.");
+    // Normalize and try saving to Firestore via SDK if available, else REST fallback
+    const emailNorm = email.toLowerCase();
+    const subscriber = { email: emailNorm, createdAt: new Date().toISOString(), source: window.location.pathname || 'unknown' };
+    if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
+      // Use deterministic doc ID (email) to prevent duplicates; rules will allow only create
+      window.firebaseDB.collection('newsletter').doc(emailNorm).set({
+        email: subscriber.email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        source: subscriber.source
+      }).then(() => {
+        form.reset();
+        alert("🎉 Thank you for subscribing! You're on our list.");
+      }).catch(() => {
+        // If rules reject because doc exists, treat as already subscribed
+        form.reset();
+        alert("You're already subscribed. Thank you!");
+      });
+    } else {
+      // REST API fallback (requires rules to allow public write)
+      const PROJECT_ID = 'eiei-e1a76';
+      // Create with deterministic documentId so duplicates fail
+      fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/newsletter?documentId=${encodeURIComponent(emailNorm)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fields: {
+            email: { stringValue: subscriber.email },
+            createdAt: { timestampValue: subscriber.createdAt },
+            source: { stringValue: subscriber.source }
+          }
+        })
+      }).then(res => {
+        if (!res.ok) throw new Error('exists or write denied');
+        form.reset();
+        alert("🎉 Thank you for subscribing! You're on our list.");
+      }).catch(() => {
+        form.reset();
+        alert("You're already subscribed or write blocked. Thank you!");
+      });
+    }
   } else {
     alert("Please enter a valid email address.");
   }

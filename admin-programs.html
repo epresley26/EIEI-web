@@ -369,6 +369,7 @@
           <button class="admin-tab" onclick="switchTab('gallery')">Gallery Images</button>
           <button class="admin-tab" onclick="switchTab('team')">Team</button>
           <button class="admin-tab" onclick="switchTab('blog')">Blog</button>
+          <button class="admin-tab" onclick="switchTab('newsletter')">Newsletter</button>
         </div>
 
         <!-- PROGRAMS TAB -->
@@ -437,6 +438,20 @@
             <div class="error-message" id="blogErrorMessage"></div>
             <div id="blogList" class="programs-list">
               <p style="grid-column: 1/-1; color: var(--text-muted);">Loading posts...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEWSLETTER TAB -->
+        <div id="newsletter" class="tab-content">
+          <div class="upload-section">
+            <h2>Newsletter Subscribers</h2>
+            <div class="button-group">
+              <button class="secondary-btn" onclick="loadNewsletterSubs()">Refresh</button>
+              <button class="primary-btn" onclick="exportNewsletterCSV()">Export CSV</button>
+            </div>
+            <div id="newsletterList" class="programs-list" style="grid-template-columns: 1fr;">
+              <p style="grid-column:1/-1;color:var(--text-muted);">Loading subscribers...</p>
             </div>
           </div>
         </div>
@@ -1351,6 +1366,100 @@
     switchTab = function(tabName) {
       originalSwitchTab(tabName);
       if (tabName === 'team') loadTeamMembers();
+    }
+
+    // --- NEWSLETTER SUBSCRIBERS ---
+    let newsletterSubs = [];
+
+    async function loadNewsletterSubs() {
+      const list = document.getElementById('newsletterList');
+      if (!list) return;
+      list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Loading subscribers...</p>';
+      try {
+        const snap = await window.firebaseDB.collection('newsletter').orderBy('createdAt','desc').get();
+        newsletterSubs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderNewsletterList();
+      } catch (e) {
+        console.error('Newsletter load error:', e);
+        list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Unable to load subscribers.</p>';
+      }
+    }
+
+    function renderNewsletterList() {
+      const list = document.getElementById('newsletterList');
+      if (!list) return;
+      list.innerHTML = '';
+      if (!newsletterSubs.length) {
+        list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">No subscribers yet.</p>';
+        return;
+      }
+      const container = document.createElement('div');
+      container.className = 'program-card';
+      const rows = newsletterSubs.map(s => {
+        const dt = toReadableDate(s.createdAt);
+        return `<div class="list-item"><input value="${escapeHtml(s.email || '')}" readonly><span style="color:var(--text-muted);">${dt}</span></div>`;
+      }).join('');
+      container.innerHTML = `
+        <h3 style="margin-bottom:1rem;">Subscribers (${newsletterSubs.length})</h3>
+        ${rows}
+      `;
+      list.appendChild(container);
+    }
+
+    function exportNewsletterCSV() {
+      const header = ['email','createdAt'];
+      const lines = [header.join(',')].concat(
+        newsletterSubs.map(s => {
+          const email = (s.email || '').replace(/"/g,'""');
+          const dt = toISOStringSafe(s.createdAt);
+          return `"${email}","${dt}"`;
+        })
+      );
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `newsletter_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function toReadableDate(value) {
+      const ms = toMillis(value);
+      if (!ms) return '';
+      const d = new Date(ms);
+      return d.toLocaleString();
+    }
+
+    function toISOStringSafe(value) {
+      const ms = toMillis(value);
+      return ms ? new Date(ms).toISOString() : '';
+    }
+
+    function toMillis(value) {
+      if (!value) return 0;
+      try {
+        if (typeof value.toMillis === 'function') return value.toMillis();
+        if (typeof value.toDate === 'function') return value.toDate().getTime();
+        if (value instanceof Date) return value.getTime();
+        const d = new Date(value);
+        const t = d.getTime();
+        return isNaN(t) ? 0 : t;
+      } catch (_) {
+        return 0;
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>\"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[s]));
+    }
+
+    const switchTabOrig3 = switchTab;
+    switchTab = function(tabName) {
+      switchTabOrig3(tabName);
+      if (tabName === 'newsletter') loadNewsletterSubs();
     }
   </script>
 
