@@ -372,6 +372,7 @@
           <button class="admin-tab" onclick="switchTab('blog')">Blog</button>
           <button class="admin-tab" onclick="switchTab('newsletter')">Newsletter</button>
           <button class="admin-tab" onclick="switchTab('enquiries')">Enquiries</button>
+          <button class="admin-tab" onclick="switchTab('contacts')">Contacts</button>
         </div>
 
         <!-- PROGRAMS TAB -->
@@ -483,6 +484,33 @@
                 </thead>
                 <tbody id="enquiriesBody">
                   <tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading enquiries...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACTS TAB -->
+        <div id="contacts" class="tab-content">
+          <div class="upload-section">
+            <h2>Contact Messages</h2>
+            <div class="button-group">
+              <button class="secondary-btn" onclick="loadContacts()">Refresh</button>
+            </div>
+            <div style="overflow:auto;">
+              <table class="data-table" id="contactsTable" style="width:100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Name</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Email</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Phone</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Subject</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Message</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Submitted</th>
+                  </tr>
+                </thead>
+                <tbody id="contactsBody">
+                  <tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading contacts...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1600,6 +1628,58 @@
     switchTab = function(tabName) {
       switchTabOrig4(tabName);
       if (tabName === 'enquiries') loadEnquiries();
+    }
+
+    // --- CONTACTS ---
+    let contacts = [];
+    async function loadContacts() {
+      const tbody = document.getElementById('contactsBody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading contacts...</td></tr>';
+      try {
+        let snap;
+        try {
+          snap = await window.firebaseDB.collection('contacts').orderBy('createdAt','desc').get();
+        } catch (orderErr) {
+          console.warn('Contacts orderBy failed, falling back:', orderErr);
+          snap = await window.firebaseDB.collection('contacts').get();
+        }
+        contacts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderContacts();
+      } catch (e) {
+        console.error('Contacts load error:', e);
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Unable to load contacts.</td></tr>';
+      }
+    }
+
+    function renderContacts() {
+      const tbody = document.getElementById('contactsBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (!contacts.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">No contacts yet.</td></tr>';
+        return;
+      }
+      contacts.forEach(c => {
+        const tr = document.createElement('tr');
+        const pad = 'padding:8px;border-bottom:1px solid var(--border);vertical-align:top;';
+        const dt = toReadableDate(c.createdAt);
+        tr.innerHTML = `
+          <td style="${pad}">${escapeHtml(c.name || '')}</td>
+          <td style="${pad}">${escapeHtml(c.email || '')}</td>
+          <td style="${pad}">${escapeHtml(c.phone || '')}</td>
+          <td style="${pad}">${escapeHtml(c.subject || '')}</td>
+          <td style="${pad}">${escapeHtml(c.message || '')}</td>
+          <td style="${pad}">${dt}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    const switchTabOrig5 = switchTab;
+    switchTab = function(tabName) {
+      switchTabOrig5(tabName);
+      if (tabName === 'contacts') loadContacts();
     }
   </script>
 

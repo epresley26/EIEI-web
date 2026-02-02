@@ -6,6 +6,10 @@
   <title>Contact Us - EIEI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <!-- Firebase SDKs for writing contacts -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="components/firebase-init.js"></script>
 </head>
 <body>
 
@@ -138,27 +142,82 @@
     // Load components when DOM is ready
     document.addEventListener('DOMContentLoaded', loadComponents);
 
-    function handleContactForm(event) {
+    async function handleContactForm(event) {
       event.preventDefault();
       const form = event.target;
       const name = form.querySelector('#name').value.trim();
       const email = form.querySelector('#email').value.trim();
+      const phone = form.querySelector('#phone').value.trim();
       const subject = form.querySelector('#subject').value.trim();
       const message = form.querySelector('#message').value.trim();
       
-      if (name && email && subject && message) {
-        console.log("Contact form submitted:", { name, email, subject, message });
-        
-        const successMsg = document.getElementById('successMessage');
-        successMsg.classList.add('show');
-        
-        form.reset();
-        
-        setTimeout(() => {
-          successMsg.classList.remove('show');
-        }, 5000);
-      } else {
+      if (!(name && email && subject && message)) {
         alert("Please fill in all required fields.");
+        return;
+      }
+
+      const data = {
+        name,
+        email: email.toLowerCase(),
+        phone: phone || '',
+        subject,
+        message,
+        createdAt: new Date().toISOString(),
+        source: 'contact-us'
+      };
+
+      // Prefer Firebase SDK if available
+      if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
+        try {
+          await window.firebaseDB.collection('contacts').add({
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            subject: data.subject,
+            message: data.message,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            source: data.source
+          });
+        } catch (e) {
+          console.warn('SDK write failed, falling back to REST', e);
+          await writeContactREST(data);
+        }
+      } else {
+        await writeContactREST(data);
+      }
+
+      const successMsg = document.getElementById('successMessage');
+      successMsg.classList.add('show');
+      form.reset();
+      setTimeout(() => successMsg.classList.remove('show'), 5000);
+    }
+
+    async function writeContactREST(data) {
+      try {
+        const PROJECT_ID = 'eiei-e1a76';
+        const body = {
+          fields: {
+            name: { stringValue: data.name },
+            email: { stringValue: data.email },
+            phone: { stringValue: data.phone },
+            subject: { stringValue: data.subject },
+            message: { stringValue: data.message },
+            createdAt: { timestampValue: data.createdAt },
+            source: { stringValue: data.source }
+          }
+        };
+        const res = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/contacts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) {
+          const txt = await res.text();
+          console.error('Contact REST write failed:', res.status, txt);
+          throw new Error('REST write failed');
+        }
+      } catch (err) {
+        console.error('Contact submit error:', err);
       }
     }
   </script>

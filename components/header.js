@@ -16,7 +16,6 @@ function createHeader() {
           <a href="blog.html">Blog</a>
           <a href="career-opportunities.html">Careers</a>
           <a href="contact-us.html">Contact</a>
-          <a href="admin-programs.html" class="nav-btn nav-login">EIEI Portal</a>
           <a href="https://forms.gle/J5eJz9ztwiEAAyZq9" target="_blank" class="nav-btn nav-tour">Schedule a Tour</a>
         </nav>
       </div>
