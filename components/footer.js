@@ -30,6 +30,7 @@ function createFooter() {
               <li><a href="index.html">Home</a></li>
               <li><a href="index.html#about">About Us</a></li>
               <li><a href="services.html">Services</a></li>
+              <li><a href="support.html">Support</a></li>
               <li><a href="blog.html">Blog</a></li>
               <li><a href="career-opportunities.html">Careers</a></li>
               <li><a href="contact-us.html">Contact</a></li>
