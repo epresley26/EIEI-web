@@ -71,7 +71,7 @@
         }
         const excerpt = post.excerpt || (post.content ? post.content.slice(0, 140) + '…' : '');
         const card = document.createElement('div');
-        card.className = 'card reveal';
+        card.className = 'card reveal visible';
         card.innerHTML = `
           <img src="${img}" alt="${post.title}" class="card-image" loading="lazy">
           <h3>${post.title}</h3>
