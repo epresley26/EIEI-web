@@ -349,14 +349,20 @@
           source: { stringValue: data.source }
         }
       };
-      await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/enquiries`, {
+      const res = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/enquiries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
+      if (!res.ok) {
+        const txt = await res.text();
+        console.error('Enquiry REST write failed:', res.status, txt);
+        throw new Error('REST write failed');
+      }
       form.reset();
       alert("Thank you! We'll be in touch soon.");
     } catch (err) {
+      console.error('Enquiry submit error:', err);
       alert('Unable to submit enquiry right now. Please try again later.');
     }
   }

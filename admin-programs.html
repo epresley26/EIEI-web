@@ -1409,7 +1409,13 @@
       if (!list) return;
       list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Loading subscribers...</p>';
       try {
-        const snap = await window.firebaseDB.collection('newsletter').orderBy('createdAt','desc').get();
+        let snap;
+        try {
+          snap = await window.firebaseDB.collection('newsletter').orderBy('createdAt','desc').get();
+        } catch (orderErr) {
+          console.warn('Newsletter orderBy failed, falling back:', orderErr);
+          snap = await window.firebaseDB.collection('newsletter').get();
+        }
         newsletterSubs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderNewsletterList();
       } catch (e) {
@@ -1514,7 +1520,13 @@
       if (!tbody) return;
       tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading enquiries...</td></tr>';
       try {
-        const snap = await window.firebaseDB.collection('enquiries').orderBy('createdAt','desc').get();
+        let snap;
+        try {
+          snap = await window.firebaseDB.collection('enquiries').orderBy('createdAt','desc').get();
+        } catch (orderErr) {
+          console.warn('Enquiries orderBy failed, falling back:', orderErr);
+          snap = await window.firebaseDB.collection('enquiries').get();
+        }
         enquiries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderEnquiries();
       } catch (e) {
