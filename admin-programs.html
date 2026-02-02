@@ -12,6 +12,7 @@
   <script src="components/firebase-init.js"></script>
   <link rel="stylesheet" href="style.css" />
   <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     .admin-container {
       min-height: 100vh;
@@ -370,6 +371,7 @@
           <button class="admin-tab" onclick="switchTab('team')">Team</button>
           <button class="admin-tab" onclick="switchTab('blog')">Blog</button>
           <button class="admin-tab" onclick="switchTab('newsletter')">Newsletter</button>
+          <button class="admin-tab" onclick="switchTab('enquiries')">Enquiries</button>
         </div>
 
         <!-- PROGRAMS TAB -->
@@ -449,9 +451,40 @@
             <div class="button-group">
               <button class="secondary-btn" onclick="loadNewsletterSubs()">Refresh</button>
               <button class="primary-btn" onclick="exportNewsletterCSV()">Export CSV</button>
+              <button class="primary-btn" onclick="exportNewsletterXLSX()">Export Excel (.xlsx)</button>
             </div>
             <div id="newsletterList" class="programs-list" style="grid-template-columns: 1fr;">
               <p style="grid-column:1/-1;color:var(--text-muted);">Loading subscribers...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ENQUIRIES TAB -->
+        <div id="enquiries" class="tab-content">
+          <div class="upload-section">
+            <h2>Enquiries</h2>
+            <div class="button-group">
+              <button class="secondary-btn" onclick="loadEnquiries()">Refresh</button>
+              <button class="primary-btn" onclick="exportEnquiriesCSV()">Export CSV</button>
+              <button class="primary-btn" onclick="exportEnquiriesXLSX()">Export Excel (.xlsx)</button>
+            </div>
+            <div style="overflow:auto;">
+              <table class="data-table" id="enquiriesTable" style="width:100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Name</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Email</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Phone</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Address</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Child Age</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Message</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Submitted</th>
+                  </tr>
+                </thead>
+                <tbody id="enquiriesBody">
+                  <tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading enquiries...</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -1426,6 +1459,18 @@
       URL.revokeObjectURL(url);
     }
 
+    function exportNewsletterXLSX() {
+      if (typeof XLSX === 'undefined') return exportNewsletterCSV();
+      const data = newsletterSubs.map(s => ({
+        Email: s.email || '',
+        CreatedAt: toReadableDate(s.createdAt)
+      }));
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Subscribers');
+      XLSX.writeFile(wb, `newsletter_${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+
     function toReadableDate(value) {
       const ms = toMillis(value);
       if (!ms) return '';
@@ -1460,6 +1505,89 @@
     switchTab = function(tabName) {
       switchTabOrig3(tabName);
       if (tabName === 'newsletter') loadNewsletterSubs();
+    }
+
+    // --- ENQUIRIES ---
+    let enquiries = [];
+    async function loadEnquiries() {
+      const tbody = document.getElementById('enquiriesBody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading enquiries...</td></tr>';
+      try {
+        const snap = await window.firebaseDB.collection('enquiries').orderBy('createdAt','desc').get();
+        enquiries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderEnquiries();
+      } catch (e) {
+        console.error('Enquiries load error:', e);
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Unable to load enquiries.</td></tr>';
+      }
+    }
+
+    function renderEnquiries() {
+      const tbody = document.getElementById('enquiriesBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (!enquiries.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">No enquiries yet.</td></tr>';
+        return;
+      }
+      enquiries.forEach(q => {
+        const tr = document.createElement('tr');
+        const pad = 'padding:8px;border-bottom:1px solid var(--border);vertical-align:top;';
+        const dt = toReadableDate(q.createdAt);
+        tr.innerHTML = `
+          <td style="${pad}">${escapeHtml(q.name || '')}</td>
+          <td style="${pad}">${escapeHtml(q.email || '')}</td>
+          <td style="${pad}">${escapeHtml(q.phone || '')}</td>
+          <td style="${pad}">${escapeHtml(q.address || '')}</td>
+          <td style="${pad}">${q.childAge != null ? escapeHtml(String(q.childAge)) : ''}</td>
+          <td style="${pad}">${escapeHtml(q.message || '')}</td>
+          <td style="${pad}">${dt}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function exportEnquiriesCSV() {
+      const header = ['name','email','phone','address','childAge','message','createdAt'];
+      const lines = [header.join(',')].concat(
+        enquiries.map(q => {
+          const v = (x) => String(x ?? '').replace(/\"/g,'\"\"');
+          return `\"${v(q.name)}\",\"${v(q.email)}\",\"${v(q.phone)}\",\"${v(q.address)}\",\"${v(q.childAge)}\",\"${v(q.message)}\",\"${toISOStringSafe(q.createdAt)}\"`;
+        })
+      );
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `enquiries_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function exportEnquiriesXLSX() {
+      if (typeof XLSX === 'undefined') return exportEnquiriesCSV();
+      const data = enquiries.map(q => ({
+        Name: q.name || '',
+        Email: q.email || '',
+        Phone: q.phone || '',
+        Address: q.address || '',
+        ChildAge: q.childAge ?? '',
+        Message: q.message || '',
+        Submitted: toReadableDate(q.createdAt)
+      }));
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Enquiries');
+      XLSX.writeFile(wb, `enquiries_${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+
+    const switchTabOrig4 = switchTab;
+    switchTab = function(tabName) {
+      switchTabOrig4(tabName);
+      if (tabName === 'enquiries') loadEnquiries();
     }
   </script>
 

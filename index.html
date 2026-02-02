@@ -43,10 +43,12 @@
   <div class="enquiry-box">
     <h3>Enquire Now</h3>
     <form class="enquiry-form" onsubmit="handleEnquiry(event)">
-      <input type="text" placeholder="Full Name" required />
-      <input type="email" placeholder="Email Address" required />
-      <input type="tel" placeholder="Phone (optional)" />
-      <textarea placeholder="How can we help?" required></textarea>
+      <input type="text" id="enqName" placeholder="Full Name" required />
+      <input type="email" id="enqEmail" placeholder="Email Address" required />
+      <input type="tel" id="enqPhone" placeholder="Phone Number" required />
+      <input type="text" id="enqAddress" placeholder="Address" required />
+      <input type="number" id="enqChildAge" placeholder="Age of Child" min="0" max="21" required />
+      <textarea id="enqMessage" placeholder="How can we help?" required></textarea>
       <button type="submit" class="primary-btn">Submit</button>
     </form>
   </div>
@@ -213,6 +215,10 @@
 <script src="components/header.js"></script>
 <script src="components/footer.js"></script>
 <script src="components/loader.js"></script>
+<!-- Firebase SDKs for writing enquiries -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="components/firebase-init.js"></script>
 <script src="script.js"></script>
 <script>
   // Load components when DOM is ready
@@ -281,19 +287,77 @@
   });
 
   // Enquiry form handler
-  function handleEnquiry(event) {
+  async function handleEnquiry(event) {
     event.preventDefault();
     const form = event.target;
-    const name = form.querySelector('input[type="text"]').value.trim();
-    const email = form.querySelector('input[type="email"]').value.trim();
-    const message = form.querySelector('textarea').value.trim();
-    
-    if (name && email && message) {
-      console.log("Enquiry submitted:", { name, email, message });
+    const name = document.getElementById('enqName').value.trim();
+    const email = document.getElementById('enqEmail').value.trim();
+    const phone = document.getElementById('enqPhone').value.trim();
+    const address = document.getElementById('enqAddress').value.trim();
+    const childAge = document.getElementById('enqChildAge').value.trim();
+    const message = document.getElementById('enqMessage').value.trim();
+
+    if (!(name && email && phone && address && childAge && message)) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const data = { 
+      name,
+      email: email.toLowerCase(),
+      phone,
+      address,
+      childAge: Number(childAge),
+      message,
+      createdAt: new Date().toISOString(),
+      source: 'index-hero-enquiry'
+    };
+
+    // Prefer Firebase SDK if available
+    if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
+      try {
+        await window.firebaseDB.collection('enquiries').add({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          childAge: data.childAge,
+          message: data.message,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          source: data.source
+        });
+        form.reset();
+        alert("Thank you! We'll be in touch soon.");
+        return;
+      } catch (e) {
+        console.warn('SDK write failed, falling back to REST', e);
+      }
+    }
+
+    // REST fallback (requires rules to allow public create)
+    try {
+      const PROJECT_ID = 'eiei-e1a76';
+      const body = {
+        fields: {
+          name: { stringValue: data.name },
+          email: { stringValue: data.email },
+          phone: { stringValue: data.phone },
+          address: { stringValue: data.address },
+          childAge: { integerValue: String(data.childAge) },
+          message: { stringValue: data.message },
+          createdAt: { timestampValue: data.createdAt },
+          source: { stringValue: data.source }
+        }
+      };
+      await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/enquiries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
       form.reset();
       alert("Thank you! We'll be in touch soon.");
-    } else {
-      alert("Please fill in all required fields.");
+    } catch (err) {
+      alert('Unable to submit enquiry right now. Please try again later.');
     }
   }
   
