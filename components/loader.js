@@ -21,17 +21,7 @@ function loadComponents() {
       console.error('Footer container not found or createFooter function not available');
     }
 
-    // Initialize theme after components are loaded
-    setTimeout(() => {
-      if (window.initTheme) {
-        initTheme();
-        console.log('Theme initialized');
-      }
-      if (window.setupAutoThemeUpdate) {
-        setupAutoThemeUpdate();
-        console.log('Auto theme update setup');
-      }
-    }, 100);
+    // Dark mode removed; no theme initialization required
   } catch (error) {
     console.error('Error loading components:', error);
   }
