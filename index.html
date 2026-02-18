@@ -224,34 +224,29 @@
   // Load components when DOM is ready
   document.addEventListener('DOMContentLoaded', loadComponents);
 
-  // Google Drive Configuration
-  const GOOGLE_DRIVE_FOLDER_ID = '1bjif6GZ65LnWx_X3vOnWR-xGeQHmC0N_'; // Same folder ID as admin
-  const PUBLIC_API_KEY = 'AIzaSyCrNI5O5pL4aUYznAXq7LYCczvJ1fCBDzw'; // Get from Google Cloud Console
-
-  // Load gallery images from Google Drive
+  // Load gallery images from Firestore (stored Google Drive links)
   function loadGalleryImages() {
     const galleryContainer = document.getElementById('galleryContainer');
     
-    // Query Google Drive API for images in the folder
-    const query = encodeURIComponent(`'${GOOGLE_DRIVE_FOLDER_ID}' in parents and trashed=false and mimeType contains 'image'`);
-    const fields = 'files(id,name,webViewLink,webContentLink,thumbnailLink)';
-    
-    fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&spaces=drive&fields=${fields}&pageSize=50&key=${PUBLIC_API_KEY}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.files && data.files.length > 0) {
+    // Load from Firestore gallery collection
+    window.firebaseDB.collection('gallery').orderBy('uploadedAt', 'desc').get()
+      .then(snapshot => {
+        if (snapshot.size > 0) {
           galleryContainer.innerHTML = '';
-          data.files.forEach(file => {
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            
-            // Use thumbnail link for faster loading
-            const imageUrl = file.thumbnailLink ? file.thumbnailLink.replace('=s220', '=s600') : file.webContentLink;
-            
-            div.onclick = function() { openFullscreen(this); };
-            div.innerHTML = `<img src="${imageUrl}" alt="${file.name}" loading="lazy">`;
-            galleryContainer.appendChild(div);
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.imageUrl) {
+              const div = document.createElement('div');
+              div.className = 'gallery-item';
+              
+              div.onclick = function() { openFullscreen(this); };
+              div.innerHTML = `<img src="${data.imageUrl}" alt="${data.title || 'Gallery image'}" loading="lazy">`;
+              galleryContainer.appendChild(div);
+            }
           });
+          if (galleryContainer.innerHTML === '') {
+            galleryContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">Gallery will be updated soon...</p>';
+          }
         } else {
           galleryContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">Gallery will be updated soon...</p>';
         }

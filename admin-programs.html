@@ -9,6 +9,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="components/firebase-init.js"></script>
   <link rel="stylesheet" href="style.css" />
   <script src="https://accounts.google.com/gsi/client"></script>
@@ -370,9 +371,11 @@
           <button class="admin-tab" onclick="switchTab('gallery')">Gallery Images</button>
           <button class="admin-tab" onclick="switchTab('team')">Team</button>
           <button class="admin-tab" onclick="switchTab('blog')">Blog</button>
+          <button class="admin-tab" onclick="switchTab('marketplace')">Marketplace</button>
           <button class="admin-tab" onclick="switchTab('newsletter')">Newsletter</button>
           <button class="admin-tab" onclick="switchTab('enquiries')">Enquiries</button>
           <button class="admin-tab" onclick="switchTab('contacts')">Contacts</button>
+          <button class="admin-tab" onclick="switchTab('roles')" id="rolesTabBtn" style="display:none;">Roles</button>
         </div>
 
         <!-- PROGRAMS TAB -->
@@ -441,6 +444,19 @@
             <div class="error-message" id="blogErrorMessage"></div>
             <div id="blogList" class="programs-list">
               <p style="grid-column: 1/-1; color: var(--text-muted);">Loading posts...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- MARKETPLACE TAB -->
+        <div id="marketplace" class="tab-content">
+          <div class="upload-section">
+            <h2>Marketplace Item Management</h2>
+            <button class="primary-btn" onclick="openAddMarketplaceItemModal()" style="margin-bottom: 2rem;">+ Add New Item</button>
+            <div class="success-message" id="marketplaceSuccessMessage"></div>
+            <div class="error-message" id="marketplaceErrorMessage"></div>
+            <div id="marketplaceItemsList" class="programs-list">
+              <p style="grid-column: 1/-1; color: var(--text-muted);">Loading marketplace items...</p>
             </div>
           </div>
         </div>
@@ -516,12 +532,87 @@
             </div>
           </div>
         </div>
+
+        <!-- ROLES TAB (Superadmin only) -->
+        <div id="roles" class="tab-content">
+          <div class="upload-section">
+            <h2>Admin Roles Management</h2>
+            <p id="rolesInfo" style="color:var(--text-muted);margin-bottom:1rem;">Manage admin users and their access.</p>
+            <div class="success-message" id="rolesSuccessMessage"></div>
+            <div class="error-message" id="rolesErrorMessage"></div>
+
+            <form id="roleForm" style="margin-bottom:1.5rem;">
+              <div class="form-group">
+                <label for="roleEmail">Admin Email *</label>
+                <input type="email" id="roleEmail" required placeholder="admin@example.com">
+              </div>
+              <div class="form-group">
+                <label>Role Type</label>
+                <select id="roleType">
+                  <option value="admin">Admin</option>
+                  <option value="superadmin">Superadmin</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="roleTempPassword">Temporary Password (min 6 chars)</label>
+                <input type="password" id="roleTempPassword" placeholder="Set an initial password">
+              </div>
+              <div class="form-group">
+                <label>Allow Access To Tabs</label>
+                <div class="programs-list" style="grid-template-columns: repeat(3, minmax(200px, 1fr));">
+                  <label><input type="checkbox" class="permCheck" value="programs"> Programs</label>
+                  <label><input type="checkbox" class="permCheck" value="gallery"> Gallery Images</label>
+                  <label><input type="checkbox" class="permCheck" value="team"> Team</label>
+                  <label><input type="checkbox" class="permCheck" value="blog"> Blog</label>
+                  <label><input type="checkbox" class="permCheck" value="marketplace"> Marketplace</label>
+                  <label><input type="checkbox" class="permCheck" value="newsletter"> Newsletter</label>
+                  <label><input type="checkbox" class="permCheck" value="enquiries"> Enquiries</label>
+                  <label><input type="checkbox" class="permCheck" value="contacts"> Contacts</label>
+                </div>
+              </div>
+              <div class="button-group">
+                <button type="submit" class="primary-btn">Save Role</button>
+                <button type="button" class="secondary-btn" onclick="document.getElementById('roleForm').reset()">Clear</button>
+              </div>
+            </form>
+
+            <div style="overflow:auto;">
+              <table class="data-table" id="rolesTable" style="width:100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Email</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Role</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Permissions</th>
+                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rolesBody">
+                  <tr><td colspan="4" style="color:var(--text-muted);padding:12px;">Loading roles...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="loginPrompt" style="text-align: center; padding: 2rem;">
-        <h2 style="color: var(--brand-blue); margin-bottom: 1rem;">Sign in with Google</h2>
-        <p style="color: var(--text-muted); margin-bottom: 2rem;">Please sign in to manage programs and gallery images</p>
-        <div id="googleSignInButton"></div>
+        <h2 style="color: var(--brand-blue); margin-bottom: 1rem;">Admin Sign In</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Use your admin email and password</p>
+        <div style="max-width:420px;margin:0 auto;text-align:left;background:var(--card-bg);padding:1.5rem;border-radius:12px;border:1px solid var(--border);">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="admin@example.com">
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+          </div>
+          <div class="button-group">
+            <button class="primary-btn" onclick="signInEmailPassword()">Sign In</button>
+          </div>
+          <div id="loginErrorMessage" class="error-message" style="margin-top:1rem;"></div>
+          <p style="color:var(--text-muted);margin-top:1rem;">Note: Gallery uploads to Google Drive require Google OAuth. Without Google sign-in, that feature will be disabled.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -648,12 +739,69 @@
     </div>
   </div>
 
+  <!-- ADD/EDIT MARKETPLACE ITEM MODAL -->
+  <div id="marketplaceModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="marketplaceModalTitle">Add Marketplace Item</h2>
+        <button class="close-btn" onclick="closeMarketplaceModal()">×</button>
+      </div>
+      <form id="marketplaceForm">
+        <div class="form-group">
+          <label for="itemTitle">Item Title *</label>
+          <input type="text" id="itemTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="itemCategory">Category *</label>
+          <select id="itemCategory" required>
+            <option value="">Select a category</option>
+            <option value="Training Materials">Training Materials</option>
+            <option value="Educational Resources">Educational Resources</option>
+            <option value="Tools & Equipment">Tools & Equipment</option>
+            <option value="Consulting Services">Consulting Services</option>
+            <option value="Publications">Publications</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="itemDescription">Description *</label>
+          <textarea id="itemDescription" required placeholder="Detailed description of the item" style="min-height:120px"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="itemPrice">Price (USD) *</label>
+          <input type="number" id="itemPrice" step="0.01" min="0" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="itemAvailability">Availability *</label>
+          <input type="text" id="itemAvailability" required placeholder="e.g., In stock, Available upon request">
+        </div>
+        <div class="form-group">
+          <label for="itemContactEmail">Contact Email *</label>
+          <input type="email" id="itemContactEmail" required placeholder="contact@example.com">
+        </div>
+        <div class="form-group">
+          <label for="itemImageUrl">Image URL</label>
+          <input type="url" id="itemImageUrl" placeholder="https://example.com/image.jpg">
+        </div>
+        <div class="form-group">
+          <label for="itemImageFile">Or Upload Image</label>
+          <input type="file" id="itemImageFile" accept="image/*">
+        </div>
+        <div class="button-group">
+          <button type="submit" class="primary-btn">Save Item</button>
+          <button type="button" class="secondary-btn" onclick="closeMarketplaceModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     const CLIENT_ID = '35109919396-prtb83ncq3t7j7h4c3qg1bs6q9e8hgkl.apps.googleusercontent.com';
     const GALLERY_FOLDER_ID = '1bjif6GZ65LnWx_X3vOnWR-xGeQHmC0N_';
     // Set these to your Team and Blog Google Drive folder IDs
     const TEAM_FOLDER_ID = '1XsnayWvcFrZjhmZmVCRPV2usCjlVw_8T';
     const BLOG_FOLDER_ID = '1xnauQHF2y2ybTizLQsFqdF4IqBalEzho';
+    const MARKETPLACE_FOLDER_ID = '1bjif6GZ65LnWx_X3vOnWR-xGeQHmC0N_'; // Use same as gallery or create a new one
     const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
     let tokenClient;
@@ -676,7 +824,15 @@
       checkAuthStatus();
     }
 
+    let currentUserEmail = null;
     function handleCredentialResponse(response) {
+      try {
+        const payload = parseJwt(response && response.credential);
+        currentUserEmail = (payload && payload.email) ? String(payload.email).toLowerCase() : null;
+        if (currentUserEmail) localStorage.setItem('adminUserEmail', currentUserEmail);
+      } catch (e) {
+        console.warn('Unable to parse Google ID token for email:', e);
+      }
       requestAccessToken();
     }
 
@@ -687,6 +843,7 @@
         callback: (tokenResponse) => {
           accessToken = tokenResponse.access_token;
           showAdminPanel();
+          setupRolesAndPermissions();
           loadPrograms();
           loadGalleryImages();
         }
@@ -699,7 +856,9 @@
       const savedToken = localStorage.getItem('adminAuthToken');
       if (savedToken) {
         accessToken = savedToken;
+        currentUserEmail = localStorage.getItem('adminUserEmail') || null;
         showAdminPanel();
+        setupRolesAndPermissions();
         loadPrograms();
         loadGalleryImages();
       }
@@ -708,9 +867,9 @@
     function showAdminPanel() {
       document.getElementById('loginPrompt').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
-      
       const authDiv = document.getElementById('authContainer');
-      authDiv.innerHTML = `<button class="logout-btn" onclick="logout()">Logout</button>`;
+      const emailText = currentUserEmail ? `Logged in as ${currentUserEmail}` : 'Logged in';
+      authDiv.innerHTML = `<span style="margin-right:1rem;color:var(--text-muted);">${emailText}</span><button class="logout-btn" onclick="logout()">Logout</button>`;
 
       localStorage.setItem('adminAuthToken', accessToken);
     }
@@ -718,7 +877,213 @@
     function logout() {
       accessToken = null;
       localStorage.removeItem('adminAuthToken');
-      location.reload();
+      localStorage.removeItem('adminUserEmail');
+      firebase.auth().signOut().finally(() => location.reload());
+    }
+
+    function parseJwt(token) {
+      if (!token) return null;
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const json = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'));
+      try { return JSON.parse(json); } catch (_) { return null; }
+    }
+
+    // Roles & permissions
+    let isSuperadmin = false;
+    let allowedTabs = new Set();
+    function hasTab(tabName) {
+      return isSuperadmin || allowedTabs.has(tabName);
+    }
+    async function setupRolesAndPermissions() {
+      try {
+        // Try direct doc fetch first
+        if (currentUserEmail) {
+          const doc = await window.firebaseDB.collection('roles').doc(currentUserEmail).get();
+          if (doc.exists) {
+            const data = doc.data();
+            isSuperadmin = String(data.role || '').toLowerCase() === 'superadmin';
+            const tabsObj = data.tabs || {};
+            Object.keys(tabsObj).forEach(k => { if (tabsObj[k]) allowedTabs.add(k); });
+          }
+        }
+
+        // If not superadmin yet, check if collection is empty (bootstrap scenario)
+        if (!isSuperadmin && currentUserEmail) {
+          const rolesSnap = await window.firebaseDB.collection('roles').get();
+          if (rolesSnap.empty) {
+            isSuperadmin = true;
+          }
+        }
+
+        applyTabPermissions();
+        if (isSuperadmin) {
+          document.getElementById('rolesTabBtn').style.display = '';
+          loadRoles();
+        }
+      } catch (e) {
+        console.warn('Roles setup failed:', e);
+        // Bootstrap fallback: if we cannot read roles (likely rules), allow current user to see Roles tab
+        if (currentUserEmail) {
+          isSuperadmin = true;
+          applyTabPermissions();
+          document.getElementById('rolesTabBtn').style.display = '';
+          // loadRoles may fail under rules; UI will still allow saving roles
+        }
+      }
+    }
+
+    function applyTabPermissions() {
+      const buttons = Array.from(document.querySelectorAll('.admin-tabs .admin-tab'));
+      buttons.forEach(btn => {
+        const on = btn.getAttribute('onclick') || '';
+        const m = on.match(/switchTab\(['"]([^'"]+)['"]\)/);
+        const tabName = m ? m[1] : null;
+        if (!tabName) return;
+        if (tabName === 'roles') {
+          btn.style.display = isSuperadmin ? '' : 'none';
+          return;
+        }
+        if (isSuperadmin) {
+          btn.style.display = '';
+        } else if (allowedTabs.has(tabName)) {
+          btn.style.display = '';
+        } else {
+          btn.style.display = 'none';
+          const content = document.getElementById(tabName);
+          if (content) content.classList.remove('active');
+        }
+      });
+
+      // If the active tab was hidden, switch to the first visible one
+      const activeBtn = document.querySelector('.admin-tabs .admin-tab.active');
+      if (activeBtn && activeBtn.style.display === 'none') {
+        const firstVisible = buttons.find(b => b.style.display !== 'none');
+        if (firstVisible) {
+          const mm = firstVisible.getAttribute('onclick').match(/switchTab\(['"]([^'"]+)['"]\)/);
+          if (mm) switchTab(mm[1]);
+        }
+      }
+    }
+
+    // Roles tab logic (superadmin only)
+    let roles = [];
+    async function loadRoles() {
+      const tbody = document.getElementById('rolesBody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);padding:12px;">Loading roles...</td></tr>';
+      try {
+        const snap = await window.firebaseDB.collection('roles').get();
+        roles = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderRoles();
+      } catch (e) {
+        console.error('Roles load error:', e);
+        tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);padding:12px;">Unable to load roles.</td></tr>';
+      }
+    }
+
+    function renderRoles() {
+      const tbody = document.getElementById('rolesBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (!roles.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);padding:12px;">No roles defined yet.</td></tr>';
+        return;
+      }
+      roles.forEach(r => {
+        const tr = document.createElement('tr');
+        const pad = 'padding:8px;border-bottom:1px solid var(--border);vertical-align:top;';
+        const perms = Object.keys(r.tabs || {}).filter(k => r.tabs[k]).join(', ');
+        tr.innerHTML = `
+          <td style="${pad}">${escapeHtml(r.id)}</td>
+          <td style="${pad}">${escapeHtml(r.role || 'admin')}</td>
+          <td style="${pad}">${escapeHtml(perms)}</td>
+          <td style="${pad}">
+            <button class="delete-btn" onclick="deleteRole('${r.id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('roleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!isSuperadmin) return showRolesError('Only superadmins can manage roles.');
+      const email = String(document.getElementById('roleEmail').value).trim().toLowerCase();
+      const roleType = document.getElementById('roleType').value;
+      const tempPasswordEl = document.getElementById('roleTempPassword');
+      const tempPassword = tempPasswordEl ? String(tempPasswordEl.value) : '';
+      const checks = Array.from(document.querySelectorAll('.permCheck'));
+      const tabs = {};
+      checks.forEach(c => { tabs[c.value] = c.checked; });
+      if (!email) return showRolesError('Email is required');
+      try {
+        // Optionally create the auth user with a temporary password
+        if (tempPassword && tempPassword.length >= 6) {
+          await createAuthUser(email, tempPassword);
+        }
+        await window.firebaseDB.collection('roles').doc(email).set({ role: roleType, tabs }, { merge: true });
+        showRolesSuccess('Role saved');
+        document.getElementById('roleForm').reset();
+        loadRoles();
+        // Re-evaluate permissions if editing current user
+        if (currentUserEmail === email) {
+          allowedTabs = new Set();
+          isSuperadmin = roleType === 'superadmin';
+          Object.keys(tabs).forEach(k => { if (tabs[k]) allowedTabs.add(k); });
+          applyTabPermissions();
+        }
+      } catch (e) {
+        console.error('Save role error:', e);
+        const code = (e && e.code) ? String(e.code) : '';
+        const msg = (e && e.message) ? String(e.message) : 'Error saving role';
+        if (code === 'permission-denied') {
+          showRolesError('Permission denied. Ensure Firestore rules allow superadmin to write roles.');
+        } else {
+          showRolesError(msg);
+        }
+      }
+    });
+
+    async function createAuthUser(email, password) {
+      // Create user via a secondary Firebase app instance so current session is not affected
+      try {
+        const cfg = firebase.app().options || {};
+        const tempApp = firebase.initializeApp(cfg, 'adminCreator');
+        const tempAuth = firebase.auth(tempApp);
+        await tempAuth.createUserWithEmailAndPassword(email, password);
+        await tempAuth.signOut();
+        if (typeof tempApp.delete === 'function') tempApp.delete();
+      } catch (err) {
+        console.warn('Create auth user failed:', err);
+        // Continue; role will still be saved. Admin can self-register later if needed.
+      }
+    }
+
+    async function deleteRole(email) {
+      if (!isSuperadmin) return showRolesError('Only superadmins can manage roles.');
+      if (!confirm('Delete this role?')) return;
+      try {
+        await window.firebaseDB.collection('roles').doc(email).delete();
+        showRolesSuccess('Role deleted');
+        loadRoles();
+      } catch (e) {
+        console.error('Delete role error:', e);
+        showRolesError('Error deleting role');
+      }
+    }
+
+    function showRolesSuccess(msg) {
+      const el = document.getElementById('rolesSuccessMessage');
+      el.textContent = '✓ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+    function showRolesError(msg) {
+      const el = document.getElementById('rolesErrorMessage');
+      el.textContent = '✗ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
     }
 
     // TAB SWITCHING
@@ -1063,15 +1428,29 @@
           headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
           body: formData
         })
-        .then(response => {
-          if (response.ok) {
-            uploaded++;
-            if (uploaded === files.length) {
-              imageInput.value = '';
-              uploadBtn.disabled = false;
-              showGallerySuccessMessage();
-              setTimeout(() => loadGalleryImages(), 1000);
-            }
+        .then(response => response.json())
+        .then(async uploadedFile => {
+          // Get the shareable Google Drive link
+          const driveLink = `https://drive.google.com/uc?export=view&id=${uploadedFile.id}`;
+          
+          // Save to Firestore
+          try {
+            await window.firebaseDB.collection('gallery').add({
+              imageUrl: driveLink,
+              title: file.name,
+              driveFileId: uploadedFile.id,
+              uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          } catch (error) {
+            console.error('Error saving to Firestore:', error);
+          }
+          
+          uploaded++;
+          if (uploaded === files.length) {
+            imageInput.value = '';
+            uploadBtn.disabled = false;
+            showGallerySuccessMessage();
+            setTimeout(() => loadGalleryImages(), 1500);
           }
         })
         .catch(error => {
@@ -1086,6 +1465,55 @@
       const msg = document.getElementById('gallerySuccessMessage');
       msg.classList.add('show');
       setTimeout(() => msg.classList.remove('show'), 3000);
+    }
+
+    function loadGalleryImages() {
+      const imageCount = document.getElementById('imageCount');
+      const gallery = document.getElementById('galleryPreview');
+      imageCount.textContent = 'Loading images...';
+      gallery.innerHTML = '';
+      
+      window.firebaseDB.collection('gallery').orderBy('uploadedAt', 'desc').get()
+        .then(snapshot => {
+          if (snapshot.size === 0) {
+            imageCount.textContent = 'No images uploaded yet';
+            return;
+          }
+
+          const files = [];
+          snapshot.forEach(doc => {
+            files.push({ id: doc.id, ...doc.data() });
+          });
+
+          files.forEach(file => {
+            const div = document.createElement('div');
+            div.className = 'preview-item';
+            div.innerHTML = `
+              <img src="${file.imageUrl}" alt="${file.title}">
+              <button class="delete-btn" onclick="deleteImage('${file.id}')">×</button>
+            `;
+            gallery.appendChild(div);
+          });
+
+          imageCount.textContent = `${files.length} image${files.length !== 1 ? 's' : ''} in gallery`;
+        })
+        .catch(error => {
+          console.error('Error loading images:', error);
+          imageCount.textContent = 'Error loading images.';
+        });
+    }
+
+    function deleteImage(docId) {
+      if (confirm('Delete this image?')) {
+        window.firebaseDB.collection('gallery').doc(docId).delete()
+          .then(() => {
+            loadGalleryImages();
+          })
+          .catch(error => {
+            console.error('Error deleting image:', error);
+            alert('Error deleting image');
+          });
+      }
     }
 
     // Helper: Upload a file to Google Drive and return file info
@@ -1110,67 +1538,57 @@
       return info; // { id, name, webViewLink, webContentLink, thumbnailLink }
     }
 
-    function loadGalleryImages() {
-      const imageCount = document.getElementById('imageCount');
-      imageCount.textContent = 'Loading images...';
-      
-      fetch(`https://www.googleapis.com/drive/v3/files?q='${GALLERY_FOLDER_ID}'+in+parents+and+trashed=false+and+mimeType+contains+'image'&spaces=drive&fields=files(id,name,webViewLink,webContentLink,thumbnailLink)&pageSize=50`, {
-        method: 'GET',
-        headers: new Headers({ 'Authorization': 'Bearer ' + accessToken })
-      })
-      .then(response => response.json())
-      .then(data => {
-        renderGalleryPreview(data.files || []);
-      })
-      .catch(error => {
-        console.error('Error loading images:', error);
-        imageCount.textContent = 'Error loading images. Make sure folder ID is correct.';
+    // Initialize when page loads (Email/Password Auth)
+    window.addEventListener('load', initializeEmailAuth);
+
+    // Initialize Email/Password Auth
+    function initializeEmailAuth() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          currentUserEmail = (user.email || '').toLowerCase();
+          localStorage.setItem('adminUserEmail', currentUserEmail);
+          showAdminPanel();
+          setupRolesAndPermissions();
+          loadPrograms();
+          if (accessToken) loadGalleryImages();
+        } else {
+          document.getElementById('adminPanel').style.display = 'none';
+          document.getElementById('loginPrompt').style.display = 'block';
+        }
       });
     }
 
-    function renderGalleryPreview(files) {
-      const gallery = document.getElementById('galleryPreview');
-      const imageCount = document.getElementById('imageCount');
-      gallery.innerHTML = '';
-
-      if (files.length === 0) {
-        imageCount.textContent = 'No images uploaded yet';
-        return;
-      }
-
-      files.forEach(file => {
-        const div = document.createElement('div');
-        div.className = 'preview-item';
-        const imageUrl = file.thumbnailLink ? file.thumbnailLink.replace('=s220', '=s400') : file.webContentLink;
-        
-        div.innerHTML = `
-          <img src="${imageUrl}" alt="${file.name}">
-          <button class="delete-btn" onclick="deleteImage('${file.id}')">×</button>
-        `;
-        gallery.appendChild(div);
-      });
-
-      imageCount.textContent = `${files.length} image${files.length !== 1 ? 's' : ''} in Google Drive folder`;
-    }
-
-    function deleteImage(fileId) {
-      if (confirm('Delete this image from Google Drive?')) {
-        fetch(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
-          method: 'DELETE',
-          headers: new Headers({ 'Authorization': 'Bearer ' + accessToken })
-        })
-        .then(() => {
-          loadGalleryImages();
-        })
-        .catch(error => {
-          console.error('Error deleting image:', error);
-          alert('Error deleting image');
-        });
+    // Sign in with email/password
+    async function signInEmailPassword() {
+      const email = String(document.getElementById('loginEmail').value || '').trim().toLowerCase();
+      const password = String(document.getElementById('loginPassword').value || '');
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+      } catch (e) {
+        console.error('Sign-in failed:', e);
+        const msg = mapAuthError(e);
+        showLoginError(msg);
       }
     }
 
-    // Initialize when page loads
-    window.addEventListener('load', initializeGoogleSignIn);
+    function showLoginError(message) {
+      const el = document.getElementById('loginErrorMessage');
+      if (!el) return alert(message);
+      el.textContent = '✗ ' + message;
+      el.classList.add('show');
+    }
+
+    function mapAuthError(err) {
+      const code = (err && err.code) || '';
+      switch (code) {
+        case 'auth/user-not-found': return 'No account found for this email.';
+        case 'auth/wrong-password': return 'Incorrect password. Try again or reset it.';
+        case 'auth/invalid-email': return 'Invalid email format.';
+        case 'auth/too-many-requests': return 'Too many attempts. Please wait and try again.';
+        case 'auth/network-request-failed': return 'Network error. Check connection or ad blockers.';
+        default: return (err && err.message) ? err.message : 'Sign-in failed. Please check your credentials.';
+      }
+    }
 
     // --- BLOG POSTS (Firestore) ---
     let blogPosts = [];
@@ -1301,6 +1719,7 @@
     switchTab = function(tabName) {
       _switchTabOrig(tabName);
       if (tabName === 'blog') loadBlogPosts();
+      if (tabName === 'roles' && isSuperadmin) loadRoles();
     }
     // --- TEAM CRUD WITH FIREBASE ---
     let teamMembers = [];
@@ -1539,6 +1958,154 @@
     switchTab = function(tabName) {
       switchTabOrig3(tabName);
       if (tabName === 'newsletter') loadNewsletterSubs();
+      if (tabName === 'marketplace') loadMarketplaceItems();
+    }
+
+    // --- MARKETPLACE ---
+    let marketplaceItems = [];
+    let editingMarketplaceId = null;
+
+    async function loadMarketplaceItems() {
+      const container = document.getElementById('marketplaceItemsList');
+      if (!container) return;
+      if (!hasTab('marketplace')) {
+        container.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">You do not have permission to manage marketplace items. Enable the "marketplace" tab for this admin in Roles.</p>';
+        return;
+      }
+      container.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Loading items...</p>';
+      try {
+        const snapshot = await db.collection('marketplace').orderBy('createdAt', 'desc').get();
+        marketplaceItems = [];
+        snapshot.forEach(doc => {
+          marketplaceItems.push({ id: doc.id, ...doc.data() });
+        });
+        displayMarketplaceItems();
+      } catch (error) {
+        console.error('Error loading marketplace items:', error);
+        container.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Error loading items.</p>';
+      }
+    }
+
+    function displayMarketplaceItems() {
+      const container = document.getElementById('marketplaceItemsList');
+      if (marketplaceItems.length === 0) {
+        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No marketplace items yet.</p>';
+        return;
+      }
+
+      container.innerHTML = marketplaceItems.map(item => `
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+            <div>
+              <h4 style="color: var(--brand-blue); margin: 0 0 0.3rem 0;">${item.title}</h4>
+              <p style="color: var(--brand-orange); font-size: 0.9rem; margin: 0 0 0.5rem 0;">${item.category || 'General'}</p>
+              <p style="color: var(--text); margin: 0 0 0.5rem 0;">${item.description.substring(0, 100)}...</p>
+              <p style="color: var(--brand-blue); font-weight: 600; margin: 0.5rem 0 0 0;">Price: $${parseFloat(item.price).toFixed(2)}</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="edit-btn" onclick="openEditMarketplaceModal('${item.id}')">Edit</button>
+              <button class="delete-btn" onclick="deleteMarketplaceItem('${item.id}')">Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openAddMarketplaceItemModal() {
+      editingMarketplaceId = null;
+      document.getElementById('marketplaceModalTitle').textContent = 'Add Marketplace Item';
+      document.getElementById('marketplaceForm').reset();
+      document.getElementById('marketplaceModal').classList.add('active');
+    }
+
+    function openEditMarketplaceModal(id) {
+      const item = marketplaceItems.find(x => x.id === id);
+      if (!item) return;
+      editingMarketplaceId = id;
+      document.getElementById('marketplaceModalTitle').textContent = 'Edit Marketplace Item';
+      document.getElementById('itemTitle').value = item.title || '';
+      document.getElementById('itemCategory').value = item.category || '';
+      document.getElementById('itemDescription').value = item.description || '';
+      document.getElementById('itemPrice').value = item.price || '';
+      document.getElementById('itemAvailability').value = item.availability || '';
+      document.getElementById('itemContactEmail').value = item.contactEmail || '';
+      document.getElementById('itemImageUrl').value = item.imageUrl || '';
+      document.getElementById('marketplaceModal').classList.add('active');
+    }
+
+    function closeMarketplaceModal() {
+      document.getElementById('marketplaceModal').classList.remove('active');
+      editingMarketplaceId = null;
+    }
+
+    document.getElementById('marketplaceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('itemTitle').value.trim();
+      const category = document.getElementById('itemCategory').value.trim();
+      const description = document.getElementById('itemDescription').value.trim();
+      const price = parseFloat(document.getElementById('itemPrice').value);
+      const availability = document.getElementById('itemAvailability').value.trim();
+      const contactEmail = document.getElementById('itemContactEmail').value.trim();
+      let imageUrl = document.getElementById('itemImageUrl').value.trim() || null;
+      const imageFile = document.getElementById('itemImageFile').files[0];
+
+      if (imageFile) {
+        try {
+          const info = await uploadToDrive(imageFile, MARKETPLACE_FOLDER_ID);
+          imageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s600') : info.webContentLink;
+        } catch (err) {
+          showMarketplaceError('Image upload failed');
+          return;
+        }
+      }
+
+      if (!title || !category || !description || !price || !availability || !contactEmail) {
+        showMarketplaceError('Please fill in all required fields.');
+        return;
+      }
+
+      try {
+        const data = { title, category, description, price, availability, contactEmail, imageUrl };
+        if (editingMarketplaceId) {
+          await db.collection('marketplace').doc(editingMarketplaceId).update(data);
+          showMarketplaceSuccess('Item updated!');
+        } else {
+          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await db.collection('marketplace').add(data);
+          showMarketplaceSuccess('Item added!');
+        }
+        closeMarketplaceModal();
+        loadMarketplaceItems();
+      } catch (e) {
+        console.error('Error saving item:', e);
+        showMarketplaceError('Error saving item.');
+      }
+    });
+
+    async function deleteMarketplaceItem(id) {
+      if (!confirm('Delete this item?')) return;
+      try {
+        await db.collection('marketplace').doc(id).delete();
+        showMarketplaceSuccess('Item deleted!');
+        loadMarketplaceItems();
+      } catch (e) {
+        console.error('Error deleting item:', e);
+        showMarketplaceError('Error deleting item.');
+      }
+    }
+
+    function showMarketplaceSuccess(msg) {
+      const el = document.getElementById('marketplaceSuccessMessage');
+      el.textContent = '✓ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    function showMarketplaceError(msg) {
+      const el = document.getElementById('marketplaceErrorMessage');
+      el.textContent = '✗ ' + msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
     }
 
     // --- ENQUIRIES ---
@@ -1546,6 +2113,11 @@
     async function loadEnquiries() {
       const tbody = document.getElementById('enquiriesBody');
       if (!tbody) return;
+      // Quick permission hint
+      if (!hasTab('enquiries')) {
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">You do not have permission to view enquiries. Enable the "enquiries" tab for this admin in Roles.</td></tr>';
+        return;
+      }
       tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading enquiries...</td></tr>';
       try {
         let snap;
@@ -1559,7 +2131,14 @@
         renderEnquiries();
       } catch (e) {
         console.error('Enquiries load error:', e);
-        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Unable to load enquiries.</td></tr>';
+        const code = (e && e.code) ? String(e.code) : '';
+        let msg = 'Unable to load enquiries.';
+        if (code === 'permission-denied') {
+          msg = 'Permission denied. Ensure Firestore rules grant read to admins with the "enquiries" tab and that you are signed in.';
+        } else if (code) {
+          msg += ' (' + code + ')';
+        }
+        tbody.innerHTML = `<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">${msg}</td></tr>`;
       }
     }
 
@@ -1635,6 +2214,10 @@
     async function loadContacts() {
       const tbody = document.getElementById('contactsBody');
       if (!tbody) return;
+      if (!hasTab('contacts')) {
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">You do not have permission to view contacts. Enable the "contacts" tab for this admin in Roles.</td></tr>';
+        return;
+      }
       tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading contacts...</td></tr>';
       try {
         let snap;
@@ -1648,7 +2231,14 @@
         renderContacts();
       } catch (e) {
         console.error('Contacts load error:', e);
-        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Unable to load contacts.</td></tr>';
+        const code = (e && e.code) ? String(e.code) : '';
+        let msg = 'Unable to load contacts.';
+        if (code === 'permission-denied') {
+          msg = 'Permission denied. Ensure Firestore rules grant read to admins with the "contacts" tab and that you are signed in.';
+        } else if (code) {
+          msg += ' (' + code + ')';
+        }
+        tbody.innerHTML = `<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">${msg}</td></tr>`;
       }
     }
 

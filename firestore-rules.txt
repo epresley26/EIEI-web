@@ -1,0 +1,75 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Simple auth check
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // --- Public site content ---
+    match /posts/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    match /programs/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    match /team/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // --- Newsletter subscriptions ---
+    match /newsletter/{email} {
+      allow read: if true;
+      allow create: if request.resource.data.email is string && request.resource.id == request.resource.data.email && !exists(/databases/$(database)/documents/newsletter/$(request.resource.id));
+      allow update, delete: if isSignedIn();
+    }
+
+    // --- Enquiries (public form) ---
+    match /enquiries/{id} {
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
+    }
+
+    // --- Contacts (Contact Us form) ---
+    match /contacts/{id} {
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
+    }
+
+    // --- Marketplace items ---
+    match /marketplace/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // --- Gallery images ---
+    match /gallery/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // --- Gallery images ---
+    match /gallery/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // --- Roles collection ---
+    match /roles/{email} {
+      allow read, create, update, delete: if isSignedIn();
+    }
+
+    // Deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

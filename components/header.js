@@ -14,6 +14,7 @@ function createHeader() {
           <a href="services.html">Services</a>
           <a href="support.html">Support</a>
           <a href="blog.html">Blog</a>
+          <a href="marketplace.html">Marketplace</a>
           <a href="career-opportunities.html">Careers</a>
           <a href="contact-us.html">Contact</a>
           <a href="https://forms.gle/J5eJz9ztwiEAAyZq9" target="_blank" class="nav-btn nav-tour">Schedule a Tour</a>
