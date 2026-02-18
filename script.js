@@ -14,6 +14,110 @@ if (slides.length > 0) {
 }
 
 // ==================
+// TESTIMONIALS CAROUSEL (Dynamic from Firestore)
+// ==================
+let testimonialCardsData = [];
+let currentTestimonial = 0;
+let testimonialsInterval;
+
+function loadAndInitializeTestimonials() {
+  if (typeof window.firebaseDB === 'undefined') {
+    console.log('Firebase not ready yet');
+    return;
+  }
+
+  window.firebaseDB.collection('testimonials').orderBy('createdAt', 'desc').get()
+    .then(snapshot => {
+      testimonialCardsData = [];
+      snapshot.forEach(doc => {
+        testimonialCardsData.push({ id: doc.id, ...doc.data() });
+      });
+
+      if (testimonialCardsData.length === 0) {
+        console.log('No testimonials found');
+        return;
+      }
+
+      renderTestimonials();
+      initializeTestimonialCarousel();
+    })
+    .catch(err => console.error('Error loading testimonials:', err));
+}
+
+function renderTestimonials() {
+  const container = document.getElementById('testimonialsContainer');
+  if (!container) return;
+
+  container.innerHTML = '';
+  testimonialCardsData.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <p>"${escapeHtmlContent(t.text || '')}"</p>
+      <h3>- ${escapeHtmlContent(t.name || '')}${t.designation ? ', ' + escapeHtmlContent(t.designation) : ''}</h3>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function escapeHtmlContent(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function initializeTestimonialCarousel() {
+  const container = document.getElementById('testimonialsContainer');
+  if (!container) return;
+
+  const testimonialCards = container.querySelectorAll('.card');
+  if (testimonialCards.length === 0) return;
+
+  currentTestimonial = 0;
+  testimonialCards[0].classList.add('active');
+
+  function showTestimonial(index) {
+    testimonialCards.forEach(card => card.classList.remove('active'));
+    testimonialCards[index].classList.add('active');
+  }
+
+  function startAutoRotate() {
+    testimonialsInterval = setInterval(() => {
+      currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
+      showTestimonial(currentTestimonial);
+    }, 5000);
+  }
+
+  startAutoRotate();
+
+  const prevBtn = document.getElementById('prevTestimonial');
+  const nextBtn = document.getElementById('nextTestimonial');
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      clearInterval(testimonialsInterval);
+      currentTestimonial = (currentTestimonial - 1 + testimonialCards.length) % testimonialCards.length;
+      showTestimonial(currentTestimonial);
+      startAutoRotate();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      clearInterval(testimonialsInterval);
+      currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
+      showTestimonial(currentTestimonial);
+      startAutoRotate();
+    });
+  }
+
+  window.addEventListener('beforeunload', () => clearInterval(testimonialsInterval));
+}
+
+// Wait a bit for Firebase to initialize
+setTimeout(loadAndInitializeTestimonials, 500);
+
+// ==================
 // CONTACT BUTTON
 // ==================
 const contactBtn = document.getElementById("contactBtn");

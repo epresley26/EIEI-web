@@ -15,54 +15,243 @@
   <script src="https://accounts.google.com/gsi/client"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
+    html, body {
+      margin: 0;
+      padding: 0 !important;
+      height: 100%;
+      overflow: hidden;
+      background: #ffffff !important;
+    }
+
+    .nav {
+      display: none !important;
+    }
+
     .admin-container {
       min-height: 100vh;
-      background: var(--bg);
-      padding-top: 80px;
+      background: #ffffff;
+      padding-top: 0;
+      display: flex;
+      height: 100vh;
+      width: 100%;
     }
 
     .admin-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 0;
+      width: 100%;
+      flex: 1;
+      height: 100%;
+    }
+
+    .admin-sidebar {
+      width: 280px;
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      border-radius: 0;
+      padding: 2rem 1.5rem;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-search {
+      display: flex;
+      align-items: center;
+      background: rgba(123, 104, 238, 0.1);
+      border: 1px solid #7b68ee;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      margin-bottom: 1.5rem;
+      gap: 0.5rem;
+    }
+
+    .sidebar-search input {
+      background: none;
+      border: none;
+      color: #e0e0e0;
+      flex: 1;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .sidebar-search input::placeholder {
+      color: #a0a0a0;
+    }
+
+    .sidebar-create-btn {
+      background: linear-gradient(135deg, #7b68ee 0%, #9a7fd0 100%);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-create-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(123, 104, 238, 0.4);
+    }
+
+    .sidebar-calendar {
+      background: rgba(42, 65, 117, 0.15);
+      border: 1px solid rgba(252, 163, 17, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.5rem;
+    }
+
+    .calendar-day {
+      width: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .calendar-day:hover {
+      background: rgba(252, 163, 17, 0.2);
+    }
+
+    .calendar-day.active {
+      background: #fca311;
+      color: #2a4175;
+      font-weight: 600;
+    }
+
+    .sidebar-section {
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-section-title {
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-section-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(252, 163, 17, 0.2);
+      color: #ffffff;
+      border-color: #fca311;
+    }
+
+    .sidebar-item.active {
+      background: rgba(252, 163, 17, 0.3);
+      color: #ffffff;
+      border-color: #fca311;
+      font-weight: 600;
+      box-shadow: inset 0 0 0 2px #fca311;
+    }
+
+    .sidebar-item-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .sidebar-nav {
+      display: none;
+    }
+
+    .admin-main {
+      flex: 1;
+      margin-left: 280px;
+      padding: 0;
+      overflow-y: auto;
+      background: #f5f5f7;
+      display: flex;
+      flex-direction: column;
     }
 
     .admin-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 3rem;
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 1rem;
+      padding: 2rem 2.5rem;
+      background: #ffffff;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
     }
 
     .admin-header h1 {
-      color: var(--brand-blue);
-      font-size: 2rem;
+      color: #2a4175;
+      font-size: 1.8rem;
+      margin: 0;
     }
 
-    .admin-tabs {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      border-bottom: 2px solid var(--border);
+    #adminPanel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2.5rem;
     }
 
-    .admin-tab {
-      padding: 0.75rem 1.5rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      color: var(--text-muted);
-      transition: all 0.3s ease;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
+    .tab-content {
+      display: none;
     }
 
-    .admin-tab.active {
-      color: var(--brand-blue);
-      border-bottom-color: var(--brand-blue);
+    .tab-content.active {
+      display: block;
     }
 
     .logout-btn {
@@ -80,25 +269,19 @@
       opacity: 0.9;
     }
 
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
     .upload-section {
-      background: var(--card-bg);
+      background: #ffffff;
       padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       margin-bottom: 2rem;
+      border: 1px solid rgba(0,0,0,0.08);
     }
 
     .upload-section h2 {
-      color: var(--brand-blue);
-      margin-bottom: 1.5rem;
+      color: #2a4175;
+      margin-top: 0;
+      font-size: 1.5rem;
     }
 
     .form-group {
@@ -110,19 +293,28 @@
 
     .form-group label {
       font-weight: 600;
-      color: var(--text);
+      color: #111;
     }
 
     .form-group input,
     .form-group textarea,
     .form-group select {
       padding: 0.8rem;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(0,0,0,0.08);
       border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
+      background: #ffffff;
+      color: #111;
       font-family: inherit;
       font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #2a4175;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(42, 65, 117, 0.1);
     }
 
     .form-group textarea {
@@ -133,6 +325,38 @@
     .programs-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .programs-list > div {
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .programs-list > div:hover {
+      border-color: #fca311;
+      box-shadow: 0 2px 12px rgba(252, 163, 17, 0.15);
+    }
+
+    .data-table {
+      color: #111;
+    }
+
+    .data-table thead {
+      background: #f5f5f7;
+    }
+
+    .data-table th {
+      color: #2a4175;
+    }
+
+    .data-table td {
+      color: #555;
+      border-color: rgba(0,0,0,0.08);
+    }
       gap: 1.5rem;
       margin-top: 2rem;
     }
@@ -171,21 +395,33 @@
     }
 
     .edit-btn {
-      background: var(--brand-blue);
+      background: #7b68ee;
       color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
     .edit-btn:hover {
-      opacity: 0.8;
+      background: #9a7fd0;
+      transform: translateY(-2px);
     }
 
     .delete-btn {
-      background: #dc2626;
+      background: #f44336;
       color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
     .delete-btn:hover {
-      opacity: 0.8;
+      background: #d32f2f;
+      transform: translateY(-2px);
     }
 
     .modal {
@@ -199,6 +435,42 @@
       z-index: 1000;
       align-items: center;
       justify-content: center;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      color: #2a4175;
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #555;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #111;
     }
 
     .modal.active {
@@ -235,10 +507,11 @@
     }
 
     .success-message {
-      background: #d1fae5;
-      color: #065f46;
+      background: rgba(76, 175, 80, 0.15);
+      border-left: 4px solid #4caf50;
+      color: #4caf50;
       padding: 1rem;
-      border-radius: 8px;
+      border-radius: 6px;
       margin-bottom: 1rem;
       display: none;
     }
@@ -249,10 +522,11 @@
     }
 
     .error-message {
-      background: #fee2e2;
-      color: #991b1b;
+      background: rgba(244, 67, 54, 0.15);
+      border-left: 4px solid #f44336;
+      color: #f44336;
       padding: 1rem;
-      border-radius: 8px;
+      border-radius: 6px;
       margin-bottom: 1rem;
       display: none;
     }
@@ -274,25 +548,26 @@
     }
 
     .primary-btn {
-      background: var(--brand-blue);
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
       color: white;
       border: none;
       padding: 0.8rem 1.5rem;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 1rem;
-      transition: opacity 0.3s ease;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
     }
 
     .primary-btn:hover {
-      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(42, 65, 117, 0.3);
     }
 
     .secondary-btn {
-      background: var(--bg-alt);
-      color: var(--text);
-      border: 1px solid var(--border);
+      background: #f5f5f7;
+      color: #2a4175;
+      border: 1px solid #2a4175;
       padding: 0.8rem 1.5rem;
       border-radius: 8px;
       cursor: pointer;
@@ -302,17 +577,22 @@
     }
 
     .secondary-btn:hover {
+      background: #2a4175;
+      color: white;
+    }
       background: var(--border);
     }
 
     .button-group {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       margin-top: 2rem;
+      flex-wrap: wrap;
     }
 
     .button-group button {
       flex: 1;
+      min-width: 150px;
     }
 
     .list-item {
@@ -343,6 +623,36 @@
       cursor: pointer;
       margin-top: 0.5rem;
     }
+
+    @media (max-width: 1024px) {
+      .admin-content {
+        flex-direction: column;
+      }
+
+      .admin-sidebar {
+        width: 100%;
+        position: static;
+        display: flex;
+      }
+
+      .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      .sidebar-nav button {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 1rem 1.5rem;
+      }
+
+      .sidebar-nav button.active {
+        border-left: none;
+        border-bottom-color: var(--brand-blue);
+        background: rgba(42, 65, 117, 0.08);
+      }
+    }
   </style>
 </head>
 <body>
@@ -360,23 +670,99 @@
   <!-- ADMIN CONTENT -->
   <div class="admin-container">
     <div class="admin-content">
-      <div class="admin-header">
-        <h1>Admin Portal - Programs Management</h1>
-        <div id="authContainer"></div>
+      <!-- SIDEBAR NAVIGATION -->
+      <div class="admin-sidebar" id="adminSidebar" style="display: none;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <img src="images/logo.png" alt="EIEI Logo" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+        </div>
+
+        <div class="sidebar-calendar">
+          <div class="calendar-header" id="todayDate">
+            <!-- Today's date will be populated here -->
+          </div>
+          <div class="calendar-grid" id="miniCalendar">
+            <!-- Calendar will be populated here -->
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            📁 CATEGORIES
+          </div>
+          <div class="sidebar-section-list">
+            <div class="sidebar-item" onclick="switchTab('programs')">
+              <span class="sidebar-item-color" style="background: #7b68ee;"></span>
+              Programs
+            </div>
+            <div class="sidebar-item" onclick="switchTab('blog')">
+              <span class="sidebar-item-color" style="background: #4caf50;"></span>
+              Blog
+            </div>
+            <div class="sidebar-item" onclick="switchTab('marketplace')">
+              <span class="sidebar-item-color" style="background: #ff6b9d;"></span>
+              Marketplace
+            </div>
+            <div class="sidebar-item" onclick="switchTab('gallery')">
+              <span class="sidebar-item-color" style="background: #ffd700;"></span>
+              Gallery
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            ⭐ MORE
+          </div>
+          <div class="sidebar-section-list">
+            <div class="sidebar-item" onclick="switchTab('team')">
+              <span class="sidebar-item-color" style="background: #00bcd4;"></span>
+              Team
+            </div>
+            <div class="sidebar-item" onclick="switchTab('testimonials')">
+              <span class="sidebar-item-color" style="background: #ff9800;"></span>
+              Testimonials
+            </div>
+            <div class="sidebar-item" onclick="switchTab('newsletter')">
+              <span class="sidebar-item-color" style="background: #e91e63;"></span>
+              Newsletter
+            </div>
+            <div class="sidebar-item" onclick="switchTab('enquiries')">
+              <span class="sidebar-item-color" style="background: #2196f3;"></span>
+              Enquiries
+            </div>
+            <div class="sidebar-item" onclick="switchTab('contacts')">
+              <span class="sidebar-item-color" style="background: #9c27b0;"></span>
+              Contacts
+            </div>
+            <div class="sidebar-item" id="rolesNavItem" onclick="switchTab('roles')" style="display:none;">
+              <span class="sidebar-item-color" style="background: #f44336;"></span>
+              Roles & Access
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto;">
+          <button onclick="logout()" style="width: 100%; padding: 0.75rem; background: #fca311; border: none; color: #ffffff; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(252, 163, 17, 0.3);">
+            🚪 Logout
+          </button>
+        </div>
       </div>
 
-      <div id="adminPanel" style="display: none;">
-        <div class="admin-tabs">
-          <button class="admin-tab active" onclick="switchTab('programs')">Programs</button>
-          <button class="admin-tab" onclick="switchTab('gallery')">Gallery Images</button>
-          <button class="admin-tab" onclick="switchTab('team')">Team</button>
-          <button class="admin-tab" onclick="switchTab('blog')">Blog</button>
-          <button class="admin-tab" onclick="switchTab('marketplace')">Marketplace</button>
-          <button class="admin-tab" onclick="switchTab('newsletter')">Newsletter</button>
-          <button class="admin-tab" onclick="switchTab('enquiries')">Enquiries</button>
-          <button class="admin-tab" onclick="switchTab('contacts')">Contacts</button>
-          <button class="admin-tab" onclick="switchTab('roles')" id="rolesTabBtn" style="display:none;">Roles</button>
-        </div>
+      <!-- MAIN CONTENT -->
+      <div class="admin-main">
+        <div id="adminPanel" style="display: none;">
+          <div class="admin-header">
+            <h1>Admin Portal</h1>
+            <div id="profileSection" style="display: flex; align-items: center; gap: 1rem;">
+              <div style="text-align: right;">
+                <div id="userEmail" style="color: #2a4175; font-weight: 600; font-size: 0.9rem;">Loading...</div>
+                <div style="color: #555; font-size: 0.8rem;">Administrator</div>
+              </div>
+              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1rem;">
+                <span id="profileInitial">A</span>
+              </div>
+            </div>
+          </div>
 
         <!-- PROGRAMS TAB -->
         <div id="programs" class="tab-content active">
@@ -457,6 +843,19 @@
             <div class="error-message" id="marketplaceErrorMessage"></div>
             <div id="marketplaceItemsList" class="programs-list">
               <p style="grid-column: 1/-1; color: var(--text-muted);">Loading marketplace items...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TESTIMONIALS TAB -->
+        <div id="testimonials" class="tab-content">
+          <div class="upload-section">
+            <h2>Testimonials Management</h2>
+            <button class="primary-btn" onclick="openAddTestimonialModal()" style="margin-bottom: 2rem;">+ Add New Testimonial</button>
+            <div class="success-message" id="testimonialSuccessMessage"></div>
+            <div class="error-message" id="testimonialErrorMessage"></div>
+            <div id="testimonialsList" class="programs-list">
+              <p style="grid-column: 1/-1; color: var(--text-muted);">Loading testimonials...</p>
             </div>
           </div>
         </div>
@@ -595,23 +994,30 @@
         </div>
       </div>
 
-      <div id="loginPrompt" style="text-align: center; padding: 2rem;">
-        <h2 style="color: var(--brand-blue); margin-bottom: 1rem;">Admin Sign In</h2>
-        <p style="color: var(--text-muted); margin-bottom: 2rem;">Use your admin email and password</p>
-        <div style="max-width:420px;margin:0 auto;text-align:left;background:var(--card-bg);padding:1.5rem;border-radius:12px;border:1px solid var(--border);">
-          <div class="form-group">
-            <label for="loginEmail">Email</label>
-            <input type="email" id="loginEmail" placeholder="admin@example.com">
+      <div id="loginPrompt" style="display: flex; align-items: center; justify-content: center; height: 100vh; width: 100%; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); margin: 0; padding: 0;">
+        <div style="text-align: center; max-width: 500px; width: 90%;">
+          <div style="margin-bottom: 2rem;">
+            <img src="images/logo.png" alt="EIEI Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;">
+            <h2 style="color: #7b68ee; margin-bottom: 0.5rem; font-size: 2rem;">Admin Sign In</h2>
+            <p style="color: #a0a0a0; margin-bottom: 2rem; font-size: 0.95rem;">Use your admin email and password</p>
           </div>
-          <div class="form-group">
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" placeholder="••••••••">
+
+          <div style="background: rgba(22, 33, 62, 0.8); padding: 2.5rem; border-radius: 16px; border: 1px solid #2a2a4e; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(123, 104, 238, 0.1);">
+            <div class="form-group">
+              <label for="loginEmail" style="display: block; color: #e0e0e0; margin-bottom: 0.5rem; font-weight: 600; text-align: left;">Email</label>
+              <input type="email" id="loginEmail" placeholder="admin@example.com" style="width: 100%; padding: 0.9rem 1rem; border: 1px solid #2a2a4e; border-radius: 8px; background: #0f3460; color: #e0e0e0; font-size: 1rem; transition: all 0.3s ease; box-sizing: border-box;">
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label for="loginPassword" style="display: block; color: #e0e0e0; margin-bottom: 0.5rem; font-weight: 600; text-align: left;">Password</label>
+              <input type="password" id="loginPassword" placeholder="••••••••" style="width: 100%; padding: 0.9rem 1rem; border: 1px solid #2a2a4e; border-radius: 8px; background: #0f3460; color: #e0e0e0; font-size: 1rem; transition: all 0.3s ease; box-sizing: border-box;">
+            </div>
+            <button class="primary-btn" onclick="signInEmailPassword()" style="width: 100%; padding: 1rem; margin-bottom: 1.5rem;">Sign In</button>
+            <div id="loginErrorMessage" class="error-message" style="margin-bottom: 1rem;"></div>
+            <p style="color: #a0a0a0; margin: 0; font-size: 0.85rem; line-height: 1.5;">Note: Gallery uploads to Google Drive require Google OAuth. Without Google sign-in, that feature will be disabled.</p>
           </div>
-          <div class="button-group">
-            <button class="primary-btn" onclick="signInEmailPassword()">Sign In</button>
-          </div>
-          <div id="loginErrorMessage" class="error-message" style="margin-top:1rem;"></div>
-          <p style="color:var(--text-muted);margin-top:1rem;">Note: Gallery uploads to Google Drive require Google OAuth. Without Google sign-in, that feature will be disabled.</p>
+        </div>
+      </div>
+        </div>
         </div>
       </div>
     </div>
@@ -795,6 +1201,34 @@
     </div>
   </div>
 
+  <!-- TESTIMONIALS MODAL -->
+  <div id="testimonialModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="testimonialModalTitle">Add Testimonial</h2>
+        <button class="close-btn" onclick="closeTestimonialModal()">×</button>
+      </div>
+      <form id="testimonialForm">
+        <div class="form-group">
+          <label for="testimonialText">Testimonial Text *</label>
+          <textarea id="testimonialText" required placeholder="Enter the testimonial quote" style="min-height:100px"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="testimonialName">Name *</label>
+          <input type="text" id="testimonialName" required placeholder="e.g., John Doe">
+        </div>
+        <div class="form-group">
+          <label for="testimonialDesignation">Designation *</label>
+          <input type="text" id="testimonialDesignation" required placeholder="e.g., CEO, Example Company">
+        </div>
+        <div class="button-group">
+          <button type="submit" class="primary-btn">Save Testimonial</button>
+          <button type="button" class="secondary-btn" onclick="closeTestimonialModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     const CLIENT_ID = '35109919396-prtb83ncq3t7j7h4c3qg1bs6q9e8hgkl.apps.googleusercontent.com';
     const GALLERY_FOLDER_ID = '1bjif6GZ65LnWx_X3vOnWR-xGeQHmC0N_';
@@ -867,9 +1301,20 @@
     function showAdminPanel() {
       document.getElementById('loginPrompt').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
-      const authDiv = document.getElementById('authContainer');
-      const emailText = currentUserEmail ? `Logged in as ${currentUserEmail}` : 'Logged in';
-      authDiv.innerHTML = `<span style="margin-right:1rem;color:var(--text-muted);">${emailText}</span><button class="logout-btn" onclick="logout()">Logout</button>`;
+      document.getElementById('adminSidebar').style.display = 'flex';
+      
+      // Update profile section
+      if (currentUserEmail) {
+        document.getElementById('userEmail').textContent = currentUserEmail;
+        const initial = currentUserEmail.charAt(0).toUpperCase();
+        document.getElementById('profileInitial').textContent = initial;
+      }
+
+      // Set Programs as active by default
+      const programsItem = document.querySelector('.sidebar-item[onclick="switchTab(\'programs\')"]');
+      if (programsItem) {
+        programsItem.classList.add('active');
+      }
 
       localStorage.setItem('adminAuthToken', accessToken);
     }
@@ -918,7 +1363,7 @@
 
         applyTabPermissions();
         if (isSuperadmin) {
-          document.getElementById('rolesTabBtn').style.display = '';
+          document.getElementById('rolesNavItem').style.display = '';
           loadRoles();
         }
       } catch (e) {
@@ -927,7 +1372,7 @@
         if (currentUserEmail) {
           isSuperadmin = true;
           applyTabPermissions();
-          document.getElementById('rolesTabBtn').style.display = '';
+          document.getElementById('rolesNavItem').style.display = '';
           // loadRoles may fail under rules; UI will still allow saving roles
         }
       }
@@ -1090,9 +1535,18 @@
     function switchTab(tabName) {
       document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
 
       event.target.classList.add('active');
       document.getElementById(tabName).classList.add('active');
+      
+      // Add active state to sidebar item
+      const sidebarItems = document.querySelectorAll('.sidebar-item');
+      sidebarItems.forEach(item => {
+        if (item.getAttribute('onclick') === `switchTab('${tabName}')`) {
+          item.classList.add('active');
+        }
+      });
     }
 
     // PROGRAMS MANAGEMENT
@@ -2270,7 +2724,140 @@
     switchTab = function(tabName) {
       switchTabOrig5(tabName);
       if (tabName === 'contacts') loadContacts();
+      if (tabName === 'testimonials') loadTestimonials();
     }
+
+    // ================
+    // TESTIMONIALS MANAGEMENT
+    // ================
+    let testimonials = [];
+    let editingTestimonialId = null;
+
+    function openAddTestimonialModal() {
+      editingTestimonialId = null;
+      document.getElementById('testimonialForm').reset();
+      document.getElementById('testimonialModalTitle').textContent = 'Add Testimonial';
+      document.getElementById('testimonialModal').style.display = 'block';
+    }
+
+    function closeTestimonialModal() {
+      document.getElementById('testimonialModal').style.display = 'none';
+    }
+
+    function loadTestimonials() {
+      window.firebaseDB.collection('testimonials').orderBy('createdAt', 'desc').get()
+        .then(snapshot => {
+          testimonials = [];
+          snapshot.forEach(doc => {
+            testimonials.push({ id: doc.id, ...doc.data() });
+          });
+          displayTestimonials();
+        })
+        .catch(err => {
+          console.error('Error loading testimonials:', err);
+          document.getElementById('testimonialsList').innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Error loading testimonials</p>';
+        });
+    }
+
+    function displayTestimonials() {
+      const container = document.getElementById('testimonialsList');
+      container.innerHTML = '';
+      
+      if (!testimonials.length) {
+        container.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">No testimonials yet</p>';
+        return;
+      }
+
+      testimonials.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.style.cssText = 'padding:1.5rem;background:var(--card-bg);border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);';
+        card.innerHTML = `
+          <p style="font-style:italic;margin-bottom:1rem;color:var(--text);">"${escapeHtml(t.text || '')}"</p>
+          <p style="margin-bottom:0.5rem;color:var(--brand-orange);font-weight:600;">- ${escapeHtml(t.name || '')}</p>
+          <p style="margin-bottom:1rem;color:var(--text-muted);font-size:0.9rem;">${escapeHtml(t.designation || '')}</p>
+          <div class="button-group" style="display:flex;gap:0.5rem;">
+            <button class="secondary-btn" onclick="editTestimonial('${t.id}')" style="flex:1;">Edit</button>
+            <button class="secondary-btn" onclick="deleteTestimonial('${t.id}')" style="flex:1;background:var(--playful-pink);color:white;">Delete</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function editTestimonial(id) {
+      const t = testimonials.find(x => x.id === id);
+      if (!t) return;
+      
+      editingTestimonialId = id;
+      document.getElementById('testimonialText').value = t.text || '';
+      document.getElementById('testimonialName').value = t.name || '';
+      document.getElementById('testimonialDesignation').value = t.designation || '';
+      document.getElementById('testimonialModalTitle').textContent = 'Edit Testimonial';
+      document.getElementById('testimonialModal').style.display = 'block';
+    }
+
+    function deleteTestimonial(id) {
+      if (!confirm('Delete this testimonial?')) return;
+      
+      window.firebaseDB.collection('testimonials').doc(id).delete()
+        .then(() => {
+          showSuccessMessage('testimonialSuccessMessage', 'Testimonial deleted successfully');
+          loadTestimonials();
+        })
+        .catch(err => showErrorMessage('testimonialErrorMessage', 'Error deleting testimonial: ' + err.message));
+    }
+
+    // Handle testimonial form submission
+    document.getElementById('testimonialForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const text = document.getElementById('testimonialText').value.trim();
+      const name = document.getElementById('testimonialName').value.trim();
+      const designation = document.getElementById('testimonialDesignation').value.trim();
+      
+      if (!text || !name || !designation) {
+        showErrorMessage('testimonialErrorMessage', 'All fields are required');
+        return;
+      }
+
+      const data = {
+        text,
+        name,
+        designation,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        if (editingTestimonialId) {
+          await window.firebaseDB.collection('testimonials').doc(editingTestimonialId).update(data);
+          showSuccessMessage('testimonialSuccessMessage', 'Testimonial updated successfully');
+        } else {
+          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await window.firebaseDB.collection('testimonials').add(data);
+          showSuccessMessage('testimonialSuccessMessage', 'Testimonial added successfully');
+        }
+        closeTestimonialModal();
+        loadTestimonials();
+      } catch (err) {
+        showErrorMessage('testimonialErrorMessage', 'Error saving testimonial: ' + err.message);
+      }
+    });
+
+    // Set today's date in the calendar header
+    function setTodayDate() {
+      const todayElement = document.getElementById('todayDate');
+      if (todayElement) {
+        const today = new Date();
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        const todayString = today.toLocaleDateString('en-US', options);
+        todayElement.innerHTML = `<strong>${todayString}</strong>`;
+      }
+    }
+
+    // Initialize today's date when page loads
+    window.addEventListener('load', setTodayDate);
+    setTodayDate(); // Also call immediately in case load event already fired
   </script>
 
 </body>
