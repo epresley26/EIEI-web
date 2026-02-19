@@ -8,45 +8,105 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // Check if user is admin
+    function isAdmin() {
+      let userEmail = request.auth.token.email;
+      let userRole = get(/databases/$(database)/documents/roles/$(userEmail)).data;
+      return userRole != null && 
+             (userRole.role == 'admin' || userRole.role == 'superadmin');
+    }
+
+    // Check if user is superadmin
+    function isSuperAdmin() {
+      let userEmail = request.auth.token.email;
+      let userRole = get(/databases/$(database)/documents/roles/$(userEmail)).data;
+      return userRole != null && userRole.role == 'superadmin';
+    }
+
+    // --- CHAT SYSTEM (NEW) ---
+    match /chats/{chatId} {
+      // Admins (authenticated) can read and write all conversations
+      allow read, write: if isSignedIn() && isAdmin();
+      
+      // Anyone can create a new chat
+      allow create: if true;
+      
+      // Allow visitors to read and update their own chats (unauthenticated)
+      allow read, update, delete: if request.auth == null;
+      
+      match /messages/{messageId} {
+        // Admins can read and write all messages
+        allow read, write: if isSignedIn() && isAdmin();
+        
+        // Unauthenticated visitors can read all messages
+        allow read: if request.auth == null;
+        
+        // Unauthenticated visitors can create messages with sender='user'
+        allow create: if request.auth == null && request.resource.data.sender == 'user';
+        
+        // Unauthenticated visitors can update messages (for marking as read)
+        allow update: if request.auth == null;
+      }
+    }
+
+    // Helper to get parent document
+    function getParent(level) {
+      return get(/databases/$(database)/documents/$(path(level)));
+    }
+
     // --- Public site content ---
     match /posts/{id} {
       allow read: if true;
-      allow create, update, delete: if isSignedIn();
+      allow create, update, delete: if isSignedIn() && isAdmin();
     }
 
     match /programs/{id} {
       allow read: if true;
-      allow create, update, delete: if isSignedIn();
+      allow create, update, delete: if isSignedIn() && isAdmin();
     }
 
     match /team/{id} {
       allow read: if true;
-      allow create, update, delete: if isSignedIn();
+      allow create, update, delete: if isSignedIn() && isAdmin();
+    }
+
+    match /testimonials/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn() && isAdmin();
     }
 
     // --- Newsletter subscriptions ---
     match /newsletter/{email} {
       allow read: if true;
       allow create: if request.resource.data.email is string && request.resource.id == request.resource.data.email && !exists(/databases/$(database)/documents/newsletter/$(request.resource.id));
-      allow update, delete: if isSignedIn();
+      allow update, delete: if isSignedIn() && isAdmin();
     }
 
     // --- Enquiries (public form) ---
     match /enquiries/{id} {
       allow create: if true;
-      allow read, update, delete: if isSignedIn();
+      allow read, update, delete: if isSignedIn() && isAdmin();
     }
 
     // --- Contacts (Contact Us form) ---
     match /contacts/{id} {
       allow create: if true;
-      allow read, update, delete: if isSignedIn();
+      allow read, update, delete: if isSignedIn() && isAdmin();
     }
 
     // --- Marketplace items ---
     match /marketplace/{id} {
       allow read: if true;
-      allow create, update, delete: if isSignedIn();
+      allow create, update, delete: if isSignedIn() && isAdmin();
+    }
+
+    // --- Roles & Permissions ---
+    match /roles/{userEmail} {
+      // Users can read their own role
+      allow read: if isSignedIn() && request.auth.token.email == userEmail;
+      
+      // Only superadmins can write roles
+      allow write: if isSignedIn() && isSuperAdmin();
     }
 
     // --- Gallery images ---

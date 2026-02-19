@@ -7,6 +7,12 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  
+  <!-- Firebase SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
 
@@ -208,10 +214,6 @@
 <script src="components/header.js"></script>
 <script src="components/footer.js"></script>
 <script src="components/loader.js"></script>
-<!-- Firebase SDKs for writing enquiries -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script src="components/firebase-init.js"></script>
 <script src="script.js"></script>
 <script>
   // Load components when DOM is ready
@@ -374,6 +376,8 @@
 </script>
 
   <script src="script.js"></script>
+  <script src="components/firebase-init.js"></script>
+  <script src="components/chat-widget.js"></script>
   <script>
     // Load gallery images when page loads
     document.addEventListener('DOMContentLoaded', loadGalleryImages);
