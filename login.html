@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EIEI Admin - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="components/firebase-init.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --brand-blue: #2a4175;
+      --brand-orange: #fca311;
+      --brand-blue-dark: #4a6fa5;
+      --bg: #ffffff;
+      --bg-alt: #f5f5f7;
+      --text: #111;
+      --text-muted: #555;
+      --border: rgba(0,0,0,0.08);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-alt);
+    }
+
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+      padding: 2rem;
+    }
+
+    .login-card {
+      background: var(--bg);
+      border: 4px solid var(--brand-blue);
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      display: flex;
+      width: 100%;
+      max-width: 900px;
+      min-height: 500px;
+      overflow: hidden;
+    }
+
+    /* Left Side - Form */
+    .login-left {
+      flex: 1;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-left h1 {
+      color: var(--text);
+      font-size: 2rem;
+      margin: 0 0 0.5rem 0;
+      font-weight: 600;
+    }
+
+    .login-left > p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0 0 2rem 0;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .form-group input[type="email"]::placeholder,
+    .form-group input[type="password"]::placeholder {
+      color: var(--placeholder);
+    }
+
+    .form-group input[type="email"]:focus,
+    .form-group input[type="password"]:focus {
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 3px rgba(42, 65, 117, 0.1);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-right: 0.5rem;
+      cursor: pointer;
+      accent-color: var(--brand-blue);
+    }
+
+    .checkbox-group label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: linear-gradient(135deg, var(--brand-orange) 0%, #ff9500 100%);
+      color: var(--brand-blue);
+      border: none;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin-bottom: 1rem;
+    }
+
+    .login-btn:hover {
+      box-shadow: 0 4px 12px rgba(252, 163, 17, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-footer {
+      text-align: center;
+    }
+
+    .login-footer a {
+      color: var(--brand-orange);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .login-footer a:hover {
+      color: var(--brand-blue);
+    }
+
+    .login-error {
+      color: #d32f2f;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      display: none;
+      background: #ffebee;
+      padding: 0.75rem;
+      border-radius: 4px;
+      border-left: 3px solid #d32f2f;
+    }
+
+    .login-error.show {
+      display: block;
+    }
+
+    /* Right Side - Illustration */
+    .login-right {
+      flex: 1;
+      background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .login-illustration {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .illustration-icon {
+      width: 180px;
+      height: 180px;
+      background: rgba(252, 163, 17, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .illustration-icon img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .login-right h3 {
+      color: var(--bg);
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .login-right p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .login-card {
+        flex-direction: column;
+        min-height: auto;
+      }
+
+      .login-left {
+        padding: 2rem;
+      }
+
+      .login-right {
+        min-height: 300px;
+        padding: 2rem;
+      }
+
+      .login-left h1 {
+        font-size: 1.5rem;
+      }
+
+      .illustration-icon {
+        width: 120px;
+        height: 120px;
+      }
+
+      .illustration-icon img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Left Side - Form -->
+      <div class="login-left">
+        <h1>Log in.</h1>
+        <p>Login with your admin credentials.</p>
+
+        <div id="loginErrorMessage" class="login-error"></div>
+
+        <form class="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="loginEmail">Your e-mail</label>
+            <input type="email" id="loginEmail" placeholder="name@domain.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••••" required>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="keepLogged" name="keepLogged">
+            <label for="keepLogged">Keep me logged in</label>
+          </div>
+
+          <button type="submit" class="login-btn">Log In</button>
+        </form>
+
+        <div class="login-footer">
+          <a href="#">Forgot Password?</a>
+        </div>
+      </div>
+
+      <!-- Right Side - Illustration -->
+      <div class="login-right">
+        <div class="login-illustration">
+          <div class="illustration-icon">
+            <img src="images/logo.png" alt="EIEI Logo">
+          </div>
+          <h3>Don't have account yet?</h3>
+          <p>Contact us at admin@eiei.com and we will take care of everything!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const email = String(document.getElementById('loginEmail').value || '').trim().toLowerCase();
+      const password = String(document.getElementById('loginPassword').value || '');
+      const keepLogged = document.getElementById('keepLogged').checked;
+
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+        
+        if (keepLogged) {
+          localStorage.setItem('adminUserEmail', email);
+        }
+        
+        // Redirect to admin panel on successful login
+        window.location.href = 'admin-programs.html';
+      } catch (e) {
+        console.error('Sign-in failed:', e);
+        const msg = mapAuthError(e);
+        showLoginError(msg);
+      }
+    }
+
+    function showLoginError(message) {
+      const el = document.getElementById('loginErrorMessage');
+      if (!el) return alert(message);
+      el.textContent = '✗ ' + message;
+      el.classList.add('show');
+    }
+
+    function mapAuthError(err) {
+      const code = (err && err.code) || '';
+      switch (code) {
+        case 'auth/user-not-found': return 'No account found for this email.';
+        case 'auth/wrong-password': return 'Incorrect password. Try again or reset it.';
+        case 'auth/invalid-email': return 'Invalid email format.';
+        case 'auth/too-many-requests': return 'Too many attempts. Please wait and try again.';
+        case 'auth/network-request-failed': return 'Network error. Check connection or ad blockers.';
+        case 'auth/invalid-login-credentials': return 'Please check your email and password.';
+        default: return (err && err.message) ? err.message : 'Sign-in failed. Please check your credentials.';
+      }
+    }
+
+    // Check if user is already logged in
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is already logged in, redirect to admin panel
+        window.location.href = 'admin-programs.html';
+      }
+    });
+  </script>
+</body>
+</html>

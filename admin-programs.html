@@ -994,34 +994,8 @@
         </div>
       </div>
 
-      <div id="loginPrompt" style="display: flex; align-items: center; justify-content: center; height: 100vh; width: 100%; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); margin: 0; padding: 0;">
-        <div style="text-align: center; max-width: 500px; width: 90%;">
-          <div style="margin-bottom: 2rem;">
-            <img src="images/logo.png" alt="EIEI Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;">
-            <h2 style="color: #7b68ee; margin-bottom: 0.5rem; font-size: 2rem;">Admin Sign In</h2>
-            <p style="color: #a0a0a0; margin-bottom: 2rem; font-size: 0.95rem;">Use your admin email and password</p>
-          </div>
-
-          <div style="background: rgba(22, 33, 62, 0.8); padding: 2.5rem; border-radius: 16px; border: 1px solid #2a2a4e; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(123, 104, 238, 0.1);">
-            <div class="form-group">
-              <label for="loginEmail" style="display: block; color: #e0e0e0; margin-bottom: 0.5rem; font-weight: 600; text-align: left;">Email</label>
-              <input type="email" id="loginEmail" placeholder="admin@example.com" style="width: 100%; padding: 0.9rem 1rem; border: 1px solid #2a2a4e; border-radius: 8px; background: #0f3460; color: #e0e0e0; font-size: 1rem; transition: all 0.3s ease; box-sizing: border-box;">
-            </div>
-            <div class="form-group" style="margin-bottom: 1.5rem;">
-              <label for="loginPassword" style="display: block; color: #e0e0e0; margin-bottom: 0.5rem; font-weight: 600; text-align: left;">Password</label>
-              <input type="password" id="loginPassword" placeholder="••••••••" style="width: 100%; padding: 0.9rem 1rem; border: 1px solid #2a2a4e; border-radius: 8px; background: #0f3460; color: #e0e0e0; font-size: 1rem; transition: all 0.3s ease; box-sizing: border-box;">
-            </div>
-            <button class="primary-btn" onclick="signInEmailPassword()" style="width: 100%; padding: 1rem; margin-bottom: 1.5rem;">Sign In</button>
-            <div id="loginErrorMessage" class="error-message" style="margin-bottom: 1rem;"></div>
-            <p style="color: #a0a0a0; margin: 0; font-size: 0.85rem; line-height: 1.5;">Note: Gallery uploads to Google Drive require Google OAuth. Without Google sign-in, that feature will be disabled.</p>
-          </div>
-        </div>
+      <div id="loginPrompt" style="display: flex; height: 100vh; width: 100%; margin: 0; padding: 0; background: #0d3d56; display: none;">
       </div>
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ADD/EDIT PROGRAM MODAL -->
   <div id="programModal" class="modal">
@@ -1996,6 +1970,7 @@
     window.addEventListener('load', initializeEmailAuth);
 
     // Initialize Email/Password Auth
+    // Initialize when page loads (Email/Password Auth)
     function initializeEmailAuth() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
@@ -2006,13 +1981,13 @@
           loadPrograms();
           if (accessToken) loadGalleryImages();
         } else {
-          document.getElementById('adminPanel').style.display = 'none';
-          document.getElementById('loginPrompt').style.display = 'block';
+          // Redirect to login page if not authenticated
+          window.location.href = 'login.html';
         }
       });
     }
 
-    // Sign in with email/password
+    window.addEventListener('load', initializeEmailAuth);
     async function signInEmailPassword() {
       const email = String(document.getElementById('loginEmail').value || '').trim().toLowerCase();
       const password = String(document.getElementById('loginPassword').value || '');
