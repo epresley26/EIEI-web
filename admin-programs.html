@@ -57,7 +57,7 @@
       position: fixed;
       left: 0;
       top: 0;
-      box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+      box-shadow: 8px 0 32px rgba(0,0,0,0.25), 4px 0 16px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
       overflow-y: auto;
@@ -218,11 +218,20 @@
     .admin-main {
       flex: 1;
       margin-left: 280px;
-      padding: 0;
+      padding: 15px;
       overflow-y: auto;
-      background: #f5f5f7;
+      background: transparent;
       display: flex;
       flex-direction: column;
+    }
+
+    .admin-main > * {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      width: 75%;
+      margin: 0 auto;
+      padding: 2rem;
     }
 
     .admin-header {
@@ -244,7 +253,7 @@
     #adminPanel {
       flex: 1;
       overflow-y: auto;
-      padding: 2.5rem;
+      padding: 0;
     }
 
     .tab-content {
@@ -358,9 +367,7 @@
       color: #555;
       border-color: rgba(0,0,0,0.08);
     }
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
+      
 
     .program-card {
       background: var(--card-bg);
@@ -581,8 +588,7 @@
       background: #2a4175;
       color: white;
     }
-      background: var(--border);
-    }
+      
 
     .button-group {
       display: flex;
@@ -711,6 +717,14 @@
               <span class="sidebar-item-color" style="background: #00bcd4;"></span>
               💬 Chat
             </div>
+            <div class="sidebar-item" onclick="switchTab('jobs')">
+              <span class="sidebar-item-color" style="background: #ff6b6b;"></span>
+              Job Openings
+            </div>
+            <div class="sidebar-item" onclick="switchTab('applications')">
+              <span class="sidebar-item-color" style="background: #ff9800;"></span>
+              Applications
+            </div>
           </div>
         </div>
 
@@ -758,7 +772,15 @@
         <div id="adminPanel" style="display: none;">
           <div class="admin-header">
             <h1>Admin Portal</h1>
-            <div id="profileSection" style="display: flex; align-items: center; gap: 1rem;">
+            <div id="profileSection" style="display: flex; align-items: center; gap: 1.5rem;">
+              <!-- Notification Icon -->
+              <div style="position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;" title="Notifications">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#2a4175"/>
+                </svg>
+                <span id="notificationBadge" style="position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #ff5252; border: 2px solid white; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 700;">0</span>
+              </div>
+              <div style="width: 1px; height: 40px; background: rgba(0,0,0,0.1);"></div>
               <div style="text-align: right;">
                 <div id="userEmail" style="color: #2a4175; font-weight: 600; font-size: 0.9rem;">Loading...</div>
                 <div style="color: #555; font-size: 0.8rem;">Administrator</div>
@@ -823,6 +845,33 @@
             <div id="teamList" class="programs-list">
               <p style="grid-column: 1/-1; color: var(--text-muted);">Loading team members...</p>
             </div>
+          </div>
+        </div>
+
+        <!-- JOB OPENINGS TAB -->
+        <div id="jobs" class="tab-content">
+          <div class="upload-section">
+            <h2>Job Openings Management</h2>
+            <button class="primary-btn" onclick="openAddJobModal()" style="margin-bottom: 2rem;">+ Post New Job</button>
+            <div class="success-message" id="jobSuccessMessage"></div>
+            <div class="error-message" id="jobErrorMessage"></div>
+            <div id="jobsList" class="programs-list">
+              <p style="grid-column: 1/-1; color: var(--text-muted);">Loading job openings...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- APPLICATIONS TAB -->
+        <div id="applications" class="tab-content">
+          <div class="upload-section">
+            <h2>Job Applications</h2>
+            <div style="margin-bottom: 1.5rem;">
+              <label for="filterJobSelect" style="margin-right: 1rem;">Filter by Job:</label>
+              <select id="filterJobSelect" onchange="loadApplicationsForJob()" style="padding: 0.5rem; border-radius: 6px; border: 1px solid #ddd;">
+                <option value="">All Jobs</option>
+              </select>
+            </div>
+            <div id="applicationsContainer"></div>
           </div>
         </div>
 
@@ -1004,33 +1053,6 @@
 
   <!-- ADD/EDIT PROGRAM MODAL -->
   <div id="programModal" class="modal">
-      <!-- ADD/EDIT TEAM MEMBER MODAL -->
-      <div id="teamModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 id="teamModalTitle">Add New Team Member</h2>
-            <button class="close-btn" onclick="closeTeamModal()">×</button>
-          </div>
-          <form id="teamForm">
-            <div class="form-group">
-              <label for="teamName">Name *</label>
-              <input type="text" id="teamName" required>
-            </div>
-            <div class="form-group">
-              <label for="teamRole">Role *</label>
-              <input type="text" id="teamRole" required>
-            </div>
-            <div class="form-group">
-              <label for="teamImage">Image *</label>
-              <input type="file" id="teamImage" accept="image/*" required>
-            </div>
-            <div class="button-group">
-              <button type="submit" class="primary-btn">Save Member</button>
-              <button type="button" class="secondary-btn" onclick="closeTeamModal()">Cancel</button>
-            </div>
-          </form>
-        </div>
-      </div>
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="modalTitle">Add New Program</h2>
@@ -1083,6 +1105,101 @@
         <div class="button-group">
           <button type="submit" class="primary-btn">Save Program</button>
           <button type="button" class="secondary-btn" onclick="closeProgramModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT TEAM MEMBER MODAL -->
+  <div id="teamModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="teamModalTitle">Add New Team Member</h2>
+        <button class="close-btn" onclick="closeTeamModal()">×</button>
+      </div>
+      <form id="teamForm">
+        <div class="form-group">
+          <label for="teamName">Name *</label>
+          <input type="text" id="teamName" required>
+        </div>
+        <div class="form-group">
+          <label for="teamRole">Role *</label>
+          <input type="text" id="teamRole" required>
+        </div>
+        <div class="form-group">
+          <label for="teamSection">Section *</label>
+          <select id="teamSection" required>
+            <option value="">-- Select Section --</option>
+            <option value="founder">Founder</option>
+            <option value="executive">Executive Team</option>
+            <option value="staff">Staff</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="teamBio">Bio</label>
+          <textarea id="teamBio" placeholder="Enter team member bio..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="teamImageUrl">Image URL</label>
+          <input type="url" id="teamImageUrl" placeholder="https://example.com/image.jpg">
+        </div>
+        <div class="form-group">
+          <label for="teamImage">Or Upload Image</label>
+          <input type="file" id="teamImage" accept="image/*">
+        </div>
+        <div class="button-group">
+          <button type="submit" class="primary-btn">Save Member</button>
+          <button type="button" class="secondary-btn" onclick="closeTeamModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT JOB OPENING MODAL -->
+  <div id="jobModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="jobModalTitle">Post New Job Opening</h2>
+        <button class="close-btn" onclick="closeJobModal()">×</button>
+      </div>
+      <form id="jobForm">
+        <div class="form-group">
+          <label for="jobTitle">Job Title *</label>
+          <input type="text" id="jobTitle" required placeholder="e.g., Special Education Teacher">
+        </div>
+        <div class="form-group">
+          <label for="jobLocation">Location *</label>
+          <input type="text" id="jobLocation" required placeholder="e.g., Philadelphia, PA">
+        </div>
+        <div class="form-group">
+          <label for="jobType">Job Type *</label>
+          <select id="jobType" required>
+            <option value="">Select job type</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Contract">Contract</option>
+            <option value="Internship">Internship</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="jobSalary">Salary Range (optional)</label>
+          <input type="text" id="jobSalary" placeholder="e.g., $45,000 - $60,000">
+        </div>
+        <div class="form-group">
+          <label for="jobDescription">Job Description *</label>
+          <textarea id="jobDescription" required style="min-height:200px" placeholder="Describe the role, responsibilities, and qualifications"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="jobRequirements">Requirements *</label>
+          <textarea id="jobRequirements" required placeholder="Enter requirements (one per line)"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="jobBenefits">Benefits (optional)</label>
+          <textarea id="jobBenefits" placeholder="Enter benefits (one per line)"></textarea>
+        </div>
+        <div class="button-group">
+          <button type="submit" class="primary-btn">Post Job</button>
+          <button type="button" class="secondary-btn" onclick="closeJobModal()">Cancel</button>
         </div>
       </form>
     </div>
@@ -1529,14 +1646,22 @@
           item.classList.add('active');
         }
       });
+
+      // Load applications when switching to applications tab
+      if (tabName === 'applications') {
+        loadApplicationsTab();
+      }
     }
 
     // PROGRAMS MANAGEMENT
     async function loadPrograms() {
       try {
         const snap = await window.firebaseDB.collection('programs').get();
-        programs = snap.docs.map(doc => doc.data());
-        if (!programs || programs.length === 0) programs = getDefaultPrograms();
+        if (snap.empty) {
+          programs = getDefaultPrograms();
+        } else {
+          programs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
       } catch (error) {
         console.error('Error loading programs:', error);
         programs = getDefaultPrograms();
@@ -1547,121 +1672,99 @@
     function getDefaultPrograms() {
       return [
         {
-          id: 'early-intervention',
-          name: 'Early Intervention Services & Behavioral Health',
-          ageRange: 'Ages 3-5',
-          description: 'EIEI offers free to low-cost on-site special education social playgroups and classrooms tailored for children ages 3-5, supported by Certified Educators, Special Needs Instructors, Registered Behavior Technicians (RBT), and Occupational and Speech Therapy support.',
-          provides: [
-            'Free to low-cost specialized classrooms',
-            'Social playgroups with structured learning activities',
-            'Individual and small group behavioral support',
-            'Speech and language therapy',
-            'Occupational therapy services',
-            'In-home and in-school support',
-            'Family engagement and parent coaching'
-          ],
+          id: 'career-development',
+          name: 'Career Development Program',
+          description: 'Join our team! We are NOW HIRING full time with benefits. Join our Early Intervention Dream Team as a Certified Early Childhood and Special Needs Educator, Registered Behavior Technician (RBT), Occupational or Speech Language Therapist.',
+          fullDescription: 'The Education Institute for Early Intervention is seeking passionate professionals to empower the minds and nurture the hearts of children ages 3-5 at our Northeast Philadelphia (19124) Special Education Classrooms. Together, we will provide a safe, nurturing, and developmentally appropriate environment for children and their families to thrive, both in school and in life-long success!',
+          imageUrl: 'images/career-dev.svg',
+          link: '/career-development.html',
           benefits: [
-            'Children with developmental delays',
-            'Children with autism spectrum disorder',
-            'Children with behavioral challenges',
-            'Children needing speech/language support',
-            'Children with special healthcare needs',
-            'Families seeking early support'
-          ],
-          location: '4704 Leiper Street, Philadelphia, PA 19124',
-          imageUrl: 'images/service1.svg'
+            'Full-time positions',
+            'Comprehensive benefits package',
+            'Work with passionate team',
+            'Support diverse learners'
+          ]
         },
         {
           id: 'training-development',
           name: 'Training, Coaching, and Professional Development',
-          description: 'Empowering owners, directors, and educators to expand their knowledge of special education and its legal aspects.',
-          provides: [
-            'Special education law and regulations',
+          description: 'Empowering owners, directors, and educators to expand their knowledge of special education and its legal aspects concerning the children and families they passionately serve.',
+          fullDescription: 'We provide comprehensive professional development for educators, program directors, and administrators. Our training covers special education law, inclusive practices, behavior management, and effective strategies for engaging with children of diverse abilities.',
+          imageUrl: 'images/training.svg',
+          link: 'training-development.html',
+          benefits: [
+            'Special education law and regulations training',
             'Inclusive classroom practices',
             'Behavior management strategies',
-            'Early childhood development',
-            'Trauma-informed approaches',
-            'Family engagement strategies',
-            'Cultural competency and diversity'
-          ],
-          benefits: [
-            'Child care providers',
-            'Preschool programs',
-            'School districts',
-            'Early intervention agencies'
-          ],
-          imageUrl: 'images/service2.svg'
+            'Professional certification support',
+            'Customized workshops for organizations'
+          ]
         },
         {
           id: 'community-programs',
-          name: 'Community Programs & Partnerships',
-          description: 'EIEI has proudly been awarded a 5-year grant in partnership with Pennsylvania\'s Pre-K Counts.',
-          provides: [
-            'Direct consultation and technical assistance',
-            'Staff training and professional development',
-            'Inclusive classroom implementation',
-            'Family engagement program development',
-            'Quality improvement initiatives'
-          ],
+          name: 'Community Programs and Partnerships',
+          description: 'We go further together! EIEI has proudly been awarded a 5-year grant in partnership with Pennsylvania\'s Pre-K Counts, supporting 20+ Early Childhood Education programs.',
+          fullDescription: 'Through our partnership with Pennsylvania\'s Pre-K Counts initiative, we support 20 remarkable Early Childhood Education (ECE) programs with training, coaching, professional development, classroom management, family engagement strategies, and support for the growth of children with diverse abilities.',
+          imageUrl: 'images/community.svg',
+          link: 'community-programs.html',
           benefits: [
-            '20+ ECE programs',
-            'Hundreds of children served',
-            'Statewide reach'
-          ],
-          imageUrl: 'images/service3.svg'
+            'Consultation and technical assistance',
+            'Staff training and development',
+            'Inclusive classroom implementation',
+            'Family engagement programs',
+            'Quality improvement initiatives',
+            'Serves 20+ ECE programs'
+          ]
         },
         {
           id: 'family-empowerment',
-          name: 'Family Empowerment & Support',
-          description: 'Join our vibrant online community and Family Empowerment Corner Sessions where families and educators come together.',
-          provides: [
+          name: 'Family Empowerment',
+          description: 'Join our vibrant online community and Family Empowerment Corner Sessions where families and educators come together to support one another.',
+          fullDescription: 'We provide a supportive community for families navigating early intervention and special education services. From tips on self-care to guidance on navigating city and state special education services, our Family Empowerment programs offer connection, resources, and shared experiences.',
+          imageUrl: 'images/family.svg',
+          link: 'family-empowerment.html',
+          benefits: [
             'Virtual support groups and community meetings',
             'Parenting workshops and training',
             'Self-care and wellness resources',
             'Navigation of special education services',
-            'Advocacy training and support'
-          ],
-          benefits: [
-            'Parents and caregivers',
-            'Families with young children',
-            'Families seeking support',
-            'Those new to special education'
-          ],
-          imageUrl: 'images/service4.svg'
+            'Peer support and shared experiences',
+            'Expert guidance and advocacy training'
+          ]
         },
         {
-          id: 'partnerships',
-          name: 'Supporting Communities & Partnerships',
-          description: 'We join hands with non-profit and for-profit partners, aligning our efforts to support their mission.',
-          provides: [
+          id: 'early-intervention',
+          name: 'Early Intervention Services and Behavioral Health',
+          description: 'EIEI offers free to low-cost on-site special education social playgroups and classrooms tailored for children ages 3-5, supported by Certified Educators and specialists.',
+          fullDescription: 'We provide comprehensive early intervention services for children ages 3-5 with diverse abilities. Our agency offers on-site special education social playgroups and classrooms, as well as comprehensive in-school and in-home services, ensuring that your child receives the best care and support they deserve.',
+          imageUrl: 'images/early-intervention.svg',
+          link: 'early-intervention.html',
+          location: '4704 Leiper Street, Philadelphia, PA 19124',
+          benefits: [
+            'Certified Early Ed & Special Needs Teachers',
+            'Registered Behavior Technicians (RBT)',
+            'Speech & Language Therapy Support',
+            'Occupational Therapy Support',
+            'In-home services',
+            'In-school services',
+            'Social playgroups and classrooms'
+          ]
+        },
+        {
+          id: 'supporting-inclusions',
+          name: 'Supporting Inclusions Through Programs and Affiliates',
+          description: 'We join hands with non-profit and for-profit partners, aligning our efforts to support their mission through essential resources, empowering education, and collaborative efforts.',
+          fullDescription: 'EIEI partners with community organizations to foster inclusivity and support children with diverse abilities. We provide consultation, resources, and collaborative support to non-profit and for-profit organizations committed to serving families in our community.',
+          imageUrl: 'images/partnerships.svg',
+          link: 'supporting-inclusions.html',
+          benefits: [
             'Strategic partnership development',
-            'Grant writing and funding support',
-            'Program evaluation and quality improvement',
-            'Staff training and capacity building'
-          ],
-          benefits: [
-            'Non-profit organizations',
-            'For-profit child care centers',
-            'School districts'
-          ],
-          imageUrl: 'images/service5.svg'
-        },
-        {
-          id: 'cacfp',
-          name: 'CACFP Sponsorship & Administrative Support',
-          description: 'As a sponsoring organization of the Child and Adult Care Food Program (CACFP), EIEI offers vital administrative support.',
-          provides: [
-            'Program sponsorship and administration',
-            'Meal reimbursement processing',
-            'Nutrition education and resources',
-            'Compliance monitoring and support'
-          ],
-          benefits: [
-            'Child care providers',
-            'Preschool programs',
-            'Community organizations'
-          ],
-          imageUrl: 'images/service6.svg'
+            'Financial resources and grants',
+            'Staff training and capacity building',
+            'Program evaluation and improvement',
+            'Collaborative community initiatives',
+            'Advocacy and support'
+          ]
         }
       ];
     }
@@ -2212,6 +2315,9 @@
       document.getElementById('teamModalTitle').textContent = 'Edit Team Member';
       document.getElementById('teamName').value = member.name;
       document.getElementById('teamRole').value = member.role;
+      document.getElementById('teamSection').value = member.section || '';
+      document.getElementById('teamBio').value = member.bio || '';
+      document.getElementById('teamImageUrl').value = member.imageUrl || '';
       document.getElementById('teamImage').value = '';
       document.getElementById('teamModal').classList.add('active');
     }
@@ -2225,32 +2331,45 @@
       e.preventDefault();
       const name = document.getElementById('teamName').value.trim();
       const role = document.getElementById('teamRole').value.trim();
+      const section = document.getElementById('teamSection').value.trim();
+      const bio = document.getElementById('teamBio').value.trim();
+      const imageUrl = document.getElementById('teamImageUrl').value.trim();
       const imageFile = document.getElementById('teamImage').files[0];
-      if (!name || !role || (!editingTeamId && !imageFile)) {
-        showTeamError('All fields are required.');
+      
+      if (!name || !role || !section) {
+        showTeamError('Name, Role, and Section are required.');
         return;
       }
+      
       try {
-        let imageUrl = null;
-        if (imageFile) {
+        let finalImageUrl = imageUrl; // Use URL if provided
+        
+        // If image file is provided and no URL, upload to Drive
+        if (imageFile && !imageUrl) {
+          if (!accessToken) {
+            showTeamError('Please authenticate with Google to upload images, or provide an image URL.');
+            return;
+          }
           const info = await uploadToDrive(imageFile, TEAM_FOLDER_ID);
-          imageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s400') : info.webContentLink;
+          finalImageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s400') : info.webContentLink;
         }
+        
         if (editingTeamId) {
           // Update
-          const updateData = { name, role };
-          if (imageUrl) updateData.imageUrl = imageUrl;
+          const updateData = { name, role, section, bio };
+          if (finalImageUrl) updateData.imageUrl = finalImageUrl;
           await window.firebaseDB.collection('team').doc(editingTeamId).update(updateData);
           showTeamSuccess('Team member updated!');
         } else {
           // Add
-          await window.firebaseDB.collection('team').add({ name, role, imageUrl });
+          await window.firebaseDB.collection('team').add({ name, role, section, bio, imageUrl: finalImageUrl || null });
           showTeamSuccess('Team member added!');
         }
         closeTeamModal();
         loadTeamMembers();
       } catch (e) {
-        showTeamError('Error saving team member.');
+        console.error('Error saving team member:', e);
+        showTeamError('Error saving team member: ' + (e.message || 'Unknown error'));
       }
     });
 
@@ -2841,6 +2960,411 @@
     // Initialize today's date when page loads
     window.addEventListener('load', setTodayDate);
     setTodayDate(); // Also call immediately in case load event already fired
+
+    // ===== NOTIFICATION BADGE HANDLER =====
+    let notificationListenerActive = false;
+    let conversationMessageListeners = {};
+
+    function countUnreadMessages() {
+      return new Promise((resolve) => {
+        const db = window.firebaseDB;
+        if (!db) {
+          resolve(0);
+          return;
+        }
+
+        let totalUnread = 0;
+        let processedConversations = 0;
+
+        db.collection('chats').get().then((chatsSnapshot) => {
+          if (chatsSnapshot.empty) {
+            resolve(0);
+            return;
+          }
+
+          chatsSnapshot.docs.forEach((chatDoc) => {
+            const chatId = chatDoc.id;
+
+            db.collection('chats')
+              .doc(chatId)
+              .collection('messages')
+              .where('sender', '==', 'user')
+              .where('read', '==', false)
+              .get()
+              .then((messagesSnapshot) => {
+                totalUnread += messagesSnapshot.size;
+                processedConversations++;
+
+                if (processedConversations === chatsSnapshot.docs.length) {
+                  resolve(totalUnread);
+                }
+              });
+          });
+        });
+      });
+    }
+
+    async function updateNotificationBadge() {
+      const badgeElement = document.getElementById('notificationBadge');
+      if (!badgeElement) return;
+
+      const count = await countUnreadMessages();
+      if (count > 0) {
+        badgeElement.textContent = count;
+        badgeElement.style.display = 'flex';
+        console.log('Badge updated to:', count);
+      } else {
+        badgeElement.style.display = 'none';
+        console.log('Badge hidden');
+      }
+    }
+
+    function setupMessageListener(conversationId) {
+      if (conversationMessageListeners[conversationId]) return;
+
+      const db = window.firebaseDB;
+      if (!db) return;
+
+      conversationMessageListeners[conversationId] = true;
+
+      // Listen to messages in this conversation and update badge when any message changes
+      db.collection('chats')
+        .doc(conversationId)
+        .collection('messages')
+        .onSnapshot(() => {
+          updateNotificationBadge();
+        });
+    }
+
+    function initializeNotificationListener() {
+      if (notificationListenerActive) return;
+      
+      const db = window.firebaseDB;
+      if (!db) {
+        console.log('Firebase not ready, retrying in 1s...');
+        setTimeout(initializeNotificationListener, 1000);
+        return;
+      }
+
+      notificationListenerActive = true;
+      console.log('Setting up notification listener...');
+
+      // Listen to conversations and set up message listeners
+      db.collection('chats').onSnapshot((chatsSnapshot) => {
+        chatsSnapshot.docs.forEach((chatDoc) => {
+          setupMessageListener(chatDoc.id);
+        });
+        // Initial count
+        updateNotificationBadge();
+      });
+    }
+
+    // Start notification listener
+    window.addEventListener('load', initializeNotificationListener);
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      initializeNotificationListener();
+    }
+
+    // JOB OPENINGS MANAGEMENT
+    let editingJobId = null;
+    let jobOpenings = [];
+
+    function openAddJobModal() {
+      editingJobId = null;
+      document.getElementById('jobModalTitle').textContent = 'Post New Job Opening';
+      document.getElementById('jobForm').reset();
+      document.getElementById('jobModal').classList.add('active');
+    }
+
+    function closeJobModal() {
+      document.getElementById('jobModal').classList.remove('active');
+      editingJobId = null;
+    }
+
+    document.getElementById('jobForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const jobData = {
+        title: document.getElementById('jobTitle').value,
+        location: document.getElementById('jobLocation').value,
+        type: document.getElementById('jobType').value,
+        salary: document.getElementById('jobSalary').value || '',
+        description: document.getElementById('jobDescription').value,
+        requirements: document.getElementById('jobRequirements').value.split('\n').filter(r => r.trim()),
+        benefits: document.getElementById('jobBenefits').value.split('\n').filter(b => b.trim()),
+        postedAt: new Date().toISOString(),
+        status: 'active'
+      };
+
+      try {
+        if (editingJobId) {
+          await window.firebaseDB.collection('jobs').doc(editingJobId).update(jobData);
+          document.getElementById('jobSuccessMessage').textContent = '✓ Job opening updated successfully!';
+          document.getElementById('jobSuccessMessage').style.display = 'block';
+        } else {
+          await window.firebaseDB.collection('jobs').add(jobData);
+          document.getElementById('jobSuccessMessage').textContent = '✓ Job opening posted successfully!';
+          document.getElementById('jobSuccessMessage').style.display = 'block';
+        }
+        closeJobModal();
+        loadJobOpenings();
+        setTimeout(() => {
+          document.getElementById('jobSuccessMessage').style.display = 'none';
+        }, 3000);
+      } catch (error) {
+        document.getElementById('jobErrorMessage').textContent = '✗ Error: ' + error.message;
+        document.getElementById('jobErrorMessage').style.display = 'block';
+      }
+    });
+
+    async function loadJobOpenings() {
+      try {
+        const snap = await window.firebaseDB.collection('jobs').orderBy('postedAt', 'desc').get();
+        jobOpenings = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderJobsList();
+      } catch (error) {
+        console.error('Error loading jobs:', error);
+      }
+    }
+
+    function renderJobsList() {
+      const container = document.getElementById('jobsList');
+      if (jobOpenings.length === 0) {
+        container.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">No job openings posted yet.</p>';
+        return;
+      }
+
+      container.innerHTML = jobOpenings.map(job => `
+        <div class="program-card">
+          <div class="program-card-header" style="background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);">
+            <h3>${job.title}</h3>
+            <span style="font-size: 0.9rem; opacity: 0.9;">${job.type} • ${job.location}</span>
+          </div>
+          <div class="program-card-body">
+            <p class="program-description">${job.description.substring(0, 150)}...</p>
+            ${job.salary ? `<p style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">💰 ${job.salary}</p>` : ''}
+            <div class="program-benefits">
+              <h4>Requirements:</h4>
+              <ul>
+                ${job.requirements.slice(0, 3).map(req => `<li>${req}</li>`).join('')}
+              </ul>
+            </div>
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+              <button class="edit-btn" onclick="editJob('${job.id}')">Edit</button>
+              <button class="delete-btn" onclick="deleteJob('${job.id}')" style="background: #ff6b6b; flex: 1;">Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function editJob(id) {
+      const job = jobOpenings.find(j => j.id === id);
+      if (!job) return;
+      editingJobId = id;
+      document.getElementById('jobModalTitle').textContent = 'Edit Job Opening';
+      document.getElementById('jobTitle').value = job.title;
+      document.getElementById('jobLocation').value = job.location;
+      document.getElementById('jobType').value = job.type;
+      document.getElementById('jobSalary').value = job.salary || '';
+      document.getElementById('jobDescription').value = job.description;
+      document.getElementById('jobRequirements').value = job.requirements.join('\n');
+      document.getElementById('jobBenefits').value = job.benefits.join('\n');
+      document.getElementById('jobModal').classList.add('active');
+    }
+
+    async function deleteJob(id) {
+      if (confirm('Are you sure you want to delete this job opening?')) {
+        try {
+          await window.firebaseDB.collection('jobs').doc(id).delete();
+          document.getElementById('jobSuccessMessage').textContent = '✓ Job opening deleted!';
+          document.getElementById('jobSuccessMessage').style.display = 'block';
+          loadJobOpenings();
+          setTimeout(() => {
+            document.getElementById('jobSuccessMessage').style.display = 'none';
+          }, 3000);
+        } catch (error) {
+          document.getElementById('jobErrorMessage').textContent = '✗ Error: ' + error.message;
+          document.getElementById('jobErrorMessage').style.display = 'block';
+        }
+      }
+    }
+
+    // ====== APPLICATION FUNCTIONS ======
+
+    async function loadApplicationsTab() {
+      try {
+        // Populate job filter dropdown
+        const jobsSnapshot = await window.firebaseDB.collection('jobs').orderBy('postedAt', 'desc').get();
+        const filterSelect = document.getElementById('filterJobSelect');
+        
+        jobsSnapshot.forEach(doc => {
+          const job = doc.data();
+          const option = document.createElement('option');
+          option.value = doc.id;
+          option.textContent = job.title;
+          filterSelect.appendChild(option);
+        });
+
+        // Load all applications
+        await loadApplicationsForJob();
+      } catch (error) {
+        console.error('Error loading applications tab:', error);
+      }
+    }
+
+    async function loadApplicationsForJob() {
+      try {
+        const selectedJobId = document.getElementById('filterJobSelect').value;
+        const applicationsContainer = document.getElementById('applicationsContainer');
+        
+        // Load all applications (no composite index needed)
+        const applicationsSnapshot = await window.firebaseDB.collection('job_applications').get();
+
+        // Filter client-side
+        let filteredApps = applicationsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        if (selectedJobId) {
+          filteredApps = filteredApps.filter(app => app.jobId === selectedJobId);
+        }
+
+        // Sort by appliedAt descending
+        filteredApps.sort((a, b) => {
+          const dateA = a.appliedAt.toDate ? a.appliedAt.toDate() : new Date(a.appliedAt);
+          const dateB = b.appliedAt.toDate ? b.appliedAt.toDate() : new Date(b.appliedAt);
+          return dateB - dateA;
+        });
+
+        if (filteredApps.length === 0) {
+          applicationsContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">No applications found.</p>';
+          return;
+        }
+
+        applicationsContainer.innerHTML = '';
+        
+        // Group applications by job
+        const jobsMap = {};
+        
+        filteredApps.forEach(app => {
+          const jobId = app.jobId;
+          
+          if (!jobsMap[jobId]) {
+            jobsMap[jobId] = {
+              jobTitle: '',
+              applications: []
+            };
+          }
+          
+          jobsMap[jobId].applications.push(app);
+        });
+
+        // Fetch job titles
+        for (const jobId of Object.keys(jobsMap)) {
+          try {
+            const jobDoc = await window.firebaseDB.collection('jobs').doc(jobId).get();
+            if (jobDoc.exists) {
+              jobsMap[jobId].jobTitle = jobDoc.data().title;
+            }
+          } catch (error) {
+            console.error('Error fetching job:', error);
+          }
+        }
+
+        // Render tables for each job
+        for (const [jobId, data] of Object.entries(jobsMap)) {
+          const tableContainer = document.createElement('div');
+          tableContainer.style.marginBottom = '3rem';
+          
+          let tableHTML = `
+            <h3 style="color: var(--brand-blue); margin-bottom: 1rem;">${data.jobTitle} (${data.applications.length} applications)</h3>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <thead>
+                  <tr style="background: var(--brand-blue); color: white;">
+                    <th style="padding: 1rem; text-align: left;">Name</th>
+                    <th style="padding: 1rem; text-align: left;">Email</th>
+                    <th style="padding: 1rem; text-align: left;">Phone</th>
+                    <th style="padding: 1rem; text-align: left;">Experience</th>
+                    <th style="padding: 1rem; text-align: left;">Resume</th>
+                    <th style="padding: 1rem; text-align: left;">Applied At</th>
+                    <th style="padding: 1rem; text-align: center;">Status</th>
+                    <th style="padding: 1rem; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          data.applications.forEach((app, index) => {
+            const appliedDate = new Date(app.appliedAt.toDate()).toLocaleDateString();
+            const rowBg = index % 2 === 0 ? '#f9f9f9' : 'white';
+            const statusColor = app.status === 'pending' ? '#ff9800' : app.status === 'reviewed' ? '#4caf50' : '#f44336';
+            
+            tableHTML += `
+              <tr style="background: ${rowBg}; border-bottom: 1px solid #eee;">
+                <td style="padding: 1rem;">${app.name}</td>
+                <td style="padding: 1rem;"><a href="mailto:${app.email}" style="color: var(--brand-blue); text-decoration: none;">${app.email}</a></td>
+                <td style="padding: 1rem;"><a href="tel:${app.phone}" style="color: var(--brand-blue); text-decoration: none;">${app.phone}</a></td>
+                <td style="padding: 1rem;">${app.experience} years</td>
+                <td style="padding: 1rem;"><a href="${app.resume}" target="_blank" style="color: var(--brand-blue); text-decoration: none;">View</a></td>
+                <td style="padding: 1rem;">${appliedDate}</td>
+                <td style="padding: 1rem; text-align: center;">
+                  <select onchange="updateApplicationStatus('${app.id}', this.value)" style="padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd; background: ${statusColor}; color: white; cursor: pointer;">
+                    <option value="pending" ${app.status === 'pending' ? 'selected' : ''}>Pending</option>
+                    <option value="reviewed" ${app.status === 'reviewed' ? 'selected' : ''}>Reviewed</option>
+                    <option value="rejected" ${app.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                  </select>
+                </td>
+                <td style="padding: 1rem; text-align: center;">
+                  <button onclick="deleteApplication('${app.id}')" style="background: #f44336; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                </td>
+              </tr>
+            `;
+          });
+
+          tableHTML += `
+                </tbody>
+              </table>
+            </div>
+          `;
+
+          tableContainer.innerHTML = tableHTML;
+          applicationsContainer.appendChild(tableContainer);
+        }
+      } catch (error) {
+        console.error('Error loading applications:', error);
+        document.getElementById('applicationsContainer').innerHTML = '<p style="color: red;">Error loading applications.</p>';
+      }
+    }
+
+    async function updateApplicationStatus(appId, newStatus) {
+      try {
+        await window.firebaseDB.collection('job_applications').doc(appId).update({
+          status: newStatus
+        });
+      } catch (error) {
+        console.error('Error updating application status:', error);
+        alert('Error updating status: ' + error.message);
+      }
+    }
+
+    async function deleteApplication(appId) {
+      if (confirm('Are you sure you want to delete this application?')) {
+        try {
+          await window.firebaseDB.collection('job_applications').doc(appId).delete();
+          loadApplicationsForJob();
+        } catch (error) {
+          console.error('Error deleting application:', error);
+          alert('Error deleting application: ' + error.message);
+        }
+      }
+    }
+
+    // Load jobs when page loads
+    window.addEventListener('load', () => {
+      loadJobOpenings();
+    });
   </script>
 
 </body>

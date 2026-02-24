@@ -6,149 +6,609 @@
   <title>About Us | EIEI</title>
   <link rel="stylesheet" href="style.css" />
   
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+  <!-- Firebase SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+  <style>
+    /* About Page Specific Styles */
+    .about-hero {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      padding: 6rem 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .about-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .about-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.95;
+      line-height: 1.8;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #2a4175, transparent);
+      margin: 3rem 0;
+    }
+
+    /* Mission & Vision Cards */
+    .mission-vision-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .mission-vision-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-left: 5px solid #fca311;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .mission-vision-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .mission-vision-card h3 {
+      color: #2a4175;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mission-vision-card p {
+      color: #6b7280;
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .icon-badge {
+      font-size: 1.5rem;
+    }
+
+    /* Why EIEI Section */
+    .why-eiei-container {
+      background: #f9fafb;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      margin-bottom: 3rem;
+    }
+
+    .why-eiei-container h2 {
+      color: #2a4175;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .why-reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .reason-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-top: 3px solid #fca311;
+    }
+
+    .reason-card h4 {
+      color: #2a4175;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+    }
+
+    .reason-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .reason-card li {
+      color: #6b7280;
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .reason-card li:before {
+      content: "→ ";
+      color: #fca311;
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+
+    /* Core Values Section */
+    .values-section {
+      margin-bottom: 3rem;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .value-item {
+      background: white;
+      padding: 1.75rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+      border-left: 4px solid #fca311;
+    }
+
+    .value-item:hover {
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+
+    .value-item strong {
+      color: #2a4175;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .value-item p {
+      color: #6b7280;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Team Section - Modern Layout */
+    .team-section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .team-section-header h2 {
+      color: #2a4175;
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .team-section-header p {
+      color: #6b7280;
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .team-category {
+      margin-bottom: 4rem;
+    }
+
+    .team-category-title {
+      color: #2a4175;
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 3px solid #fca311;
+      display: inline-block;
+    }
+
+    .team-grid-modern {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .team-card-modern {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+
+    .team-card-modern:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+
+    .team-photo-modern {
+      height: 300px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+    }
+
+    .team-photo-modern img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .team-card-modern:hover .team-photo-modern img {
+      transform: scale(1.05);
+    }
+
+    .team-info-modern {
+      padding: 1.75rem;
+    }
+
+    .team-info-modern h3 {
+      color: #2a4175;
+      font-size: 1.1rem;
+      margin: 0 0 0.3rem 0;
+      font-weight: 600;
+    }
+
+    .team-role-modern {
+      color: #fca311;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .team-bio-modern {
+      color: #6b7280;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #fca311;
+      color: #2a4175;
+      padding: 0.75rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid #fca311;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: #fca311;
+    }
+
+    /* Empty State */
+    .empty-state {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 768px) {
+      .about-hero {
+        padding: 3rem 1.5rem;
+      }
+
+      .about-hero h1 {
+        font-size: 2rem;
+      }
+
+      .mission-vision-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team-grid-modern {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-section {
+        padding: 2rem 1.5rem;
+      }
+
+      .cta-section h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="header"></div>
   <main class="admin-container">
     <div class="admin-content">
-      <section class="card" style="margin-bottom:2rem;">
-        <h1 class="section-title">About Us</h1>
-        <div class="about-flex">
-          <div class="about-text">
-            <p>At The Education Institute for Early Intervention (EIEI), we address a critical issue in childcare—suspensions and expulsions of young children, often due to behavioral challenges linked to inadequate support for children with Individual Family Service Plans (IFSPs) or Individual Education Plans (IEPs). EIEI educates and empowers childcare professionals to create inclusive environments that foster children’s development and well-being. We collaborate with families, educators, and community partners to drive meaningful change, ensuring all children receive the support they need to thrive.</p>
-          </div>
-          <div class="about-image">
-            <img src="images/about-1.jpg" alt="EIEI About" class="about-section-img">
-          </div>
-        </div>
-      </section>
-      <section class="card" style="margin-bottom:2rem;">
-        <h2 class="section-title">EIEI Core Values</h2>
-        <ul class="feature-list">
-          <li><strong>Empathy:</strong> We understand and share the feelings of children and families, providing compassionate and respectful support for their experiences and challenges.</li>
-          <li><strong>Equity:</strong> We are committed to ensuring that every child, regardless of background or ability, receives equal opportunities to succeed and thrive in their educational journey.</li>
-          <li><strong>Integrity:</strong> We commit to maintaining the highest ethical standards, ensuring trust and transparency in all interactions with children, families, and colleagues.</li>
-          <li><strong>Inclusivity:</strong> We value diversity and strive to create an environment where every child, regardless of ability, background, or need, feels welcomed and supported.</li>
-          <li><strong>Empowerment:</strong> We encourage and support children with special needs to become confident, independent learners and help families advocate for their child’s rights and needs.</li>
-          <li><strong>Engagement:</strong> We actively involve children, families, and educators in the learning process, fostering strong connections that enhance each child’s development.</li>
-          <li><strong>Involvement:</strong> We actively engage with families, educators, and the community to build strong partnerships that support the holistic development of every child.</li>
-          <li><strong>Impact:</strong> We dedicate ourselves to making a positive and lasting difference in the lives of children with special needs and their families.</li>
-        </ul>
-        <div class="about-image"><img src="images/about-2.jpg" alt="EIEI Core Values" class="about-section-img"></div>
-      </section>
-      <section class="card" style="margin-bottom:2rem;">
-        <h2 class="section-title">Why EIEI?</h2>
-        <h3>Why Are Expulsions and Suspensions Happening in Childcare Programs?</h3>
-        <ul>
-          <li>Young children ages one to five are suspended, expelled, and never return to programs because of their behaviors.</li>
-          <li>Many Full/Part-time childcare professionals lack training and experience to support and accommodate children with IFSPs and IEPs.</li>
-        </ul>
-        <h3>Children who are expelled from Childcare are more likely to:</h3>
-        <ul>
-          <li>Miss opportunities to grow, develop and practice social and emotional skills</li>
-          <li>Continue to develop behavior problems that lead to difficulties adjusting to kindergarten and potentially suspensions in grade school.</li>
-          <li>Experience harmful effects on development, relationships, education, and health.</li>
-          <li>Develop negative views towards school, teachers, and the world around them.</li>
-        </ul>
-        <h3>Families who have a child with an IFSP or IEP:</h3>
-        <ul>
-          <li>Become frustrated with childcare programs where employees are not adequately trained or lack experience in Special Education Services that provide support and development for their child.</li>
-          <li>Experience difficulty with parenting, which could potentially lead to detachment and family risk factors.</li>
-          <li>They may disassociate themselves from family, friends, and social activities due to their child’s disability and lack of social skills among peers.</li>
-          <li>May experience increased stress and financial challenges</li>
-          <li>They are more likely to seek alternative care, which may lead to a lack of full-time employment or professional careers due to instability in childcare.</li>
-        </ul>
-        <h3>Childcare Perspective</h3>
-        <ul>
-          <li>Childcare staff is required to manage children that exhibit challenging behaviors but often lack the education, experience, and skills needed to respond appropriately to the child.</li>
-          <li>Staff is often paid low salaries, experience poor working conditions, and have high teacher/child ratios that affect classroom management and the ability to manage behaviors effectively.</li>
-          <li>Moreover, childcare staff may have “Implicit Bias” that leads to stress, burn-out, and low retention rates in the childcare workforce.</li>
-        </ul>
-        <div class="about-image"><img src="images/about-3.jpg" alt="EIEI Why" class="about-section-img"></div>
-      </section>
-      <section class="card">
-        <h2 class="section-title">EIEI Promise</h2>
-        <ul>
-          <li>Educate the workforce to provide appropriate teaching and learning environments to children entitled to IDEA services.</li>
-          <li>Invest in the workforce with a commitment to impartiality and integrity for children.</li>
-          <li>Embrace the individuality of children.</li>
-          <li>Initiate change, growth, and innovation with parents, business owners, stakeholders, and community partners in all programs.</li>
-        </ul>
-        <p style="font-size:0.95rem;color:var(--text-muted);margin-top:2rem;">Non-Discrimination in Services Policy Statement: Admissions, the provisions of services, and referrals of clients shall be made without regard to race (to include hair type, hair texture, or hair style), color, religious creed (to include all aspects of religious observances and practice, as well as belief), disability, ancestry, national origin (including Limited English Proficiency), age (40 and over), or sex (to include pregnancy status, childbirth status, breastfeeding status, sex assigned at birth). Program services shall be made accessible to eligible persons with disabilities through the most practical and economically feasible methods available. These methods include, but are not limited to, equipment redesign, the provision of aides and the use of alternative service delivery locations. Structural modifications shall be considered only as a last resort among available methods.</p>
+      <!-- Hero Section -->
+      <section class="about-hero">
+        <h1>About EIEI</h1>
+        <p>Empowering Early Childhood Educators to Create Inclusive Environments Where Every Child Thrives</p>
       </section>
 
-      <!-- Meet the Team Section -->
-      <section class="card" style="margin-bottom:2rem;">
-        <h2 class="section-title">Meet the Team</h2>
-        <div class="team-grid">
-          <!-- Founder -->
-          <div class="team-card">
-            <div class="team-photo"><img src="images/team/founder.png" alt="Dr. Allen-Presley"></div>
-            <div class="team-info">
-              <h3>Dr. Allen-Presley</h3>
-              <p class="team-role">Founder & CEO</p>
-              <p>Dr. Allen-Presley is a passionate advocate for early childhood education with over 20 years of experience. She has founded multiple programs, led the first PA Registered Apprenticeship for Special Education Paraprofessionals, and is a published author and speaker. Her leadership and vision drive EIEI’s mission for inclusive, high-quality education.</p>
-            </div>
+      <!-- Mission & Vision -->
+      <section class="card">
+        <div class="mission-vision-grid">
+          <div class="mission-vision-card">
+            <h3><span class="icon-badge">🎯</span> Our Mission</h3>
+            <p>At The Education Institute for Early Intervention (EIEI), we address a critical issue in childcare—suspensions and expulsions of young children, often due to behavioral challenges linked to inadequate support for children with Individual Family Service Plans (IFSPs) or Individual Education Plans (IEPs). EIEI educates and empowers childcare professionals to create inclusive environments that foster children's development and well-being.</p>
           </div>
-          <!-- Executive Team -->
-          <div class="team-card">
-            <div class="team-photo"><img src="images/team/cynthia.png" alt="Cynthia MB Robinson"></div>
-            <div class="team-info">
-              <h3>Cynthia MB Robinson</h3>
-              <p class="team-role">Chief Human Resources Officer</p>
-              <p>Mrs. Robinson manages EIEI’s HR and is a senior special education instructor, program coordinator, and executive assistant. She is an educator, coach, and author with decades of experience in ECE and community service.</p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-photo"><img src="images/team/shirquille.png" alt="Shirquille Sande"></div>
-            <div class="team-info">
-              <h3>Shirquille Sande</h3>
-              <p class="team-role">Chief Operations Officer</p>
-              <p>Shirquille is the COO and IT Manager, driving daily operations and tech innovation at EIEI. With a background in IT and project management, he ensures smooth processes and growth for the organization.</p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-photo"><img src="images/team/sakinah.png" alt="Sakinah Ali"></div>
-            <div class="team-info">
-              <h3>Sakinah Ali</h3>
-              <p class="team-role">Executive Assistant</p>
-              <p>Sakinah brings project management and communication expertise to EIEI, ensuring seamless operations and supporting the executive team. She is passionate about organization and adventure.</p>
-            </div>
+          <div class="mission-vision-card">
+            <h3><span class="icon-badge">🌟</span> Our Vision</h3>
+            <p>We envision a world where all children, particularly those with special needs, receive equitable support and opportunities to thrive in early childhood settings. Through collaboration with families, educators, and community partners, we drive meaningful change ensuring every child receives the support they need to succeed.</p>
           </div>
         </div>
-        <h3 style="margin-top:2.5rem;">Staff</h3>
-        <div class="team-grid">
-          <div class="team-card"><div class="team-photo"><img src="images/team/nikita.png" alt="Nikita Kumari Kushwaha"></div><div class="team-info"><h3>Nikita Kumari Kushwaha</h3><p class="team-role">Program Administrator</p><p>Manages daily operations, student transportation, and parent communication. Holds a B.B.A. in Business Analytics and is certified in digital marketing, UI/UX, and project management.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/annastacia.png" alt="Annastacia Gichobi"></div><div class="team-info"><h3>Annastacia Gichobi</h3><p class="team-role">Billing Coordinator</p><p>Oversees billing and workflow for providers, ensuring accuracy and efficiency. Enjoys baking and nature walks.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/lvonnemcmillian.png" alt="L'Vonne McMillian"></div><div class="team-info"><h3>L'Vonne McMillian</h3><p class="team-role">Senior Special Education Instructor</p><p>Parent, advocate, and educator with 10+ years of experience. Published author and founder of Marie Morgan Educational Center, Inc.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/renee.png" alt="Renee Washington"></div><div class="team-info"><h3>Renee Washington</h3><p class="team-role">ECSE Teacher</p><p>Teaches in the Peacock room, with 11 years in ECE. Loves seeing children grow and thrive.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/minnette.png" alt="Minnette Taylor"></div><div class="team-info"><h3>Minnette Taylor</h3><p class="team-role">Assistant Program Director</p><p>Owner of G & T Daycare Montessori, coach for PA Apprenticeship, and holds multiple degrees and certifications in ECE and Montessori teaching.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/todd.png" alt="Todd Hopkins"></div><div class="team-info"><h3>Todd Hopkins</h3><p class="team-role">Technical Support Coach</p><p>15+ years in ECE, experienced in professional development, curriculum, and coaching. Focuses on trauma-informed care and resilience.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/abel.png" alt="Abel Mapenzi"></div><div class="team-info"><h3>Abel Mapenzi</h3><p class="team-role">Financial Coordinator</p><p>10 years in accounts, ensures financial order at EIEI. Enjoys cooking and movie nights with family.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/lakia.png" alt="Lakia Wilson"></div><div class="team-info"><h3>Lakia Wilson</h3><p class="team-role">PreK Counts Coach</p><p>20+ years in child care, holds multiple degrees and certifications. Values quality improvement and mentoring others.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/adrienne.png" alt="Adrienne Briggs"></div><div class="team-info"><h3>Adrienne Briggs</h3><p class="team-role">Student Support & Educator</p><p>Over 32 years in family child care, highly awarded and active in professional development and advocacy.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/hellen.png" alt="Hellen Ndugi Thiong’o"></div><div class="team-info"><h3>Hellen Ndugi Thiong’o</h3><p class="team-role">Program Coordinator</p><p>Experienced in customer service and program coordination, dedicated to high-quality results and learning new skills.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/asimba.png" alt="Asimba George"></div><div class="team-info"><h3>Asimba George</h3><p class="team-role">CRM & Database Manager</p><p>Sales and marketing professional with 5+ years of experience, passionate about social impact and helping others.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/diane.png" alt="Diane Hall"></div><div class="team-info"><h3>Diane Hall</h3><p class="team-role">Pre-K Counts Coach</p><p>40+ years in ECE, experienced as a director, evaluator, and trainer. Holds multiple degrees in psychology and education.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/brittany.png" alt="Brittany Lakes"></div><div class="team-info"><h3>Brittany Lakes</h3><p class="team-role">ECSE Family Coordinator</p><p>Teaching assistant and family support coordinator, passionate about connecting with parents and supporting children’s development.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/jennifer.png" alt="Jennifer McDuffie"></div><div class="team-info"><h3>Jennifer McDuffie</h3><p class="team-role">Early Childhood Educator | Special Instructor</p><p>29 years in ECE, classroom teacher and special instructor, passionate about nurturing and supporting every child.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/lien.png" alt="Lien Vo-Jones, MA, BCBA, LBS"></div><div class="team-info"><h3>Lien Vo-Jones, MA, BCBA, LBS</h3><p class="team-role">Clinical Coordinator</p><p>Behavior Analyst and Early Intervention Specialist, dedicated to positive behavior supports and family training.</p></div></div>
-          <div class="team-card"><div class="team-photo"><img src="images/team/abigail.png" alt="Abigail Wairimu Kariuki"></div><div class="team-info"><h3>Abigail Wairimu Kariuki</h3><p class="team-role">Career Development Program Assistant</p><p>Experienced in youth advocacy and program coordination, passionate about empowering young people and community development.</p></div></div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Why EIEI Section -->
+      <section class="card why-eiei-container">
+        <h2>Why EIEI?</h2>
+        <div class="why-reasons-grid">
+          <div class="reason-card">
+            <h4>The Problem</h4>
+            <ul>
+              <li>Young children ages 1-5 are suspended/expelled due to behavioral challenges</li>
+              <li>Childcare professionals lack training to support children with IFSPs/IEPs</li>
+              <li>Early expulsions lead to long-term developmental difficulties</li>
+            </ul>
+          </div>
+          <div class="reason-card">
+            <h4>The Impact on Children</h4>
+            <ul>
+              <li>Miss opportunities to develop social and emotional skills</li>
+              <li>Experience harmful effects on development and relationships</li>
+              <li>Develop negative attitudes toward school and education</li>
+              <li>Face difficulties adjusting to kindergarten and beyond</li>
+            </ul>
+          </div>
+          <div class="reason-card">
+            <h4>Family & Community Challenges</h4>
+            <ul>
+              <li>Families frustrated with inadequate professional support</li>
+              <li>Increased parental stress and financial burdens</li>
+              <li>Reduced employment and career stability for parents</li>
+              <li>Social isolation and limited community engagement</li>
+            </ul>
+          </div>
         </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Core Values -->
+      <section class="card values-section">
+        <h2 class="section-title" style="margin-bottom: 2rem;">EIEI Core Values</h2>
+        <div class="values-grid">
+          <div class="value-item">
+            <strong>Empathy</strong>
+            <p>We understand and share the feelings of children and families, providing compassionate and respectful support.</p>
+          </div>
+          <div class="value-item">
+            <strong>Equity</strong>
+            <p>We ensure every child receives equal opportunities to succeed and thrive regardless of background or ability.</p>
+          </div>
+          <div class="value-item">
+            <strong>Integrity</strong>
+            <p>We maintain the highest ethical standards, ensuring trust and transparency in all interactions.</p>
+          </div>
+          <div class="value-item">
+            <strong>Inclusivity</strong>
+            <p>We value diversity and create environments where every child feels welcomed and supported.</p>
+          </div>
+          <div class="value-item">
+            <strong>Empowerment</strong>
+            <p>We encourage children with special needs to become confident, independent learners.</p>
+          </div>
+          <div class="value-item">
+            <strong>Engagement</strong>
+            <p>We actively involve children, families, and educators in fostering strong developmental connections.</p>
+          </div>
+          <div class="value-item">
+            <strong>Involvement</strong>
+            <p>We build strong partnerships with families, educators, and community partners.</p>
+          </div>
+          <div class="value-item">
+            <strong>Impact</strong>
+            <p>We dedicate ourselves to making lasting, positive change in children's and families' lives.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- EIEI Promise -->
+      <section class="card" style="background: linear-gradient(135deg, #f0f4f8 0%, #e8f0f8 100%); margin-bottom: 3rem;">
+        <h2 class="section-title" style="margin-bottom: 1.5rem;">EIEI Promise</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="padding: 1.5rem;">
+            <h4 style="color: #2a4175; margin-bottom: 0.75rem;">📚 Educate</h4>
+            <p style="color: #6b7280; margin: 0; font-size: 0.9rem; line-height: 1.6;">Provide appropriate teaching and learning environments for children entitled to IDEA services.</p>
+          </div>
+          <div style="padding: 1.5rem;">
+            <h4 style="color: #2a4175; margin-bottom: 0.75rem;">💼 Invest</h4>
+            <p style="color: #6b7280; margin: 0; font-size: 0.9rem; line-height: 1.6;">Commit to impartiality and integrity in supporting children and professionals.</p>
+          </div>
+          <div style="padding: 1.5rem;">
+            <h4 style="color: #2a4175; margin-bottom: 0.75rem;">🤝 Embrace</h4>
+            <p style="color: #6b7280; margin: 0; font-size: 0.9rem; line-height: 1.6;">Celebrate the individuality and unique needs of every child.</p>
+          </div>
+          <div style="padding: 1.5rem;">
+            <h4 style="color: #2a4175; margin-bottom: 0.75rem;">🚀 Innovate</h4>
+            <p style="color: #6b7280; margin: 0; font-size: 0.9rem; line-height: 1.6;">Drive change, growth, and innovation with all stakeholders and community partners.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Meet the Team -->
+      <section class="card">
+        <div class="team-section-header">
+          <h2>Meet the Team</h2>
+          <p>Dedicated professionals committed to making a difference in early childhood education</p>
+        </div>
+
+        <!-- Founder -->
+        <div class="team-category" id="founderSection" style="display:none;">
+          <h3 class="team-category-title">Founder</h3>
+          <div class="team-grid-modern" id="founderTeam"></div>
+        </div>
+
+        <!-- Executive Team -->
+        <div class="team-category" id="executiveSection" style="display:none;">
+          <h3 class="team-category-title">Executive Team</h3>
+          <div class="team-grid-modern" id="executiveTeam"></div>
+        </div>
+
+        <!-- Staff -->
+        <div class="team-category" id="staffSection" style="display:none;">
+          <h3 class="team-category-title">Our Staff</h3>
+          <div class="team-grid-modern" id="staffTeam"></div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="cta-section">
+        <h2>Ready to Join Our Community?</h2>
+        <p>Discover how EIEI can support your early childhood education journey</p>
+        <a href="contact-us.html" class="cta-button">Get In Touch</a>
+      </section>
+
+      <!-- Policies -->
+      <section class="card" style="margin-top: 3rem; background: #f9fafb;">
+        <h3 style="color: #2a4175; margin-bottom: 1rem;">Non-Discrimination Policy</h3>
+        <p style="font-size:0.9rem;color:#6b7280;line-height:1.8;margin:0;">Admissions, the provisions of services, and referrals of clients shall be made without regard to race (to include hair type, hair texture, or hair style), color, religious creed (to include all aspects of religious observances and practice, as well as belief), disability, ancestry, national origin (including Limited English Proficiency), age (40 and over), or sex (to include pregnancy status, childbirth status, breastfeeding status, sex assigned at birth). Program services shall be made accessible to eligible persons with disabilities through the most practical and economically feasible methods available. These methods include, but are not limited to, equipment redesign, the provision of aides and the use of alternative service delivery locations. Structural modifications shall be considered only as a last resort among available methods.</p>
       </section>
     </div>
   </main>
+
   <div id="footer"></div>
   <script src="components/header.js"></script>
   <script src="components/footer.js"></script>
   <script src="components/chat-widget.js"></script>
+  <script src="components/firebase-init.js"></script>
   <script>
     document.getElementById('header').innerHTML = createHeader();
     document.getElementById('footer').innerHTML = createFooter();
+
+    // Load team members dynamically from Firestore
+    async function loadTeamMembers() {
+      try {
+        console.log('Attempting to load team members from Firestore...');
+        const snapshot = await window.firebaseDB.collection('team').get();
+        console.log('Firestore query completed, found ' + snapshot.size + ' documents');
+        const teamMembers = snapshot.docs.map(doc => {
+          console.log('Team member:', doc.data());
+          return { id: doc.id, ...doc.data() };
+        });
+        
+        // Group members by section
+        const founder = teamMembers.filter(m => m.section === 'founder');
+        const executive = teamMembers.filter(m => m.section === 'executive');
+        const staff = teamMembers.filter(m => m.section === 'staff');
+
+        console.log('Grouped: ' + founder.length + ' founders, ' + executive.length + ' executives, ' + staff.length + ' staff');
+
+        // Render founder
+        if (founder.length > 0) {
+          document.getElementById('founderSection').style.display = 'block';
+          renderTeamSection('founderTeam', founder);
+        }
+
+        // Render executive
+        if (executive.length > 0) {
+          document.getElementById('executiveSection').style.display = 'block';
+          renderTeamSection('executiveTeam', executive);
+        }
+
+        // Render staff
+        if (staff.length > 0) {
+          document.getElementById('staffSection').style.display = 'block';
+          renderTeamSection('staffTeam', staff);
+        }
+      } catch (error) {
+        console.error('Error loading team members:', error);
+      }
+    }
+
+    function renderTeamSection(containerId, members) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      
+      if (members.length === 0) {
+        container.innerHTML = '<div class="empty-state">No team members in this section yet</div>';
+        return;
+      }
+      
+      members.forEach(member => {
+        const card = document.createElement('div');
+        card.className = 'team-card-modern';
+        card.innerHTML = `
+          <div class="team-photo-modern">
+            <img src="${member.imageUrl || 'images/placeholder.png'}" alt="${member.name}">
+          </div>
+          <div class="team-info-modern">
+            <h3>${member.name}</h3>
+            <p class="team-role-modern">${member.role}</p>
+            <p class="team-bio-modern">${member.bio || ''}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Load team members when Firebase is ready
+    let attemptCount = 0;
+    const maxAttempts = 15;
+    
+    function initTeamLoading() {
+      if (typeof window.firebaseDB !== 'undefined' && window.firebaseDB) {
+        console.log('Firebase DB ready, loading team members');
+        loadTeamMembers();
+      } else {
+        attemptCount++;
+        if (attemptCount < maxAttempts) {
+          console.log('Firebase DB not ready, retrying... (attempt ' + attemptCount + '/' + maxAttempts + ')');
+          setTimeout(initTeamLoading, 1000);
+        } else {
+          console.error('Firebase DB initialization timeout - team members may not load');
+        }
+      }
+    }
+    
+    initTeamLoading();
   </script>
 </body>
 </html>

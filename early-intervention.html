@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Early Intervention Services & Behavioral Health - EIEI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background-color: #f3f4f6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .breadcrumb {
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .breadcrumb a {
+      color: #2a4175;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: #fca311;
+    }
+
+    .program-header {
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .location-badge {
+      display: inline-block;
+      background-color: #fca311;
+      color: #2a4175;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .program-title {
+      color: #2a4175;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .program-subtitle {
+      font-size: 1.2rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .content-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      color: #2a4175;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #fca311;
+      padding-bottom: 0.5rem;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .benefit-card {
+      padding: 1.5rem;
+      background-color: #f3f4f6;
+      border-left: 4px solid #fca311;
+      border-radius: 4px;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .benefit-title {
+      color: #2a4175;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit-desc {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .highlight-box {
+      background-color: #e8f4f8;
+      border-left: 4px solid #2a4175;
+      padding: 1.5rem;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+    }
+
+    .highlight-box strong {
+      color: #2a4175;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: #fca311;
+      color: #2a4175;
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .cta-button:hover {
+      background-color: #ff9500;
+    }
+
+    .testimonials-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .testimonials-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .testimonials {
+      flex: 1;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #testimonialsContainer .card {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    #testimonialsContainer .card.active {
+      display: block;
+    }
+
+    #testimonialsContainer .card p {
+      color: #6b7280;
+      font-size: 1rem;
+      margin: 1rem 0;
+      line-height: 1.8;
+    }
+
+    #testimonialsContainer .card h3 {
+      color: #2a4175;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .testimonial-nav {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #2a4175;
+      padding: 0.5rem;
+    }
+
+    .testimonial-nav:hover {
+      color: #fca311;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER CONTAINER -->
+  <div id="header-container"></div>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> / <a href="services.html">Services</a> / Early Intervention Services & Behavioral Health
+    </div>
+
+    <div class="program-header">
+      <div class="location-badge">📍 4704 Leiper Street, Philadelphia, PA 19124</div>
+      <h1 class="program-title">Early Intervention Services & Behavioral Health</h1>
+      <p class="program-subtitle">Comprehensive support for children ages 3-5 with diverse abilities</p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Welcome to ECSE: A Place Where Every Child Shines</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        Discover a world where your child's potential takes center stage. Early Childhood Special Education (ECSE) at EIEI is dedicated to nurturing unique abilities, fostering growth, and celebrating every milestone.
+      </p>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        At EIEI, we are dedicated to providing the highest quality early intervention services to support your child's development. Our team of experienced professionals works closely with families to create individualized plans that address each child's unique needs. We believe in the power of early intervention to make a significant impact on a child's future success and well-being.
+      </p>
+      <div class="highlight-box">
+        <strong>Our Mission:</strong> To provide a safe, nurturing, and developmentally appropriate environment for children and their families to thrive, both in school and in life-long success!
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Why Choose ECSE at EIEI?</h2>
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Personalized Support:</strong> Tailored programs that adapt to your child's needs.</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Inclusive Environment:</strong> Every child is welcomed, valued, and supported.</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Expert Guidance:</strong> Led by experienced educators and specialists.</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Family-Focused Care</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        You are at the heart of your child's success. Our family-centered approach ensures you're supported every step of the way. Together, we build a brighter future.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Smooth Transitions, Lifelong Skills</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        Change can be challenging, but we make it seamless. From preschool to kindergarten, our transition planning equips children with the tools they need to thrive in their next educational setting.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Comprehensive Services</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        From speech therapy to behavioral support, our team provides holistic care that empowers children to succeed in every aspect of life.
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Special Education Classrooms</div>
+          <div class="benefit-desc">Ages 3-5 classrooms designed for children with special needs and diverse learning styles.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Social Playgroups</div>
+          <div class="benefit-desc">Supportive, inclusive environments where children develop social and communication skills.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">In-Home Services</div>
+          <div class="benefit-desc">Bring services directly to your family - coaching, guidance, and support at home.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">In-School Services</div>
+          <div class="benefit-desc">Collaborate with school programs to ensure continuity of care and support.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Speech & Language Therapy</div>
+          <div class="benefit-desc">Professional speech-language pathologists support communication development.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Occupational Therapy</div>
+          <div class="benefit-desc">Support for daily living skills, sensory development, and motor skill growth.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Our Team</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Certified Early Childhood & Special Needs Educators</div>
+          <div class="benefit-desc">Expert educators with specialized training in supporting diverse learners.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Registered Behavior Technicians (RBTs)</div>
+          <div class="benefit-desc">Trained professionals who implement behavioral strategies and support positive development.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Speech-Language Pathologists</div>
+          <div class="benefit-desc">Specialists in communication development and speech therapy.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Occupational Therapists</div>
+          <div class="benefit-desc">Professionals focused on developing skills for daily living and independence.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Behavioral Health Services</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        We recognize that supporting children's behavioral and mental health is integral to their overall development. Our comprehensive behavioral health services are designed to help all students succeed.
+      </p>
+
+      <div style="margin-bottom: 2rem;">
+        <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.5rem;">Tier 1 - Universal Supports & Services for All Students</h3>
+        <p style="margin-bottom: 1rem; line-height: 1.8;">Every school has support for all students. All students are taught expected behaviors like how to show respect and kindness. School staff praises children for their excellent behavior.</p>
+        <p style="font-weight: 600; margin-bottom: 1rem;">Examples of services for all students include:</p>
+        <ul style="list-style-position: inside; line-height: 2; margin-left: 1rem;">
+          <li><strong>Positive Behavioral Intervention & Supports (PBIS)</strong> - Promotes positive school safety and good behavior among all students through emotional learning and mindfulness programs.</li>
+          <li><strong>Restorative Justice Programs</strong> - Teaches students how to resolve conflicts on their own and in small groups through safe and supportive spaces.</li>
+          <li><strong>Social-Emotional Learning (SEL)</strong> - Teaches students how to manage their emotions, make good decisions, and work with other children on a team.</li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.5rem;">Tier 2 - Individual Supports & Services (30-90 days)</h3>
+        <p style="margin-bottom: 1rem; line-height: 1.8;">These services identify students with some distress or issues and connect them to resources in or outside the school. Your child receives all Tier 1 supports plus small group or individualized support.</p>
+        <p style="font-weight: 600; margin-bottom: 1rem;">Examples of services may include:</p>
+        <ul style="list-style-position: inside; line-height: 2; margin-left: 1rem;">
+          <li><strong>Student Assistance Program (SAP)</strong> - A team of experts who determine which resources are a good match for your child.</li>
+          <li><strong>Support Team for Education Project (STEP)</strong> - Provides behavioral health, counseling, and therapy services plus social services support.</li>
+          <li>Daily behavior reports, behavior contracts, school counseling, check-ins and check-outs</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.5rem;">Tier 3 - Intensive Support & Services (60-120 days)</h3>
+        <p style="margin-bottom: 1rem; line-height: 1.8;">Students with the most distress or needs receive intensive behavioral health services (IBHS). These services aim to help students stay at home and school instead of being placed in a hospital setting.</p>
+        <p style="font-weight: 600; margin-bottom: 1rem;">Examples of IBHS services include:</p>
+        <ul style="list-style-position: inside; line-height: 2; margin-left: 1rem;">
+          <li>Individual and group sessions</li>
+          <li>Family therapy and case management</li>
+          <li>Behavior management planning</li>
+          <li>Crisis intervention and referrals</li>
+          <li>Outpatient satellite services in schools</li>
+        </ul>
+        <div class="highlight-box" style="margin-top: 1.5rem;">
+          <strong>24-Hour Mental Health Support:</strong> If additional mental health resources are needed, our 24-Hour Mental Health Delegate Line is available at 215-685-6440.
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Programs Designed for Growth</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        Experience programs built on kindness, inclusivity, and excellence. Every activity and service is designed to help your child thrive, learn, and grow confidently.
+      </p>
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Free to low-cost services - removing financial barriers to quality care</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Comprehensive approach - addressing multiple areas of child development</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Family-centered - supporting not just the child, but the entire family</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Certified professionals - experienced team dedicated to your child's success</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Inclusive environment - celebrating diversity and supporting all learners</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Evidence-based practices - programs built on proven successful strategies</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Location convenience - services at our Northeast Philadelphia location</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Our Esteemed Faculty</h2>
+      <p style="margin-bottom: 2rem; line-height: 1.8;">
+        Meet the experienced educators and specialists dedicated to supporting your child's growth and success.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+        <div style="text-align: center;">
+          <img src="images/essence-allen-presley.jpg" alt="Dr. Essence Allen Presley" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <div style="color: #2a4175; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">Dr. Essence Allen Presley</div>
+          <div style="color: #6b7280; font-size: 0.9rem;">Program Director & Founder</div>
+        </div>
+        <div style="text-align: center;">
+          <img src="images/brittany-lakes.jpg" alt="Brittany Lakes" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <div style="color: #2a4175; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">Brittany Lakes</div>
+          <div style="color: #6b7280; font-size: 0.9rem;">Early Childhood Specialist</div>
+        </div>
+        <div style="text-align: center;">
+          <img src="images/joann-lander.jpg" alt="Joann Lander" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <div style="color: #2a4175; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">Joann Lander</div>
+          <div style="color: #6b7280; font-size: 0.9rem;">Special Education Educator</div>
+        </div>
+        <div style="text-align: center;">
+          <img src="images/lien-vo-jones.jpg" alt="Lien Vo-Jones" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <div style="color: #2a4175; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">Lien Vo-Jones</div>
+          <div style="color: #6b7280; font-size: 0.9rem;">Behavioral Health Specialist</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Our Kids Are Off to a Fantastic Year!</h2>
+      <p style="margin-bottom: 2rem; line-height: 1.8;">
+        Celebrating a year of growth and achievement. As we wrap up another successful school year, we want to extend our heartfelt thanks to all the families, students, and staff who have made this year truly special. We've seen tremendous growth, celebrated countless achievements, and created wonderful memories together.
+      </p>
+      
+      <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1.5rem; margin-top: 1.5rem;">Year-End Highlights & Yearbook 2023-24</h3>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        To commemorate this incredible year, we are excited to share our yearbook, which captures the highlights and cherished moments from this school year. We hope you enjoy looking back on these memories as much as we do. Thank you for being a part of the EIEI community. We look forward to continuing our journey together in the upcoming year!
+      </p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <a href="https://drive.google.com/file/d/1TgOgmtelAV1Llsmv-FQAycP71tgh5lf8/view?usp=sharing" target="_blank" style="display: block; padding: 1.5rem; background-color: #f3f4f6; border-left: 4px solid #fca311; border-radius: 4px; text-decoration: none; transition: transform 0.3s ease;">
+          <div style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">📚 Yearbook 2024 - English</div>
+          <div style="color: #6b7280; font-size: 0.9rem;">View our yearbook highlights and cherished moments</div>
+        </a>
+        <a href="https://drive.google.com/file/d/1l6LzfiTz0IQ0RrTe57DG1bt80VuKuH7k/view?usp=sharing" target="_blank" style="display: block; padding: 1.5rem; background-color: #f3f4f6; border-left: 4px solid #fca311; border-radius: 4px; text-decoration: none; transition: transform 0.3s ease;">
+          <div style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">📚 Yearbook 2024 - Spanish</div>
+          <div style="color: #6b7280; font-size: 0.9rem;">Ver nuestro anuario y momentos especiales</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">What People Are Saying</h2>
+      <div class="testimonials-wrapper" style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
+        <button class="testimonial-nav prev" id="prevTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❮</button>
+        <div class="testimonials" id="testimonialsContainer" style="flex: 1; min-height: 200px;">
+          <!-- Testimonials will be loaded here by script.js -->
+        </div>
+        <button class="testimonial-nav next" id="nextTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❯</button>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2 style="color: white;">Join Our Early Childhood Special Education Classroom Waitlist</h2>
+      <p style="margin: 1rem 0;">We are committed to providing a nurturing and inclusive learning environment for young children with diverse abilities. If you're interested in enrolling your child in our program, join our waitlist today!</p>
+      <a href="https://app.tryplayground.com/listings/ay15Df13LMhDjpOPAJXo" class="cta-button" target="_blank">Join the Waitlist</a>
+    </div>
+
+
+  </div>
+
+  <!-- FOOTER CONTAINER -->
+  <div id="footer-container"></div>
+
+  <!-- Header Component -->
+  <script src="components/header.js"></script>
+  
+  <!-- Footer Component -->
+  <script src="components/footer.js"></script>
+
+  <!-- Chat Widget -->
+  <script src="components/chat-widget.js"></script>
+
+  <!-- Firebase & Testimonials -->
+  <script src="components/firebase-init.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerContainer = document.getElementById('header-container');
+      if (headerContainer) {
+        headerContainer.innerHTML = createHeader();
+      }
+      
+      const footerContainer = document.getElementById('footer-container');
+      if (footerContainer) {
+        footerContainer.innerHTML = createFooter();
+      }
+    });
+  </script>
+</body>
+</html>

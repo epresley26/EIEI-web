@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Training, Coaching & Professional Development - EIEI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background-color: #f3f4f6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .breadcrumb {
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .breadcrumb a {
+      color: #2a4175;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: #fca311;
+    }
+
+    .program-header {
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .program-title {
+      color: #2a4175;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .program-subtitle {
+      font-size: 1.2rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .content-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      color: #2a4175;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #fca311;
+      padding-bottom: 0.5rem;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .benefit-card {
+      padding: 1.5rem;
+      background-color: #f3f4f6;
+      border-left: 4px solid #fca311;
+      border-radius: 4px;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .benefit-title {
+      color: #2a4175;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit-desc {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: #fca311;
+      color: #2a4175;
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .cta-button:hover {
+      background-color: #ff9500;
+    }
+
+    .testimonials-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .testimonials-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .testimonials {
+      flex: 1;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #testimonialsContainer .card {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    #testimonialsContainer .card.active {
+      display: block;
+    }
+
+    #testimonialsContainer .card p {
+      color: #6b7280;
+      font-size: 1rem;
+      margin: 1rem 0;
+      line-height: 1.8;
+    }
+
+    #testimonialsContainer .card h3 {
+      color: #2a4175;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .testimonial-nav {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #2a4175;
+      padding: 0.5rem;
+    }
+
+    .testimonial-nav:hover {
+      color: #fca311;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER CONTAINER -->
+  <div id="header-container"></div>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> / <a href="services.html">Services</a> / Training, Coaching & Professional Development
+    </div>
+
+    <div class="program-header">
+      <h1 class="program-title">Training, Coaching, and Professional Development</h1>
+      <p class="program-subtitle">Empower Your Team with Comprehensive Training, Coaching, and Professional Development</p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Professional Development at EIEI</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        Empower your team with our comprehensive training programs designed to equip professionals in early childhood education, early intervention, and leadership development with the skills and knowledge they need to thrive. Our hands-on, practical training focuses on essential competencies, from supporting young children's developmental milestones to effectively leading teams in early learning environments.
+      </p>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        Whether onboarding new staff, providing specialized early intervention training, or cultivating leadership skills, our tailored solutions meet the evolving needs of your organization.
+      </p>
+      <div style="background-color: #e8f4f8; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #fca311;">
+        <p style="margin: 0;"><strong style="color: #2a4175;">EIEI is PQAS and ACT 48 Approved for Professional Development Certification</strong></p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Training: Building Foundational Skills</h2>
+      <div style="background-color: #f3f4f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Purpose:</strong> Training focuses on teaching specific skills or knowledge needed to perform a job or task. It is structured and formal, ensuring employees have the essential tools for success.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Scope:</strong> Short-term and task-oriented, often aimed at new hires or employees learning a new system or process.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Method:</strong> Delivered through workshops, classes, or online modules with clear objectives.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Example:</strong> Understanding safety procedures and regulations or mastering specific teaching methods.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Why:</strong> Training ensures employees have the basic skills and knowledge to perform their tasks efficiently and safely, preventing struggles with core responsibilities.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">When:</strong> When introducing new tools, systems, processes, or onboarding new employees.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Outcome:</strong> Improved job performance, greater operational efficiency, and compliance with industry standards.</p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Coaching: Enhancing Performance and Development</h2>
+      <div style="background-color: #f3f4f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Purpose:</strong> Coaching focuses on personal and professional growth, helping individuals improve their performance through guidance, feedback, and support.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Scope:</strong> Long-term and individualized, supporting employees in developing skills, behaviors, and mindset.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Method:</strong> One-on-one sessions involving discussions, goal setting, and feedback.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Example:</strong> Helping an employee incorporate quality standards with behavior modification or improving culture and classroom management.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Why:</strong> Coaching provides tailored support for improving specific behaviors, overcoming challenges, and refining skills. It builds confidence, leadership, and critical thinking abilities.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">When:</strong> For leadership development, managing transitions, or improving specific skills (e.g., communication, time management).</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Outcome:</strong> Enhanced personal growth, better performance, increased engagement, and motivation.</p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Professional Development: Fostering Long-Term Growth</h2>
+      <div style="background-color: #f3f4f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Purpose:</strong> Professional development focuses on broad, ongoing learning that helps individuals advance in their careers by acquiring new skills, knowledge, and competencies.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Scope:</strong> Long-term, aimed at personal growth and career progression, often self-driven or organizationally supported.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Method:</strong> Delivered through workshops, seminars, certifications, conferences, and mentorship.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Why:</strong> Provides opportunities for career growth, skill advancement, and staying current with industry trends and emerging skills. It helps retain top talent and keep employees motivated.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">When:</strong> Continually, as part of an employee's career path to encourage ongoing learning and adaptability.</p>
+        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Outcome:</strong> Increased expertise, career advancement opportunities, and a more innovative, forward-thinking workforce.</p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Before Registering for Our Programs, Remember:</h2>
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Training establishes the basics, ensuring employees can perform their tasks.</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Coaching hones personal development and improves on-the-job performance.</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Professional Development prepares individuals for future challenges, innovations, and career progression.</li>
+      </ul>
+      <p style="margin-top: 1.5rem; line-height: 1.8;">
+        <strong style="color: #2a4175;">Together, our programs provide a comprehensive framework for improving the immediate and long-term success of employees and the organization.</strong> Each component plays a critical role in skill development, performance improvement, and career growth, ensuring no gaps are left unaddressed.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">List of Available Trainings</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Generational Health Estate Planning (Wills & Trust)</div>
+          <div class="benefit-desc">Understanding financial planning and estate management for families.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Problem-Solving Techniques For Early Intervention & Special Needs</div>
+          <div class="benefit-desc">Evidence-based strategies for addressing challenges in special education settings.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Early Intervention Curriculum For Special Needs Children</div>
+          <div class="benefit-desc">Comprehensive curriculum design for supporting developmental milestones.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Kindergarten Transition for Special Needs Students</div>
+          <div class="benefit-desc">Strategies for smooth transitions from early intervention to kindergarten.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Special Needs Students In Early Intervention</div>
+          <div class="benefit-desc">Best practices and interventions for students with special needs.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">De-escalation for Early Childhood</div>
+          <div class="benefit-desc">Practical de-escalation techniques for managing challenging behaviors.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Professional Moments Gallery</h2>
+      <p style="margin-bottom: 2rem; line-height: 1.8;">
+        See our training programs in action! These images showcase professional development moments, team collaboration, and educators engaged in continuous learning.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <img src="images/training-gallery-1.jpg" alt="Professional Development Moment 1" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <img src="images/training-gallery-2.jpg" alt="Professional Development Moment 2" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <img src="images/training-gallery-3.jpg" alt="Professional Development Moment 3" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <img src="images/training-gallery-4.jpg" alt="Professional Development Moment 4" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">What People Are Saying</h2>
+      <div class="testimonials-wrapper" style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
+        <button class="testimonial-nav prev" id="prevTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❮</button>
+        <div class="testimonials" id="testimonialsContainer" style="flex: 1; min-height: 200px;">
+          <!-- Testimonials will be loaded here by script.js -->
+        </div>
+        <button class="testimonial-nav next" id="nextTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❯</button>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2 style="color: white;">Ready to Strengthen Your Workforce?</h2>
+      <p style="margin: 1rem 0;">Invest in professional development and training programs tailored to your organization's needs. Contact us today to learn about our comprehensive training solutions.</p>
+      <a href="tel:484-501-9101" class="cta-button">Call: 484-501-9101</a>
+    </div>
+  </div>
+
+  <!-- FOOTER CONTAINER -->
+  <div id="footer-container"></div>
+
+  <!-- Header Component -->
+  <script src="components/header.js"></script>
+  
+  <!-- Footer Component -->
+  <script src="components/footer.js"></script>
+
+  <!-- Chat Widget -->
+  <script src="components/chat-widget.js"></script>
+
+  <!-- Firebase & Testimonials -->
+  <script src="components/firebase-init.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerContainer = document.getElementById('header-container');
+      if (headerContainer) {
+        headerContainer.innerHTML = createHeader();
+      }
+      
+      const footerContainer = document.getElementById('footer-container');
+      if (footerContainer) {
+        footerContainer.innerHTML = createFooter();
+      }
+    });
+  </script>
+</body>
+</html>

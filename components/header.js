@@ -4,21 +4,27 @@ function createHeader() {
     <!-- NAV -->
     <header class="nav">
       <div class="nav-inner">
-        <a href="index.html" class="logo-link">
-          <img src="images/logo.png" alt="EIEI Logo" class="logo">
-        </a>
+        <div class="nav-logo-section">
+          <a href="index.html" class="logo-link">
+            <img src="images/logo.png" alt="EIEI Logo" class="logo">
+          </a>
+        </div>
+        
         <button class="menu-toggle" id="menuToggle">☰</button>
-        <nav>
-          <a href="index.html" class="nav-home" id="navHome">Home</a>
-          <a href="about.html">About</a>
-          <a href="services.html">Services</a>
-          <a href="support.html">Support</a>
-          <a href="blog.html">Blog</a>
-          <a href="marketplace.html">Marketplace</a>
-          <a href="career-opportunities.html">Careers</a>
-          <a href="contact-us.html">Contact</a>
-          <a href="https://forms.gle/J5eJz9ztwiEAAyZq9" target="_blank" class="nav-btn nav-tour">Schedule a Tour</a>
+        
+        <nav class="nav-menu">
+          <a href="index.html" class="nav-item">About</a>
+          <a href="services.html" class="nav-item">Services</a>
+          <a href="support.html" class="nav-item">Support</a>
+          <a href="blog.html" class="nav-item">Blog</a>
+          <a href="marketplace.html" class="nav-item">Marketplace</a>
+          <a href="career-opportunities.html" class="nav-item">Careers</a>
+          <a href="contact-us.html" class="nav-item">Contact</a>
         </nav>
+
+        <div class="nav-actions">
+          <a href="https://forms.gle/J5eJz9ztwiEAAyZq9" target="_blank" class="nav-btn nav-tour">Schedule a Tour</a>
+        </div>
       </div>
     </header>
   `;

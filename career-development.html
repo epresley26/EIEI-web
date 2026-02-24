@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Development Program - EIEI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background-color: #f3f4f6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .breadcrumb {
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .breadcrumb a {
+      color: #2a4175;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: #fca311;
+    }
+
+    .program-header {
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .program-title {
+      color: #2a4175;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .program-subtitle {
+      font-size: 1.2rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .content-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      color: #2a4175;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #fca311;
+      padding-bottom: 0.5rem;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .benefit-card {
+      padding: 1.5rem;
+      background-color: #f3f4f6;
+      border-left: 4px solid #fca311;
+      border-radius: 4px;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .benefit-title {
+      color: #2a4175;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit-desc {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: #fca311;
+      color: #2a4175;
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .cta-button:hover {
+      background-color: #ff9500;
+    }
+
+    .testimonials-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .testimonials-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .testimonials {
+      flex: 1;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #testimonialsContainer .card {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    #testimonialsContainer .card.active {
+      display: block;
+    }
+
+    #testimonialsContainer .card p {
+      color: #6b7280;
+      font-size: 1rem;
+      margin: 1rem 0;
+      line-height: 1.8;
+    }
+
+    #testimonialsContainer .card h3 {
+      color: #2a4175;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .testimonial-nav {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #2a4175;
+      padding: 0.5rem;
+    }
+
+    .testimonial-nav:hover {
+      color: #fca311;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER CONTAINER -->
+  <div id="header-container"></div>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> / <a href="services.html">Services</a> / Career Development Program
+    </div>
+
+    <div class="program-header">
+      <h1 class="program-title">EIEI Career Development Program</h1>
+      <p class="program-subtitle">Empower your future in early intervention and special education</p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">About Our Career Development Program</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        The Education Institute for Early Intervention (EIEI) Career Development program is designed to empower individuals interested in making a difference in the lives of children with special needs, specifically focusing on early childhood and birth – 8yrs old.
+      </p>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        As part of our initiative, we offer a Pennsylvania Department of Labor Registered Apprenticeship in Special Education, a Child Development Associate (CDA) certification, and a Special Education Learn to Earn Program. These opportunities provide hands-on experience, mentorship, and professional training, equipping participants with the skills and knowledge necessary to excel in early intervention and early childhood special education.
+      </p>
+      <p style="line-height: 1.8;">
+        Join us to advance your career while making a meaningful impact on children's lives. No prior teaching experience required!
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Our Programs</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Pennsylvania Registered Apprenticeship</div>
+          <div class="benefit-desc">18-month comprehensive program combining classroom instruction with hands-on training. Earn while you learn with paid on-the-job experience.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Child Development Associate (CDA)</div>
+          <div class="benefit-desc">Professional certification in early childhood development with focus on special education practices.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Special Education Learn to Earn</div>
+          <div class="benefit-desc">Flexible program combining academic coursework with practical work experience in special education settings.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Special Education Paraeducator Apprenticeship</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        The Education Institute for Early Intervention (EIEI) has launched its Pennsylvania Department of Labor Registered Apprenticeship Program for Special Education Paraeducators, beginning in 2025. This program marks a significant advancement in training the next generation of educators who will play a vital role in supporting students with special needs.
+      </p>
+
+      <div style="margin-bottom: 2rem;">
+        <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem;">Program Features</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Earn While You Learn:</strong> Receive paid on-the-job training under the guidance of experienced educators.</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Comprehensive Curriculum:</strong> Covers individualized instruction techniques, behavior management strategies, and best practices in special education.</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Hands-On Experience:</strong> Practical, real-world training in special education settings.</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Balanced Approach:</strong> Mix of academic coursework and professional development opportunities.</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Nationally Recognized Credential:</strong> Upon completion, receive credentials as Special Education Paraeducators.</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Career Advancement:</strong> Opens numerous career opportunities in education and lays foundation for long-term professional growth.</li>
+        </ul>
+      </div>
+
+      <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem;">Key Details</h3>
+      <div style="margin-bottom: 2rem;">
+        <img src="images/career-assistive-tech.jpg" alt="Using Assistive Technology to Promote Literacy Development" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Program Duration</div>
+          <div class="benefit-desc"><strong>18 months</strong> - Complete all required training during this period.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Training Format</div>
+          <div class="benefit-desc"><strong>Online Classes</strong> - Flexible learning combined with on-the-job training.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Employment Requirement</div>
+          <div class="benefit-desc"><strong>Full-Time Employment</strong> - Must maintain full-time employment throughout the 18 months.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Prior Experience</div>
+          <div class="benefit-desc"><strong>Prior Training Credit</strong> - May be eligible for credit for previous training from other providers.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Eligibility Requirements</h2>
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 1rem;"><strong style="color: #2a4175;">✓</strong> Passionate about supporting children with special needs</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #2a4175;">✓</strong> Interested in early childhood and birth-8 years old support</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #2a4175;">✓</strong> Able to maintain full-time employment during the program</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #2a4175;">✓</strong> No prior teaching experience required - we welcome career changers!</li>
+        <li style="margin-bottom: 1rem;"><strong style="color: #2a4175;">✓</strong> Willingness to complete online coursework and practical training</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">What People Are Saying</h2>
+      <div class="testimonials-wrapper" style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
+        <button class="testimonial-nav prev" id="prevTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❮</button>
+        <div class="testimonials" id="testimonialsContainer" style="flex: 1; min-height: 200px;">
+          <!-- Testimonials will be loaded here by script.js -->
+        </div>
+        <button class="testimonial-nav next" id="nextTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❯</button>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Terms of Apprenticeship</h2>
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 1rem;">Program Duration & Requirements</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Duration:</strong> 18-month comprehensive program</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Training Format:</strong> All training consists of online classes combined with on-the-job experience</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Employment Requirement:</strong> Apprentices must maintain full-time employment while participating throughout the 18-month period</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Prior Training Credit:</strong> If you have already completed required training from another provider, you may be eligible for credit for that specific training. Submit unexpired certificates with your application materials</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Prior Work Experience:</strong> Documentation of prior work experience in a licensed childcare program should be submitted with application materials</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Employment Termination:</strong> If employment is terminated for any reason, immediately contact the Apprenticeship Coordinator. We will assist apprentices in obtaining employment from another participating employer if they remain eligible</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Certificates & Credentials</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        Upon successful completion of the 18-month apprenticeship program, participants receive nationally recognized credentials that open doors to numerous career opportunities in the education sector.
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Special Education Paraeducator Credential</div>
+          <div class="benefit-desc">Nationally recognized certification qualifying you for immediate career opportunities in special education settings.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Apprenticeship Completion Certificate</div>
+          <div class="benefit-desc">Official Pennsylvania Department of Labor certification recognizing completion of the registered apprenticeship program.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Professional Development Credits</div>
+          <div class="benefit-desc">Earn professional development hours applicable toward ongoing educator certifications and licensing requirements.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Career Foundation</div>
+          <div class="benefit-desc">Credentials provide immediate career prospects and lay the foundation for long-term professional growth within special education.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Eligibility Requirements</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        The EIEI apprenticeship program is open to individuals who are passionate about making a difference in the lives of students with special needs. No prior teaching experience is required!
+      </p>
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 1rem;">Basic Eligibility Criteria</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Passionate about supporting children with special needs (birth-8 years)</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Able to maintain full-time employment during the 18-month program</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Willing to complete online coursework and practical training</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> High school diploma or GED</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Ability to pass background checks</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> No prior teaching experience required - career changers welcome!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Employment & Job Placement</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        EIEI partners with multiple participating employers to ensure apprentices have access to quality employment opportunities in special education settings.
+      </p>
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 1rem;">Employment Support</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Job Placement Assistance:</strong> We help connect apprentices with participating employers in the Philadelphia area and surrounding regions</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Employer Network:</strong> Access to EIEI's network of partner schools and special education programs</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Employment Continuity:</strong> If your employment ends, we assist in finding alternative employment with another participating employer</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Full-Time Positions:</strong> Apprenticeship must be pursued through full-time employment in a special education setting</li>
+          <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">Career Growth:</strong> Upon completion, credentials open doors to supervisory, leadership, and teaching positions</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Application Directions</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        Ready to apply for the 2025 cohort? Follow these steps to submit your application for the Pennsylvania Department of Labor Registered Apprenticeship Program.
+      </p>
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 1rem;">Application Steps</h3>
+        <div style="background-color: #f3f4f6; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #fca311;">
+          <ol style="list-style-position: inside; line-height: 2.2;">
+            <li><strong>Step 1: Verify Eligibility</strong> - Confirm you meet all basic requirements (high school diploma/GED, ability to work full-time, background check eligibility)</li>
+            <li><strong>Step 2: Prepare Documents</strong> - Gather required materials including resume, references, and any prior training certificates</li>
+            <li><strong>Step 3: Complete Application Form</strong> - Fill out the official apprenticeship application with personal and employment information</li>
+            <li><strong>Step 4: Submit Supporting Materials</strong> - Include documentation of prior work experience in childcare settings and any unexpired training certificates</li>
+            <li><strong>Step 5: Interview</strong> - Participate in an interview with the EIEI Apprenticeship Coordinator</li>
+            <li><strong>Step 6: Employer Placement</strong> - Once approved, we will help place you with a participating employer</li>
+            <li><strong>Step 7: Program Start</strong> - Begin your 18-month apprenticeship journey!</li>
+          </ol>
+        </div>
+      </div>
+      <div style="background-color: #e8f4f8; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2a4175; margin-top: 1.5rem;">
+        <p style="margin: 0;"><strong>Contact Information:</strong></p>
+        <p style="margin: 0.5rem 0;">📞 <strong>Phone:</strong> 484-501-9101</p>
+        <p style="margin: 0.5rem 0;">📧 <strong>Email:</strong> admin@eiforei.org</p>
+        <p style="margin: 0.5rem 0;"><strong>Contact Person:</strong> Dr. Essence Allen-Presley</p>
+        <p style="margin: 0.5rem 0;"><strong>Applications for 2025 cohort are now open!</strong></p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Frequently Asked Questions (FAQs)</h2>
+      <div style="margin-bottom: 2rem;">
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: Do I need prior teaching experience?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: No! No prior teaching experience is required. The program is designed for individuals new to the education field. We welcome career changers who are passionate about supporting children with special needs.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: How long is the apprenticeship program?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: The apprenticeship is an 18-month program. During this time, you must maintain full-time employment and complete all required online classes and on-the-job training.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: Can I get credit for prior training?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: Yes! If you have completed required training from another provider, you may be eligible for credit. Submit your unexpired certificates with your application materials for review.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: Will I be paid during the apprenticeship?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: Yes! You "earn while you learn." Apprentices receive paid on-the-job training under the guidance of experienced educators. You will be employed throughout the program.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: What if I don't have a job yet?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: EIEI provides job placement assistance. After your application is approved, we help connect you with a participating employer in our network to begin your apprenticeship.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: What credentials do I receive?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: Upon completion, you receive a nationally recognized credential as a Special Education Paraeducator, official completion certificate from the Pennsylvania Department of Labor, and professional development credits.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: What's the cost of the program?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: Please contact Dr. Essence Allen-Presley at 484-501-9101 or admin@eiforei.org for detailed information about program costs and any financial assistance options available.</p>
+        </div>
+
+        <div>
+          <h3 style="color: #2a4175; font-size: 1.1rem; margin-bottom: 0.5rem;">Q: What happens if I need to change employers?</h3>
+          <p style="color: #6b7280; line-height: 1.8;">A: If your employment is terminated for any reason, contact the Apprenticeship Coordinator immediately. EIEI will assist you in obtaining employment with another participating employer to continue your apprenticeship.</p>
+        </div>
+      </div>
+    </div>
+      <p style="margin-bottom: 2rem; line-height: 1.8;">
+        See our career development program in action! These images showcase apprentices and educators engaged in hands-on training and professional development.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <img src="images/career-gallery-1.jpg" alt="Career Development Program - Gallery 1" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <img src="images/career-gallery-2.jpg" alt="Career Development Program - Gallery 2" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <img src="images/career-gallery-3.jpg" alt="Career Development Program - Gallery 3" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <img src="images/career-gallery-4.jpg" alt="Career Development Program - Gallery 4" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2 style="color: white;">Ready to Launch Your Career in Special Education?</h2>
+      <p style="margin: 1rem 0;">Join the 2025 cohort! Applications are now being accepted for our Pennsylvania Department of Labor Registered Apprenticeship Program. Let's make a meaningful impact on children's lives together.</p>
+      <p style="margin: 1rem 0; font-size: 0.95rem;">Contact Dr. Essence Allen-Presley for more information</p>
+      <a href="tel:484-501-9101" class="cta-button">Call: 484-501-9101</a>
+    </div>
+  </div>
+
+  <!-- FOOTER CONTAINER -->
+  <div id="footer-container"></div>
+
+  <!-- Header Component -->
+  <script src="components/header.js"></script>
+  
+  <!-- Footer Component -->
+  <script src="components/footer.js"></script>
+
+  <!-- Chat Widget -->
+  <script src="components/chat-widget.js"></script>
+
+  <!-- Firebase & Testimonials -->
+  <script src="components/firebase-init.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerContainer = document.getElementById('header-container');
+      if (headerContainer) {
+        headerContainer.innerHTML = createHeader();
+      }
+      
+      const footerContainer = document.getElementById('footer-container');
+      if (footerContainer) {
+        footerContainer.innerHTML = createFooter();
+      }
+    });
+  </script>
+</body>
+</html>

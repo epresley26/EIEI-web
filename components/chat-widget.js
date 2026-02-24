@@ -66,7 +66,7 @@ class ChatWidget {
       }
 
       .chat-button.active {
-        background: linear-gradient(135deg, #fca311 0%, #ff9500 100%);
+        background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
       }
 
       .chat-badge {
@@ -94,10 +94,10 @@ class ChatWidget {
         position: absolute;
         bottom: 80px;
         right: 0;
-        width: 380px;
-        height: 600px;
+        width: 420px;
+        height: 650px;
         background: white;
-        border-radius: 12px;
+        border-radius: 16px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         display: none;
         flex-direction: column;
@@ -120,26 +120,63 @@ class ChatWidget {
 
       .chat-header h3 {
         margin: 0;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
 
-      .chat-header-close {
+      .chat-header-icons {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+
+      .chat-header-icon-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
         background: rgba(255, 255, 255, 0.2);
         border: none;
         color: white;
         cursor: pointer;
-        font-size: 20px;
-        width: 32px;
-        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.3s ease;
+      }
+
+      .chat-header-icon-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .chat-header-close {
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
+        background: #2a4175;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: none;
+      }
+
+      .chat-header-close.show {
+        display: flex;
       }
 
       .chat-header-close:hover {
-        background: rgba(255, 255, 255, 0.3);
+        background: #4a6fa5;
       }
 
       .chat-messages {
@@ -148,13 +185,13 @@ class ChatWidget {
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        background: #f9f9f9;
+        gap: 1.25rem;
+        background: #ffffff;
       }
 
       .message {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.75rem;
         align-items: flex-end;
         animation: slideIn 0.3s ease;
       }
@@ -174,8 +211,38 @@ class ChatWidget {
         justify-content: flex-end;
       }
 
+      .message-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .message.user .message-avatar {
+        order: 2;
+        background: linear-gradient(135deg, #fca311 0%, #ff9500 100%);
+      }
+
+      .message-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex-shrink: 0;
+        max-width: 280px;
+      }
+
+      .message.user .message-content {
+        align-items: flex-end;
+      }
+
       .message-bubble {
-        max-width: 95%;
+        max-width: 100%;
         padding: 0.75rem 1rem;
         border-radius: 12px;
         word-wrap: break-word;
@@ -192,7 +259,7 @@ class ChatWidget {
       }
 
       .message.admin .message-bubble {
-        background: #e8e8e8;
+        background: #f0f0f0;
         color: #333;
         border-bottom-left-radius: 2px;
       }
@@ -200,13 +267,17 @@ class ChatWidget {
       .message-time {
         font-size: 0.75rem;
         color: #999;
-        margin-top: 0.3rem;
+        margin-top: 0.2rem;
+      }
+
+      .message.user .message-time {
+        text-align: right;
       }
 
       .chat-input-area {
         padding: 1rem;
         background: white;
-        border-top: 1px solid #e0e0e0;
+        border-top: 1px solid #e5e5e5;
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
@@ -216,13 +287,14 @@ class ChatWidget {
       .chat-input-group {
         display: flex;
         gap: 0.5rem;
+        align-items: center;
       }
 
       .chat-input {
         flex: 1;
         padding: 0.75rem 1rem;
         border: 1px solid #e0e0e0;
-        border-radius: 6px;
+        border-radius: 20px;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         font-size: 0.9rem;
         outline: none;
@@ -234,19 +306,46 @@ class ChatWidget {
         box-shadow: 0 0 0 3px rgba(42, 65, 117, 0.1);
       }
 
+      .chat-input::placeholder {
+        color: #b0b0b0;
+      }
+
+      .chat-action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(42, 65, 117, 0.1);
+        border: none;
+        color: #2a4175;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .chat-action-btn:hover {
+        background: rgba(42, 65, 117, 0.2);
+      }
+
       .chat-send-btn {
-        padding: 0.75rem 1rem;
-        background: linear-gradient(135deg, #fca311 0%, #ff9500 100%);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
         color: white;
         border: none;
-        border-radius: 6px;
         cursor: pointer;
-        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
         transition: all 0.3s ease;
       }
 
       .chat-send-btn:hover {
-        box-shadow: 0 4px 12px rgba(252, 163, 17, 0.3);
+        box-shadow: 0 4px 12px rgba(42, 65, 117, 0.3);
       }
 
       .chat-send-btn:active {
@@ -263,7 +362,7 @@ class ChatWidget {
         width: 100%;
         padding: 0.75rem;
         border: 1px solid #e0e0e0;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 0.9rem;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         outline: none;
@@ -279,7 +378,7 @@ class ChatWidget {
         flex-direction: column;
         gap: 1.5rem;
         padding: 2rem 1.5rem;
-        background: #f9f9f9;
+        background: #ffffff;
         flex: 1;
         justify-content: center;
       }
@@ -287,8 +386,9 @@ class ChatWidget {
       .chat-welcome-screen h2 {
         margin: 0;
         color: #2a4175;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         text-align: center;
+        font-weight: 600;
       }
 
       .chat-welcome-screen p {
@@ -313,7 +413,7 @@ class ChatWidget {
         flex: 1;
         padding: 0.75rem;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         font-weight: 600;
         cursor: pointer;
@@ -337,7 +437,7 @@ class ChatWidget {
       }
 
       .chat-btn-secondary:hover {
-        background: #f0f0f0;
+        background: rgba(42, 65, 117, 0.05);
       }
 
       .chat-loading {
@@ -352,6 +452,7 @@ class ChatWidget {
           height: 70vh;
           bottom: 80px;
           right: 10px;
+          border-radius: 16px;
         }
 
         .message-bubble {
@@ -374,15 +475,19 @@ class ChatWidget {
         <div class="chat-badge" id="chatBadge">0</div>
       </button>
 
+      <button class="chat-header-close" id="chatCloseBtn">×</button>
+
       <div class="chat-window" id="chatWindow">
         <div class="chat-header">
-          <h3>💬 Chat Support</h3>
-          <button class="chat-header-close" id="chatClose">×</button>
+          <h3>
+            <span style="font-size: 1.3rem;">💬</span>
+            <span>EIEI Support</span>
+          </h3>
         </div>
 
         <!-- Welcome Screen (shown first) -->
         <div class="chat-welcome-screen" id="chatWelcome">
-          <h2>Welcome to Chat Support</h2>
+          <h2>Welcome to EIEI</h2>
           <p>Get help from our support team</p>
           
           <div class="chat-welcome-form">
@@ -392,7 +497,6 @@ class ChatWidget {
             </div>
             <div class="chat-button-group">
               <button class="chat-btn-primary" id="chatStartBtn">Start Chat</button>
-              <button class="chat-btn-secondary" id="chatGuestBtn">Chat as Guest</button>
             </div>
           </div>
         </div>
@@ -400,13 +504,12 @@ class ChatWidget {
         <!-- Chat Screen (shown after welcome) -->
         <div id="chatContent" style="display: none; flex: 1; display: flex; flex-direction: column;">
           <div class="chat-messages" id="chatMessages">
-            <div class="chat-loading">Loading conversation...</div>
           </div>
 
           <div class="chat-input-area">
             <div class="chat-input-group">
-              <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
-              <button class="chat-send-btn" id="chatSend">Send</button>
+              <input type="text" class="chat-input" id="chatInput" placeholder="Do you have question?">
+              <button class="chat-send-btn" id="chatSend" title="Send message">➤</button>
             </div>
           </div>
         </div>
@@ -419,11 +522,10 @@ class ChatWidget {
   setupEventListeners() {
     // Toggle chat window
     document.getElementById('chatToggle').addEventListener('click', () => this.toggleChat());
-    document.getElementById('chatClose').addEventListener('click', () => this.closeChat());
+    document.getElementById('chatCloseBtn').addEventListener('click', () => this.closeChat());
     
     // Welcome form buttons
     document.getElementById('chatStartBtn').addEventListener('click', () => this.startChat());
-    document.getElementById('chatGuestBtn').addEventListener('click', () => this.startChatAsGuest());
     
     // Chat message sending
     document.getElementById('chatSend').addEventListener('click', () => this.sendMessage());
@@ -448,12 +550,6 @@ class ChatWidget {
     
     this.visitorName = name;
     this.visitorEmail = email;
-    this.showChatScreen();
-  }
-
-  startChatAsGuest() {
-    this.visitorName = 'Guest';
-    this.visitorEmail = '';
     this.showChatScreen();
   }
 
@@ -611,14 +707,13 @@ class ChatWidget {
       
       const timestamp = msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
       
-      const senderLabel = msg.sender === 'user' ? '' : 'Support: ';
+      const avatar = msg.sender === 'user' ? '👤' : '👨‍💼';
       
       messageDiv.innerHTML = `
-        <div style="width: 100%; display: flex; flex-direction: ${msg.sender === 'user' ? 'row-reverse' : 'row'}; gap: 0.5rem;">
-          <div>
-            <div class="message-bubble">${senderLabel}<strong>${msg.sender === 'admin' ? '' : ''}</strong>${this.escapeHtml(msg.text)}</div>
-            <div class="message-time" style="text-align: ${msg.sender === 'user' ? 'right' : 'left'}; margin-top: 0.3rem;">${timestamp}</div>
-          </div>
+        <div class="message-avatar">${avatar}</div>
+        <div class="message-content">
+          <div class="message-bubble">${this.escapeHtml(msg.text)}</div>
+          <div class="message-time">${timestamp}</div>
         </div>
       `;
       
@@ -721,6 +816,7 @@ class ChatWidget {
     this.isOpen = true;
     document.getElementById('chatWindow').classList.add('open');
     document.getElementById('chatToggle').classList.add('active');
+    document.getElementById('chatCloseBtn').classList.add('show');
     document.getElementById('chatInput').focus();
     
     // Mark messages as read
@@ -731,6 +827,7 @@ class ChatWidget {
     this.isOpen = false;
     document.getElementById('chatWindow').classList.remove('open');
     document.getElementById('chatToggle').classList.remove('active');
+    document.getElementById('chatCloseBtn').classList.remove('show');
   }
 
   async markMessagesAsRead() {

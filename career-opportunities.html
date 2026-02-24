@@ -82,66 +82,7 @@
   <!-- POSITIONS AVAILABLE -->
   <section class="positions-section">
     <h2>Current Openings</h2>
-
-    <div class="position-card">
-      <h3>Special Education Teachers</h3>
-      <div class="position-salary">$48,000 - $49,000 annually</div>
-      <p>We're searching for passionate individuals who possess the skills to make a lasting impact. As a certified teacher, you'll help children with developmental delays or disabilities achieve their full potential.</p>
-      <ul>
-        <li>Lead classroom instruction and activities</li>
-        <li>Develop individualized education plans (IEPs)</li>
-        <li>Collaborate with therapists and support staff</li>
-        <li>Engage with families and caregivers</li>
-      </ul>
-    </div>
-
-    <div class="position-card">
-      <h3>Special Education Teaching Assistants</h3>
-      <div class="position-salary">$15 - $17 per hour</div>
-      <p>Inspire and educate with full training and support. No prior teaching experience required!</p>
-      <ul>
-        <li>Support classroom instruction</li>
-        <li>Assist with student care and activities</li>
-        <li>Help implement behavior strategies</li>
-        <li>Full training provided</li>
-      </ul>
-    </div>
-
-    <div class="position-card">
-      <h3>Registered Behavior Technicians (RBT)</h3>
-      <div class="position-salary">$28,000 - $30,000 annually</div>
-      <p>Make a significant difference in young lives. Our RBT role offers a unique opportunity with a focus on evidence-based strategies and collaborative approaches.</p>
-      <ul>
-        <li>Implement behavior intervention plans</li>
-        <li>Collect and analyze behavioral data</li>
-        <li>Provide direct student support</li>
-        <li>Collaborate with BCBA and staff</li>
-      </ul>
-    </div>
-
-    <div class="position-card">
-      <h3>Speech Language Therapists</h3>
-      <div class="position-salary">$88 - $93 per hour</div>
-      <p>Guide children towards effective communication skills, enabling them to express themselves and connect with the world around them.</p>
-      <ul>
-        <li>Assess communication needs</li>
-        <li>Develop and implement therapy plans</li>
-        <li>Provide individual and group therapy</li>
-        <li>Collaborate with educational team</li>
-      </ul>
-    </div>
-
-    <div class="position-card">
-      <h3>Occupational Therapists - Early Childhood (Ages 3-5)</h3>
-      <div class="position-salary">$86 - $92 per hour</div>
-      <p>Occupational therapists are crucial for supporting children with developmental delays or disabilities. Utilize play-based interventions to develop foundational skills necessary for learning and daily living.</p>
-      <ul>
-        <li>Assess occupational therapy needs</li>
-        <li>Design play-based interventions</li>
-        <li>Support fine and gross motor development</li>
-        <li>Provide classroom and in-home services</li>
-      </ul>
-    </div>
+    <div id="jobs-container"></div>
   </section>
 
   <!-- BENEFITS -->
@@ -240,16 +181,169 @@
     </div>
   </section>
 
+  <!-- APPLICATION MODAL -->
+  <div id="applicationModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 500px;">
+      <span class="close-modal" onclick="closeApplicationModal()">&times;</span>
+      <h2 id="applicationJobTitle" style="color: var(--brand-blue); margin-bottom: 1rem;"></h2>
+      <form id="applicationForm" onsubmit="submitJobApplication(event)">
+        <div class="form-group">
+          <label for="appName">Full Name *</label>
+          <input type="text" id="appName" required>
+        </div>
+        <div class="form-group">
+          <label for="appEmail">Email Address *</label>
+          <input type="email" id="appEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="appPhone">Phone Number *</label>
+          <input type="tel" id="appPhone" required>
+        </div>
+        <div class="form-group">
+          <label for="appExperience">Years of Experience *</label>
+          <input type="number" id="appExperience" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="appResume">Resume/CV (URL or attachment) *</label>
+          <input type="text" id="appResume" placeholder="https://example.com/resume.pdf" required>
+        </div>
+        <div class="form-group">
+          <label for="appCoverLetter">Cover Letter</label>
+          <textarea id="appCoverLetter" rows="4" placeholder="Tell us why you're interested in this position..."></textarea>
+        </div>
+        <button type="submit" class="primary-btn" style="width: 100%;">Submit Application</button>
+      </form>
+    </div>
+  </div>
+
   <!-- FOOTER CONTAINER -->
   <div id="footer-container"></div>
 
   <script src="components/header.js"></script>
   <script src="components/footer.js"></script>
   <script src="components/loader.js"></script>
+  <script src="components/firebase-init.js"></script>
   <script src="script.js"></script>
   <script>
     // Load components when DOM is ready
-    document.addEventListener('DOMContentLoaded', loadComponents);
+    document.addEventListener('DOMContentLoaded', () => {
+      loadComponents();
+      loadJobOpenings();
+    });
+
+    async function loadJobOpenings() {
+      try {
+        const db = firebase.firestore();
+        const jobsSnapshot = await db.collection('jobs')
+          .orderBy('postedAt', 'desc')
+          .get();
+
+        const jobsContainer = document.getElementById('jobs-container');
+        
+        if (jobsSnapshot.empty) {
+          jobsContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No job openings available at this time. Please check back soon!</p>';
+          return;
+        }
+
+        jobsContainer.innerHTML = '';
+        jobsSnapshot.forEach(doc => {
+          const job = doc.data();
+          const jobId = doc.id;
+          const requirementsList = Array.isArray(job.requirements) 
+            ? job.requirements.join('\n') 
+            : job.requirements || '';
+          
+          const requirementsHTML = requirementsList
+            .split('\n')
+            .filter(item => item.trim())
+            .map(item => `<li>${item.trim()}</li>`)
+            .join('');
+
+          const jobCard = document.createElement('div');
+          jobCard.className = 'position-card';
+          jobCard.innerHTML = `
+            <h3>${job.title}</h3>
+            <div class="position-meta">
+              <span class="job-type">${job.type}</span>
+              <span class="job-location">${job.location}</span>
+            </div>
+            ${job.salary ? `<div class="position-salary">${job.salary}</div>` : ''}
+            <p>${job.description}</p>
+            ${requirementsHTML ? `<ul>${requirementsHTML}</ul>` : ''}
+            <button class="primary-btn" onclick="openApplicationModal('${jobId}', '${job.title}')" style="margin-top: 1.5rem;">Apply Now</button>
+          `;
+          jobsContainer.appendChild(jobCard);
+        });
+      } catch (error) {
+        console.error('Error loading jobs:', error);
+        const jobsContainer = document.getElementById('jobs-container');
+        jobsContainer.innerHTML = '<p style="color: red;">Error loading job openings. Please try again later.</p>';
+      }
+    }
+
+    let currentJobId = null;
+
+    function openApplicationModal(jobId, jobTitle) {
+      currentJobId = jobId;
+      document.getElementById('applicationJobTitle').textContent = `Apply for: ${jobTitle}`;
+      document.getElementById('applicationModal').style.display = 'flex';
+    }
+
+    function closeApplicationModal() {
+      document.getElementById('applicationModal').style.display = 'none';
+      document.getElementById('applicationForm').reset();
+      currentJobId = null;
+    }
+
+    async function submitJobApplication(event) {
+      event.preventDefault();
+      
+      if (!currentJobId) {
+        alert('Error: Job ID not found. Please try again.');
+        return;
+      }
+
+      const name = document.getElementById('appName').value.trim();
+      const email = document.getElementById('appEmail').value.trim();
+      const phone = document.getElementById('appPhone').value.trim();
+      const experience = document.getElementById('appExperience').value;
+      const resume = document.getElementById('appResume').value.trim();
+      const coverLetter = document.getElementById('appCoverLetter').value.trim();
+
+      if (!name || !email || !phone || !experience || !resume) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      try {
+        const db = firebase.firestore();
+        await db.collection('job_applications').add({
+          jobId: currentJobId,
+          name: name,
+          email: email,
+          phone: phone,
+          experience: parseInt(experience),
+          resume: resume,
+          coverLetter: coverLetter,
+          appliedAt: new Date(),
+          status: 'pending'
+        });
+
+        alert('Application submitted successfully! We will review it and contact you soon.');
+        closeApplicationModal();
+      } catch (error) {
+        console.error('Error submitting application:', error);
+        alert('Error submitting application. Please try again.');
+      }
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('applicationModal');
+      if (event.target === modal) {
+        closeApplicationModal();
+      }
+    }
 
     function handleCareerApplication(event) {
       event.preventDefault();

@@ -1,4 +1,6 @@
 // Admin Chat Interface
+console.log('admin-chat.js loaded');
+
 class AdminChatInterface {
   constructor() {
     this.conversations = [];
@@ -15,6 +17,7 @@ class AdminChatInterface {
     this.loadConversations();
     this.setupRealtimeListeners();
     this.requestNotificationPermission();
+    this.updateNotificationBadge();
   }
 
   createNotificationSound() {
@@ -258,20 +261,31 @@ class AdminChatInterface {
         .admin-message {
           display: flex;
           justify-content: flex-end;
+          align-items: flex-end;
         }
 
         .user-message {
           display: flex;
           justify-content: flex-start;
+          align-items: flex-end;
+        }
+
+        .message-wrapper {
+          display: flex;
+          flex-direction: column;
+          flex-shrink: 0;
+          max-width: 350px;
         }
 
         .message-bubble {
-          max-width: 70%;
+          max-width: 100%;
           padding: 0.75rem 1rem;
           border-radius: 12px;
           word-wrap: break-word;
           font-size: 0.95rem;
           line-height: 1.4;
+          overflow-wrap: break-word;
+          white-space: normal;
         }
 
         .admin-message .message-bubble {
@@ -465,11 +479,31 @@ class AdminChatInterface {
       item.addEventListener('click', () => this.selectConversation(conv.id));
       container.appendChild(item);
     });
+    
+    this.updateNotificationBadge();
   }
 
   async selectConversation(conversationId) {
     this.selectedConversationId = conversationId;
     this.unreadConversations.delete(conversationId);
+    
+    // Mark all messages in this conversation as read
+    try {
+      const db = window.firebaseDB;
+      const messagesRef = db.collection('chats').doc(conversationId).collection('messages');
+      const unreadMessages = await messagesRef.where('sender', '==', 'user').where('read', '==', false).get();
+      
+      const batch = db.batch();
+      unreadMessages.docs.forEach(doc => {
+        batch.update(doc.ref, { read: true });
+      });
+      await batch.commit();
+      console.log('Marked messages as read:', unreadMessages.docs.length);
+    } catch (e) {
+      console.error('Error marking messages as read:', e);
+    }
+    
+    this.updateNotificationBadge();
     
     // Update active state
     document.querySelectorAll('.conversation-item').forEach(item => {
@@ -481,6 +515,13 @@ class AdminChatInterface {
     // Load messages
     this.loadConversationMessages(conversationId);
     this.setupMessageListener(conversationId);
+  }
+
+  updateNotificationBadge() {
+    // Call the main notification badge updater from admin-programs.html
+    if (typeof updateNotificationBadge === 'function') {
+      updateNotificationBadge();
+    }
   }
 
   async loadConversationMessages(conversationId) {
@@ -522,7 +563,7 @@ class AdminChatInterface {
           
           return `
             <div class="${isAdmin ? 'admin-message' : 'user-message'}">
-              <div>
+              <div class="message-wrapper">
                 <div class="message-bubble">${this.escapeHtml(msg.text)}</div>
                 <div class="message-time">${timestamp}</div>
               </div>
@@ -634,6 +675,7 @@ class AdminChatInterface {
           } else {
             // Mark conversation as unread and show notification
             this.unreadConversations.add(conversationId);
+            this.updateNotificationBadge();
             this.playNotificationSound();
             this.showDesktopNotification(conversationId);
             this.renderConversationsList(this.currentFilter);
@@ -700,14 +742,19 @@ class AdminChatInterface {
 window.adminChat = null;
 
 function initializeAdminChat() {
+  console.log('initializeAdminChat called, firebaseDB:', !!window.firebaseDB, 'adminChat:', !!window.adminChat);
   if (!window.adminChat && window.firebaseDB) {
+    console.log('Creating AdminChatInterface...');
     window.adminChat = new AdminChatInterface();
+    console.log('AdminChatInterface created:', window.adminChat);
   }
 }
 
 // Initialize on page load
+console.log('Document ready state:', document.readyState);
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeAdminChat);
 } else {
+  console.log('Document already loaded, initializing immediately');
   initializeAdminChat();
 }
