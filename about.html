@@ -240,57 +240,104 @@
     }
 
     .team-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .team-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .team-section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--brand-blue);
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid var(--brand-orange);
+    }
+
+    .team-section-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
     }
 
     .team-card {
-      background: white;
-      border-radius: 8px;
+      position: relative;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
       text-align: center;
       cursor: pointer;
+      height: 300px;
     }
 
     .team-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
     }
 
     .team-image {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 240px;
+      height: 100%;
       object-fit: cover;
-      background: #f0f0f0;
+      z-index: 1;
     }
 
     .team-info {
-      padding: 1.5rem 1rem;
-      border-bottom: 4px solid var(--brand-orange);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      width: 100%;
+      padding: 1.5rem;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.8) 80%,
+        rgba(0, 0, 0, 0.9) 100%
+      );
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: auto;
     }
 
     .team-name {
-      color: var(--brand-blue);
-      font-size: 1.05rem;
-      font-weight: 600;
+      color: white;
+      font-size: 1.15rem;
+      font-weight: 700;
       margin-bottom: 0.3rem;
+      letter-spacing: -0.3px;
     }
 
     .team-role {
-      color: #666;
-      font-size: 0.85rem;
-      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      font-weight: 400;
       margin: 0;
     }
 
     .team-bio {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      line-height: 1.4;
-      margin: 0;
+      display: none;
+    }
+
+    .team-stats {
+      display: none;
+    }
+
+    .team-cta-btn {
       display: none;
     }
 
@@ -728,19 +775,76 @@
         return;
       }
       
+      // Group members by section
+      const groupedMembers = {
+        founder: [],
+        executive: [],
+        staff: []
+      };
+      
+      members.forEach(member => {
+        const section = (member.section || 'staff').toLowerCase();
+        if (groupedMembers.hasOwnProperty(section)) {
+          groupedMembers[section].push(member);
+        } else {
+          groupedMembers.staff.push(member);
+        }
+      });
+      
       container.innerHTML = '';
-      members.forEach((member, index) => {
-        const card = document.createElement('div');
-        card.className = 'team-card';
-        card.innerHTML = `
-          <img src="${member.imageUrl || 'images/team/default.jpg'}" alt="${member.name}" class="team-image">
-          <div class="team-info">
-            <div class="team-name">${member.name}</div>
-            <div class="team-role">${member.role}</div>
-          </div>
-        `;
-        card.addEventListener('click', () => openTeamModal(member));
-        container.appendChild(card);
+      const sectionOrder = ['founder', 'executive', 'staff'];
+      const sectionLabels = {
+        founder: 'Founder',
+        executive: 'Executive Team',
+        staff: 'Staff'
+      };
+      
+      sectionOrder.forEach(sectionKey => {
+        const sectionMembers = groupedMembers[sectionKey];
+        if (sectionMembers.length === 0) return;
+        
+        // Create section container
+        const sectionDiv = document.createElement('div');
+        sectionDiv.className = 'team-section';
+        
+        // Create section title
+        const sectionTitle = document.createElement('h3');
+        sectionTitle.className = 'team-section-title';
+        sectionTitle.textContent = sectionLabels[sectionKey];
+        sectionDiv.appendChild(sectionTitle);
+        
+        // Create grid for this section
+        const gridDiv = document.createElement('div');
+        gridDiv.className = 'team-section-grid';
+        
+        // Add cards to grid
+        sectionMembers.forEach(member => {
+          const card = document.createElement('div');
+          card.className = 'team-card';
+          card.innerHTML = `
+            <img src="${member.imageUrl || 'images/team/default.jpg'}" alt="${member.name}" class="team-image">
+            <div class="team-info">
+              <div class="team-name">${member.name}</div>
+              <div class="team-role">${member.role}</div>
+            </div>
+            <div class="team-stats">
+              <div class="team-stat">
+                <span class="team-stat-icon">👥</span>
+                <span class="team-stat-value">120</span>
+              </div>
+              <div class="team-stat">
+                <span class="team-stat-icon">⭐</span>
+                <span class="team-stat-value">4.8</span>
+              </div>
+            </div>
+            <button class="team-cta-btn" onclick="event.stopPropagation();">View Profile</button>
+          `;
+          card.addEventListener('click', () => openTeamModal(member));
+          gridDiv.appendChild(card);
+        });
+        
+        sectionDiv.appendChild(gridDiv);
+        container.appendChild(sectionDiv);
       });
     }
 
