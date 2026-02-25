@@ -1,6 +1,6 @@
-// Replace the below config with your own Firebase project config from the Firebase Console
+// Firebase Configuration
 const firebaseConfig = {
-   apiKey: "AIzaSyCZNErpIXNGplWVDozEM99eYHjX_gr57vE",
+  apiKey: "AIzaSyCZNErpIXNGplWVDozEM99eYHjX_gr57vE",
   authDomain: "eiei-e1a76.firebaseapp.com",
   projectId: "eiei-e1a76",
   storageBucket: "eiei-e1a76.appspot.com",
@@ -9,7 +9,7 @@ const firebaseConfig = {
   measurementId: "G-28SHEQRWLY"
 };
 
-// Initialize Firebase - wait for firebase global to be defined
+// Initialize Firebase
 (function initializeFirebase() {
   if (typeof firebase === 'undefined') {
     console.log('Waiting for Firebase SDK to load...');
@@ -20,7 +20,7 @@ const firebaseConfig = {
   try {
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = typeof firebase.storage === 'function' ? firebase.storage() : null;
+    const storage = firebase.storage();
     
     // Export for use in other scripts
     window.firebaseApp = firebase.app();
@@ -39,7 +39,6 @@ const firebaseConfig = {
     }
   }
 })();
-window.firebaseStorage = storage;
 
 
 
