@@ -432,6 +432,57 @@
       transform: translateY(-2px);
     }
 
+    .gallery-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .preview-item {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      background: #f5f5f5;
+      border: 1px solid rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+
+    .preview-item:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transform: translateY(-4px);
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-item .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .preview-item:hover .delete-btn {
+      opacity: 1;
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -780,6 +831,14 @@
                 </svg>
                 <span id="notificationBadge" style="position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #ff5252; border: 2px solid white; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 700;">0</span>
               </div>
+              <!-- Google Drive Auth Button -->
+              <button id="topGoogleAuthBtn" style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #4285F4 0%, #1F60D2 100%); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease;" title="Authenticate Google Drive for image management">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 6h12v12H6z" fill="white" opacity="0.2"/>
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                </svg>
+                <span id="topGoogleAuthText">Enable Editing</span>
+              </button>
               <div style="width: 1px; height: 40px; background: rgba(0,0,0,0.1);"></div>
               <div style="text-align: right;">
                 <div id="userEmail" style="color: #2a4175; font-weight: 600; font-size: 0.9rem;">Loading...</div>
@@ -811,10 +870,16 @@
           <div class="upload-section">
             <h2>Upload Gallery Images to Google Drive</h2>
             <div class="success-message" id="gallerySuccessMessage">✓ Image uploaded successfully!</div>
+            
+            <div style="background: #f5f5f5; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+              <p style="margin: 0 0 0.5rem 0; color: var(--text-muted);">Step 1: Authenticate with Google Drive</p>
+              <button type="button" class="primary-btn" id="googleAuthBtn" style="width: auto;">Login with Google</button>
+              <span id="googleAuthStatus" style="margin-left: 1rem; color: var(--text-muted);">Not authenticated</span>
+            </div>
 
             <form class="upload-form" id="uploadForm">
               <div class="form-group">
-                <label for="imageInput">Select Images (PNG, JPG, GIF)</label>
+                <label for="imageInput">Step 2: Select Images (PNG, JPG, GIF)</label>
                 <input 
                   type="file" 
                   id="imageInput" 
@@ -1147,8 +1212,17 @@
           <label for="teamImage">Or Upload Image</label>
           <input type="file" id="teamImage" accept="image/*">
         </div>
+        <div id="teamProgressContainer" style="display: none; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.9rem; color: var(--text-muted);">Uploading image...</span>
+            <span id="teamProgressPercent" style="font-size: 0.9rem; color: var(--brand-blue); font-weight: 600;">0%</span>
+          </div>
+          <div style="width: 100%; height: 8px; background-color: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+            <div id="teamProgressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--brand-blue), var(--brand-orange)); transition: width 0.3s ease; border-radius: 4px;"></div>
+          </div>
+        </div>
         <div class="button-group">
-          <button type="submit" class="primary-btn">Save Member</button>
+          <button type="submit" id="teamSaveBtn" class="primary-btn">Save Member</button>
           <button type="button" class="secondary-btn" onclick="closeTeamModal()">Cancel</button>
         </div>
       </form>
@@ -1233,8 +1307,17 @@
           <label for="postImageFile">Or Upload Image</label>
           <input type="file" id="postImageFile" accept="image/*">
         </div>
+        <div id="blogProgressContainer" style="display: none; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.9rem; color: var(--text-muted);">Uploading image...</span>
+            <span id="blogProgressPercent" style="font-size: 0.9rem; color: var(--brand-blue); font-weight: 600;">0%</span>
+          </div>
+          <div style="width: 100%; height: 8px; background-color: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+            <div id="blogProgressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--brand-blue), var(--brand-orange)); transition: width 0.3s ease; border-radius: 4px;"></div>
+          </div>
+        </div>
         <div class="button-group">
-          <button type="submit" class="primary-btn">Publish</button>
+          <button type="submit" id="blogPublishBtn" class="primary-btn">Publish</button>
           <button type="button" class="secondary-btn" onclick="closeBlogModal()">Cancel</button>
         </div>
       </form>
@@ -1411,6 +1494,9 @@
       if (programsItem) {
         programsItem.classList.add('active');
       }
+
+      // Auto-load gallery images
+      setTimeout(() => loadGalleryImages(), 300);
 
       localStorage.setItem('adminAuthToken', accessToken);
     }
@@ -1647,9 +1733,11 @@
         }
       });
 
-      // Load applications when switching to applications tab
+      // Load specific tab content
       if (tabName === 'applications') {
         loadApplicationsTab();
+      } else if (tabName === 'gallery') {
+        loadGalleryImages();
       }
     }
 
@@ -1935,10 +2023,54 @@
       setTimeout(() => msg.classList.remove('show'), 3000);
     }
 
-    // GALLERY MANAGEMENT
     const uploadForm = document.getElementById('uploadForm');
     const imageInput = document.getElementById('imageInput');
     const uploadBtn = document.getElementById('uploadBtn');
+    const googleAuthBtn = document.getElementById('googleAuthBtn');
+    const googleAuthStatus = document.getElementById('googleAuthStatus');
+    const topGoogleAuthBtn = document.getElementById('topGoogleAuthBtn');
+    
+    let googleDriveAccessToken = null;
+
+    // Initialize Google OAuth for Drive
+    function initGoogleDriveAuth() {
+      const tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/drive.file',
+        callback: (tokenResponse) => {
+          if (tokenResponse.access_token) {
+            googleDriveAccessToken = tokenResponse.access_token;
+            googleAuthStatus.textContent = '✓ Google authenticated';
+            googleAuthStatus.style.color = 'green';
+            // Update top button
+            topGoogleAuthBtn.style.background = 'linear-gradient(135deg, #34A853 0%, #0F8B3D 100%)';
+            document.getElementById('topGoogleAuthText').textContent = '✓ Edit Mode';
+            console.log('Google Drive authenticated');
+            // Reload gallery after auth
+            loadGalleryImages();
+            // Re-render lists to show edit buttons
+            renderBlogList();
+            renderTeamList();
+            displayMarketplaceItems();
+          }
+        }
+      });
+      
+      googleAuthBtn.onclick = () => {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      };
+      
+      topGoogleAuthBtn.onclick = () => {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      };
+    }
+
+    // Initialize on page load if Google API is ready
+    if (window.google && window.google.accounts) {
+      initGoogleDriveAuth();
+    } else {
+      setTimeout(initGoogleDriveAuth, 1000);
+    }
 
     uploadForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -1949,10 +2081,27 @@
       const files = Array.from(imageInput.files);
       if (files.length === 0) return;
 
+      if (!googleDriveAccessToken) {
+        alert('Please authenticate with Google first by clicking the Google login button');
+        return;
+      }
+
+      console.log('Starting upload of', files.length, 'files to Google Drive');
+      
       uploadBtn.disabled = true;
+      const progressDiv = document.getElementById('uploadProgress');
+      progressDiv.style.display = 'block';
 
       let uploaded = 0;
       files.forEach((file) => {
+        // Validate file is an image
+        if (!file.type.startsWith('image/')) {
+          alert('Please select only image files');
+          uploadBtn.disabled = false;
+          progressDiv.style.display = 'none';
+          return;
+        }
+
         const formData = new FormData();
         const metadata = {
           name: file.name,
@@ -1962,40 +2111,90 @@
         formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
         formData.append('file', file);
 
+        console.log('Uploading file to Google Drive:', file.name);
+        
         fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
           method: 'POST',
-          headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
+          headers: new Headers({ 'Authorization': 'Bearer ' + googleDriveAccessToken }),
           body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+          console.log('Drive upload response status:', response.status);
+          if (!response.ok) throw new Error('Upload failed: ' + response.status);
+          return response.json();
+        })
         .then(async uploadedFile => {
-          // Get the shareable Google Drive link
-          const driveLink = `https://drive.google.com/uc?export=view&id=${uploadedFile.id}`;
+          if (!uploadedFile.id) {
+            throw new Error('Upload response missing file ID');
+          }
           
-          // Save to Firestore
+          console.log('File uploaded to Drive with ID:', uploadedFile.id);
+          
+          // Make file public by sharing it with "anyone"
+          try {
+            const permissionResponse = await fetch(
+              `https://www.googleapis.com/drive/v3/files/${uploadedFile.id}/permissions`,
+              {
+                method: 'POST',
+                headers: new Headers({ 
+                  'Authorization': 'Bearer ' + googleDriveAccessToken,
+                  'Content-Type': 'application/json'
+                }),
+                body: JSON.stringify({
+                  role: 'reader',
+                  type: 'anyone'
+                })
+              }
+            );
+            
+            if (!permissionResponse.ok) {
+              console.warn('Failed to set public permission, but file may still be accessible');
+            } else {
+              console.log('File permission set to public');
+            }
+          } catch (permError) {
+            console.warn('Permission error:', permError);
+          }
+          
+          // Generate public Google Drive link with alt=media for direct viewing
+          const imageUrl = `https://drive.google.com/uc?export=view&id=${uploadedFile.id}`;
+          
+          // Save to Firestore gallery collection so landing page can fetch it
           try {
             await window.firebaseDB.collection('gallery').add({
-              imageUrl: driveLink,
-              title: file.name,
               driveFileId: uploadedFile.id,
+              imageUrl: imageUrl,
+              fileName: file.name,
+              mimeType: file.type,
               uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
+            console.log('Image metadata saved to Firestore:', file.name);
           } catch (error) {
             console.error('Error saving to Firestore:', error);
+            alert('Upload to Drive succeeded but metadata save failed: ' + error.message);
           }
           
           uploaded++;
+          const progress = Math.round((uploaded / files.length) * 100);
+          const progressTextEl = document.getElementById('progressText');
+          if (progressTextEl) progressTextEl.textContent = progress;
+          
           if (uploaded === files.length) {
             imageInput.value = '';
             uploadBtn.disabled = false;
+            progressDiv.style.display = 'none';
             showGallerySuccessMessage();
             setTimeout(() => loadGalleryImages(), 1500);
           }
         })
         .catch(error => {
-          console.error('Upload error:', error);
-          alert('Error uploading file: ' + file.name);
-          uploadBtn.disabled = false;
+          console.error('Upload error for file', file.name, ':', error);
+          alert('Error uploading file: ' + file.name + ' - ' + error.message);
+          uploaded++;
+          if (uploaded === files.length) {
+            uploadBtn.disabled = false;
+            progressDiv.style.display = 'none';
+          }
         });
       });
     }
@@ -2009,37 +2208,83 @@
     function loadGalleryImages() {
       const imageCount = document.getElementById('imageCount');
       const gallery = document.getElementById('galleryPreview');
+      
+      if (!imageCount || !gallery) {
+        console.log('Gallery elements not found, skipping load');
+        return;
+      }
+      
       imageCount.textContent = 'Loading images...';
       gallery.innerHTML = '';
       
+      // Check if Firebase is ready
+      if (!window.firebaseDB) {
+        console.error('Firebase DB not available');
+        imageCount.textContent = 'Firebase not initialized';
+        loadLocalGalleryPreview();
+        return;
+      }
+      
+      // Load images from Firestore gallery collection
       window.firebaseDB.collection('gallery').orderBy('uploadedAt', 'desc').get()
         .then(snapshot => {
+          console.log('Loaded', snapshot.size, 'images from Firestore');
           if (snapshot.size === 0) {
             imageCount.textContent = 'No images uploaded yet';
+            loadLocalGalleryPreview();
             return;
           }
-
-          const files = [];
+          
+          gallery.innerHTML = '';
           snapshot.forEach(doc => {
-            files.push({ id: doc.id, ...doc.data() });
-          });
-
-          files.forEach(file => {
+            const data = doc.data();
+            // Convert Google Drive view URL to direct download URL for better compatibility
+            let imageUrl = data.imageUrl;
+            if (imageUrl.includes('drive.google.com')) {
+              const fileId = imageUrl.match(/id=([a-zA-Z0-9-_]+)/)?.[1];
+              if (fileId) {
+                imageUrl = `https://lh3.googleusercontent.com/d/${fileId}=s0`;
+              }
+            }
             const div = document.createElement('div');
             div.className = 'preview-item';
+            const deleteButtonHTML = googleDriveAccessToken 
+              ? `<button class="delete-btn" onclick="deleteImage('${doc.id}')">×</button>`
+              : '';
             div.innerHTML = `
-              <img src="${file.imageUrl}" alt="${file.title}">
-              <button class="delete-btn" onclick="deleteImage('${file.id}')">×</button>
+              <img src="${imageUrl}" alt="${data.fileName}" onerror="this.src='images/training-gallery-1.jpg'">
+              ${deleteButtonHTML}
             `;
             gallery.appendChild(div);
           });
-
-          imageCount.textContent = `${files.length} image${files.length !== 1 ? 's' : ''} in gallery`;
+          
+          const countText = googleDriveAccessToken 
+            ? `${snapshot.size} image${snapshot.size !== 1 ? 's' : ''} in gallery`
+            : `${snapshot.size} image${snapshot.size !== 1 ? 's' : ''} in gallery (authenticate to manage)`;
+          imageCount.textContent = countText;
         })
         .catch(error => {
-          console.error('Error loading images:', error);
-          imageCount.textContent = 'Error loading images.';
+          console.error('Error loading gallery from Firestore:', error);
+          imageCount.textContent = 'Error loading images: ' + error.message;
+          loadLocalGalleryPreview();
         });
+      
+      function loadLocalGalleryPreview() {
+        const localGalleryImages = [
+          'images/training-gallery-1.jpg',
+          'images/training-gallery-2.jpg',
+          'images/training-gallery-3.jpg',
+          'images/training-gallery-4.jpg'
+        ];
+        gallery.innerHTML = '';
+        localGalleryImages.forEach(imagePath => {
+          const div = document.createElement('div');
+          div.className = 'preview-item';
+          div.innerHTML = `<img src="${imagePath}" alt="Gallery image">`;
+          gallery.appendChild(div);
+        });
+        imageCount.textContent = `${localGalleryImages.length} local gallery images (upload new images to replace)`;
+      }
     }
 
     function deleteImage(docId) {
@@ -2055,26 +2300,129 @@
       }
     }
 
+    // Auto-refresh gallery images every 10 seconds for live editing
+    setInterval(() => {
+      const galleryPreview = document.getElementById('galleryPreview');
+      // Only refresh if gallery preview is visible (user is editing)
+      if (galleryPreview && galleryPreview.offsetParent !== null) {
+        loadGalleryImages();
+      }
+    }, 10000);
+
     // Helper: Upload a file to Google Drive and return file info
     async function uploadToDrive(file, parentFolderId) {
-      if (!accessToken) throw new Error('No OAuth access token');
+      // Use googleDriveAccessToken if available (for blog, team, marketplace, gallery)
+      // Otherwise use accessToken (fallback)
+      const token = googleDriveAccessToken || accessToken;
+      if (!token) throw new Error('No OAuth access token. Please authenticate with Google Drive first.');
       if (!parentFolderId || parentFolderId.includes('GOES_HERE')) throw new Error('Set the Drive folder ID');
+      
       const formData = new FormData();
       const metadata = { name: file.name, mimeType: file.type, parents: [parentFolderId] };
       formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
       formData.append('file', file);
+      
       const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
         method: 'POST',
-        headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
+        headers: new Headers({ 'Authorization': 'Bearer ' + token }),
         body: formData
       });
-      if (!uploadRes.ok) throw new Error('Drive upload failed');
+      if (!uploadRes.ok) {
+        const errorData = await uploadRes.json().catch(() => ({}));
+        console.error('Drive upload error:', errorData);
+        throw new Error('Drive upload failed: ' + (errorData.error?.message || uploadRes.statusText));
+      }
       const uploaded = await uploadRes.json();
+      
+      // Get file info and make it publicly accessible
       const infoRes = await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}?fields=id,name,webViewLink,webContentLink,thumbnailLink`, {
-        headers: new Headers({ 'Authorization': 'Bearer ' + accessToken })
+        headers: new Headers({ 'Authorization': 'Bearer ' + token })
       });
       const info = await infoRes.json();
+      
+      // Make file publicly readable
+      try {
+        await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}/permissions`, {
+          method: 'POST',
+          headers: new Headers({
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }),
+          body: JSON.stringify({ role: 'reader', type: 'anyone' })
+        });
+      } catch (err) {
+        console.warn('Failed to set public permissions:', err);
+      }
+      
       return info; // { id, name, webViewLink, webContentLink, thumbnailLink }
+    }
+
+    // Upload to Drive with progress callback
+    async function uploadToDriveWithProgress(file, parentFolderId, onProgress) {
+      const token = googleDriveAccessToken || accessToken;
+      if (!token) throw new Error('No OAuth access token. Please authenticate with Google Drive first.');
+      if (!parentFolderId || parentFolderId.includes('GOES_HERE')) throw new Error('Set the Drive folder ID');
+      
+      const formData = new FormData();
+      const metadata = { name: file.name, mimeType: file.type, parents: [parentFolderId] };
+      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+      formData.append('file', file);
+      
+      // Simulate progress while uploading
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        if (progress < 90) {
+          progress += Math.random() * 30;
+          if (progress > 90) progress = 90;
+          onProgress(Math.floor(progress));
+        }
+      }, 200);
+      
+      try {
+        const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+          method: 'POST',
+          headers: new Headers({ 'Authorization': 'Bearer ' + token }),
+          body: formData
+        });
+        
+        clearInterval(progressInterval);
+        onProgress(95);
+        
+        if (!uploadRes.ok) {
+          const errorData = await uploadRes.json().catch(() => ({}));
+          console.error('Drive upload error:', errorData);
+          throw new Error('Drive upload failed: ' + (errorData.error?.message || uploadRes.statusText));
+        }
+        const uploaded = await uploadRes.json();
+        
+        // Get file info and make it publicly accessible
+        const infoRes = await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}?fields=id,name,webViewLink,webContentLink,thumbnailLink`, {
+          headers: new Headers({ 'Authorization': 'Bearer ' + token })
+        });
+        const info = await infoRes.json();
+        
+        onProgress(99);
+        
+        // Make file publicly readable
+        try {
+          await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}/permissions`, {
+            method: 'POST',
+            headers: new Headers({
+              'Authorization': 'Bearer ' + token,
+              'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({ role: 'reader', type: 'anyone' })
+          });
+        } catch (err) {
+          console.warn('Failed to set public permissions:', err);
+        }
+        
+        onProgress(100);
+        return info;
+      } catch (err) {
+        clearInterval(progressInterval);
+        throw err;
+      }
     }
 
     // Initialize when page loads (Email/Password Auth)
@@ -2158,13 +2506,19 @@
         card.className = 'program-card';
         const img = p.imageUrl || 'images/service1.svg';
         const excerpt = p.excerpt || (p.content ? p.content.slice(0, 120) + '…' : '');
+        const editButton = googleDriveAccessToken 
+          ? `<button class="edit-btn" onclick="openEditBlogModal('${p.id}')">Edit</button>`
+          : `<button class="edit-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Edit</button>`;
+        const deleteButton = googleDriveAccessToken
+          ? `<button class="delete-btn" onclick="deleteBlogPost('${p.id}')">Delete</button>`
+          : `<button class="delete-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Delete</button>`;
         card.innerHTML = `
           <img src="${img}" alt="${p.title}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:1rem;">
           <h3>${p.title}</h3>
           <p>${excerpt}</p>
           <div class="program-actions">
-            <button class="edit-btn" onclick="openEditBlogModal('${p.id}')">Edit</button>
-            <button class="delete-btn" onclick="deleteBlogPost('${p.id}')">Delete</button>
+            ${editButton}
+            ${deleteButton}
           </div>
         `;
         list.appendChild(card);
@@ -2197,24 +2551,44 @@
 
     document.getElementById('blogForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const publishBtn = document.getElementById('blogPublishBtn');
+      const progressContainer = document.getElementById('blogProgressContainer');
+      const progressBar = document.getElementById('blogProgressBar');
+      const progressPercent = document.getElementById('blogProgressPercent');
+      
       const title = document.getElementById('postTitle').value.trim();
       const excerpt = document.getElementById('postExcerpt').value.trim();
       const content = document.getElementById('postContent').value.trim();
       let imageUrl = document.getElementById('postImageUrl').value.trim() || null;
       const imageFile = document.getElementById('postImageFile').files[0];
+      
       if (imageFile) {
         try {
-          const info = await uploadToDrive(imageFile, BLOG_FOLDER_ID);
+          // Show progress bar
+          progressContainer.style.display = 'block';
+          publishBtn.disabled = true;
+          
+          const info = await uploadToDriveWithProgress(imageFile, BLOG_FOLDER_ID, (percent) => {
+            progressBar.style.width = percent + '%';
+            progressPercent.textContent = percent + '%';
+          });
           imageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s600') : info.webContentLink;
         } catch (err) {
-          showBlogError('Image upload failed');
+          console.error('Image upload error:', err);
+          showBlogError('Image upload failed: ' + err.message);
+          progressContainer.style.display = 'none';
+          publishBtn.disabled = false;
           return;
         }
       }
+      
       if (!title || !excerpt || !content) {
         showBlogError('Please fill in all required fields.');
+        progressContainer.style.display = 'none';
+        publishBtn.disabled = false;
         return;
       }
+      
       try {
         if (editingPostId) {
           await window.firebaseDB.collection('posts').doc(editingPostId).update({ title, excerpt, content, imageUrl });
@@ -2224,9 +2598,16 @@
           showBlogSuccess('Post published!');
         }
         closeBlogModal();
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+        progressPercent.textContent = '0%';
+        publishBtn.disabled = false;
         loadBlogPosts();
       } catch (e) {
-        showBlogError('Error saving post.');
+        console.error('Save error:', e);
+        showBlogError('Error saving post: ' + e.message);
+        progressContainer.style.display = 'none';
+        publishBtn.disabled = false;
       }
     });
 
@@ -2288,13 +2669,19 @@
       teamMembers.forEach(member => {
         const card = document.createElement('div');
         card.className = 'program-card';
+        const editButton = googleDriveAccessToken 
+          ? `<button class="edit-btn" onclick="openEditTeamModal('${member.id}')">Edit</button>`
+          : `<button class="edit-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Edit</button>`;
+        const deleteButton = googleDriveAccessToken
+          ? `<button class="delete-btn" onclick="deleteTeamMember('${member.id}')">Delete</button>`
+          : `<button class="delete-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Delete</button>`;
         card.innerHTML = `
           <img src="${member.imageUrl || ''}" alt="${member.name}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:1rem;">
           <h3>${member.name}</h3>
           <p>${member.role}</p>
           <div class="program-actions">
-            <button class="edit-btn" onclick="openEditTeamModal('${member.id}')">Edit</button>
-            <button class="delete-btn" onclick="deleteTeamMember('${member.id}')">Delete</button>
+            ${editButton}
+            ${deleteButton}
           </div>
         `;
         teamList.appendChild(card);
@@ -2329,6 +2716,11 @@
 
     document.getElementById('teamForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const saveBtn = document.getElementById('teamSaveBtn');
+      const progressContainer = document.getElementById('teamProgressContainer');
+      const progressBar = document.getElementById('teamProgressBar');
+      const progressPercent = document.getElementById('teamProgressPercent');
+      
       const name = document.getElementById('teamName').value.trim();
       const role = document.getElementById('teamRole').value.trim();
       const section = document.getElementById('teamSection').value.trim();
@@ -2346,11 +2738,21 @@
         
         // If image file is provided and no URL, upload to Drive
         if (imageFile && !imageUrl) {
-          if (!accessToken) {
+          // Show progress bar
+          progressContainer.style.display = 'block';
+          saveBtn.disabled = true;
+          
+          if (!googleDriveAccessToken && !accessToken) {
             showTeamError('Please authenticate with Google to upload images, or provide an image URL.');
+            progressContainer.style.display = 'none';
+            saveBtn.disabled = false;
             return;
           }
-          const info = await uploadToDrive(imageFile, TEAM_FOLDER_ID);
+          
+          const info = await uploadToDriveWithProgress(imageFile, TEAM_FOLDER_ID, (percent) => {
+            progressBar.style.width = percent + '%';
+            progressPercent.textContent = percent + '%';
+          });
           finalImageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s400') : info.webContentLink;
         }
         
@@ -2366,10 +2768,16 @@
           showTeamSuccess('Team member added!');
         }
         closeTeamModal();
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+        progressPercent.textContent = '0%';
+        saveBtn.disabled = false;
         loadTeamMembers();
       } catch (e) {
         console.error('Error saving team member:', e);
         showTeamError('Error saving team member: ' + (e.message || 'Unknown error'));
+        progressContainer.style.display = 'none';
+        saveBtn.disabled = false;
       }
     });
 
@@ -2549,7 +2957,14 @@
         return;
       }
 
-      container.innerHTML = marketplaceItems.map(item => `
+      container.innerHTML = marketplaceItems.map(item => {
+        const editButton = googleDriveAccessToken 
+          ? `<button class="edit-btn" onclick="openEditMarketplaceModal('${item.id}')">Edit</button>`
+          : `<button class="edit-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Edit</button>`;
+        const deleteButton = googleDriveAccessToken
+          ? `<button class="delete-btn" onclick="deleteMarketplaceItem('${item.id}')">Delete</button>`
+          : `<button class="delete-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Delete</button>`;
+        return `
         <div class="card">
           <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
             <div>
@@ -2559,12 +2974,13 @@
               <p style="color: var(--brand-blue); font-weight: 600; margin: 0.5rem 0 0 0;">Price: $${parseFloat(item.price).toFixed(2)}</p>
             </div>
             <div style="display: flex; gap: 0.5rem;">
-              <button class="edit-btn" onclick="openEditMarketplaceModal('${item.id}')">Edit</button>
-              <button class="delete-btn" onclick="deleteMarketplaceItem('${item.id}')">Delete</button>
+              ${editButton}
+              ${deleteButton}
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     function openAddMarketplaceItemModal() {
