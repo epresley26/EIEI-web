@@ -7,6 +7,157 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   
+  <style>
+    /* Application Modal Styles */
+    .app-modal-content {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 88%;
+      max-width: 1400px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: row;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+      z-index: 2000;
+      box-sizing: border-box;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1999;
+    }
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    
+
+    .app-modal-left {
+      flex: 0 0 auto;
+      min-width: 380px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+      padding: 2.5rem 2rem;
+      border-right: 1px solid #e0e0e0;
+      overflow-y: auto;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    .job-details-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-label {
+      font-size: 0.85rem;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.4rem;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      color: var(--brand-blue);
+      font-weight: 600;
+    }
+
+    .job-description-section {
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+    }
+
+    .app-modal-right {
+      flex: 1 1 auto;
+      padding: 2.5rem 2.5rem;
+      overflow-y: auto;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    .app-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .app-modal-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: #999;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+      color: var(--brand-blue);
+    }
+
+    @media (max-width: 1024px) {
+      .app-modal-content {
+        flex-direction: column;
+      }
+
+      .app-modal-left {
+        flex: 0 0 auto;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        max-height: 300px;
+      }
+
+      .app-modal-right {
+        flex: 0 0 auto;
+        overflow-y: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-modal-content {
+        width: 95%;
+        max-height: 90vh;
+      }
+
+      .app-modal-left,
+      .app-modal-right {
+        padding: 1.5rem;
+      }
+
+      .app-modal-header {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+  
   <!-- Firebase SDK (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -183,36 +334,65 @@
 
   <!-- APPLICATION MODAL -->
   <div id="applicationModal" class="modal" style="display: none;">
-    <div class="modal-content" style="max-width: 500px;">
-      <span class="close-modal" onclick="closeApplicationModal()">&times;</span>
-      <h2 id="applicationJobTitle" style="color: var(--brand-blue); margin-bottom: 1rem;"></h2>
-      <form id="applicationForm" onsubmit="submitJobApplication(event)">
-        <div class="form-group">
-          <label for="appName">Full Name *</label>
-          <input type="text" id="appName" required>
+    <div class="app-modal-content">
+      <div class="app-modal-left">
+        <h3 id="modalJobTitle" style="color: var(--brand-blue); font-size: 1.3rem; margin-bottom: 1.5rem;"></h3>
+        <div class="job-details-section">
+          <div class="detail-item">
+            <span class="detail-label">Position Type</span>
+            <span class="detail-value" id="modalJobType">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Location</span>
+            <span class="detail-value" id="modalJobLocation">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Salary</span>
+            <span class="detail-value" id="modalJobSalary">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Employment Type</span>
+            <span class="detail-value" id="modalJobEmploymentType">-</span>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="appEmail">Email Address *</label>
-          <input type="email" id="appEmail" required>
+        <div class="job-description-section">
+          <h4 style="margin-bottom: 1rem; color: var(--brand-blue);">Job Description</h4>
+          <p id="modalJobDescription" style="line-height: 1.6; color: #666;"></p>
         </div>
-        <div class="form-group">
-          <label for="appPhone">Phone Number *</label>
-          <input type="tel" id="appPhone" required>
+      </div>
+      <div class="app-modal-right">
+        <div class="app-modal-header">
+          <h3 style="color: var(--brand-blue);">Application Form</h3>
+          <span class="close-modal" onclick="closeApplicationModal()">&times;</span>
         </div>
-        <div class="form-group">
-          <label for="appExperience">Years of Experience *</label>
-          <input type="number" id="appExperience" min="0" required>
-        </div>
-        <div class="form-group">
-          <label for="appResume">Resume/CV (URL or attachment) *</label>
-          <input type="text" id="appResume" placeholder="https://example.com/resume.pdf" required>
-        </div>
-        <div class="form-group">
-          <label for="appCoverLetter">Cover Letter</label>
-          <textarea id="appCoverLetter" rows="4" placeholder="Tell us why you're interested in this position..."></textarea>
-        </div>
-        <button type="submit" class="primary-btn" style="width: 100%;">Submit Application</button>
-      </form>
+        <form id="applicationForm" onsubmit="submitJobApplication(event)">
+          <div class="form-group">
+            <label for="appName">Full Name *</label>
+            <input type="text" id="appName" required>
+          </div>
+          <div class="form-group">
+            <label for="appEmail">Email Address *</label>
+            <input type="email" id="appEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="appPhone">Phone Number *</label>
+            <input type="tel" id="appPhone" required>
+          </div>
+          <div class="form-group">
+            <label for="appExperience">Years of Experience *</label>
+            <input type="number" id="appExperience" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="appResume">Resume/CV (URL) *</label>
+            <input type="text" id="appResume" placeholder="https://example.com/resume.pdf" required>
+          </div>
+          <div class="form-group">
+            <label for="appCoverLetter">Cover Letter</label>
+            <textarea id="appCoverLetter" rows="3" placeholder="Tell us why you're interested in this position..."></textarea>
+          </div>
+          <button type="submit" class="primary-btn" style="width: 100%; margin-top: 1rem;">Submit Application</button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -270,8 +450,20 @@
             ${job.salary ? `<div class="position-salary">${job.salary}</div>` : ''}
             <p>${job.description}</p>
             ${requirementsHTML ? `<ul>${requirementsHTML}</ul>` : ''}
-            <button class="primary-btn" onclick="openApplicationModal('${jobId}', '${job.title}')" style="margin-top: 1.5rem;">Apply Now</button>
+            <button class="primary-btn apply-now-btn" data-job-id="${jobId}" style="margin-top: 1.5rem;">Apply Now</button>
           `;
+          
+          // Store full job data on the card
+          const applyBtn = jobCard.querySelector('.apply-now-btn');
+          applyBtn.dataset.jobData = JSON.stringify(job);
+          applyBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const jId = this.dataset.jobId;
+            const jData = JSON.parse(this.dataset.jobData);
+            const jTitle = jData.title;
+            openApplicationModal(jId, jTitle, jData);
+          });
+          
           jobsContainer.appendChild(jobCard);
         });
       } catch (error) {
@@ -283,9 +475,14 @@
 
     let currentJobId = null;
 
-    function openApplicationModal(jobId, jobTitle) {
+    function openApplicationModal(jobId, jobTitle, jobData) {
       currentJobId = jobId;
-      document.getElementById('applicationJobTitle').textContent = `Apply for: ${jobTitle}`;
+      document.getElementById('modalJobTitle').textContent = jobTitle;
+      document.getElementById('modalJobType').textContent = jobData.type || '-';
+      document.getElementById('modalJobLocation').textContent = jobData.location || '-';
+      document.getElementById('modalJobSalary').textContent = jobData.salary || '-';
+      document.getElementById('modalJobEmploymentType').textContent = jobData.employmentType || 'Full-time';
+      document.getElementById('modalJobDescription').textContent = jobData.description || 'No description available';
       document.getElementById('applicationModal').style.display = 'flex';
     }
 
