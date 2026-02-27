@@ -868,24 +868,19 @@
         <!-- GALLERY TAB -->
         <div id="gallery" class="tab-content">
           <div class="upload-section">
-            <h2>Upload Gallery Images to Google Drive</h2>
+            <h2>Gallery Images</h2>
             <div class="success-message" id="gallerySuccessMessage">✓ Image uploaded successfully!</div>
             
-            <div style="background: #f5f5f5; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-              <p style="margin: 0 0 0.5rem 0; color: var(--text-muted);">Step 1: Authenticate with Google Drive</p>
-              <button type="button" class="primary-btn" id="googleAuthBtn" style="width: auto;">Login with Google</button>
-              <span id="googleAuthStatus" style="margin-left: 1rem; color: var(--text-muted);">Not authenticated</span>
-            </div>
-
             <form class="upload-form" id="uploadForm">
               <div class="form-group">
-                <label for="imageInput">Step 2: Select Images (PNG, JPG, GIF)</label>
+                <label for="imageInput">Select Images to Upload (PNG, JPG, GIF)</label>
                 <input 
                   type="file" 
                   id="imageInput" 
                   accept="image/*" 
                   multiple
                 />
+                <small style="color: #999; display: block; margin-top: 0.5rem;">Max file size: 5MB per image. Images will be automatically compressed for storage.</small>
               </div>
               <button type="submit" class="primary-btn" id="uploadBtn">Upload Images</button>
               <div id="uploadProgress" style="display: none; margin-top: 1rem; color: var(--text-muted);">
@@ -895,7 +890,7 @@
 
             <div class="image-count" id="imageCount">Loading images...</div>
 
-            <h3 style="margin-top: 2rem; color: var(--brand-blue);">Images in Google Drive Folder</h3>
+            <h3 style="margin-top: 2rem; color: var(--brand-blue);">Images in Gallery</h3>
             <div class="gallery-preview" id="galleryPreview"></div>
           </div>
         </div>
@@ -929,7 +924,9 @@
         <!-- APPLICATIONS TAB -->
         <div id="applications" class="tab-content">
           <div class="upload-section">
-            <h2>Job Applications</h2>
+            <h2>Applications</h2>
+            
+            <!-- Job Applications Section -->
             <div style="margin-bottom: 1.5rem;">
               <label for="filterJobSelect" style="margin-right: 1rem;">Filter by Job:</label>
               <select id="filterJobSelect" onchange="loadApplicationsForJob()" style="padding: 0.5rem; border-radius: 6px; border: 1px solid #ddd;">
@@ -1290,6 +1287,15 @@
         <div class="form-group">
           <label for="postTitle">Title *</label>
           <input type="text" id="postTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="postType">Type *</label>
+          <select id="postType" required>
+            <option value="">Select type...</option>
+            <option value="Blog">Blog</option>
+            <option value="News">News</option>
+            <option value="Event">Event</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="postExcerpt">Excerpt *</label>
@@ -2026,67 +2032,42 @@
     const uploadForm = document.getElementById('uploadForm');
     const imageInput = document.getElementById('imageInput');
     const uploadBtn = document.getElementById('uploadBtn');
-    const googleAuthBtn = document.getElementById('googleAuthBtn');
-    const googleAuthStatus = document.getElementById('googleAuthStatus');
-    const topGoogleAuthBtn = document.getElementById('topGoogleAuthBtn');
     
-    let googleDriveAccessToken = null;
-
-    // Initialize Google OAuth for Drive
-    function initGoogleDriveAuth() {
-      const tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/drive.file',
-        callback: (tokenResponse) => {
-          if (tokenResponse.access_token) {
-            googleDriveAccessToken = tokenResponse.access_token;
-            googleAuthStatus.textContent = '✓ Google authenticated';
-            googleAuthStatus.style.color = 'green';
-            // Update top button
-            topGoogleAuthBtn.style.background = 'linear-gradient(135deg, #34A853 0%, #0F8B3D 100%)';
-            document.getElementById('topGoogleAuthText').textContent = '✓ Edit Mode';
-            console.log('Google Drive authenticated');
-            // Reload gallery after auth
-            loadGalleryImages();
-            // Re-render lists to show edit buttons
-            renderBlogList();
-            renderTeamList();
-            displayMarketplaceItems();
-          }
-        }
-      });
-      
-      googleAuthBtn.onclick = () => {
-        tokenClient.requestAccessToken({ prompt: 'consent' });
-      };
-      
-      topGoogleAuthBtn.onclick = () => {
-        tokenClient.requestAccessToken({ prompt: 'consent' });
-      };
-    }
-
-    // Initialize on page load if Google API is ready
-    if (window.google && window.google.accounts) {
-      initGoogleDriveAuth();
-    } else {
-      setTimeout(initGoogleDriveAuth, 1000);
-    }
+    // ImgBB API key for image uploads
+    const IMGBB_API_KEY = 'd8375f7a4f39dad8848b662126a8cfff';
 
     uploadForm.addEventListener('submit', (e) => {
       e.preventDefault();
       uploadFiles();
     });
 
+    async function uploadToImgBB(file) {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('key', IMGBB_API_KEY);
+      
+      const response = await fetch('https://api.imgbb.com/1/upload', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        throw new Error('ImgBB upload failed: ' + response.statusText);
+      }
+      
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error('ImgBB error: ' + (data.error?.message || 'Unknown error'));
+      }
+      
+      return data.data.url;
+    }
+
     function uploadFiles() {
       const files = Array.from(imageInput.files);
       if (files.length === 0) return;
 
-      if (!googleDriveAccessToken) {
-        alert('Please authenticate with Google first by clicking the Google login button');
-        return;
-      }
-
-      console.log('Starting upload of', files.length, 'files to Google Drive');
+      console.log('Starting upload of', files.length, 'image files to ImgBB');
       
       uploadBtn.disabled = true;
       const progressDiv = document.getElementById('uploadProgress');
@@ -2102,100 +2083,54 @@
           return;
         }
 
-        const formData = new FormData();
-        const metadata = {
-          name: file.name,
-          mimeType: file.type,
-          parents: [GALLERY_FOLDER_ID]
-        };
-        formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-        formData.append('file', file);
+        // Validate original file size (max 32MB for ImgBB)
+        const maxSize = 32 * 1024 * 1024;
+        if (file.size > maxSize) {
+          alert('Image file is too large. Maximum size is 32MB. File: ' + file.name);
+          uploadBtn.disabled = false;
+          progressDiv.style.display = 'none';
+          return;
+        }
 
-        console.log('Uploading file to Google Drive:', file.name);
+        console.log('Processing file:', file.name, 'Size:', file.size);
         
-        fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-          method: 'POST',
-          headers: new Headers({ 'Authorization': 'Bearer ' + googleDriveAccessToken }),
-          body: formData
-        })
-        .then(response => {
-          console.log('Drive upload response status:', response.status);
-          if (!response.ok) throw new Error('Upload failed: ' + response.status);
-          return response.json();
-        })
-        .then(async uploadedFile => {
-          if (!uploadedFile.id) {
-            throw new Error('Upload response missing file ID');
-          }
-          
-          console.log('File uploaded to Drive with ID:', uploadedFile.id);
-          
-          // Make file public by sharing it with "anyone"
+        (async () => {
           try {
-            const permissionResponse = await fetch(
-              `https://www.googleapis.com/drive/v3/files/${uploadedFile.id}/permissions`,
-              {
-                method: 'POST',
-                headers: new Headers({ 
-                  'Authorization': 'Bearer ' + googleDriveAccessToken,
-                  'Content-Type': 'application/json'
-                }),
-                body: JSON.stringify({
-                  role: 'reader',
-                  type: 'anyone'
-                })
-              }
-            );
+            // Upload to ImgBB
+            const imageUrl = await uploadToImgBB(file);
+            console.log('Image uploaded to ImgBB:', file.name, 'URL:', imageUrl);
             
-            if (!permissionResponse.ok) {
-              console.warn('Failed to set public permission, but file may still be accessible');
-            } else {
-              console.log('File permission set to public');
-            }
-          } catch (permError) {
-            console.warn('Permission error:', permError);
-          }
-          
-          // Generate public Google Drive link with alt=media for direct viewing
-          const imageUrl = `https://drive.google.com/uc?export=view&id=${uploadedFile.id}`;
-          
-          // Save to Firestore gallery collection so landing page can fetch it
-          try {
+            // Save to Firestore gallery collection with ImgBB URL
             await window.firebaseDB.collection('gallery').add({
-              driveFileId: uploadedFile.id,
               imageUrl: imageUrl,
               fileName: file.name,
-              mimeType: file.type,
               uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            console.log('Image metadata saved to Firestore:', file.name);
+            
+            console.log('Image saved to Firestore:', file.name);
+            
+            uploaded++;
+            const progress = Math.round((uploaded / files.length) * 100);
+            const progressTextEl = document.getElementById('progressText');
+            if (progressTextEl) progressTextEl.textContent = progress;
+            
+            if (uploaded === files.length) {
+              imageInput.value = '';
+              uploadBtn.disabled = false;
+              progressDiv.style.display = 'none';
+              showGallerySuccessMessage();
+              setTimeout(() => loadGalleryImages(), 1500);
+            }
           } catch (error) {
-            console.error('Error saving to Firestore:', error);
-            alert('Upload to Drive succeeded but metadata save failed: ' + error.message);
+            console.error('Error uploading file:', error);
+            alert('Error uploading file: ' + file.name + ' - ' + error.message);
+            uploaded++;
+            if (uploaded === files.length) {
+              uploadBtn.disabled = false;
+              progressDiv.style.display = 'none';
+            }
           }
-          
-          uploaded++;
-          const progress = Math.round((uploaded / files.length) * 100);
-          const progressTextEl = document.getElementById('progressText');
-          if (progressTextEl) progressTextEl.textContent = progress;
-          
-          if (uploaded === files.length) {
-            imageInput.value = '';
-            uploadBtn.disabled = false;
-            progressDiv.style.display = 'none';
-            showGallerySuccessMessage();
-            setTimeout(() => loadGalleryImages(), 1500);
-          }
-        })
-        .catch(error => {
-          console.error('Upload error for file', file.name, ':', error);
-          alert('Error uploading file: ' + file.name + ' - ' + error.message);
-          uploaded++;
-          if (uploaded === files.length) {
-            uploadBtn.disabled = false;
-            progressDiv.style.display = 'none';
-          }
-        });
+        })();
       });
     }
 
@@ -2226,7 +2161,7 @@
       }
       
       // Load images from Firestore gallery collection
-      window.firebaseDB.collection('gallery').orderBy('uploadedAt', 'desc').get()
+      window.firebaseDB.collection('gallery').get()
         .then(snapshot => {
           console.log('Loaded', snapshot.size, 'images from Firestore');
           if (snapshot.size === 0) {
@@ -2236,21 +2171,31 @@
           }
           
           gallery.innerHTML = '';
-          snapshot.forEach(doc => {
+          
+          // Sort by uploadedAt in memory instead of using orderBy (which requires composite index)
+          const docs = snapshot.docs.sort((a, b) => {
+            const timeA = a.data().uploadedAt?.toDate?.() || new Date(0);
+            const timeB = b.data().uploadedAt?.toDate?.() || new Date(0);
+            return timeB - timeA;
+          });
+          
+          docs.forEach(doc => {
             const data = doc.data();
-            // Convert Google Drive view URL to direct download URL for better compatibility
-            let imageUrl = data.imageUrl;
-            if (imageUrl.includes('drive.google.com')) {
-              const fileId = imageUrl.match(/id=([a-zA-Z0-9-_]+)/)?.[1];
-              if (fileId) {
-                imageUrl = `https://lh3.googleusercontent.com/d/${fileId}=s0`;
-              }
+            // Check for new base64 format first, then fallback to old Google Drive URL
+            let imageUrl = data.imageData;
+            
+            if (!imageUrl && data.imageUrl) {
+              // Old format with Google Drive URL - still display but marked for migration
+              imageUrl = data.imageUrl;
             }
+            
+            if (!imageUrl) {
+              imageUrl = 'images/training-gallery-1.jpg';
+            }
+            
             const div = document.createElement('div');
             div.className = 'preview-item';
-            const deleteButtonHTML = googleDriveAccessToken 
-              ? `<button class="delete-btn" onclick="deleteImage('${doc.id}')">×</button>`
-              : '';
+            const deleteButtonHTML = `<button class="delete-btn" onclick="deleteImage('${doc.id}')">×</button>`;
             div.innerHTML = `
               <img src="${imageUrl}" alt="${data.fileName}" onerror="this.src='images/training-gallery-1.jpg'">
               ${deleteButtonHTML}
@@ -2258,9 +2203,7 @@
             gallery.appendChild(div);
           });
           
-          const countText = googleDriveAccessToken 
-            ? `${snapshot.size} image${snapshot.size !== 1 ? 's' : ''} in gallery`
-            : `${snapshot.size} image${snapshot.size !== 1 ? 's' : ''} in gallery (authenticate to manage)`;
+          const countText = `${snapshot.size} image${snapshot.size !== 1 ? 's' : ''} in gallery`;
           imageCount.textContent = countText;
         })
         .catch(error => {
@@ -2490,7 +2433,8 @@
         blogPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderBlogList();
       } catch (e) {
-        list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Error loading posts.</p>';
+        console.error('Error loading blog posts:', e);
+        list.innerHTML = '<p style="grid-column:1/-1;color:var(--text-muted);">Error loading posts: ' + e.message + '</p>';
       }
     }
 
@@ -2506,19 +2450,13 @@
         card.className = 'program-card';
         const img = p.imageUrl || 'images/service1.svg';
         const excerpt = p.excerpt || (p.content ? p.content.slice(0, 120) + '…' : '');
-        const editButton = googleDriveAccessToken 
-          ? `<button class="edit-btn" onclick="openEditBlogModal('${p.id}')">Edit</button>`
-          : `<button class="edit-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Edit</button>`;
-        const deleteButton = googleDriveAccessToken
-          ? `<button class="delete-btn" onclick="deleteBlogPost('${p.id}')">Delete</button>`
-          : `<button class="delete-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Delete</button>`;
         card.innerHTML = `
-          <img src="${img}" alt="${p.title}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:1rem;">
+          <img src="${img}" alt="${p.title}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:1rem;" onerror="this.src='images/service1.svg'">
           <h3>${p.title}</h3>
           <p>${excerpt}</p>
           <div class="program-actions">
-            ${editButton}
-            ${deleteButton}
+            <button class="edit-btn" onclick="openEditBlogModal('${p.id}')">Edit</button>
+            <button class="delete-btn" onclick="deleteBlogPost('${p.id}')">Delete</button>
           </div>
         `;
         list.appendChild(card);
@@ -2538,6 +2476,7 @@
       editingPostId = id;
       document.getElementById('blogModalTitle').textContent = 'Edit Post';
       document.getElementById('postTitle').value = p.title || '';
+      document.getElementById('postType').value = p.type || 'Blog';
       document.getElementById('postExcerpt').value = p.excerpt || '';
       document.getElementById('postContent').value = p.content || '';
       document.getElementById('postImageUrl').value = p.imageUrl || '';
@@ -2557,22 +2496,43 @@
       const progressPercent = document.getElementById('blogProgressPercent');
       
       const title = document.getElementById('postTitle').value.trim();
+      const type = document.getElementById('postType').value.trim();
       const excerpt = document.getElementById('postExcerpt').value.trim();
       const content = document.getElementById('postContent').value.trim();
       let imageUrl = document.getElementById('postImageUrl').value.trim() || null;
       const imageFile = document.getElementById('postImageFile').files[0];
       
+      if (!title || !type || !excerpt || !content) {
+        showBlogError('Please fill in all required fields.');
+        return;
+      }
+      
       if (imageFile) {
         try {
+          // Validate file size (max 32MB for ImgBB)
+          const maxSize = 32 * 1024 * 1024;
+          if (imageFile.size > maxSize) {
+            showBlogError('Image file is too large. Maximum size is 32MB.');
+            return;
+          }
+          
+          // Validate file type
+          if (!imageFile.type.startsWith('image/')) {
+            showBlogError('Please select a valid image file.');
+            return;
+          }
+          
           // Show progress bar
           progressContainer.style.display = 'block';
           publishBtn.disabled = true;
+          progressBar.style.width = '30%';
+          progressPercent.textContent = '30%';
           
-          const info = await uploadToDriveWithProgress(imageFile, BLOG_FOLDER_ID, (percent) => {
-            progressBar.style.width = percent + '%';
-            progressPercent.textContent = percent + '%';
-          });
-          imageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s600') : info.webContentLink;
+          // Upload to ImgBB
+          imageUrl = await uploadToImgBB(imageFile);
+          
+          progressBar.style.width = '60%';
+          progressPercent.textContent = '60%';
         } catch (err) {
           console.error('Image upload error:', err);
           showBlogError('Image upload failed: ' + err.message);
@@ -2582,30 +2542,32 @@
         }
       }
       
-      if (!title || !excerpt || !content) {
-        showBlogError('Please fill in all required fields.');
-        progressContainer.style.display = 'none';
-        publishBtn.disabled = false;
-        return;
-      }
-      
       try {
+        progressBar.style.width = '80%';
+        progressPercent.textContent = '80%';
+        
         if (editingPostId) {
-          await window.firebaseDB.collection('posts').doc(editingPostId).update({ title, excerpt, content, imageUrl });
+          await window.firebaseDB.collection('posts').doc(editingPostId).update({ title, type, excerpt, content, imageUrl });
           showBlogSuccess('Post updated!');
         } else {
-          await window.firebaseDB.collection('posts').add({ title, excerpt, content, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+          await window.firebaseDB.collection('posts').add({ title, type, excerpt, content, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
           showBlogSuccess('Post published!');
         }
+        
+        progressBar.style.width = '100%';
+        progressPercent.textContent = '100%';
+        
         closeBlogModal();
-        progressContainer.style.display = 'none';
-        progressBar.style.width = '0%';
-        progressPercent.textContent = '0%';
-        publishBtn.disabled = false;
-        loadBlogPosts();
+        setTimeout(() => {
+          progressContainer.style.display = 'none';
+          progressBar.style.width = '0%';
+          progressPercent.textContent = '0%';
+          publishBtn.disabled = false;
+          loadBlogPosts();
+        }, 500);
       } catch (e) {
-        console.error('Save error:', e);
-        showBlogError('Error saving post: ' + e.message);
+        console.error('Error saving post:', e);
+        showBlogError('Error saving post: ' + (e.message || 'Unknown error'));
         progressContainer.style.display = 'none';
         publishBtn.disabled = false;
       }
@@ -2651,11 +2613,15 @@
       const teamList = document.getElementById('teamList');
       teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Loading team members...</p>';
       try {
+        if (!window.firebaseDB) {
+          throw new Error('Firebase DB not initialized');
+        }
         const snapshot = await window.firebaseDB.collection('team').get();
         teamMembers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         renderTeamList();
       } catch (e) {
-        teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Error loading team members.</p>';
+        console.error('Error loading team members:', e);
+        teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Error loading team members: ' + e.message + '</p>';
       }
     }
 
@@ -2669,19 +2635,14 @@
       teamMembers.forEach(member => {
         const card = document.createElement('div');
         card.className = 'program-card';
-        const editButton = googleDriveAccessToken 
-          ? `<button class="edit-btn" onclick="openEditTeamModal('${member.id}')">Edit</button>`
-          : `<button class="edit-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Edit</button>`;
-        const deleteButton = googleDriveAccessToken
-          ? `<button class="delete-btn" onclick="deleteTeamMember('${member.id}')">Delete</button>`
-          : `<button class="delete-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Delete</button>`;
+        const memberImageUrl = member.imageUrl || 'images/default-avatar.jpg';
         card.innerHTML = `
-          <img src="${member.imageUrl || ''}" alt="${member.name}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:1rem;">
+          <img src="${memberImageUrl}" alt="${member.name}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:1rem;" onerror="this.src='images/default-avatar.jpg'">
           <h3>${member.name}</h3>
           <p>${member.role}</p>
           <div class="program-actions">
-            ${editButton}
-            ${deleteButton}
+            <button class="edit-btn" onclick="openEditTeamModal('${member.id}')">Edit</button>
+            <button class="delete-btn" onclick="deleteTeamMember('${member.id}')">Delete</button>
           </div>
         `;
         teamList.appendChild(card);
@@ -2736,25 +2697,36 @@
       try {
         let finalImageUrl = imageUrl; // Use URL if provided
         
-        // If image file is provided and no URL, upload to Drive
+        // If image file is provided and no URL, upload to ImgBB
         if (imageFile && !imageUrl) {
-          // Show progress bar
-          progressContainer.style.display = 'block';
-          saveBtn.disabled = true;
-          
-          if (!googleDriveAccessToken && !accessToken) {
-            showTeamError('Please authenticate with Google to upload images, or provide an image URL.');
-            progressContainer.style.display = 'none';
-            saveBtn.disabled = false;
+          // Validate file size (max 32MB for ImgBB)
+          const maxSize = 32 * 1024 * 1024;
+          if (imageFile.size > maxSize) {
+            showTeamError('Image file is too large. Maximum size is 32MB.');
             return;
           }
           
-          const info = await uploadToDriveWithProgress(imageFile, TEAM_FOLDER_ID, (percent) => {
-            progressBar.style.width = percent + '%';
-            progressPercent.textContent = percent + '%';
-          });
-          finalImageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s400') : info.webContentLink;
+          // Validate file type
+          if (!imageFile.type.startsWith('image/')) {
+            showTeamError('Please select a valid image file.');
+            return;
+          }
+          
+          // Show progress bar
+          progressContainer.style.display = 'block';
+          saveBtn.disabled = true;
+          progressBar.style.width = '30%';
+          progressPercent.textContent = '30%';
+          
+          // Upload to ImgBB
+          finalImageUrl = await uploadToImgBB(imageFile);
+          
+          progressBar.style.width = '60%';
+          progressPercent.textContent = '60%';
         }
+        
+        progressBar.style.width = '80%';
+        progressPercent.textContent = '80%';
         
         if (editingTeamId) {
           // Update
@@ -2767,12 +2739,18 @@
           await window.firebaseDB.collection('team').add({ name, role, section, bio, imageUrl: finalImageUrl || null });
           showTeamSuccess('Team member added!');
         }
+        
+        progressBar.style.width = '100%';
+        progressPercent.textContent = '100%';
+        
         closeTeamModal();
-        progressContainer.style.display = 'none';
-        progressBar.style.width = '0%';
-        progressPercent.textContent = '0%';
-        saveBtn.disabled = false;
-        loadTeamMembers();
+        setTimeout(() => {
+          progressContainer.style.display = 'none';
+          progressBar.style.width = '0%';
+          progressPercent.textContent = '0%';
+          saveBtn.disabled = false;
+          loadTeamMembers();
+        }, 500);
       } catch (e) {
         console.error('Error saving team member:', e);
         showTeamError('Error saving team member: ' + (e.message || 'Unknown error'));
@@ -3021,36 +2999,49 @@
       let imageUrl = document.getElementById('itemImageUrl').value.trim() || null;
       const imageFile = document.getElementById('itemImageFile').files[0];
 
-      if (imageFile) {
-        try {
-          const info = await uploadToDrive(imageFile, MARKETPLACE_FOLDER_ID);
-          imageUrl = info.thumbnailLink ? info.thumbnailLink.replace('=s220', '=s600') : info.webContentLink;
-        } catch (err) {
-          showMarketplaceError('Image upload failed');
-          return;
-        }
-      }
-
       if (!title || !category || !description || !price || !availability || !contactEmail) {
         showMarketplaceError('Please fill in all required fields.');
         return;
       }
 
+      if (imageFile) {
+        try {
+          // Validate file size (max 32MB for ImgBB)
+          const maxSize = 32 * 1024 * 1024;
+          if (imageFile.size > maxSize) {
+            showMarketplaceError('Image file is too large. Maximum size is 32MB.');
+            return;
+          }
+          
+          // Validate file type
+          if (!imageFile.type.startsWith('image/')) {
+            showMarketplaceError('Please select a valid image file.');
+            return;
+          }
+          
+          // Upload to ImgBB
+          imageUrl = await uploadToImgBB(imageFile);
+        } catch (err) {
+          showMarketplaceError('Image upload failed: ' + err.message);
+          return;
+        }
+      }
+
       try {
         const data = { title, category, description, price, availability, contactEmail, imageUrl };
         if (editingMarketplaceId) {
-          await db.collection('marketplace').doc(editingMarketplaceId).update(data);
+          await window.firebaseDB.collection('marketplace').doc(editingMarketplaceId).update(data);
           showMarketplaceSuccess('Item updated!');
         } else {
           data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          await db.collection('marketplace').add(data);
+          await window.firebaseDB.collection('marketplace').add(data);
           showMarketplaceSuccess('Item added!');
         }
         closeMarketplaceModal();
         loadMarketplaceItems();
       } catch (e) {
         console.error('Error saving item:', e);
-        showMarketplaceError('Error saving item.');
+        showMarketplaceError('Error saving item: ' + (e.message || 'Unknown error'));
       }
     });
 
@@ -3716,6 +3707,7 @@
             const appliedDate = new Date(app.appliedAt.toDate()).toLocaleDateString();
             const rowBg = index % 2 === 0 ? '#f9f9f9' : 'white';
             const statusColor = app.status === 'pending' ? '#ff9800' : app.status === 'reviewed' ? '#4caf50' : '#f44336';
+            const resumeBtn = (app.resumeData || app.resumeUrl) ? `<button onclick="downloadJobResume('${app.id}', '${app.resumeFileName || 'resume.pdf'}')" style="background: #28a745; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer;">📥 Download</button>` : 'N/A';
             
             tableHTML += `
               <tr style="background: ${rowBg}; border-bottom: 1px solid #eee;">
@@ -3723,7 +3715,7 @@
                 <td style="padding: 1rem;"><a href="mailto:${app.email}" style="color: var(--brand-blue); text-decoration: none;">${app.email}</a></td>
                 <td style="padding: 1rem;"><a href="tel:${app.phone}" style="color: var(--brand-blue); text-decoration: none;">${app.phone}</a></td>
                 <td style="padding: 1rem;">${app.experience} years</td>
-                <td style="padding: 1rem;"><a href="${app.resume}" target="_blank" style="color: var(--brand-blue); text-decoration: none;">View</a></td>
+                <td style="padding: 1rem;">${resumeBtn}</td>
                 <td style="padding: 1rem;">${appliedDate}</td>
                 <td style="padding: 1rem; text-align: center;">
                   <select onchange="updateApplicationStatus('${app.id}', this.value)" style="padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd; background: ${statusColor}; color: white; cursor: pointer;">
@@ -3774,6 +3766,208 @@
           console.error('Error deleting application:', error);
           alert('Error deleting application: ' + error.message);
         }
+      }
+    }
+
+    // ==================
+    // CAREER APPLICATIONS (from career-opportunities.html form)
+    // ==================
+    
+
+
+    async function loadCareerApplications() {
+      try {
+        const positionFilter = document.getElementById('filterPositionSelect').value;
+        const statusFilter = document.getElementById('filterStatusSelect').value;
+        
+        const snapshot = await window.firebaseDB.collection('careerApplications')
+          .orderBy('submittedAt', 'desc')
+          .get();
+
+        let apps = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        // Populate position filter if empty
+        if (document.getElementById('filterPositionSelect').children.length === 1) {
+          const positions = new Set(apps.map(a => a.position));
+          positions.forEach(pos => {
+            const option = document.createElement('option');
+            option.value = pos;
+            option.textContent = pos;
+            document.getElementById('filterPositionSelect').appendChild(option);
+          });
+        }
+
+        // Apply filters
+        if (positionFilter) {
+          apps = apps.filter(a => a.position === positionFilter);
+        }
+        if (statusFilter) {
+          apps = apps.filter(a => a.status === statusFilter);
+        }
+
+        const container = document.getElementById('careerApplicationsContainer');
+        
+        if (apps.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">No applications found.</p>';
+          return;
+        }
+
+        container.innerHTML = apps.map(app => {
+          const date = app.submittedAt ? new Date(app.submittedAt.toDate()).toLocaleDateString() : 'N/A';
+          const resumeBtn = app.resumeData ? `<button onclick="downloadCareerResume('${app.id}', '${app.resumeFileName}')" style="background: #28a745; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; margin-right: 0.5rem;">📥 Resume</button>` : '';
+          
+          return `
+            <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--brand-blue);">
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                  <div style="font-size: 0.85rem; color: #999; font-weight: 600; margin-bottom: 0.3rem;">Name</div>
+                  <div style="font-weight: 600;">${app.name}</div>
+                </div>
+                <div>
+                  <div style="font-size: 0.85rem; color: #999; font-weight: 600; margin-bottom: 0.3rem;">Position</div>
+                  <div style="font-weight: 600;">${app.position}</div>
+                </div>
+                <div>
+                  <div style="font-size: 0.85rem; color: #999; font-weight: 600; margin-bottom: 0.3rem;">Email</div>
+                  <div><a href="mailto:${app.email}" style="color: var(--brand-blue); text-decoration: none;">${app.email}</a></div>
+                </div>
+                <div>
+                  <div style="font-size: 0.85rem; color: #999; font-weight: 600; margin-bottom: 0.3rem;">Phone</div>
+                  <div><a href="tel:${app.phone}" style="color: var(--brand-blue); text-decoration: none;">${app.phone}</a></div>
+                </div>
+              </div>
+              
+              ${app.coverLetter ? `<div style="background: #f5f5f5; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                <div style="font-size: 0.85rem; color: #999; font-weight: 600; margin-bottom: 0.5rem;">Message:</div>
+                <div style="white-space: pre-wrap; line-height: 1.6;">${app.coverLetter}</div>
+              </div>` : ''}
+              
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                ${resumeBtn}
+                <button onclick="viewCareerApplicationDetails('${app.id}')" style="background: var(--brand-blue); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; margin-right: 0.5rem;">👁️ View</button>
+                <select onchange="updateCareerApplicationStatus('${app.id}', this.value)" style="padding: 0.4rem 0.8rem; border-radius: 4px; border: 1px solid #ddd; font-size: 0.85rem;">
+                  <option value="${app.status}" selected>${app.status}</option>
+                  <option value="pending">Pending</option>
+                  <option value="reviewed">Reviewed</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+              
+              <div style="color: #999; font-size: 0.85rem; margin-top: 1rem;">Submitted: ${date}</div>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading career applications:', error);
+        document.getElementById('careerApplicationsContainer').innerHTML = '<p style="color: red;">Error loading applications.</p>';
+      }
+    }
+
+    function downloadCareerResume(appId, filename) {
+      window.firebaseDB.collection('careerApplications').doc(appId).get().then(doc => {
+        const data = doc.data();
+        if (!data || !data.resumeData) {
+          alert('Resume not found');
+          return;
+        }
+        
+        try {
+          // Check if it's a base64 data URL
+          if (data.resumeData.startsWith('data:')) {
+            const link = document.createElement('a');
+            link.href = data.resumeData;
+            link.download = filename || 'resume.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else {
+            // Fallback for direct URLs
+            window.open(data.resumeData, '_blank');
+          }
+        } catch (err) {
+          console.error('Error processing resume:', err);
+          alert('Error downloading resume');
+        }
+      }).catch(error => {
+        console.error('Error downloading resume:', error);
+        alert('Error downloading resume: ' + error.message);
+      });
+    }
+    
+    function downloadJobResume(appId, filename) {
+      window.firebaseDB.collection('job_applications').doc(appId).get().then(doc => {
+        const data = doc.data();
+        if (!data) {
+          alert('Application not found');
+          return;
+        }
+        
+        // Try base64 data first, then fall back to URL
+        const resumeData = data.resumeData || data.resumeUrl;
+        if (!resumeData) {
+          alert('Resume not found for this application');
+          return;
+        }
+        
+        try {
+          // Check if it's a base64 data URL
+          if (resumeData.startsWith('data:')) {
+            const link = document.createElement('a');
+            link.href = resumeData;
+            link.download = filename || 'resume.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else {
+            // Fallback for direct URLs
+            window.open(resumeData, '_blank');
+          }
+        } catch (err) {
+          console.error('Error processing resume:', err);
+          alert('Error downloading resume');
+        }
+      }).catch(error => {
+        console.error('Error downloading resume:', error);
+        alert('Error downloading resume: ' + error.message);
+      });
+    }
+
+    function viewCareerApplicationDetails(appId) {
+      window.firebaseDB.collection('careerApplications').doc(appId).get().then(doc => {
+        const app = doc.data();
+        if (!app) return;
+        
+        const date = app.submittedAt ? new Date(app.submittedAt.toDate()).toLocaleString() : 'N/A';
+        alert(`
+Name: ${app.name}
+Email: ${app.email}
+Phone: ${app.phone}
+Position: ${app.position}
+Location: ${app.location}
+Status: ${app.status}
+Submitted: ${date}
+
+Message:
+${app.coverLetter || 'N/A'}
+
+Resume: ${app.resumeFileName || 'Not uploaded'}
+        `);
+      });
+    }
+
+    async function updateCareerApplicationStatus(appId, newStatus) {
+      if (newStatus === '') return;
+      try {
+        await window.firebaseDB.collection('careerApplications').doc(appId).update({
+          status: newStatus
+        });
+        loadCareerApplications();
+      } catch (error) {
+        console.error('Error updating status:', error);
+        alert('Error updating status');
       }
     }
 

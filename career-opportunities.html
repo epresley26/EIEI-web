@@ -163,6 +163,9 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  
+  <!-- Google API for Drive uploads -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -277,51 +280,6 @@
     </div>
   </section>
 
-  <!-- APPLICATION CTA -->
-  <section class="apply-cta">
-    <h2>Apply Today</h2>
-    <div class="apply-form">
-      <form onsubmit="handleCareerApplication(event)">
-        <div class="form-group">
-          <label for="name">Full Name *</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address *</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-          <label for="phone">Phone Number *</label>
-          <input type="tel" id="phone" name="phone" required>
-        </div>
-        <div class="form-group">
-          <label for="position">Position Applying For *</label>
-          <select id="position" name="position" required>
-            <option value="">Select a position...</option>
-            <option value="teacher">Special Education Teacher</option>
-            <option value="teaching-assistant">Teaching Assistant</option>
-            <option value="rbt">Registered Behavior Technician</option>
-            <option value="speech">Speech Language Therapist</option>
-            <option value="ot">Occupational Therapist</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="location">Location Preference *</label>
-          <select id="location" name="location" required>
-            <option value="">Select location...</option>
-            <option value="philadelphia">Philadelphia (Main Location)</option>
-            <option value="travel">Travel to programs/homes</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message">Tell us about yourself *</label>
-          <textarea id="message" name="message" required></textarea>
-        </div>
-        <button type="submit" class="primary-btn">Submit Application</button>
-      </form>
-    </div>
-  </section>
-
   <!-- CONTACT FOR QUESTIONS -->
   <section class="section">
     <div style="text-align: center; background: var(--card-bg); padding: 2rem; border-radius: 12px;">
@@ -384,7 +342,12 @@
           </div>
           <div class="form-group">
             <label for="appResume">Resume/CV (URL) *</label>
-            <input type="text" id="appResume" placeholder="https://example.com/resume.pdf" required>
+            <input type="text" id="appResume" placeholder="https://example.com/resume.pdf">
+          </div>
+          <div class="form-group">
+            <label for="appResumeFile">Or Upload Resume File</label>
+            <input type="file" id="appResumeFile" accept=".pdf,.doc,.docx" />
+            <small style="color: #999; display: block; margin-top: 0.5rem;">PDF or Word document (max 10MB)</small>
           </div>
           <div class="form-group">
             <label for="appCoverLetter">Cover Letter</label>
@@ -504,33 +467,69 @@
       const email = document.getElementById('appEmail').value.trim();
       const phone = document.getElementById('appPhone').value.trim();
       const experience = document.getElementById('appExperience').value;
-      const resume = document.getElementById('appResume').value.trim();
+      const resumeUrl = document.getElementById('appResume').value.trim();
+      const resumeFile = document.getElementById('appResumeFile').files[0];
       const coverLetter = document.getElementById('appCoverLetter').value.trim();
 
-      if (!name || !email || !phone || !experience || !resume) {
-        alert('Please fill in all required fields.');
+      // Require either URL or file
+      if (!name || !email || !phone || !experience || (!resumeUrl && !resumeFile)) {
+        alert('Please fill in all required fields and provide either a resume URL or upload a resume file.');
         return;
       }
 
       try {
-        const db = firebase.firestore();
-        await db.collection('job_applications').add({
+        let applicationData = {
           jobId: currentJobId,
           name: name,
           email: email,
           phone: phone,
           experience: parseInt(experience),
-          resume: resume,
           coverLetter: coverLetter,
-          appliedAt: new Date(),
+          appliedAt: firebase.firestore.FieldValue.serverTimestamp(),
           status: 'pending'
-        });
+        };
+
+        // If file is provided, convert to base64 and store
+        if (resumeFile) {
+          // Validate file size (10MB)
+          const maxSize = 10 * 1024 * 1024;
+          if (resumeFile.size > maxSize) {
+            alert("Resume file is too large. Maximum size is 10MB.");
+            return;
+          }
+
+          // Validate file type
+          const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+          if (!allowedTypes.includes(resumeFile.type)) {
+            alert("Please upload a PDF or Word document (.pdf, .doc, .docx)");
+            return;
+          }
+
+          // Convert file to base64
+          const reader = new FileReader();
+          const resumeBase64 = await new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(resumeFile);
+          });
+
+          applicationData.resumeFileName = resumeFile.name;
+          applicationData.resumeSize = resumeFile.size;
+          applicationData.resumeMimeType = resumeFile.type;
+          applicationData.resumeData = resumeBase64;
+        } else if (resumeUrl) {
+          // If URL provided instead
+          applicationData.resumeUrl = resumeUrl;
+        }
+
+        const db = firebase.firestore();
+        const docRef = await db.collection('job_applications').add(applicationData);
 
         alert('Application submitted successfully! We will review it and contact you soon.');
         closeApplicationModal();
       } catch (error) {
         console.error('Error submitting application:', error);
-        alert('Error submitting application. Please try again.');
+        alert(`Error submitting application: ${error.message}`);
       }
     }
 
@@ -549,14 +548,96 @@
       const email = form.querySelector('#email').value.trim();
       const phone = form.querySelector('#phone').value.trim();
       const position = form.querySelector('#position').value;
+      const location = form.querySelector('#location').value;
+      const message = form.querySelector('#message').value.trim();
+      const resumeFile = form.querySelector('#resume').files[0];
       
-      if (name && email && phone && position) {
-        console.log("Career application submitted:", { name, email, phone, position });
-        form.reset();
-        alert("Thank you for applying! We'll review your application and contact you soon.");
-      } else {
-        alert("Please fill in all required fields.");
+      if (!name || !email || !phone || !position || !location || !message || !resumeFile) {
+        alert("Please fill in all required fields including resume upload.");
+        return;
       }
+
+      // Validate file size (5MB for Firestore storage)
+      const maxSize = 5 * 1024 * 1024;
+      if (resumeFile.size > maxSize) {
+        alert("Resume file is too large. Maximum size is 5MB.");
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (!allowedTypes.includes(resumeFile.type)) {
+        alert("Please upload a PDF or Word document (.pdf, .doc, .docx)");
+        return;
+      }
+
+      // Show progress
+      const progressDiv = document.getElementById('uploadProgress');
+      const progressText = document.getElementById('progressText');
+      const progressBar = document.getElementById('progressBar');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      progressDiv.style.display = 'block';
+      submitBtn.disabled = true;
+      progressText.textContent = 'Processing your application...';
+      progressBar.style.width = '30%';
+
+      // Convert file to base64
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        progressBar.style.width = '60%';
+        progressText.textContent = 'Saving to database...';
+        
+        const resumeBase64 = e.target.result;
+        
+        if (window.firebaseDB) {
+          window.firebaseDB.collection('careerApplications').add({
+            name,
+            email,
+            phone,
+            position,
+            location,
+            coverLetter: message,
+            resumeFileName: resumeFile.name,
+            resumeSize: resumeFile.size,
+            resumeMimeType: resumeFile.type,
+            resumeData: resumeBase64,
+            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'pending'
+          })
+          .then(docRef => {
+            progressBar.style.width = '100%';
+            progressText.textContent = 'Application submitted successfully!';
+            
+            setTimeout(() => {
+              form.reset();
+              progressDiv.style.display = 'none';
+              submitBtn.disabled = false;
+              progressBar.style.width = '0%';
+              alert("Thank you for applying! We'll review your application and contact you soon.");
+            }, 1000);
+          })
+          .catch(error => {
+            progressDiv.style.display = 'none';
+            submitBtn.disabled = false;
+            progressBar.style.width = '0%';
+            console.error('Error submitting application:', error);
+            alert(`Error submitting application: ${error.message}`);
+          });
+        } else {
+          progressDiv.style.display = 'none';
+          submitBtn.disabled = false;
+          alert('Error: Firebase not initialized. Please try again.');
+        }
+      };
+      
+      reader.onerror = function(error) {
+        progressDiv.style.display = 'none';
+        submitBtn.disabled = false;
+        alert('Error reading file: ' + error.message);
+      };
+      
+      reader.readAsDataURL(resumeFile);
     }
   </script>
   <script src="components/chat-widget.js"></script>

@@ -9,10 +9,101 @@ const firebaseConfig = {
   measurementId: "G-28SHEQRWLY"
 };
 
-// Initialize Firebase
+// Initialize Firebase (handles both Compat and Modular SDKs)
 (function initializeFirebase() {
+  // Check for modular Firebase SDK (v9+)
+  if (typeof window.initializeApp !== 'undefined' && typeof window.getFirestore !== 'undefined') {
+    // Modular SDK - create a Compat-style wrapper
+    try {
+      const app = window.initializeApp(firebaseConfig);
+      const dbModular = window.getFirestore(app);
+      const storage = window.getStorage(app);
+      
+      // Wrap modular Firestore with Compat-style API for backward compatibility
+      window.firebaseApp = app;
+      window.firebaseDB = {
+        collection: (collectionName) => {
+          return {
+            get: async () => {
+              const docs = [];
+              const querySnapshot = await window.getDocs(window.collection(dbModular, collectionName));
+              querySnapshot.forEach(doc => {
+                docs.push({
+                  id: doc.id,
+                  data: () => doc.data(),
+                  exists: () => true
+                });
+              });
+              return {
+                docs: docs,
+                size: docs.length,
+                empty: docs.length === 0
+              };
+            },
+            doc: (docId) => {
+              return {
+                get: async () => {
+                  const docRef = window.doc(dbModular, collectionName, docId);
+                  const docSnap = await window.getDoc(docRef);
+                  return {
+                    id: docSnap.id,
+                    data: () => docSnap.data(),
+                    exists: () => docSnap.exists()
+                  };
+                },
+                update: async (data) => {
+                  const docRef = window.doc(dbModular, collectionName, docId);
+                  return window.updateDoc(docRef, data);
+                },
+                delete: async () => {
+                  const docRef = window.doc(dbModular, collectionName, docId);
+                  return window.deleteDoc(docRef);
+                },
+                set: async (data, options) => {
+                  const docRef = window.doc(dbModular, collectionName, docId);
+                  return window.setDoc(docRef, data, options);
+                }
+              };
+            },
+            add: async (data) => {
+              const result = await window.addDoc(window.collection(dbModular, collectionName), data);
+              return result;
+            },
+            orderBy: (field, direction) => {
+              return {
+                get: async () => {
+                  const q = window.query(
+                    window.collection(dbModular, collectionName),
+                    window.orderBy(field, direction || 'asc')
+                  );
+                  const querySnapshot = await window.getDocs(q);
+                  const docs = [];
+                  querySnapshot.forEach(doc => {
+                    docs.push({
+                      id: doc.id,
+                      data: () => doc.data()
+                    });
+                  });
+                  return {
+                    docs: docs,
+                    size: docs.length
+                  };
+                }
+              };
+            }
+          };
+        }
+      };
+      window.firebaseStorage = storage;
+      console.log('Firebase (Modular) initialized successfully with Compat wrapper');
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+    }
+    return;
+  }
+  
+  // Check for Compat Firebase SDK
   if (typeof firebase === 'undefined') {
-    console.log('Waiting for Firebase SDK to load...');
     setTimeout(initializeFirebase, 100);
     return;
   }
@@ -22,16 +113,14 @@ const firebaseConfig = {
     const db = firebase.firestore();
     const storage = firebase.storage();
     
-    // Export for use in other scripts
     window.firebaseApp = firebase.app();
     window.firebaseDB = db;
     window.firebaseStorage = storage;
-    console.log('Firebase initialized successfully');
+    console.log('Firebase (Compat) initialized successfully');
   } catch (error) {
     if (error.code !== 'app/duplicate-app') {
       console.error('Firebase initialization error:', error);
     } else {
-      // App already initialized, just set the window references
       window.firebaseApp = firebase.app();
       window.firebaseDB = firebase.firestore();
       window.firebaseStorage = firebase.storage();

@@ -7,19 +7,53 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-  <script src="components/firebase-init.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, setDoc, addDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    
+    // Make functions global for non-module scripts
+    window.initializeApp = initializeApp;
+    window.getFirestore = getFirestore;
+    window.collection = collection;
+    window.getDocs = getDocs;
+    window.doc = doc;
+    window.getDoc = getDoc;
+    window.updateDoc = updateDoc;
+    window.deleteDoc = deleteDoc;
+    window.setDoc = setDoc;
+    window.addDoc = addDoc;
+    window.query = query;
+    window.orderBy = orderBy;
+    window.getStorage = getStorage;
+    window.getAuth = getAuth;
+    
+    // Load firebase-init after imports are ready
+    const script = document.createElement('script');
+    script.src = 'components/firebase-init.js';
+    document.head.appendChild(script);
+  </script>
 </head>
 <body>
   <!-- HEADER CONTAINER -->
   <div id="header-container"></div>
 
-  <section class="section light">
-    <h2>Latest News & Updates</h2>
-    <p style="text-align:center;color:var(--text-muted);max-width:800px;margin:0 auto 2rem;">Stories, announcements, and insights from EIEI.</p>
-    <div class="cards" id="blogCards">
+  <section class="section light" style="padding-top: 10%;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
+      <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem;">Helpful Articles &<br>Stories Guidance</h2>
+      <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6; max-width: 800px; margin: 0 auto;">Discover helpful resources, stories, and guidance to support you on your journey. Learn from our community and stay updated with the latest insights.</p>
+    </div>
+    
+    <!-- Type Filter Buttons -->
+    <div style="display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap;">
+      <button class="type-filter-btn active" onclick="filterByType('All')" data-type="All" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--brand-blue);color:white;cursor:pointer;font-weight:600;transition:all 0.3s;">All</button>
+      <button class="type-filter-btn" onclick="filterByType('Blog')" data-type="Blog" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">Blog</button>
+      <button class="type-filter-btn" onclick="filterByType('News')" data-type="News" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">News</button>
+      <button class="type-filter-btn" onclick="filterByType('Event')" data-type="Event" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">Event</button>
+    </div>
+    
+    <div class="cards" id="blogCards" style="max-width: 1200px; margin: 0 auto;">
       <p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Loading posts...</p>
     </div>
   </section>
@@ -40,6 +74,7 @@
       const container = document.getElementById('blogCards');
       container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Loading posts...</p>';
       if (!window.firebaseDB) {
+        console.error('Firebase DB not initialized');
         container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Firebase is not initialized. Please check your Firebase config in components/firebase-init.js.</p>';
         return;
       }
@@ -48,16 +83,19 @@
         try {
           snap = await window.firebaseDB.collection('posts').orderBy('createdAt', 'desc').get();
         } catch (orderErr) {
-          console.warn('Order by createdAt failed, falling back:', orderErr);
+          console.warn('Order by createdAt failed, falling back to simple get:', orderErr);
           snap = await window.firebaseDB.collection('posts').get();
         }
         let posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         posts = posts.sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
         console.log('Loaded posts:', posts.length);
+        allPosts = posts;
         renderPosts(posts);
       } catch (e) {
         console.error('Blog load error:', e);
-        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Unable to load posts. Check Firestore rules (public read) and your Firebase config.</p>';
+        console.error('Error code:', e.code);
+        console.error('Error message:', e.message);
+        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Unable to load posts. Error: ' + e.message + '</p>';
       }
     }
 
@@ -68,22 +106,77 @@
         container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">No posts yet. Check back soon!</p>';
         return;
       }
+      
       posts.forEach(post => {
-        let img = post.imageUrl || 'images/service1.svg';
-        if (img && img.includes('thumbnail') && img.includes('=s')) {
-          img = img.replace(/=s\d+/, '=s600');
+        const type = post.type || post.postType || 'Blog';
+        
+        // Convert Firestore Timestamp properly
+        let date = 'No date';
+        if (post.createdAt) {
+          try {
+            let dateObj;
+            if (typeof post.createdAt.toDate === 'function') {
+              dateObj = post.createdAt.toDate();
+            } else if (post.createdAt instanceof Date) {
+              dateObj = post.createdAt;
+            } else if (typeof post.createdAt === 'number') {
+              dateObj = new Date(post.createdAt);
+            } else {
+              dateObj = new Date(post.createdAt);
+            }
+            date = dateObj.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+          } catch (e) {
+            date = 'No date';
+          }
         }
-        const excerpt = post.excerpt || (post.content ? post.content.slice(0, 140) + '…' : '');
+        
+        const imageUrl = post.imageUrl || 'images/placeholder.jpg';
+        const excerpt = post.excerpt || (post.content ? post.content.slice(0, 120) + '…' : 'Read more about this post');
+        
         const card = document.createElement('div');
-        card.className = 'card reveal visible';
+        card.className = 'card reveal visible post-card';
+        card.setAttribute('data-type', type);
         card.innerHTML = `
-          <img src="${img}" alt="${post.title}" class="card-image" loading="lazy">
-          <h3>${post.title}</h3>
-          <p>${escapeHtml(excerpt)}</p>
-          <button class="primary-btn" onclick="openPostModal('${post.id}')">Read More</button>
+          <img src="${imageUrl}" alt="${post.title}" class="card-image" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+          <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column;">
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: capitalize;">
+              <span style="font-weight: 600; color: var(--brand-blue);">${type}</span> ${date}
+            </div>
+            <h3 style="font-size: 1.35rem; font-weight: 700; line-height: 1.4; margin: 0 0 1rem 0; color: var(--text);">${post.title}</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; flex-grow: 1; margin: 0;">${escapeHtml(excerpt)}</p>
+            <button class="primary-btn" onclick="openPostModal('${post.id}')" style="margin-top: 1.5rem; align-self: flex-start;">Read More</button>
+          </div>
         `;
         container.appendChild(card);
       });
+    }
+    
+    let allPosts = [];
+    let currentTypeFilter = 'All';
+    
+    function filterByType(type) {
+      currentTypeFilter = type;
+      const buttons = document.querySelectorAll('.type-filter-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-type') === type) {
+          btn.style.background = 'var(--brand-blue)';
+          btn.style.color = 'white';
+        } else {
+          btn.style.background = 'var(--bg-secondary)';
+          btn.style.color = 'var(--text)';
+        }
+      });
+      
+      if (type === 'All') {
+        renderPosts(allPosts);
+      } else {
+        const filtered = allPosts.filter(post => (post.type || 'Blog') === type);
+        renderPosts(filtered);
+      }
     }
     function toMillis(value) {
       if (!value) return 0;
@@ -107,12 +200,16 @@
     const modal = document.createElement('div');
     modal.className = 'modal';
     modal.innerHTML = `
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 id="postModalTitle">Post</h2>
-          <button class="close-btn" onclick="closePostModal()">×</button>
+      <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 16px;">
+        <div style="position: sticky; top: 0; background: white; padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; z-index: 10;">
+          <h2 id="postModalTitle" style="margin: 0; font-size: 1.5rem; color: var(--text);">Post</h2>
+          <button class="close-btn" onclick="closePostModal()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-muted); padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">×</button>
         </div>
-        <div id="postModalBody" style="white-space:pre-wrap;line-height:1.6"></div>
+        <img id="postModalImage" src="" alt="" style="width: 100%; height: 400px; object-fit: cover; display: none;">
+        <div style="padding: 3rem; max-width: 100%;">
+          <div id="postModalMeta" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;"></div>
+          <div id="postModalBody" style="font-size: 1.1rem; line-height: 1.8; color: var(--text); word-break: break-word; white-space: pre-wrap;"></div>
+        </div>
       </div>
     `;
     document.body.appendChild(modal);
@@ -121,7 +218,51 @@
       try {
         const doc = await window.firebaseDB.collection('posts').doc(id).get();
         const post = doc.data();
+        
+        // Title
         document.getElementById('postModalTitle').textContent = post.title || 'Post';
+        
+        // Image
+        const imgEl = document.getElementById('postModalImage');
+        if (post.imageUrl) {
+          imgEl.src = post.imageUrl;
+          imgEl.style.display = 'block';
+        } else {
+          imgEl.style.display = 'none';
+        }
+        
+        // Metadata
+        const type = post.type || post.postType || 'Blog';
+        let date = 'No date';
+        if (post.createdAt) {
+          try {
+            let dateObj;
+            if (typeof post.createdAt.toDate === 'function') {
+              dateObj = post.createdAt.toDate();
+            } else if (post.createdAt instanceof Date) {
+              dateObj = post.createdAt;
+            } else if (typeof post.createdAt === 'number') {
+              dateObj = new Date(post.createdAt);
+            } else {
+              dateObj = new Date(post.createdAt);
+            }
+            date = dateObj.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+          } catch (e) {
+            console.error('Date conversion error:', e);
+            date = 'No date';
+          }
+        }
+        const metaEl = document.getElementById('postModalMeta');
+        metaEl.innerHTML = `
+          <span style="font-weight: 600; color: var(--brand-blue);">${type}</span>
+          <span style="color: var(--text-muted);">${date}</span>
+        `;
+        
+        // Content
         document.getElementById('postModalBody').textContent = post.content || '';
         modal.classList.add('active');
       } catch (e) {
@@ -131,7 +272,16 @@
 
     function closePostModal() { modal.classList.remove('active'); }
 
-    document.addEventListener('DOMContentLoaded', loadPosts);
+    // Wait for Firebase to initialize before loading posts
+    function waitForFirebase() {
+      if (window.firebaseDB) {
+        loadPosts();
+      } else {
+        setTimeout(waitForFirebase, 100);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', waitForFirebase);
   </script>
 </body>
 </html>
