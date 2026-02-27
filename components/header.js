@@ -19,11 +19,12 @@ function createHeader() {
           <a href="blog.html" class="nav-item">Blog</a>
           <a href="marketplace.html" class="nav-item">Marketplace</a>
           <a href="career-opportunities.html" class="nav-item">Careers</a>
+          <a href="nafei.html" class="nav-item">NAFEI</a>
           <a href="contact-us.html" class="nav-item">Contact</a>
         </nav>
 
         <div class="nav-actions">
-          <a href="https://forms.gle/J5eJz9ztwiEAAyZq9" target="_blank" class="nav-btn nav-tour">Schedule a Tour</a>
+          <button onclick="openTourRequestModal()" class="nav-btn nav-tour">Schedule a Tour</button>
         </div>
       </div>
     </header>

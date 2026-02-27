@@ -115,6 +115,44 @@ service cloud.firestore {
       allow create, update, delete: if isSignedIn();
     }
 
+    // --- Program Galleries (per program) ---
+    match /programGalleries/{programId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn() && isAdmin();
+    }
+
+    // --- Testimonial Galleries ---
+    match /testimonialGalleries/{galleryId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn() && isAdmin();
+    }
+
+    // --- Tour Requests (ECSE Classroom Tours) ---
+    match /tourRequests/{id} {
+      allow create: if request.resource.data.keys().hasAll([
+        'parentName', 'childName', 'childDOB', 'childAge', 'lea', 'phone', 
+        'address', 'email', 'needsTransportation', 'attendingPreschool', 
+        'primaryLanguage', 'services', 'preferredTime', 'submittedAt', 'status'
+      ]) && 
+      request.resource.data.parentName is string &&
+      request.resource.data.childName is string &&
+      request.resource.data.childDOB is string &&
+      request.resource.data.childAge is number &&
+      request.resource.data.lea is string &&
+      request.resource.data.phone is string &&
+      request.resource.data.address is string &&
+      request.resource.data.email is string &&
+      request.resource.data.needsTransportation is bool &&
+      request.resource.data.attendingPreschool is bool &&
+      request.resource.data.primaryLanguage is string &&
+      request.resource.data.services is list &&
+      request.resource.data.preferredTime is string &&
+      request.resource.data.submittedAt is timestamp &&
+      request.resource.data.status is string;
+      
+      allow read, update, delete: if isSignedIn() && isAdmin();
+    }
+
     // --- Testimonials ---
     match /testimonials/{id} {
       allow read: if true;
@@ -129,6 +167,19 @@ service cloud.firestore {
 
     // --- Job Applications ---
     match /job_applications/{id} {
+      allow read: if isSignedIn() && isAdmin();
+      allow create: if true;
+      allow update, delete: if isSignedIn() && isAdmin();
+    }
+
+    // --- Blog Posts ---
+    match /blog/{id} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn() && isAdmin();
+    }
+
+    // --- Applications (Job Applications) ---
+    match /applications/{id} {
       allow read: if isSignedIn() && isAdmin();
       allow create: if true;
       allow update, delete: if isSignedIn() && isAdmin();

@@ -107,51 +107,59 @@
         return;
       }
       
-      posts.forEach(post => {
-        const type = post.type || post.postType || 'Blog';
-        
-        // Convert Firestore Timestamp properly
-        let date = 'No date';
-        if (post.createdAt) {
-          try {
-            let dateObj;
-            if (typeof post.createdAt.toDate === 'function') {
-              dateObj = post.createdAt.toDate();
-            } else if (post.createdAt instanceof Date) {
-              dateObj = post.createdAt;
-            } else if (typeof post.createdAt === 'number') {
-              dateObj = new Date(post.createdAt);
-            } else {
-              dateObj = new Date(post.createdAt);
+      // Render posts with staggered timing to reduce lag
+      posts.forEach((post, index) => {
+        setTimeout(() => {
+          const type = post.type || post.postType || 'Blog';
+          
+          // Convert Firestore Timestamp properly
+          let date = 'No date';
+          if (post.createdAt) {
+            try {
+              let dateObj;
+              if (typeof post.createdAt.toDate === 'function') {
+                dateObj = post.createdAt.toDate();
+              } else if (post.createdAt instanceof Date) {
+                dateObj = post.createdAt;
+              } else if (typeof post.createdAt === 'number') {
+                dateObj = new Date(post.createdAt);
+              } else {
+                dateObj = new Date(post.createdAt);
+              }
+              date = dateObj.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            } catch (e) {
+              date = 'No date';
             }
-            date = dateObj.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            });
-          } catch (e) {
-            date = 'No date';
           }
-        }
-        
-        const imageUrl = post.imageUrl || 'images/placeholder.jpg';
-        const excerpt = post.excerpt || (post.content ? post.content.slice(0, 120) + '…' : 'Read more about this post');
-        
-        const card = document.createElement('div');
-        card.className = 'card reveal visible post-card';
-        card.setAttribute('data-type', type);
-        card.innerHTML = `
-          <img src="${imageUrl}" alt="${post.title}" class="card-image" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column;">
-            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: capitalize;">
-              <span style="font-weight: 600; color: var(--brand-blue);">${type}</span> ${date}
+          
+          let imageUrl = post.imageUrl || 'images/placeholder.jpg';
+          // Optimize ImgBB URLs for card display (600px max)
+          if (imageUrl.includes('imgbb.com')) {
+            imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/600x400');
+          }
+          
+          const excerpt = post.excerpt || (post.content ? post.content.slice(0, 120) + '…' : 'Read more about this post');
+          
+          const card = document.createElement('div');
+          card.className = 'card reveal visible post-card';
+          card.setAttribute('data-type', type);
+          card.innerHTML = `
+            <img src="${imageUrl}" alt="${post.title}" class="card-image" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column;">
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: capitalize;">
+                <span style="font-weight: 600; color: var(--brand-blue);">${type}</span> ${date}
+              </div>
+              <h3 style="font-size: 1.35rem; font-weight: 700; line-height: 1.4; margin: 0 0 1rem 0; color: var(--text);">${post.title}</h3>
+              <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; flex-grow: 1; margin: 0;">${escapeHtml(excerpt)}</p>
+              <button class="primary-btn" onclick="openPostModal('${post.id}')" style="margin-top: 1.5rem; align-self: flex-start;">Read More</button>
             </div>
-            <h3 style="font-size: 1.35rem; font-weight: 700; line-height: 1.4; margin: 0 0 1rem 0; color: var(--text);">${post.title}</h3>
-            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; flex-grow: 1; margin: 0;">${escapeHtml(excerpt)}</p>
-            <button class="primary-btn" onclick="openPostModal('${post.id}')" style="margin-top: 1.5rem; align-self: flex-start;">Read More</button>
-          </div>
-        `;
-        container.appendChild(card);
+          `;
+          container.appendChild(card);
+        }, index * 30); // Stagger each post by 30ms
       });
     }
     

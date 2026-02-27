@@ -799,6 +799,8 @@
         staff: 'Staff'
       };
       
+      let cardIndex = 0; // Track card index for staggered loading
+      
       sectionOrder.forEach(sectionKey => {
         const sectionMembers = groupedMembers[sectionKey];
         if (sectionMembers.length === 0) return;
@@ -817,30 +819,42 @@
         const gridDiv = document.createElement('div');
         gridDiv.className = 'team-section-grid';
         
-        // Add cards to grid
+        // Add cards to grid with staggered rendering
         sectionMembers.forEach(member => {
-          const card = document.createElement('div');
-          card.className = 'team-card';
-          card.innerHTML = `
-            <img src="${member.imageUrl || 'images/team/default.jpg'}" alt="${member.name}" class="team-image" onerror="this.src='images/team/default.jpg'">
-            <div class="team-info">
-              <div class="team-name">${member.name}</div>
-              <div class="team-role">${member.role}</div>
-            </div>
-            <div class="team-stats">
-              <div class="team-stat">
-                <span class="team-stat-icon">👥</span>
-                <span class="team-stat-value">120</span>
+          const currentCardIndex = cardIndex;
+          cardIndex++;
+          
+          setTimeout(() => {
+            const card = document.createElement('div');
+            card.className = 'team-card';
+            
+            let imageUrl = member.imageUrl || 'images/team/default.jpg';
+            // Optimize ImgBB URLs for team display (280x280px)
+            if (imageUrl.includes('imgbb.com')) {
+              imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/280x280');
+            }
+            
+            card.innerHTML = `
+              <img src="${imageUrl}" alt="${member.name}" class="team-image" loading="lazy" onerror="this.src='images/team/default.jpg'">
+              <div class="team-info">
+                <div class="team-name">${member.name}</div>
+                <div class="team-role">${member.role}</div>
               </div>
-              <div class="team-stat">
-                <span class="team-stat-icon">⭐</span>
-                <span class="team-stat-value">4.8</span>
+              <div class="team-stats">
+                <div class="team-stat">
+                  <span class="team-stat-icon">👥</span>
+                  <span class="team-stat-value">120</span>
+                </div>
+                <div class="team-stat">
+                  <span class="team-stat-icon">⭐</span>
+                  <span class="team-stat-value">4.8</span>
+                </div>
               </div>
-            </div>
-            <button class="team-cta-btn" onclick="event.stopPropagation();">View Profile</button>
-          `;
-          card.addEventListener('click', () => openTeamModal(member));
-          gridDiv.appendChild(card);
+              <button class="team-cta-btn" onclick="event.stopPropagation();">View Profile</button>
+            `;
+            card.addEventListener('click', () => openTeamModal(member));
+            gridDiv.appendChild(card);
+          }, currentCardIndex * 40); // Stagger each card by 40ms
         });
         
         sectionDiv.appendChild(gridDiv);

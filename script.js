@@ -272,3 +272,183 @@ function handleNewsletterSignup(event) {
     alert("Please enter a valid email address.");
   }
 }
+
+// ========== TESTIMONIAL GALLERY LOADING ==========
+function loadTestimonialGallery() {
+  const container = document.getElementById('testimonialGalleryContainer');
+  if (!container) return;
+
+  const db = firebase.firestore();
+  db.collection('testimonialGalleries').doc('main').get()
+    .then(doc => {
+      if (doc.exists && doc.data().images && doc.data().images.length > 0) {
+        const images = doc.data().images;
+        container.innerHTML = '';
+        
+        images.forEach((img, idx) => {
+          setTimeout(() => {
+            const imgElement = document.createElement('div');
+            imgElement.style.cssText = 'border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; contain: layout style paint;';
+            imgElement.innerHTML = `<img src="${img.url}" alt="Testimonial Gallery" style="width: 100%; height: 220px; object-fit: cover;" loading="lazy">`;
+            imgElement.addEventListener('mouseenter', function() {
+              this.style.transform = 'translateY(-8px)';
+              this.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+            });
+            imgElement.addEventListener('mouseleave', function() {
+              this.style.transform = 'translateY(0)';
+              this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            });
+            container.appendChild(imgElement);
+          }, idx * 50);
+        });
+      }
+    })
+    .catch(err => console.error('Error loading testimonial gallery:', err));
+}
+
+// Load testimonial gallery when window loads
+window.addEventListener('load', loadTestimonialGallery);
+
+// ========== PAGE-SPECIFIC TESTIMONIAL GALLERY LOADING ==========
+function loadPageTestimonialGallery(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const db = firebase.firestore();
+  db.collection('testimonialGalleries').doc('main').get()
+    .then(doc => {
+      if (doc.exists && doc.data().images && doc.data().images.length > 0) {
+        const images = doc.data().images;
+        container.innerHTML = '';
+        
+        images.forEach((img, idx) => {
+          setTimeout(() => {
+            const imgElement = document.createElement('div');
+            imgElement.style.cssText = 'border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; contain: layout style paint;';
+            imgElement.innerHTML = `<img src="${img.url}" alt="Testimonial Gallery" style="width: 100%; height: 200px; object-fit: cover;" loading="lazy">`;
+            imgElement.addEventListener('mouseenter', function() {
+              this.style.transform = 'translateY(-8px)';
+              this.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+            });
+            imgElement.addEventListener('mouseleave', function() {
+              this.style.transform = 'translateY(0)';
+              this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            });
+            container.appendChild(imgElement);
+          }, idx * 50);
+        });
+      }
+    })
+    .catch(err => console.error('Error loading testimonial gallery:', err));
+}
+
+// Load page-specific testimonial galleries
+window.addEventListener('load', () => {
+  if (document.getElementById('trainingTestimonialGalleryContainer')) {
+    loadPageTestimonialGallery('trainingTestimonialGalleryContainer');
+  }
+  if (document.getElementById('earlyInterventionTestimonialGalleryContainer')) {
+    loadPageTestimonialGallery('earlyInterventionTestimonialGalleryContainer');
+  }
+});
+// ==================
+// TOUR REQUEST MODAL
+// ==================
+
+function openTourRequestModal() {
+  const modal = document.getElementById('tourRequestModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+    console.log('Tour request modal opened');
+  } else {
+    console.error('Tour request modal element not found');
+  }
+}
+
+function closeTourRequestModal() {
+  const modal = document.getElementById('tourRequestModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
+  }
+  const form = document.getElementById('tourRequestForm');
+  if (form) {
+    form.reset();
+  }
+}
+
+function submitTourRequest(event) {
+  event.preventDefault();
+
+  if (typeof window.firebaseDB === 'undefined') {
+    alert('Database not ready. Please refresh and try again.');
+    return;
+  }
+
+  // Get all form values
+  const parentName = document.getElementById('tourParentName').value.trim();
+  const childName = document.getElementById('tourChildName').value.trim();
+  const childDOB = document.getElementById('tourChildDOB').value;
+  const childAge = document.getElementById('tourChildAge').value;
+  const lea = document.getElementById('tourLEA').value.trim();
+  const phone = document.getElementById('tourPhone').value.trim();
+  const address = document.getElementById('tourAddress').value.trim();
+  const email = document.getElementById('tourEmail').value.trim();
+  const transportation = document.querySelector('input[name="tourTransportation"]:checked');
+  const preschool = document.querySelector('input[name="tourPreschool"]:checked');
+  const language = document.getElementById('tourLanguage').value.trim();
+  const services = Array.from(document.querySelectorAll('input[name="tourServices"]:checked')).map(el => el.value);
+  const preferredTime = document.querySelector('input[name="tourTime"]:checked');
+
+  // Validate required fields
+  if (!parentName || !childName || !childDOB || !childAge || !lea || !phone || !address || !email || !transportation || !preschool || !language || services.length === 0 || !preferredTime) {
+    alert('Please fill in all required fields');
+    return;
+  }
+
+  // Show loading state
+  const btn = event.target.querySelector('button[type="submit"]');
+  const originalText = btn.textContent;
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  // Save to Firestore
+  window.firebaseDB.collection('tourRequests').add({
+    parentName: parentName,
+    childName: childName,
+    childDOB: childDOB,
+    childAge: parseInt(childAge),
+    lea: lea,
+    phone: phone,
+    address: address,
+    email: email,
+    needsTransportation: transportation.value === 'yes',
+    attendingPreschool: preschool.value === 'yes',
+    primaryLanguage: language,
+    services: services,
+    preferredTime: preferredTime.value,
+    submittedAt: new Date(),
+    status: 'pending'
+  })
+  .then(() => {
+    alert('✓ Tour request submitted successfully! We will contact you soon at ' + phone + ' to confirm your tour.');
+    closeTourRequestModal();
+  })
+  .catch(error => {
+    console.error('Error submitting tour request:', error);
+    alert('Error submitting tour request. Please try again.');
+  })
+  .finally(() => {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  });
+}
+
+// Close modal when clicking outside of it
+window.addEventListener('click', (event) => {
+  const modal = document.getElementById('tourRequestModal');
+  if (event.target === modal) {
+    closeTourRequestModal();
+  }
+});

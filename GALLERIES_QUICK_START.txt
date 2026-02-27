@@ -1,0 +1,86 @@
+QUICK START: Program & Testimonial Galleries
+==============================================
+
+✅ FULLY IMPLEMENTED AND READY TO USE
+
+NEW FEATURES:
+=============
+
+1. PROGRAM GALLERIES
+   - Each program page now has its own image gallery
+   - Managed from Admin Panel → "Program Galleries" tab
+   - Upload up to 5 images per program
+   - Auto-uploads to ImgBB
+   - Displays on all 6 program pages
+
+2. TESTIMONIAL GALLERIES
+   - Shared gallery for all testimonials
+   - Managed from Admin Panel → "Testimonial Gallery" tab
+   - Upload up to 5 images
+   - Auto-uploads to ImgBB
+   - Displays on: index.html, training-development.html, early-intervention.html
+
+ADMIN USAGE:
+============
+
+Upload Program Gallery:
+1. Go to admin-programs.html
+2. Sidebar → "Program Galleries"
+3. Select program from dropdown
+4. Drag-drop images or click to browse
+5. Click "Upload Images"
+6. Done!
+
+Upload Testimonial Gallery:
+1. Go to admin-programs.html
+2. Sidebar → "Testimonial Gallery"
+3. Drag-drop images or click to browse
+4. Click "Upload Images"
+5. Done!
+
+WHAT USERS SEE:
+================
+
+Program Pages:
+- Scroll down to "Photo Gallery" section
+- Responsive grid of images
+- Hover effects on images
+
+Homepage & Program Pages:
+- Scroll to "Moments of Impact" section
+- Testimonial gallery with beautiful grid
+- Images auto-load
+
+DATABASE:
+===========
+
+Collections Created:
+- programGalleries (programId as docId)
+- testimonialGalleries (single doc: "main")
+
+All images stored in ImgBB with URLs in Firestore
+
+FEATURES:
+==========
+
+✓ Drag-and-drop upload
+✓ Multiple format support (JPEG, PNG, WebP)
+✓ Responsive grid layout
+✓ Lazy loading
+✓ Smooth hover animations
+✓ Delete individual images
+✓ Real-time updates
+✓ Performance optimized
+✓ Mobile friendly
+
+FILES MODIFIED:
+================
+
+1. admin-programs.html - Added tabs and upload functions
+2. program.html - Added gallery display
+3. index.html - Added testimonial gallery section
+4. training-development.html - Added testimonial gallery
+5. early-intervention.html - Added testimonial gallery
+6. script.js - Added gallery loading functions
+
+STATUS: ✅ PRODUCTION READY

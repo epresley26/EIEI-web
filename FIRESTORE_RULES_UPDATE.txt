@@ -1,0 +1,43 @@
+FIRESTORE RULES UPDATE - REQUIRED
+===================================
+
+❌ ISSUE: Missing permissions for program and testimonial galleries
+
+✅ SOLUTION: Update Firestore security rules
+
+STEPS TO FIX:
+=============
+
+1. Go to Firebase Console
+   URL: https://console.firebase.google.com/project/eiei-e1a76/firestore/rules
+
+2. Click "Edit rules" button
+
+3. Replace ALL content with the rules from:
+   /Users/nishant/Documents/GitHub/EIEI/firestore-rules.txt
+
+4. Click "Publish" button
+
+5. Confirm the update
+
+WHAT WAS ADDED:
+================
+
+New rule sections for:
+- programGalleries/{programId} - Read by all, Write by admins
+- testimonialGalleries/{galleryId} - Read by all, Write by admins
+
+WHAT THIS ALLOWS:
+==================
+
+✓ Anyone can VIEW program galleries
+✓ Admins can UPLOAD to program galleries
+✓ Anyone can VIEW testimonial galleries
+✓ Admins can UPLOAD to testimonial galleries
+
+After updating:
+- Program gallery sections will load on all program pages
+- Testimonial gallery sections will load on all pages
+- Admin panel uploads will work for both types
+
+STATUS: Ready to implement in Firebase Console

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAFEI - National Association for Early Intervention</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  
+  <!-- Firebase SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  
+  <style>
+    .nafei-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+    
+    .nafei-hero h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .nafei-hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: var(--brand-orange);
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+    }
+    
+    .cta-button:hover {
+      background: #ff7600;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+    }
+    
+    .mission-vision-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+      width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .mission-card, .vision-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-left: 4px solid var(--brand-blue);
+    }
+    
+    .vision-card {
+      border-left-color: var(--brand-orange);
+    }
+    
+    .mission-card h3, .vision-card h3 {
+      color: var(--brand-blue);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .vision-card h3 {
+      color: var(--brand-orange);
+    }
+    
+    .core-values {
+      background: #f9fafb;
+      padding: 4rem 2rem;
+      margin-bottom: 4rem;
+    }
+    
+    .core-values h2 {
+      text-align: center;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 3rem;
+    }
+    
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      width: 85%;
+      margin: 0 auto;
+    }
+    
+    .value-item {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.3s ease;
+    }
+    
+    .value-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    
+    .value-letter {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--brand-blue);
+      margin-bottom: 0.5rem;
+    }
+    
+    .value-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    
+    .value-desc {
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 4rem;
+      width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .program-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    
+    .program-box h4 {
+      color: var(--brand-blue);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    
+    .program-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--text-muted);
+    }
+    
+    .program-box li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .program-box li:last-child {
+      border-bottom: none;
+    }
+    
+    .conference-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
+    
+    .conference-section h2 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 3rem;
+    }
+    
+    .conference-dates {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 85%;
+      margin: 0 auto 3rem;
+    }
+    
+    .date-item {
+      background: rgba(255,255,255,0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .date-item h4 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    
+    .date-item p {
+      margin: 0.5rem 0;
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+      .nafei-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .mission-vision-grid {
+        grid-template-columns: 1fr;
+        width: 90%;
+      }
+      
+      .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+        width: 90%;
+      }
+      
+      .programs-grid {
+        grid-template-columns: 1fr;
+        width: 90%;
+      }
+      
+      .conference-dates {
+        grid-template-columns: 1fr;
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER CONTAINER -->
+  <div id="header-container"></div>
+
+  <!-- NAFEI HERO SECTION -->
+  <section class="nafei-hero">
+    <h1>National Association for Early Intervention (NAFEI)</h1>
+    <p>Empower and Inspire: Learning Without Limits</p>
+    <p style="font-size: 1.1rem; margin-top: 1.5rem;">Every Child Deserves a Strong Start. Let's Build It Together.</p>
+    <a href="https://earlyinterventioncommunity.mn.co/share/BIG_I9CWFS_fNOUP?utm_source=manual" class="cta-button" target="_blank">Join Our Community</a>
+  </section>
+
+  <!-- WHO ARE WE SECTION -->
+  <section class="section" style="max-width: none !important; padding: 4rem 0;">
+    <div style="width: 85%; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 4rem;">
+        <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Who Are We?</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; max-width: 800px; margin: 0 auto;">The National Association for Early Intervention (NAFEI) is a purpose-driven community of educators, specialists, families, and advocates dedicated to one mission: giving children with diverse abilities the very best start in life.</p>
+      </div>
+
+      <!-- MISSION & VISION -->
+      <div class="mission-vision-grid">
+        <div class="mission-card">
+          <h3>Our Mission</h3>
+          <p>To uplift educators, families, and professionals with transformative tools, knowledge, and a shared vision for inclusive early childhood success.</p>
+        </div>
+        <div class="vision-card">
+          <h3>Our Vision</h3>
+          <p>A world where no child is left behind—where inclusivity is the norm, and children of all abilities are surrounded by understanding, opportunity, and support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE VALUES SECTION -->
+  <section class="core-values">
+    <h2>Our Core Values</h2>
+    <p style="text-align: center; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">We live by our name: NAFEI represents our commitment to creating inclusive, equitable, and inspiring early intervention services.</p>
+    
+    <div class="values-grid">
+      <div class="value-item">
+        <div class="value-letter">N</div>
+        <div class="value-title">Nurturing</div>
+        <div class="value-desc">We create compassionate, responsive environments where children thrive and feel supported at every stage of their development.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-letter" style="color: var(--brand-orange);">A</div>
+        <div class="value-title">Accessibility</div>
+        <div class="value-desc">We eliminate barriers so every child can access the care and support they need, regardless of background or circumstances.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-letter" style="color: #10b981;">E</div>
+        <div class="value-title">Equity</div>
+        <div class="value-desc">We commit to justice and fairness in every aspect of early intervention, ensuring all children have equal opportunities.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-letter" style="color: #f59e0b;">I</div>
+        <div class="value-title">Inspiration</div>
+        <div class="value-desc">We fuel hope, action, and innovation to empower families and professionals to create meaningful change.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE DO SECTION -->
+  <section class="section" style="max-width: none !important; padding: 4rem 0;">
+    <div style="width: 85%; margin: 0 auto;">
+      <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 1rem;">What We Do</h2>
+      <p style="text-align: center; color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; max-width: 800px; margin: 0 auto 3rem;">NAFEI brings people, resources, and purpose together to reimagine early childhood intervention through cutting-edge programs, family support, and systemic change.</p>
+      
+      <div class="programs-grid">
+        <div class="program-box">
+          <h4>🎓 National Training & Certification</h4>
+          <ul>
+            <li>Early Intervention Specialist Certification</li>
+            <li>Advocacy in Special Education</li>
+            <li>Professional Development Courses</li>
+            <li>Child Growth & Behavior Training</li>
+          </ul>
+        </div>
+        <div class="program-box">
+          <h4>🤝 Connection & Community</h4>
+          <ul>
+            <li>Professional Development Networks</li>
+            <li>Peer Support Forums</li>
+            <li>Exclusive Webinars & Workshops</li>
+            <li>Research-Backed Practices</li>
+          </ul>
+        </div>
+        <div class="program-box">
+          <h4>✊ Policy & Advocacy</h4>
+          <ul>
+            <li>Equitable Funding Initiatives</li>
+            <li>Inclusive Practices Advocacy</li>
+            <li>Systemic Reform Leadership</li>
+            <li>Capitol Engagement</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS & SERVICES SECTION -->
+  <section class="section" style="max-width: none !important; background: #f9fafb; padding: 4rem 0;">
+    <div style="width: 85%; margin: 0 auto;">
+      <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 3rem;">Our Programs & Services</h2>
+      
+      <div class="programs-grid">
+        <div class="program-box">
+          <h4>🎯 Targeted Support</h4>
+          <ul>
+            <li>Developmental Screening Toolkits</li>
+            <li>Language & Literacy Access</li>
+            <li>Inclusive Classroom Training</li>
+            <li>Parent Empowerment Series</li>
+            <li>Communication Device Training</li>
+          </ul>
+        </div>
+        <div class="program-box">
+          <h4>💡 Innovation & Equity</h4>
+          <ul>
+            <li>Assistive Tech Training</li>
+            <li>Social-Emotional Skill Groups</li>
+            <li>Cultural Competency Workshops</li>
+            <li>Multilingual Resources</li>
+            <li>Technology Grants</li>
+          </ul>
+        </div>
+        <div class="program-box">
+          <h4>🚀 Going Further</h4>
+          <ul>
+            <li>Behavior Coaching & PBIS Training</li>
+            <li>Kindergarten Transition Support</li>
+            <li>Innovation Challenge Fund</li>
+            <li>Specialized Playgroups</li>
+            <li>Educator Scholarships</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAINING & CERTIFICATION SECTION -->
+  <section class="section" style="max-width: none !important; padding: 4rem 0;">
+    <div style="width: 85%; margin: 0 auto;">
+      <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 2rem;">Training & Certification</h2>
+      <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;">Advance your career. Expand your impact. Knowledge unlocks doors—and changes lives.</p>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+        <div>
+          <h3 style="color: var(--brand-blue); margin-bottom: 1.5rem; font-size: 1.3rem;">For Professionals</h3>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">Early Intervention Specialist Certification</li>
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">Advocacy in Special Education</li>
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">Child Growth & Development</li>
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">Behavior & Inclusion Strategies</li>
+            <li style="padding: 0.7rem 0;">Continuing Education Credits Available</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color: var(--brand-blue); margin-bottom: 1.5rem; font-size: 1.3rem;">For Families & Caregivers</h3>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">Milestone Trackers & Developmental Guides</li>
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">Support Groups & Family Coaching</li>
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">Culturally Responsive Resources</li>
+            <li style="padding: 0.7rem 0; border-bottom: 1px solid #e5e7eb;">IEP/IFSP Navigation Workshops</li>
+            <li style="padding: 0.7rem 0;">Advocacy Training & Support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN THE NETWORK SECTION -->
+  <section class="section" style="max-width: none !important; background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%); padding: 4rem 0;">
+    <div style="width: 85%; margin: 0 auto;">
+      <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 3rem;">Join the NAFEI Network</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 3rem;">
+        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+          <h3 style="color: var(--brand-blue); margin-bottom: 1.5rem; font-size: 1.2rem;">📚 Access Exclusive Resources</h3>
+          <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-muted);">
+            <li style="padding: 0.5rem 0;">Toolkits & Research Materials</li>
+            <li style="padding: 0.5rem 0;">Webinars & Live Workshops</li>
+            <li style="padding: 0.5rem 0;">Community Forums</li>
+            <li style="padding: 0.5rem 0;">Training Opportunities</li>
+          </ul>
+        </div>
+        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+          <h3 style="color: var(--brand-orange); margin-bottom: 1.5rem; font-size: 1.2rem;">🌟 Grow Your Impact</h3>
+          <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-muted);">
+            <li style="padding: 0.5rem 0;">Professional Development</li>
+            <li style="padding: 0.5rem 0;">Networking Events</li>
+            <li style="padding: 0.5rem 0;">Early Event Invitations</li>
+            <li style="padding: 0.5rem 0;">Conference Access</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div style="text-align: center;">
+        <a href="https://earlyinterventioncommunity.mn.co/share/BIG_I9CWFS_fNOUP?utm_source=manual" class="cta-button" target="_blank">Join Now & Transform Your Practice</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GET INVOLVED SECTION -->
+  <section class="section" style="max-width: none !important; padding: 4rem 0;">
+    <div style="width: 85%; margin: 0 auto;">
+      <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 1rem;">Get Involved</h2>
+      <p style="text-align: center; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem;">Your voice, your energy, and your support help us go further. Choose your way to make an impact:</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+          <h3 style="color: var(--brand-blue); margin-bottom: 1rem;">Become a Member</h3>
+          <p style="color: var(--text-muted); line-height: 1.6;">Access exclusive benefits, community resources, and professional growth opportunities.</p>
+        </div>
+        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
+          <h3 style="color: var(--brand-blue); margin-bottom: 1rem;">Volunteer</h3>
+          <p style="color: var(--text-muted); line-height: 1.6;">Offer your time, expertise, and passion to directly support children and families in need.</p>
+        </div>
+        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">💝</div>
+          <h3 style="color: var(--brand-blue); margin-bottom: 1rem;">Donate</h3>
+          <p style="color: var(--text-muted); line-height: 1.6;">Every dollar helps provide resources, training, and support to children with diverse abilities.</p>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 3rem;">
+        <a href="https://earlyinterventioncommunity.mn.co/share/BIG_I9CWFS_fNOUP?utm_source=manual" class="cta-button" target="_blank">Get Started Today</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFERENCE SECTION -->
+  <section class="conference-section">
+    <h2>Learning Without Limits Conference 2025</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 3rem;">Join us for 2 powerful dates to empower and inspire educators, families, and professionals.</p>
+    
+    <div class="conference-dates">
+      <div class="date-item">
+        <h4>🗓️ October 13, 2025</h4>
+        <p><strong>8:00 AM – 4:00 PM</strong></p>
+        <p>Subaru Park – Legends Lounge, Primepoint Club</p>
+        <p>1 Stadium Dr, Chester, PA 19013</p>
+        <p style="font-size: 0.9rem; margin-top: 1rem;">Parking: Lot D & F</p>
+      </div>
+      <div class="date-item">
+        <h4>🗓️ October 18, 2025</h4>
+        <p><strong>9:00 AM – 3:00 PM</strong></p>
+        <p>Community College of Philadelphia – Northeast Campus</p>
+        <p>12901 Townsend Road, Philadelphia, PA 19154</p>
+      </div>
+    </div>
+    
+    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; backdrop-filter: blur(10px);">
+      <p style="margin: 0.5rem 0;"><strong>Registration Fee:</strong> $35</p>
+      <p style="margin: 0.5rem 0;"><strong>Contact:</strong> info@nafei.org</p>
+    </div>
+    
+    <a href="https://buy.stripe.com/14k4hn3qz8lv2fS5kk" class="cta-button" target="_blank" style="background: white; color: #667eea;">Register Now</a>
+  </section>
+
+  <!-- FOOTER CONTAINER -->
+  <div id="footer-container"></div>
+
+  <script src="components/header.js"></script>
+  <script src="components/footer.js"></script>
+  <script src="components/loader.js"></script>
+  <script src="script.js"></script>
+  <script src="components/firebase-init.js"></script>
+  <script src="components/chat-widget.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', loadComponents);
+  </script>
+</body>
+</html>

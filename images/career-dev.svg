@@ -1,0 +1,31 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#f0f4ff" rx="20"/>
+  
+  <!-- Gradient def -->
+  <defs>
+    <linearGradient id="careerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Briefcase -->
+  <g transform="translate(50, 40)">
+    <rect x="5" y="25" width="90" height="70" rx="5" fill="url(#careerGrad)" stroke="none"/>
+    <path d="M 30 25 L 30 10 Q 30 5 35 5 L 65 5 Q 70 5 70 10 L 70 25" fill="url(#careerGrad)" stroke="none"/>
+    <rect x="30" y="10" width="40" height="15" rx="3" fill="#667eea"/>
+  </g>
+  
+  <!-- Person icon -->
+  <g transform="translate(60, 90)" fill="#667eea">
+    <circle cx="0" cy="0" r="8"/>
+    <path d="M -10 10 Q -10 5 -5 5 L 5 5 Q 10 5 10 10 L 8 18 Q 8 20 6 20 L -6 20 Q -8 20 -8 18 Z"/>
+  </g>
+  
+  <!-- Plus sign (growth) -->
+  <g transform="translate(130, 120)" stroke="#ff8c00" stroke-width="4" stroke-linecap="round">
+    <line x1="0" y1="-8" x2="0" y2="8"/>
+    <line x1="-8" y1="0" x2="8" y2="0"/>
+  </g>
+</svg>

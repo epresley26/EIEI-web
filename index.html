@@ -144,6 +144,16 @@
   </div>
 </section>
 
+<!-- TESTIMONIAL GALLERY SECTION -->
+<section class="section testimonial-gallery-section" style="max-width: none !important; background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); padding: 4rem 0;">
+  <div style="width: 85%; margin: 0 auto;">
+    <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 2rem; text-align: center;">Moments of Impact</h2>
+    <div id="testimonialGalleryContainer" class="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem;">
+      <!-- Testimonial gallery images loaded here -->
+    </div>
+  </div>
+</section>
+
   <!-- GALLERY SECTION -->
 <section class="section gallery-section" style="max-width: none !important;">
   <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Image Gallery</h2>
@@ -323,7 +333,15 @@
   document.addEventListener('DOMContentLoaded', loadComponents);
 
   // Load gallery images from Firestore with local fallback
+  let galleryLoadingTimeout = null;
+  let galleryCache = null;
+  let galleryFullyLoaded = false;
+  
   function loadGalleryImages() {
+    // Debounce gallery loading - prevents reload spam
+    if (galleryLoadingTimeout) return;
+    galleryLoadingTimeout = setTimeout(() => { galleryLoadingTimeout = null; }, 3000);
+    
     const galleryContainer = document.getElementById('galleryContainer');
     const localGalleryImages = [
       'images/training-gallery-1.jpg',
@@ -334,6 +352,19 @@
     
     console.log('loadGalleryImages called. Firebase DB available:', !!window.firebaseDB);
     
+    // Try to load from cache first
+    const cachedData = localStorage.getItem('galleryCache');
+    if (cachedData) {
+      try {
+        galleryCache = JSON.parse(cachedData);
+        console.log('Using cached gallery data:', galleryCache.length, 'images');
+        displayGalleryImages(galleryCache);
+        return;
+      } catch (e) {
+        console.warn('Cache parse failed, fetching from Firestore');
+      }
+    }
+    
     // Load images from Firestore gallery collection
     if (window.firebaseDB) {
       window.firebaseDB.collection('gallery').get()
@@ -341,7 +372,6 @@
           console.log('Firestore query returned', snapshot.size, 'images');
           if (snapshot.size > 0) {
             console.log('Displaying images from Firestore');
-            galleryContainer.innerHTML = '';
             
             // Sort by uploadedAt in memory instead of using orderBy (which requires composite index)
             const docs = snapshot.docs.sort((a, b) => {
@@ -353,22 +383,23 @@
             // Limit to latest 12 images
             const latestDocs = docs.slice(0, 12);
             
-            latestDocs.forEach(doc => {
+            // Cache the gallery data (expires after 5 minutes)
+            galleryCache = latestDocs.map(doc => {
               const data = doc.data();
-              // Use imageUrl field (ImgBB URLs)
               let imageUrl = data.imageUrl;
-              
-              if (!imageUrl) {
-                imageUrl = 'images/training-gallery-1.jpg';
+              if (!imageUrl) imageUrl = 'images/training-gallery-1.jpg';
+              if (imageUrl.includes('imgbb.com')) {
+                imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/320x320');
               }
-              console.log('Adding image:', data.fileName, 'URL:', imageUrl.substring(0, 50) + '...');
-              const div = document.createElement('div');
-              div.className = 'gallery-item';
-              div.onclick = function() { openFullscreen(this); };
-              div.innerHTML = `<img src="${imageUrl}" alt="${data.fileName}" loading="lazy" onerror="this.src='images/training-gallery-1.jpg'">`;
-              galleryContainer.appendChild(div);
+              return { id: doc.id, fileName: data.fileName, imageUrl };
             });
-            console.log(`Successfully loaded ${latestDocs.length} images from Firestore (latest 12 of ${snapshot.size})`);
+            
+            // Cache for 5 minutes
+            localStorage.setItem('galleryCache', JSON.stringify(galleryCache));
+            setTimeout(() => localStorage.removeItem('galleryCache'), 5 * 60 * 1000);
+            
+            displayGalleryImages(galleryCache);
+            console.log(`Successfully loaded ${galleryCache.length} images from Firestore`);
           } else {
             console.log('No images in Firestore, loading local images');
             loadLocalGallery();
@@ -384,16 +415,68 @@
       loadLocalGallery();
     }
     
+    function displayGalleryImages(images) {
+      const galleryContainer = document.getElementById('galleryContainer');
+      galleryContainer.innerHTML = '';
+      
+      // Load only first 6 images immediately
+      const initialImages = images.slice(0, 6);
+      const remainingImages = images.slice(6);
+      
+      initialImages.forEach((item, index) => {
+        setTimeout(() => {
+          addGalleryImage(galleryContainer, item);
+        }, index * 40);
+      });
+      
+      // Load remaining images with lazy loading using Intersection Observer
+      if (remainingImages.length > 0) {
+        setTimeout(() => {
+          const loadMoreObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting && !galleryFullyLoaded) {
+                console.log('Gallery visible, loading remaining images');
+                remainingImages.forEach((item, idx) => {
+                  setTimeout(() => {
+                    addGalleryImage(galleryContainer, item);
+                  }, idx * 40);
+                });
+                galleryFullyLoaded = true;
+                loadMoreObserver.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: '100px' });
+          
+          loadMoreObserver.observe(galleryContainer);
+        }, 100);
+      } else {
+        galleryFullyLoaded = true;
+      }
+    }
+    
+    function addGalleryImage(container, item) {
+      const div = document.createElement('div');
+      div.className = 'gallery-item';
+      div.style.willChange = 'transform'; // Optimize repaints
+      div.onclick = function() { openFullscreen(this); };
+      div.innerHTML = `<img src="${item.imageUrl}" alt="${item.fileName}" loading="lazy" onerror="this.src='images/training-gallery-1.jpg'">`;
+      container.appendChild(div);
+    }
+    
     function loadLocalGallery() {
       console.log('Loading local gallery images');
       galleryContainer.innerHTML = '';
-      localGalleryImages.forEach(imagePath => {
-        const div = document.createElement('div');
-        div.className = 'gallery-item';
-        div.onclick = function() { openFullscreen(this); };
-        div.innerHTML = `<img src="${imagePath}" alt="Gallery image" loading="lazy">`;
-        galleryContainer.appendChild(div);
+      localGalleryImages.forEach((imagePath, index) => {
+        setTimeout(() => {
+          const div = document.createElement('div');
+          div.className = 'gallery-item';
+          div.style.willChange = 'transform';
+          div.onclick = function() { openFullscreen(this); };
+          div.innerHTML = `<img src="${imagePath}" alt="Gallery image" loading="lazy">`;
+          galleryContainer.appendChild(div);
+        }, index * 40);
       });
+      galleryFullyLoaded = true;
     }
   }
 
@@ -520,17 +603,17 @@
   }
 </script>
 
-  <script src="script.js"></script>
   <script src="components/firebase-init.js"></script>
   <script src="components/chat-widget.js"></script>
   <script>
     // Load gallery images when page loads - with delay to ensure Firebase is initialized
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(loadGalleryImages, 500);
+    // Defer to after full page load to avoid blocking initial render
+    window.addEventListener('load', () => {
+      setTimeout(loadGalleryImages, 1000);
     });
     
-    // Reload gallery every 30 seconds to check for new images
-    setInterval(loadGalleryImages, 30000);
+    // Reload gallery every 5 minutes (was 60 seconds) to further reduce lag
+    setInterval(loadGalleryImages, 5 * 60 * 1000);
   </script>
 </body>
 </html>

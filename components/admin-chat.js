@@ -463,7 +463,7 @@ class AdminChatInterface {
       const isUnread = this.unreadConversations.has(conv.id);
       
       item.className = `conversation-item ${isActive ? 'active' : ''} ${isClosed ? 'closed' : ''} ${isUnread ? 'unread' : ''}`;
-      
+      item.setAttribute('data-conversation-id', conv.id);
       const lastMessageTime = conv.updatedAt ? new Date(conv.updatedAt.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
       
       item.innerHTML = `
@@ -476,14 +476,14 @@ class AdminChatInterface {
         <div class="conversation-time">${lastMessageTime}</div>
       `;
       
-      item.addEventListener('click', () => this.selectConversation(conv.id));
+      item.addEventListener('click', (event) => this.selectConversation(conv.id, event));
       container.appendChild(item);
     });
     
     this.updateNotificationBadge();
   }
 
-  async selectConversation(conversationId) {
+  async selectConversation(conversationId, event) {
     this.selectedConversationId = conversationId;
     this.unreadConversations.delete(conversationId);
     
@@ -509,8 +509,19 @@ class AdminChatInterface {
     document.querySelectorAll('.conversation-item').forEach(item => {
       item.classList.remove('active');
     });
-    event.currentTarget.classList.add('active');
-    event.currentTarget.classList.remove('unread');
+    
+    // Only update active/unread states if event is available
+    if (event && event.currentTarget) {
+      event.currentTarget.classList.add('active');
+      event.currentTarget.classList.remove('unread');
+    } else {
+      // Find and update the conversation item by ID
+      const conversationItem = document.querySelector(`[data-conversation-id="${conversationId}"]`);
+      if (conversationItem) {
+        conversationItem.classList.add('active');
+        conversationItem.classList.remove('unread');
+      }
+    }
 
     // Load messages
     this.loadConversationMessages(conversationId);
