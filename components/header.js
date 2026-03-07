@@ -24,7 +24,6 @@ function createHeader() {
         </nav>
 
         <div class="nav-actions">
-          <button onclick="openTourRequestModal()" class="nav-btn nav-tour">Schedule a Tour</button>
         </div>
       </div>
     </header>

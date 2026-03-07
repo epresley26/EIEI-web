@@ -12,8 +12,9 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="components/firebase-init.js"></script>
   <script src="components/admin-chat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://accounts.google.com/gsi/client"></script>
+  <!-- Google Sign-In removed -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     html, body {
@@ -30,7 +31,7 @@
 
     .admin-container {
       min-height: 100vh;
-      background: #ffffff;
+      background: #faf8fc;
       padding-top: 0;
       display: flex;
       height: 100vh;
@@ -50,88 +51,97 @@
 
     .admin-sidebar {
       width: 280px;
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      background: linear-gradient(180deg, #1f1330 0%, #24163a 100%);
       border-radius: 0;
-      padding: 2rem 1.5rem;
+      padding: 1rem 0.8rem;
       height: 100vh;
       position: fixed;
       left: 0;
       top: 0;
-      box-shadow: 8px 0 32px rgba(0,0,0,0.25), 4px 0 16px rgba(0,0,0,0.15);
+      box-shadow: none;
+      border-right: none;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
+      overflow: hidden;
       z-index: 100;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .sidebar-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      overflow: hidden;
     }
 
     .sidebar-search {
       display: flex;
       align-items: center;
-      background: rgba(123, 104, 238, 0.1);
-      border: 1px solid #7b68ee;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03);
       border-radius: 8px;
-      padding: 0.5rem 1rem;
-      margin-bottom: 1.5rem;
+      padding: 0.45rem 0.75rem;
+      margin-bottom: 1rem;
       gap: 0.5rem;
     }
 
     .sidebar-search input {
       background: none;
       border: none;
-      color: #e0e0e0;
+      color: #2c1f4c;
       flex: 1;
       font-size: 0.9rem;
       outline: none;
     }
 
     .sidebar-search input::placeholder {
-      color: #a0a0a0;
+      color: #b0a5c0;
     }
 
     .sidebar-create-btn {
-      background: linear-gradient(135deg, #7b68ee 0%, #9a7fd0 100%);
+      background: #7c3aed;
       color: white;
       border: none;
-      padding: 1rem;
-      border-radius: 8px;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
       cursor: pointer;
       font-weight: 600;
-      margin-bottom: 2rem;
-      display: flex;
+      margin: 0.5rem 0 1rem 0;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      transition: all 0.3s ease;
+      transition: background 0.15s ease, transform 0.12s ease;
+      font-size: 0.9rem;
     }
 
     .sidebar-create-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(123, 104, 238, 0.4);
+      background: #6b28df;
+      transform: translateY(-1px);
     }
 
-    .sidebar-calendar {
-      background: rgba(42, 65, 117, 0.15);
-      border: 1px solid rgba(252, 163, 17, 0.3);
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
+    .sidebar-create-btn {
+      background: linear-gradient(90deg,#8b5cf6,#6d28d9);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      margin: 0.5rem 0 1rem 0;
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 1rem;
-      color: #ffffff;
-      font-size: 0.9rem;
-      font-weight: 600;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: filter 0.15s ease, transform 0.12s ease;
+      font-size: 0.92rem;
     }
 
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 0.5rem;
+    .sidebar-create-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
     }
+    
 
     .calendar-day {
       width: 100%;
@@ -141,120 +151,317 @@
       justify-content: center;
       border-radius: 4px;
       font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.6);
+      color: #8b7ba8;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       border: 1px solid transparent;
+      background: #f0ece8;
     }
 
     .calendar-day:hover {
-      background: rgba(252, 163, 17, 0.2);
+      background: rgba(124, 58, 237, 0.2);
     }
 
     .calendar-day.active {
-      background: #fca311;
-      color: #2a4175;
+      background: #7c3aed;
+      color: #ffffff;
       font-weight: 600;
     }
 
     .sidebar-section {
-      margin-bottom: 2rem;
+      margin-bottom: 1.25rem;
+      padding: 0 0.5rem;
     }
 
     .sidebar-section-title {
-      color: #ffffff;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
+      color: #85729a;
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      opacity: 0.9;
     }
 
     .sidebar-section-list {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.25rem;
     }
 
     .sidebar-item {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 6px;
+      padding: 0.6rem 0.6rem;
+      padding-left: 0.6rem;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      color: rgba(255, 255, 255, 0.8);
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
+      color: rgba(255,255,255,0.92);
+      transition: background 0.12s ease, color 0.12s ease;
+      font-size: 0.95rem;
+      position: relative;
     }
 
     .sidebar-item:hover {
-      background: rgba(252, 163, 17, 0.2);
+      background: rgba(255,255,255,0.03);
       color: #ffffff;
-      border-color: #fca311;
     }
 
     .sidebar-item.active {
-      background: rgba(252, 163, 17, 0.3);
+      background: rgba(124,58,237,0.06);
       color: #ffffff;
-      border-color: #fca311;
-      font-weight: 600;
-      box-shadow: inset 0 0 0 2px #fca311;
+      font-weight: 700;
+    }
+
+    .sidebar-item.active::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 10px;
+      bottom: 10px;
+      width: 4px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #7c3aed, #a855f7);
     }
 
     .sidebar-item-color {
       width: 12px;
       height: 12px;
       border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.2) inset;
+    }
+
+    /* Make inline svgs readable on dark sidebar */
+    .admin-sidebar svg path,
+    .admin-sidebar svg circle,
+    .admin-sidebar svg rect {
+      fill: rgba(255,255,255,0.92) !important;
+      stroke: rgba(255,255,255,0.06) !important;
+    }
+
+    /* Profile avatar contrast */
+    #profileSection > div:last-child {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    #profileInitial {
+      display: inline-block;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    #profileAvatarImage,
+    #profileDropdownAvatarImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: none;
+    }
+
+    #profileButton.has-image {
+      background: transparent !important;
+      overflow: visible;
+    }
+
+    .pd-avatar.has-image {
+      background: transparent;
+      overflow: hidden;
     }
 
     .sidebar-nav {
       display: none;
     }
 
+    /* Header / main layout */
+    .admin-header {
+      position: fixed;
+      top: 0;
+      left: 280px;
+      right: 0;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      /* equal padding on all sides */
+      padding: 16px;
+      box-sizing: border-box;
+      z-index: 1200;
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      backdrop-filter: blur(6px);
+    }
+
+    #profileSection {
+      position: relative;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-header h1 { margin: 0; padding: 0; }
+
+    /* Profile dropdown */
+    .profile-dropdown {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: #ffffff;
+      color: #222;
+      min-width: 320px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(16,24,40,0.18);
+      padding: 0;
+      z-index: 1300;
+      overflow: hidden;
+      display: none;
+    }
+
+    .profile-dropdown.show { display: block; }
+
+    .pd-header {
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .pd-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .pd-avatar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 14px;
+      height: 14px;
+      background: #10b981;
+      border: 3px solid white;
+      border-radius: 50%;
+    }
+
+    .pd-info h4 {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .pd-info p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    .pd-menu {
+      padding: 8px 0;
+    }
+
+    .pd-item {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 12px 16px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: #222;
+      transition: background 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .pd-item:hover { background: #f3f0ff; }
+
+    .pd-item-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .pd-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .pd-shortcut {
+      font-size: 0.8rem;
+      color: #b3b8c4;
+      white-space: nowrap;
+    }
+
+    .pd-divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 8px 0;
+    }
+
     .admin-main {
       flex: 1;
-      margin-left: 280px;
-      padding: 15px;
+      /* position the main area to the right of the fixed sidebar and below the fixed header */
+      position: fixed;
+      top: 72px;
+      left: 280px;
+      right: 0;
+      height: calc(100vh - 72px);
+      box-sizing: border-box;
+      padding: 2rem;
       overflow-y: auto;
-      background: transparent;
+      background: linear-gradient(135deg, #e8dff5 0%, #ede9fe 100%);
       display: flex;
       flex-direction: column;
     }
 
     .admin-main > * {
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-      width: 75%;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem 2.5rem;
-      background: #ffffff;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      flex-shrink: 0;
-    }
-
-    .admin-header h1 {
-      color: #2a4175;
-      font-size: 1.8rem;
+      background: transparent;
+      border-radius: 25px;
+      box-shadow: none;
+      width: 100%;
       margin: 0;
-    }
-
-    #adminPanel {
-      flex: 1;
-      overflow-y: auto;
       padding: 0;
     }
+
+    /* Ensure inner tab panels fill the available main area (prevent centered gap) */
+    .admin-main .tab-content > div {
+      width: 100% !important;
+      box-sizing: border-box;
+    }
+
+    /* duplicate sidebar block removed */
 
     .tab-content {
       display: none;
@@ -280,18 +487,26 @@
     }
 
     .upload-section {
-      background: #ffffff;
+      background: white;
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       margin-bottom: 2rem;
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid #e8dff5;
     }
 
     .upload-section h2 {
-      color: #2a4175;
+      color: #2c1f4c;
       margin-top: 0;
       font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .upload-section h3 {
+      color: #2c1f4c;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 2rem;
     }
 
     .form-group {
@@ -303,16 +518,17 @@
 
     .form-group label {
       font-weight: 600;
-      color: #111;
+      color: #2c1f4c;
+      font-size: 0.95rem;
     }
 
     .form-group input,
     .form-group textarea,
     .form-group select {
       padding: 0.8rem;
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid #ddd4e8;
       border-radius: 8px;
-      background: #ffffff;
+      background: #faf8fc;
       color: #111;
       font-family: inherit;
       font-size: 1rem;
@@ -322,9 +538,9 @@
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
-      border-color: #2a4175;
+      border-color: #7c3aed;
       outline: none;
-      box-shadow: 0 0 0 3px rgba(42, 65, 117, 0.1);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
     }
 
     .form-group textarea {
@@ -339,51 +555,71 @@
     }
 
     .programs-list > div {
-      background: #ffffff;
-      border: 1px solid rgba(0,0,0,0.08);
+      background: white;
+      border: 1px solid #e8dff5;
       border-radius: 12px;
       padding: 1.5rem;
       transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .programs-list > div:hover {
-      border-color: #fca311;
-      box-shadow: 0 2px 12px rgba(252, 163, 17, 0.15);
+      border-color: #7c3aed;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
+      transform: translateY(-2px);
     }
 
     .data-table {
-      color: #111;
+      color: #2c1f4c;
+      width: 100%;
+      border-collapse: collapse;
     }
 
     .data-table thead {
-      background: #f5f5f7;
+      background: #f0e6ff;
     }
 
     .data-table th {
-      color: #2a4175;
+      color: #2c1f4c;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #e8dff5;
     }
 
     .data-table td {
       color: #555;
-      border-color: rgba(0,0,0,0.08);
+      border-color: #e8dff5;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e8dff5;
     }
-      
+
+    .data-table tr:hover {
+      background: #f9f7ff;
+    }
 
     .program-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: white;
+      border: 1px solid #e8dff5;
       border-radius: 12px;
       padding: 1.5rem;
       position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .program-card:hover {
+      border-color: #7c3aed;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
     }
 
     .program-card h3 {
-      color: var(--brand-blue);
+      color: #7c3aed;
       margin-bottom: 0.5rem;
+      font-size: 1.1rem;
     }
 
     .program-card p {
-      color: var(--text-muted);
+      color: #7d6b8f;
       font-size: 0.9rem;
       margin-bottom: 1rem;
     }
@@ -417,18 +653,56 @@
       transform: translateY(-2px);
     }
 
-    .delete-btn {
-      background: #f44336;
+    .primary-btn {
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+    }
+
+    .edit-btn {
+      background: #3b82f6;
       color: white;
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .edit-btn:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    .delete-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
     }
 
     .delete-btn:hover {
-      background: #d32f2f;
+      background: #dc2626;
       transform: translateY(-2px);
     }
 
@@ -443,17 +717,18 @@
       position: relative;
       width: 200px;
       height: 200px;
-      border-radius: 8px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      background: #f5f5f5;
-      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: #f5f3ff;
+      border: 1px solid #e8dff5;
       transition: all 0.3s ease;
     }
 
     .preview-item:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.2);
       transform: translateY(-4px);
+      border-color: #7c3aed;
     }
 
     .preview-item img {
@@ -490,23 +765,23 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.4);
       z-index: 1000;
       align-items: center;
       justify-content: center;
     }
 
     .modal-content {
-      background: #ffffff;
-      border: 1px solid rgba(0,0,0,0.08);
+      background: #faf8fc;
+      border: 1px solid #ddd4e8;
       border-radius: 12px;
       max-width: 500px;
       width: 90%;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 40px rgba(124, 58, 237, 0.15);
     }
 
     .modal-header {
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      border-bottom: 1px solid #e8dff5;
       padding: 1.5rem;
       display: flex;
       justify-content: space-between;
@@ -514,65 +789,38 @@
     }
 
     .modal-header h2 {
-      color: #2a4175;
+      color: #2c1f4c;
       margin: 0;
       font-size: 1.3rem;
+      font-weight: 600;
     }
 
     .close-btn {
       background: none;
       border: none;
-      color: #555;
+      color: #7d6b8f;
       font-size: 1.5rem;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
     .close-btn:hover {
-      color: #111;
+      color: #2c1f4c;
     }
 
     .modal.active {
       display: flex;
     }
 
-    .modal-content {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 500px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-header h2 {
-      color: var(--brand-blue);
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-muted);
-    }
-
     .success-message {
-      background: rgba(76, 175, 80, 0.15);
-      border-left: 4px solid #4caf50;
-      color: #4caf50;
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      color: #047857;
       padding: 1rem;
       border-radius: 6px;
       margin-bottom: 1rem;
       display: none;
+      font-weight: 500;
     }
 
     .success-message.show {
@@ -581,15 +829,20 @@
     }
 
     .error-message {
-      background: rgba(244, 67, 54, 0.15);
-      border-left: 4px solid #f44336;
-      color: #f44336;
+      background: #fee2e2;
+      border-left: 4px solid #ef4444;
+      color: #991b1b;
       padding: 1rem;
       border-radius: 6px;
       margin-bottom: 1rem;
       display: none;
+      font-weight: 500;
     }
 
+    .error-message.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
     .error-message.show {
       display: block;
       animation: slideDown 0.3s ease;
@@ -607,7 +860,7 @@
     }
 
     .primary-btn {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
       color: white;
       border: none;
       padding: 0.8rem 1.5rem;
@@ -620,13 +873,13 @@
 
     .primary-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(42, 65, 117, 0.3);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
     }
 
     .secondary-btn {
       background: #f5f5f7;
-      color: #2a4175;
-      border: 1px solid #2a4175;
+      color: #7c3aed;
+      border: 1px solid #7c3aed;
       padding: 0.8rem 1.5rem;
       border-radius: 8px;
       cursor: pointer;
@@ -636,7 +889,7 @@
     }
 
     .secondary-btn:hover {
-      background: #2a4175;
+      background: #7c3aed;
       color: white;
     }
       
@@ -735,13 +988,12 @@
         </div>
 
         <div class="sidebar-calendar">
-          <div class="calendar-header" id="todayDate">
-            <!-- Today's date will be populated here -->
-          </div>
           <div class="calendar-grid" id="miniCalendar">
             <!-- Calendar will be populated here -->
           </div>
         </div>
+
+        <div class="sidebar-body">
 
         <div class="sidebar-section">
           <div class="sidebar-section-title">
@@ -749,7 +1001,7 @@
           </div>
           <div class="sidebar-section-list">
             <div class="sidebar-item active" onclick="switchTab('home')">
-              <span class="sidebar-item-color" style="background: #2a4175;"></span>
+              <span class="sidebar-item-color" style="background: #7c3aed;"></span>
               Home
             </div>
           </div>
@@ -831,8 +1083,10 @@
           </div>
         </div>
 
+        </div> <!-- .sidebar-body -->
+
         <div style="margin-top: auto;">
-          <button onclick="logout()" style="width: 100%; padding: 0.75rem; background: #fca311; border: none; color: #ffffff; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(252, 163, 17, 0.3);">
+          <button onclick="logout()" style="width: 100%; padding: 0.75rem; background: #ef4444; border: none; color: #ffffff; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);">
             🚪 Logout
           </button>
         </div>
@@ -844,70 +1098,241 @@
           <div class="admin-header">
             <h1>Admin Portal</h1>
             <div id="profileSection" style="display: flex; align-items: center; gap: 1.5rem;">
-              <!-- Notification Icon -->
-              <div style="position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;" title="Notifications">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#2a4175"/>
-                </svg>
-                <span id="notificationBadge" style="position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #ff5252; border: 2px solid white; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 700;">0</span>
-              </div>
-              <!-- Google Drive Auth Button -->
-              <button id="topGoogleAuthBtn" style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #4285F4 0%, #1F60D2 100%); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease;" title="Authenticate Google Drive for image management">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 6h12v12H6z" fill="white" opacity="0.2"/>
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-                </svg>
-                <span id="topGoogleAuthText">Enable Editing</span>
-              </button>
+              <!-- Notification moved to dropdown -->
               <div style="width: 1px; height: 40px; background: rgba(0,0,0,0.1);"></div>
               <div style="text-align: right;">
-                <div id="userEmail" style="color: #2a4175; font-weight: 600; font-size: 0.9rem;">Loading...</div>
-                <div style="color: #555; font-size: 0.8rem;">Administrator</div>
+                <div id="userEmail" style="color: #7c3aed; font-weight: 600; font-size: 0.9rem;">Loading...</div>
+                <div id="userRole" style="color: #555; font-size: 0.8rem;">Administrator</div>
               </div>
-              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1rem;">
+              <div id="profileButton" style="width: 40px; height: 40px; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; position: relative;">
+                <img id="profileAvatarImage" alt="Profile" referrerpolicy="no-referrer" onerror="this.style.display='none'; document.getElementById('profileButton').classList.remove('has-image'); document.getElementById('profileInitial').style.display='inline-block';">
                 <span id="profileInitial">A</span>
+                <div id="profileDropdown" class="profile-dropdown">
+                  <!-- Profile Header -->
+                  <div class="pd-header">
+                    <div class="pd-avatar">
+                      <img id="profileDropdownAvatarImage" alt="Profile" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.parentElement.classList.remove('has-image'); document.getElementById('profileAvatarInitial').style.display='inline-block';">
+                      <span id="profileAvatarInitial">A</span>
+                    </div>
+                    <div class="pd-info">
+                      <h4 id="profileName">Administrator</h4>
+                      <p id="profileEmail">user@example.com</p>
+                    </div>
+                  </div>
+
+                  <!-- Menu Items -->
+                  <div class="pd-menu">
+                    <button type="button" class="pd-item">
+                      <span class="pd-item-label">
+                        <span class="pd-icon">🔔</span>
+                        <span>Notifications</span>
+                      </span>
+                      <span id="notificationBadge" style="background: #ff5252; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">0</span>
+                    </button>
+                    <div class="pd-divider"></div>
+                    <button type="button" class="pd-item" onclick="openEditProfile()">
+                      <span class="pd-item-label">
+                        <span class="pd-icon">✏️</span>
+                        <span>Edit Profile</span>
+                      </span>
+                      <span class="pd-shortcut">⌘E</span>
+                    </button>
+                    <div class="pd-divider"></div>
+                    <button type="button" class="pd-item" onclick="logout()">
+                      <span class="pd-item-label">
+                        <span class="pd-icon">🚪</span>
+                        <span>Sign Out</span>
+                      </span>
+                      <span class="pd-shortcut">⌘F</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
         <!-- HOME TAB -->
         <div id="home" class="tab-content active">
-          <div class="upload-section">
-            <h2>Dashboard</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-              <!-- Stats Cards -->
-              <div style="background: linear-gradient(135deg, #2a4175, #3d5a99); border-radius: 12px; padding: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(42, 65, 117, 0.2);">
-                <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Total Programs</div>
-                <div style="font-size: 2rem; font-weight: 700;" id="dashboardProgramsCount">0</div>
+          <div style="background: linear-gradient(135deg, #f0e6ff 0%, #f5f3ff 100%); padding: 2rem; min-height: 100vh; overflow-y: auto;">
+            
+            <!-- HEADER WITH GREETING -->
+            <div style="margin-bottom: 2.5rem;">
+              <h2 style="margin: 0 0 0.5rem 0; color: #2c1f4c; font-size: 1.8rem; font-weight: 600;">Good morning! 👋</h2>
+              <p style="margin: 0; color: #7d6b8f; font-size: 0.95rem;">Let's check your site performance today.</p>
+            </div>
+
+            <!-- TOP STATS ROW -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+              <!-- Stat Card 1 -->
+              <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #7c3aed;">
+                <div style="color: #7d6b8f; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Total Programs</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 2.2rem; font-weight: 700; color: #2c1f4c;" id="dashboardProgramsCount">0</div>
+                  <div style="color: #7c3aed; font-size: 2rem;">📚</div>
+                </div>
               </div>
-              <div style="background: linear-gradient(135deg, #fca311, #ffb844); border-radius: 12px; padding: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(252, 163, 17, 0.2);">
-                <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Blog Posts</div>
-                <div style="font-size: 2rem; font-weight: 700;" id="dashboardBlogCount">0</div>
+
+              <!-- Stat Card 2 -->
+              <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #f59e0b;">
+                <div style="color: #7d6b8f; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Pending Tours</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 2.2rem; font-weight: 700; color: #2c1f4c;" id="dashboardPendingTours">0</div>
+                  <div style="color: #f59e0b; font-size: 2rem;">🎯</div>
+                </div>
               </div>
-              <div style="background: linear-gradient(135deg, #4caf50, #66bb6a); border-radius: 12px; padding: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);">
-                <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Tour Requests</div>
-                <div style="font-size: 2rem; font-weight: 700;" id="dashboardToursCount">0</div>
-              </div>
-              <div style="background: linear-gradient(135deg, #26a69a, #4db8a8); border-radius: 12px; padding: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(38, 166, 154, 0.2);">
-                <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Job Applications</div>
-                <div style="font-size: 2rem; font-weight: 700;" id="dashboardApplicationsCount">0</div>
+
+              <!-- Stat Card 3 -->
+              <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #10b981;">
+                <div style="color: #7d6b8f; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Unread Messages</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 2.2rem; font-weight: 700; color: #2c1f4c;" id="dashboardUnreadMessages">0</div>
+                  <div style="color: #10b981; font-size: 2rem;">💬</div>
+                </div>
               </div>
             </div>
 
-            <!-- Recent Activity -->
-            <div style="margin-top: 2rem;">
-              <h3 style="margin-bottom: 1.5rem; color: #2a4175;">Recent Tour Requests</h3>
-              <div id="dashboardRecentTours" style="max-height: 400px; overflow-y: auto;">
-                <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Loading recent requests...</p>
+            <!-- CONTENT GRID - 2 COLUMNS -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+              
+              <!-- LEFT COLUMN -->
+              <div>
+                <!-- All Metrics Block -->
+                <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+                  <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">All Metrics</h3>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <!-- Mini Card -->
+                    <div style="text-align: center; padding: 1rem; background: #f3f0ff; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #7c3aed;" id="dashboardBlogCount">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Blog Posts</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #fef3c7; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #d97706;" id="dashboardToursCount">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Total Tours</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #dbeafe; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #0284c7;" id="dashboardApplicationsCount">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Applications</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #e0e7ff; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #4f46e5;" id="dashboardMarketplaceItems">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Marketplace</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tour Status Block -->
+                <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                  <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Tour Request Status</h3>
+                  <div id="dashboardTourBreakdown">
+                    <p style="color: #7d6b8f; text-align: center; padding: 1rem;">Loading...</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RIGHT COLUMN -->
+              <div>
+                <!-- Engagement Block -->
+                <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+                  <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Engagement Overview</h3>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div style="text-align: center; padding: 1rem; background: #f3f0ff; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #7c3aed;" id="dashboardNewsletterSubscribers">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Newsletter</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #fce7f3; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #db2777;" id="dashboardTotalContacts">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Contacts</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #dcfce7; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #16a34a;" id="dashboardTestimonials">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Testimonials</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #cffafe; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #0891b2;" id="dashboardActiveChats">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Chats</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Content Library Block -->
+                <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                  <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Content Library</h3>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div style="text-align: center; padding: 1rem; background: #fef2f2; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #dc2626;" id="dashboardGalleryImages">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Images</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f0fdf4; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #22c55e;" id="dashboardTeamMembers">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Team</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #fdf2f8; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #ec4899;" id="dashboardOpenJobs">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">Jobs</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f5f3ff; border-radius: 10px;">
+                      <div style="font-size: 1.8rem; font-weight: 700; color: #a855f7;" id="dashboardNewApplications">0</div>
+                      <div style="font-size: 0.8rem; color: #7d6b8f; margin-top: 0.5rem;">New Apps</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div style="margin-top: 2rem;">
-              <h3 style="margin-bottom: 1.5rem; color: #2a4175;">Recent Applications</h3>
-              <div id="dashboardRecentApplications" style="max-height: 400px; overflow-y: auto;">
-                <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Loading recent applications...</p>
+            <!-- CHARTS SECTION -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+              <!-- Application Distribution Chart -->
+              <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Application Distribution 📊</h3>
+                <div style="position: relative; height: 300px;">
+                  <canvas id="appDistributionChart"></canvas>
+                </div>
+              </div>
+
+              <!-- Newsletter Growth Chart -->
+              <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Newsletter Growth 📈</h3>
+                <div style="position: relative; height: 300px;">
+                  <canvas id="newsletterGrowthChart"></canvas>
+                </div>
               </div>
             </div>
+
+            <!-- RECENT ACTIVITY SECTION -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+              <!-- Recent Tour Requests -->
+              <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Recent Tours 📋</h3>
+                <div id="dashboardRecentTours" style="max-height: 350px; overflow-y: auto;">
+                  <p style="color: #7d6b8f; text-align: center; padding: 1rem;">Loading...</p>
+                </div>
+              </div>
+
+              <!-- Recent Applications -->
+              <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Recent Applications 📝</h3>
+                <div id="dashboardRecentApplications" style="max-height: 350px; overflow-y: auto;">
+                  <p style="color: #7d6b8f; text-align: center; padding: 1rem;">Loading...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Application Insights -->
+            <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 2.5rem;">
+              <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Top Job Positions 💼</h3>
+              <div id="dashboardApplicationInsights">
+                <p style="color: #7d6b8f; text-align: center; padding: 1rem;">Loading...</p>
+              </div>
+            </div>
+
+            <!-- Most Popular Program -->
+            <div style="background: #faf8fc; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 2.5rem;">
+              <h3 style="margin: 0 0 1.5rem 0; color: #2c1f4c; font-size: 1rem; font-weight: 600;">Most Popular Program ⭐</h3>
+              <div id="dashboardMostPopularProgram">
+                <p style="color: #7d6b8f; text-align: center; padding: 1rem;">Loading...</p>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -1182,6 +1607,12 @@
 
             <form id="roleForm" style="margin-bottom:1.5rem;">
               <div class="form-group">
+                <label for="roleTeamSearch">Search Team Member By Name *</label>
+                <input type="text" id="roleTeamSearch" placeholder="Type a team member name" autocomplete="off">
+                <div id="roleTeamSearchResults" style="margin-top:8px; border:1px solid var(--border); border-radius:10px; max-height:180px; overflow:auto; display:none; background:#fff;"></div>
+                <div id="roleTeamSelected" style="display:none; margin-top:8px; padding:10px; border:1px solid var(--border); border-radius:10px; background:#faf7ff;"></div>
+              </div>
+              <div class="form-group">
                 <label for="roleEmail">Admin Email *</label>
                 <input type="email" id="roleEmail" required placeholder="admin@example.com">
               </div>
@@ -1211,7 +1642,7 @@
               </div>
               <div class="button-group">
                 <button type="submit" class="primary-btn">Save Role</button>
-                <button type="button" class="secondary-btn" onclick="document.getElementById('roleForm').reset()">Clear</button>
+                <button type="button" class="secondary-btn" onclick="resetRoleForm()">Clear</button>
               </div>
             </form>
 
@@ -1236,6 +1667,44 @@
 
       <div id="loginPrompt" style="display: flex; height: 100vh; width: 100%; margin: 0; padding: 0; background: #0d3d56; display: none;">
       </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div id="editProfileModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Profile</h2>
+        <button class="close-btn" onclick="closeEditProfileModal()">×</button>
+      </div>
+
+      <!-- Profile Edit Form -->
+      <form id="editProfileForm" onsubmit="saveEditProfile(event)" style="padding: 2rem;">
+        <div class="form-group">
+          <label for="editProfileName">Full Name *</label>
+          <input type="text" id="editProfileName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editProfileEmail">Email Address *</label>
+          <input type="email" id="editProfileEmail" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editProfileRole">Job Role *</label>
+          <input type="text" id="editProfileRole" placeholder="e.g., Executive Director, Program Manager" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editProfilePicture">Profile Picture URL</label>
+          <input type="url" id="editProfilePicture" placeholder="https://example.com/photo.jpg">
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="primary-btn">Save Changes</button>
+          <button type="button" class="secondary-btn" onclick="closeEditProfileModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ADD/EDIT PROGRAM MODAL -->
   <div id="programModal" class="modal">
@@ -1539,103 +2008,184 @@
   </div>
 
   <script>
-    const CLIENT_ID = '35109919396-prtb83ncq3t7j7h4c3qg1bs6q9e8hgkl.apps.googleusercontent.com';
-    const GALLERY_FOLDER_ID = '1bjif6GZ65LnWx_X3vOnWR-xGeQHmC0N_';
-    // Set these to your Team and Blog Google Drive folder IDs
-    const TEAM_FOLDER_ID = '1XsnayWvcFrZjhmZmVCRPV2usCjlVw_8T';
-    const BLOG_FOLDER_ID = '1xnauQHF2y2ybTizLQsFqdF4IqBalEzho';
-    const MARKETPLACE_FOLDER_ID = '1bjif6GZ65LnWx_X3vOnWR-xGeQHmC0N_'; // Use same as gallery or create a new one
-    const SCOPES = 'https://www.googleapis.com/auth/drive.file';
-
-    let tokenClient;
-    let accessToken = null;
+    // Google Drive / Enable Editing removed: related UI and OAuth flows deleted.
     let programs = [];
     let editingProgramId = null;
 
-    // Initialize Google Sign-In
-    function initializeGoogleSignIn() {
-      google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: handleCredentialResponse
-      });
-
-      google.accounts.id.renderButton(
-        document.getElementById('googleSignInButton'),
-        { theme: 'outline', size: 'large' }
-      );
-
-      checkAuthStatus();
-    }
-
     let currentUserEmail = null;
-    let galleryLoadedOnce = false; // Track if gallery has been loaded on first tab access
-    function handleCredentialResponse(response) {
-      try {
-        const payload = parseJwt(response && response.credential);
-        currentUserEmail = (payload && payload.email) ? String(payload.email).toLowerCase() : null;
-        if (currentUserEmail) localStorage.setItem('adminUserEmail', currentUserEmail);
-      } catch (e) {
-        console.warn('Unable to parse Google ID token for email:', e);
-      }
-      requestAccessToken();
-    }
-
-    function requestAccessToken() {
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: (tokenResponse) => {
-          accessToken = tokenResponse.access_token;
-          showAdminPanel();
-          setupRolesAndPermissions();
-          loadPrograms();
-        }
-      });
-
-      tokenClient.requestAccessToken({ prompt: 'consent' });
-    }
-
-    function checkAuthStatus() {
-      const savedToken = localStorage.getItem('adminAuthToken');
-      if (savedToken) {
-        accessToken = savedToken;
-        currentUserEmail = localStorage.getItem('adminUserEmail') || null;
-        showAdminPanel();
-        setupRolesAndPermissions();
-        loadPrograms();
-      }
-    }
+    let galleryLoadedOnce = false;
 
     function showAdminPanel() {
       document.getElementById('loginPrompt').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
       document.getElementById('adminSidebar').style.display = 'flex';
-      
-      // Update profile section
+
       if (currentUserEmail) {
-        document.getElementById('userEmail').textContent = currentUserEmail;
-        const initial = currentUserEmail.charAt(0).toUpperCase();
-        document.getElementById('profileInitial').textContent = initial;
+        // Render instantly from cache, then refresh from Firebase in background
+        renderCachedProfileInstantly();
+        loadProfileOnLogin();
       }
 
-      // Set Programs as active by default
       const programsItem = document.querySelector('.sidebar-item[onclick="switchTab(\'programs\')"]');
-      if (programsItem) {
-        programsItem.classList.add('active');
+      if (programsItem) programsItem.classList.add('active');
+    }
+
+    function renderCachedProfileInstantly() {
+      const cachedEmail = (currentUserEmail || localStorage.getItem('adminUserEmail') || '').trim().toLowerCase();
+      const cachedName = (localStorage.getItem('adminUserName') || '').trim();
+      const cachedRole = (localStorage.getItem('adminUserRole') || 'Admin Level').trim();
+      const cachedPicture = (localStorage.getItem('adminUserPicture') || '').trim();
+
+      const fullName = cachedName || cachedEmail;
+      const firstName = fullName.includes(' ') ? fullName.split(' ')[0] : (fullName.includes('@') ? fullName.split('@')[0] : fullName || 'Admin');
+      const initial = firstName.charAt(0).toUpperCase();
+
+      const userEmailEl = document.getElementById('userEmail');
+      const userRoleEl = document.getElementById('userRole');
+      const profileInitialEl = document.getElementById('profileInitial');
+      const profileNameEl = document.getElementById('profileName');
+      const profileEmailEl = document.getElementById('profileEmail');
+      const profileAvatarEl = document.getElementById('profileAvatarInitial');
+
+      if (userEmailEl) userEmailEl.textContent = firstName || 'Admin';
+      if (userRoleEl) userRoleEl.textContent = cachedRole || 'Admin Level';
+      if (profileInitialEl) profileInitialEl.textContent = initial;
+      if (profileNameEl) profileNameEl.textContent = fullName || 'Admin';
+      if (profileEmailEl) profileEmailEl.textContent = cachedEmail || 'admin@example.com';
+      if (profileAvatarEl) profileAvatarEl.textContent = initial;
+      updateProfileAvatarUI(cachedPicture, initial);
+    }
+
+    async function loadProfileOnLogin() {
+      try {
+        const doc = await window.firebaseDB.collection('roles').doc(currentUserEmail).get();
+        let fullName = currentUserEmail;
+        let displayName = currentUserEmail;
+        let displayEmail = currentUserEmail;
+        let role = 'Admin Level';
+        let profilePicture = localStorage.getItem('adminUserPicture') || '';
+
+        if (doc.exists) {
+          const data = doc.data();
+          if (data.name && data.name.trim()) {
+            fullName = data.name.trim();
+          }
+          if (data.email && data.email.trim()) {
+            displayEmail = data.email.trim();
+          }
+          const accessRole = String(data.role || '').trim();
+          role = String(data.jobRole || '').trim() || (accessRole.toLowerCase() === 'superadmin' ? 'Admin Level' : (accessRole || 'Admin Level'));
+          profilePicture = String(data.profilePicture || '').trim() || profilePicture;
+        }
+
+        // Prefer role/picture from team collection when available
+        const teamProfile = await getTeamProfileData(currentUserEmail, fullName);
+        if (teamProfile.role) role = teamProfile.role;
+        if (teamProfile.picture) profilePicture = teamProfile.picture;
+
+        // Display first name from stored full name (or email prefix as fallback)
+        if (fullName.includes(' ')) {
+          displayName = fullName.split(' ')[0];
+        } else if (fullName.includes('@')) {
+          displayName = fullName.split('@')[0];
+        } else {
+          displayName = fullName;
+        }
+
+        // Update header with first name or email, and role
+        const userEmailEl = document.getElementById('userEmail');
+        const userRoleEl = document.getElementById('userRole');
+        const profileInitialEl = document.getElementById('profileInitial');
+        const profileNameEl = document.getElementById('profileName');
+        const profileEmailEl = document.getElementById('profileEmail');
+        const profileAvatarEl = document.getElementById('profileAvatarInitial');
+
+        if (userEmailEl) userEmailEl.textContent = displayName;
+        if (userRoleEl) userRoleEl.textContent = role;
+        if (profileInitialEl) profileInitialEl.textContent = displayName.charAt(0).toUpperCase();
+        if (profileNameEl) profileNameEl.textContent = fullName;
+        if (profileEmailEl) profileEmailEl.textContent = displayEmail;
+        if (profileAvatarEl) profileAvatarEl.textContent = displayName.charAt(0).toUpperCase();
+        updateProfileAvatarUI(profilePicture, displayName.charAt(0).toUpperCase());
+
+        // Update localStorage
+        localStorage.setItem('adminUserEmail', displayEmail);
+        localStorage.setItem('adminUserName', fullName);
+        localStorage.setItem('adminUserRole', role);
+        localStorage.setItem('adminUserPicture', profilePicture);
+      } catch (error) {
+        console.warn('Failed to load profile on login:', error);
+        // Fallback to email display
+        const userEmailEl = document.getElementById('userEmail');
+        const userRoleEl = document.getElementById('userRole');
+        const profileInitialEl = document.getElementById('profileInitial');
+        const profileNameEl = document.getElementById('profileName');
+        const profileEmailEl = document.getElementById('profileEmail');
+        const profileAvatarEl = document.getElementById('profileAvatarInitial');
+        if (userEmailEl) userEmailEl.textContent = currentUserEmail;
+        if (userRoleEl) userRoleEl.textContent = localStorage.getItem('adminUserRole') || 'Admin Level';
+        if (profileInitialEl) profileInitialEl.textContent = currentUserEmail.charAt(0).toUpperCase();
+        if (profileNameEl) profileNameEl.textContent = localStorage.getItem('adminUserName') || currentUserEmail;
+        if (profileEmailEl) profileEmailEl.textContent = currentUserEmail;
+        if (profileAvatarEl) profileAvatarEl.textContent = currentUserEmail.charAt(0).toUpperCase();
+        updateProfileAvatarUI(localStorage.getItem('adminUserPicture') || '', currentUserEmail.charAt(0).toUpperCase());
+      }
+    }
+
+    async function getTeamProfileData(email, fullName = '') {
+      try {
+        const teamRef = window.firebaseDB.collection('team');
+        const readPayload = (data = {}) => ({
+          role: String(data.role || '').trim(),
+          picture: String(data.profilePicture || data.imageUrl || '').trim()
+        });
+
+        // 1) If team doc id is email (fast path)
+        if (email) {
+          const byId = await teamRef.doc(email).get();
+          if (byId.exists) {
+            const payload = readPayload(byId.data() || {});
+            if (payload.role || payload.picture) return payload;
+          }
+        }
+
+        // 2) Match team.email
+        if (email) {
+          const byEmail = await teamRef.where('email', '==', email).limit(1).get();
+          if (!byEmail.empty) {
+            const payload = readPayload(byEmail.docs[0].data() || {});
+            if (payload.role || payload.picture) return payload;
+          }
+        }
+
+        // 3) Match full name if present
+        if (fullName) {
+          const byName = await teamRef.where('name', '==', fullName).limit(1).get();
+          if (!byName.empty) {
+            const payload = readPayload(byName.docs[0].data() || {});
+            if (payload.role || payload.picture) return payload;
+          }
+        }
+      } catch (teamErr) {
+        console.warn('Failed reading team profile data:', teamErr);
       }
 
-      // Load gallery images once on first Gallery tab access
-      localStorage.setItem('adminAuthToken', accessToken);
+      return { role: '', picture: '' };
+    }
+
+    async function getTeamJobRole(email, fullName = '') {
+      const data = await getTeamProfileData(email, fullName);
+      return data.role || '';
+    }
+
+    async function getTeamProfilePicture(email, fullName = '') {
+      const data = await getTeamProfileData(email, fullName);
+      return data.picture || '';
     }
 
     function logout() {
-      accessToken = null;
-      localStorage.removeItem('adminAuthToken');
       localStorage.removeItem('adminUserEmail');
-      firebase.auth().signOut().finally(() => {
-        // Redirect to homepage
-        window.location.href = '/';
-      });
+      firebase.auth().signOut().finally(() => { window.location.href = '/'; });
     }
 
     function parseJwt(token) {
@@ -1725,12 +2275,128 @@
 
     // Roles tab logic (superadmin only)
     let roles = [];
+    let roleTeamDirectory = [];
+    let selectedRoleTeamMember = null;
+
+    async function loadRoleTeamDirectory() {
+      try {
+        const snap = await window.firebaseDB.collection('team').get();
+        roleTeamDirectory = snap.docs.map(d => {
+          const data = d.data() || {};
+          return {
+            id: d.id,
+            name: String(data.name || '').trim(),
+            role: String(data.role || '').trim(),
+            email: String(data.email || '').trim().toLowerCase(),
+            picture: String(data.profilePicture || data.imageUrl || '').trim()
+          };
+        }).filter(m => m.name);
+      } catch (e) {
+        console.warn('Team directory load failed:', e);
+        roleTeamDirectory = [];
+      }
+    }
+
+    function renderRoleTeamSearchResults(matches) {
+      const resultsEl = document.getElementById('roleTeamSearchResults');
+      if (!resultsEl) return;
+      if (!matches.length) {
+        resultsEl.style.display = 'block';
+        resultsEl.innerHTML = '<div style="padding:10px; color:var(--text-muted);">No matching team member found.</div>';
+        return;
+      }
+      resultsEl.style.display = 'block';
+      resultsEl.innerHTML = matches.map(m => `
+        <button type="button" onclick="selectRoleTeamMember('${m.id}')" style="width:100%; text-align:left; border:none; background:transparent; padding:10px; cursor:pointer; border-bottom:1px solid var(--border);">
+          <div style="font-weight:600; color:#2f1f4d;">${escapeHtml(m.name)}</div>
+          <div style="font-size:0.85rem; color:#7d6b8f;">${escapeHtml(m.role || 'No role in team')} ${m.email ? '• ' + escapeHtml(m.email) : ''}</div>
+        </button>
+      `).join('');
+    }
+
+    function selectRoleTeamMember(memberId) {
+      const member = roleTeamDirectory.find(m => m.id === memberId);
+      if (!member) return;
+      selectedRoleTeamMember = member;
+
+      const selectedEl = document.getElementById('roleTeamSelected');
+      const resultsEl = document.getElementById('roleTeamSearchResults');
+      const searchInput = document.getElementById('roleTeamSearch');
+      const emailInput = document.getElementById('roleEmail');
+
+      if (searchInput) searchInput.value = member.name;
+      if (emailInput && member.email && !emailInput.value.trim()) {
+        emailInput.value = member.email;
+      }
+
+      if (selectedEl) {
+        selectedEl.style.display = 'block';
+        selectedEl.innerHTML = `
+          <div style="display:flex; gap:10px; align-items:center;">
+            ${member.picture ? `<img src="${escapeHtml(member.picture)}" alt="${escapeHtml(member.name)}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'">` : '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">' + escapeHtml(member.name.charAt(0).toUpperCase()) + '</div>'}
+            <div>
+              <div style="font-weight:700; color:#2f1f4d;">${escapeHtml(member.name)}</div>
+              <div style="font-size:0.85rem; color:#7d6b8f;">${escapeHtml(member.role || 'No team role set')}</div>
+            </div>
+          </div>
+        `;
+      }
+      if (resultsEl) {
+        resultsEl.style.display = 'none';
+        resultsEl.innerHTML = '';
+      }
+    }
+
+    function resetRoleForm() {
+      const form = document.getElementById('roleForm');
+      if (form) form.reset();
+      selectedRoleTeamMember = null;
+      const selectedEl = document.getElementById('roleTeamSelected');
+      const resultsEl = document.getElementById('roleTeamSearchResults');
+      if (selectedEl) {
+        selectedEl.style.display = 'none';
+        selectedEl.innerHTML = '';
+      }
+      if (resultsEl) {
+        resultsEl.style.display = 'none';
+        resultsEl.innerHTML = '';
+      }
+    }
+
+    document.getElementById('roleTeamSearch')?.addEventListener('input', async (e) => {
+      const q = String((e.target && e.target.value) || '').trim().toLowerCase();
+      if (!q) {
+        const resultsEl = document.getElementById('roleTeamSearchResults');
+        if (resultsEl) {
+          resultsEl.style.display = 'none';
+          resultsEl.innerHTML = '';
+        }
+        selectedRoleTeamMember = null;
+        const selectedEl = document.getElementById('roleTeamSelected');
+        if (selectedEl) {
+          selectedEl.style.display = 'none';
+          selectedEl.innerHTML = '';
+        }
+        return;
+      }
+      if (!roleTeamDirectory.length) {
+        await loadRoleTeamDirectory();
+      }
+      const matches = roleTeamDirectory
+        .filter(m => m.name.toLowerCase().includes(q))
+        .slice(0, 8);
+      renderRoleTeamSearchResults(matches);
+    });
+
     async function loadRoles() {
       const tbody = document.getElementById('rolesBody');
       if (!tbody) return;
       tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);padding:12px;">Loading roles...</td></tr>';
       try {
-        const snap = await window.firebaseDB.collection('roles').get();
+        const [snap] = await Promise.all([
+          window.firebaseDB.collection('roles').get(),
+          loadRoleTeamDirectory()
+        ]);
         roles = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderRoles();
       } catch (e) {
@@ -1773,15 +2439,23 @@
       const checks = Array.from(document.querySelectorAll('.permCheck'));
       const tabs = {};
       checks.forEach(c => { tabs[c.value] = c.checked; });
+      if (!selectedRoleTeamMember) return showRolesError('Please select a team member from search.');
       if (!email) return showRolesError('Email is required');
+      if (!tempPassword || tempPassword.length < 6) return showRolesError('Please set a temporary password (minimum 6 characters).');
       try {
-        // Optionally create the auth user with a temporary password
-        if (tempPassword && tempPassword.length >= 6) {
-          await createAuthUser(email, tempPassword);
-        }
-        await window.firebaseDB.collection('roles').doc(email).set({ role: roleType, tabs }, { merge: true });
-        showRolesSuccess('Role saved');
-        document.getElementById('roleForm').reset();
+        // Create auth user with the provided temporary password
+        const authResult = await createAuthUser(email, tempPassword);
+        await window.firebaseDB.collection('roles').doc(email).set({
+          role: roleType,
+          tabs,
+          email,
+          name: selectedRoleTeamMember.name,
+          jobRole: selectedRoleTeamMember.role || 'Admin Level',
+          profilePicture: selectedRoleTeamMember.picture || '',
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+        showRolesSuccess(authResult === 'exists' ? 'Role saved. Login already exists for this email (password unchanged).' : 'Role saved and admin login created.');
+        resetRoleForm();
         loadRoles();
         // Re-evaluate permissions if editing current user
         if (currentUserEmail === email) {
@@ -1804,16 +2478,24 @@
 
     async function createAuthUser(email, password) {
       // Create user via a secondary Firebase app instance so current session is not affected
+      const cfg = firebase.app().options || {};
+      const appName = `adminCreator-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const tempApp = firebase.initializeApp(cfg, appName);
       try {
-        const cfg = firebase.app().options || {};
-        const tempApp = firebase.initializeApp(cfg, 'adminCreator');
         const tempAuth = firebase.auth(tempApp);
         await tempAuth.createUserWithEmailAndPassword(email, password);
         await tempAuth.signOut();
-        if (typeof tempApp.delete === 'function') tempApp.delete();
+        return 'created';
       } catch (err) {
-        console.warn('Create auth user failed:', err);
-        // Continue; role will still be saved. Admin can self-register later if needed.
+        const code = String((err && err.code) || '');
+        if (code.includes('email-already-in-use')) {
+          return 'exists';
+        }
+        throw err;
+      } finally {
+        if (typeof tempApp.delete === 'function') {
+          try { await tempApp.delete(); } catch (_) {}
+        }
       }
     }
 
@@ -1875,21 +2557,154 @@
     // DASHBOARD
     async function loadDashboard() {
       try {
-        // Load programs count
-        const programsSnap = await window.firebaseDB.collection('programs').get();
-        document.getElementById('dashboardProgramsCount').textContent = programsSnap.size;
+        // Helper function to safely set element text
+        const setText = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = value;
+        };
 
-        // Load blog count
-        const blogSnap = await window.firebaseDB.collection('blog').get();
-        document.getElementById('dashboardBlogCount').textContent = blogSnap.size;
+        // Run all independent queries in PARALLEL for speed
+        const [programsSnap, blogSnap, toursSnap, appSnap, pendingTours, chatsSnap, 
+                newsletterSnap, contactsSnap, testimonialsSnap, chatActiveSnap, 
+                gallerySnap, teamSnap, jobsSnap, marketplaceSnap, newsletterDocsSnap] = await Promise.all([
+          window.firebaseDB.collection('programs').get(),
+          window.firebaseDB.collection('blog').get(),
+          window.firebaseDB.collection('tourRequests').get(),
+          window.firebaseDB.collection('applications').get(),
+          window.firebaseDB.collection('tourRequests').where('status', '==', 'Pending').get(),
+          window.firebaseDB.collection('chats').get(),
+          window.firebaseDB.collection('newsletter').get(),
+          window.firebaseDB.collection('contacts').get(),
+          window.firebaseDB.collection('testimonials').get(),
+          window.firebaseDB.collection('chats').where('status', '==', 'active').get(),
+          window.firebaseDB.collection('gallery').get(),
+          window.firebaseDB.collection('team').get(),
+          window.firebaseDB.collection('jobs').get(),
+          window.firebaseDB.collection('marketplace').get(),
+          window.firebaseDB.collection('newsletter').get()
+        ]);
 
-        // Load tour requests count
-        const toursSnap = await window.firebaseDB.collection('tourRequests').get();
-        document.getElementById('dashboardToursCount').textContent = toursSnap.size;
+        // Update Performance Metrics
+        setText('dashboardProgramsCount', programsSnap.size);
+        setText('dashboardBlogCount', blogSnap.size);
+        setText('dashboardToursCount', toursSnap.size);
+        setText('dashboardApplicationsCount', appSnap.size);
+        setText('dashboardPendingTours', pendingTours.size);
 
-        // Load applications count
-        const appSnap = await window.firebaseDB.collection('applications').get();
-        document.getElementById('dashboardApplicationsCount').textContent = appSnap.size;
+        // Count unread conversations in PARALLEL
+        const unreadConversations = chatsSnap.docs.map(chatDoc => 
+          chatDoc.ref.collection('messages')
+            .where('sender', '==', 'user')
+            .where('read', '==', false)
+            .get()
+        );
+        
+        const unreadResults = await Promise.all(unreadConversations);
+        const unreadConvCount = unreadResults.filter(snap => snap.size > 0).length;
+        setText('dashboardUnreadMessages', unreadConvCount);
+
+        // Update remaining metrics (already fetched in parallel above)
+        setText('dashboardMarketplaceItems', marketplaceSnap.size);
+        setText('dashboardNewsletterSubscribers', newsletterSnap.size);
+        setText('dashboardTotalContacts', contactsSnap.size);
+        setText('dashboardTestimonials', testimonialsSnap.size);
+        setText('dashboardActiveChats', chatsSnap.size);
+        setText('dashboardGalleryImages', gallerySnap.size);
+        setText('dashboardTeamMembers', teamSnap.size);
+        setText('dashboardOpenJobs', jobsSnap.size);
+
+        // Tour Request Breakdown by Status - count from already-fetched data
+        const pendingCount = pendingTours.size;
+        const contactedCount = toursSnap.docs.filter(doc => doc.data().status === 'Contacted').length;
+        const completedCount = toursSnap.docs.filter(doc => doc.data().status === 'Completed').length;
+        
+        const tourBreakdownContainer = document.getElementById('dashboardTourBreakdown');
+        if (tourBreakdownContainer) {
+          const total = toursSnap.size || 1;
+          const pendingPct = ((pendingCount / total) * 100).toFixed(0);
+          const contactedPct = ((contactedCount / total) * 100).toFixed(0);
+          const completedPct = ((completedCount / total) * 100).toFixed(0);
+          
+          tourBreakdownContainer.innerHTML = `
+            <div style="margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <span>Pending</span>
+                <span style="font-weight: 600;">${pendingCount} (${pendingPct}%)</span>
+              </div>
+              <div style="background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: #ff9800; height: 100%; width: ${pendingPct}%;"></div>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <span>Contacted</span>
+                <span style="font-weight: 600;">${contactedCount} (${contactedPct}%)</span>
+              </div>
+              <div style="background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: #2196F3; height: 100%; width: ${contactedPct}%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <span>Completed</span>
+                <span style="font-weight: 600;">${completedCount} (${completedPct}%)</span>
+              </div>
+              <div style="background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: #4caf50; height: 100%; width: ${completedPct}%;"></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // Application Insights - by Position
+        const appsByPosition = {};
+        appSnap.forEach(doc => {
+          const pos = doc.data().position || 'Unspecified';
+          appsByPosition[pos] = (appsByPosition[pos] || 0) + 1;
+        });
+
+        const appInsightsContainer = document.getElementById('dashboardApplicationInsights');
+        if (appInsightsContainer) {
+          const sortedPositions = Object.entries(appsByPosition)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+          
+          appInsightsContainer.innerHTML = sortedPositions.map(([pos, count]) => `
+            <div style="margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <span>${pos}</span>
+                <span style="font-weight: 600;">${count}</span>
+              </div>
+              <div style="background: #f0f0f0; height: 6px; border-radius: 3px; overflow: hidden;">
+                <div style="background: #ff6b6b; height: 100%; width: ${(count / (sortedPositions[0]?.[1] || 1)) * 100}%;"></div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Engagement Overview - Most Popular Program
+        const programStats = {};
+        toursSnap.forEach(doc => {
+          const data = doc.data();
+          const program = data.program || 'Not Specified';
+          programStats[program] = (programStats[program] || 0) + 1;
+        });
+
+        const mostPopularProgram = Object.entries(programStats)
+          .sort((a, b) => b[1] - a[1])[0];
+
+        if (document.getElementById('dashboardMostPopularProgram') && mostPopularProgram) {
+          document.getElementById('dashboardMostPopularProgram').innerHTML = `
+            <div style="text-align: center;">
+              <div style="font-size: 1.3rem; font-weight: 700; color: var(--brand-blue); margin-bottom: 0.5rem;">
+                ${mostPopularProgram[0]}
+              </div>
+              <div style="font-size: 0.9rem; color: #666;">
+                ${mostPopularProgram[1]} tour requests
+              </div>
+            </div>
+          `;
+        }
 
         // Load recent tour requests
         const recentTours = await window.firebaseDB.collection('tourRequests')
@@ -1898,21 +2713,23 @@
           .get();
 
         const toursContainer = document.getElementById('dashboardRecentTours');
-        if (recentTours.empty) {
-          toursContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No recent tour requests</p>';
-        } else {
-          toursContainer.innerHTML = recentTours.docs.map(doc => {
-            const data = doc.data();
-            const status = data.status || 'Pending';
-            const statusColor = status === 'Completed' ? '#4caf50' : status === 'Contacted' ? '#2196F3' : '#ff9800';
-            return `
-              <div style="background: #f5f5f5; border-left: 4px solid ${statusColor}; padding: 1rem; margin-bottom: 0.5rem; border-radius: 4px;">
-                <div style="font-weight: 600; margin-bottom: 0.25rem;">${data.parentName || 'N/A'}</div>
-                <div style="font-size: 0.85rem; color: #666; margin-bottom: 0.25rem;">${data.email || 'N/A'}</div>
-                <div style="font-size: 0.85rem; color: #666;">Status: <span style="color: ${statusColor}; font-weight: 600;">${status}</span></div>
-              </div>
-            `;
-          }).join('');
+        if (toursContainer) {
+          if (recentTours.empty) {
+            toursContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No recent tour requests</p>';
+          } else {
+            toursContainer.innerHTML = recentTours.docs.map(doc => {
+              const data = doc.data();
+              const status = data.status || 'Pending';
+              const statusColor = status === 'Completed' ? '#4caf50' : status === 'Contacted' ? '#2196F3' : '#ff9800';
+              return `
+                <div style="background: #f5f5f5; border-left: 4px solid ${statusColor}; padding: 1rem; margin-bottom: 0.5rem; border-radius: 4px;">
+                  <div style="font-weight: 600; margin-bottom: 0.25rem;">${data.parentName || 'N/A'}</div>
+                  <div style="font-size: 0.85rem; color: #666; margin-bottom: 0.25rem;">${data.email || 'N/A'}</div>
+                  <div style="font-size: 0.85rem; color: #666;">Status: <span style="color: ${statusColor}; font-weight: 600;">${status}</span></div>
+                </div>
+              `;
+            }).join('');
+          }
         }
 
         // Load recent applications
@@ -1922,26 +2739,164 @@
           .get();
 
         const appsContainer = document.getElementById('dashboardRecentApplications');
-        if (recentApps.empty) {
-          appsContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No recent applications</p>';
-        } else {
-          appsContainer.innerHTML = recentApps.docs.map(doc => {
-            const data = doc.data();
-            return `
-              <div style="background: #f5f5f5; border-left: 4px solid #ff9800; padding: 1rem; margin-bottom: 0.5rem; border-radius: 4px;">
-                <div style="font-weight: 600; margin-bottom: 0.25rem;">${data.firstName || 'N/A'} ${data.lastName || ''}</div>
-                <div style="font-size: 0.85rem; color: #666; margin-bottom: 0.25rem;">${data.email || 'N/A'}</div>
-                <div style="font-size: 0.85rem; color: #666;">${data.position || 'Position not specified'}</div>
-              </div>
-            `;
-          }).join('');
+        if (appsContainer) {
+          if (recentApps.empty) {
+            appsContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No recent applications</p>';
+          } else {
+            appsContainer.innerHTML = recentApps.docs.map(doc => {
+              const data = doc.data();
+              return `
+                <div style="background: #f5f5f5; border-left: 4px solid #ff9800; padding: 1rem; margin-bottom: 0.5rem; border-radius: 4px;">
+                  <div style="font-weight: 600; margin-bottom: 0.25rem;">${data.firstName || 'N/A'} ${data.lastName || ''}</div>
+                  <div style="font-size: 0.85rem; color: #666; margin-bottom: 0.25rem;">${data.email || 'N/A'}</div>
+                  <div style="font-size: 0.85rem; color: #666;">${data.position || 'Position not specified'}</div>
+                </div>
+              `;
+            }).join('');
+          }
         }
+
+        // CHARTS - Application Distribution by Position
+        const appsByPos = {};
+        appSnap.forEach(doc => {
+          const pos = doc.data().position || 'Unspecified';
+          appsByPos[pos] = (appsByPos[pos] || 0) + 1;
+        });
+
+        const appDistributionCtx = document.getElementById('appDistributionChart');
+        if (appDistributionCtx && Object.keys(appsByPos).length > 0) {
+          // Destroy existing chart if it exists and has destroy method
+          if (window.appDistributionChart && typeof window.appDistributionChart.destroy === 'function') {
+            window.appDistributionChart.destroy();
+          }
+          
+          const colors = ['#9c27b0', '#673ab7', '#5e35b1', '#512da8', '#4527a0'];
+          window.appDistributionChart = new Chart(appDistributionCtx, {
+            type: 'doughnut',
+            data: {
+              labels: Object.keys(appsByPos),
+              datasets: [{
+                data: Object.values(appsByPos),
+                backgroundColor: colors.slice(0, Object.keys(appsByPos).length),
+                borderColor: '#ffffff',
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: {
+                    font: { size: 12 },
+                    padding: 15,
+                    usePointStyle: true
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // CHARTS - Newsletter Growth Over Time
+        const newsletterDocs = await window.firebaseDB.collection('newsletter').get();
+        const subscribersByDate = {};
+        
+        newsletterDocs.forEach(doc => {
+          const createdAt = doc.data().createdAt || doc.data().subscribedAt;
+          if (createdAt) {
+            const date = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
+            const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            subscribersByDate[dateKey] = (subscribersByDate[dateKey] || 0) + 1;
+          }
+        });
+
+        // Sort dates and calculate cumulative growth
+        const sortedDates = Object.keys(subscribersByDate).sort();
+        let cumulativeCount = 0;
+        const cumulativeData = sortedDates.map(date => {
+          cumulativeCount += subscribersByDate[date];
+          return cumulativeCount;
+        });
+
+        const newsletterGrowthCtx = document.getElementById('newsletterGrowthChart');
+        if (newsletterGrowthCtx && sortedDates.length > 0) {
+          // Destroy existing chart if it exists and has destroy method
+          if (window.newsletterGrowthChart && typeof window.newsletterGrowthChart.destroy === 'function') {
+            window.newsletterGrowthChart.destroy();
+          }
+          
+          window.newsletterGrowthChart = new Chart(newsletterGrowthCtx, {
+            type: 'line',
+            data: {
+              labels: sortedDates,
+              datasets: [{
+                label: 'Total Subscribers',
+                data: cumulativeData,
+                borderColor: '#673ab7',
+                backgroundColor: 'rgba(103, 58, 183, 0.05)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: '#673ab7',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    font: { size: 12 },
+                    padding: 15,
+                    usePointStyle: true
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+              }
+            }
+          });
+        }
+
       } catch (e) {
         console.error('Error loading dashboard:', e);
-        document.getElementById('dashboardProgramsCount').textContent = '0';
-        document.getElementById('dashboardBlogCount').textContent = '0';
-        document.getElementById('dashboardToursCount').textContent = '0';
-        document.getElementById('dashboardApplicationsCount').textContent = '0';
+        console.error('Error code:', e.code);
+        console.error('Error message:', e.message);
+        
+        // Show error message in UI
+        if (e.code === 'permission-denied') {
+          const errorMsg = document.createElement('div');
+          errorMsg.style.cssText = 'background: #ffebee; border: 1px solid #ef5350; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #c62828;';
+          errorMsg.innerHTML = `
+            <strong>⚠️ Permission Denied</strong><br>
+            Dashboard stats require Firestore rules to be deployed.<br>
+            <a href="https://console.firebase.google.com/project/eiei-e1a76/firestore/rules" target="_blank" style="color: #1976d2; text-decoration: underline;">Deploy Firestore Rules</a>
+          `;
+          const uploadSection = document.querySelector('.upload-section');
+          if (uploadSection) uploadSection.insertBefore(errorMsg, uploadSection.firstChild);
+        }
+        
+        // Safely set error fallback values
+        const setText = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = value;
+        };
+        setText('dashboardProgramsCount', '0');
+        setText('dashboardBlogCount', '0');
+        setText('dashboardToursCount', '0');
+        setText('dashboardApplicationsCount', '0');
       }
     }
 
@@ -2516,119 +3471,13 @@
     // Gallery images now only refresh on: initial load, upload, delete
 
     // Helper: Upload a file to Google Drive and return file info
-    async function uploadToDrive(file, parentFolderId) {
-      // Use googleDriveAccessToken if available (for blog, team, marketplace, gallery)
-      // Otherwise use accessToken (fallback)
-      const token = googleDriveAccessToken || accessToken;
-      if (!token) throw new Error('No OAuth access token. Please authenticate with Google Drive first.');
-      if (!parentFolderId || parentFolderId.includes('GOES_HERE')) throw new Error('Set the Drive folder ID');
-      
-      const formData = new FormData();
-      const metadata = { name: file.name, mimeType: file.type, parents: [parentFolderId] };
-      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-      formData.append('file', file);
-      
-      const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-        method: 'POST',
-        headers: new Headers({ 'Authorization': 'Bearer ' + token }),
-        body: formData
-      });
-      if (!uploadRes.ok) {
-        const errorData = await uploadRes.json().catch(() => ({}));
-        console.error('Drive upload error:', errorData);
-        throw new Error('Drive upload failed: ' + (errorData.error?.message || uploadRes.statusText));
-      }
-      const uploaded = await uploadRes.json();
-      
-      // Get file info and make it publicly accessible
-      const infoRes = await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}?fields=id,name,webViewLink,webContentLink,thumbnailLink`, {
-        headers: new Headers({ 'Authorization': 'Bearer ' + token })
-      });
-      const info = await infoRes.json();
-      
-      // Make file publicly readable
-      try {
-        await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}/permissions`, {
-          method: 'POST',
-          headers: new Headers({
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          }),
-          body: JSON.stringify({ role: 'reader', type: 'anyone' })
-        });
-      } catch (err) {
-        console.warn('Failed to set public permissions:', err);
-      }
-      
-      return info; // { id, name, webViewLink, webContentLink, thumbnailLink }
+    async function uploadToDrive(/* file, parentFolderId */) {
+      throw new Error('Google Drive integration has been removed. Use Firebase storage or another upload flow.');
     }
 
     // Upload to Drive with progress callback
-    async function uploadToDriveWithProgress(file, parentFolderId, onProgress) {
-      const token = googleDriveAccessToken || accessToken;
-      if (!token) throw new Error('No OAuth access token. Please authenticate with Google Drive first.');
-      if (!parentFolderId || parentFolderId.includes('GOES_HERE')) throw new Error('Set the Drive folder ID');
-      
-      const formData = new FormData();
-      const metadata = { name: file.name, mimeType: file.type, parents: [parentFolderId] };
-      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-      formData.append('file', file);
-      
-      // Simulate progress while uploading
-      let progress = 0;
-      const progressInterval = setInterval(() => {
-        if (progress < 90) {
-          progress += Math.random() * 30;
-          if (progress > 90) progress = 90;
-          onProgress(Math.floor(progress));
-        }
-      }, 200);
-      
-      try {
-        const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-          method: 'POST',
-          headers: new Headers({ 'Authorization': 'Bearer ' + token }),
-          body: formData
-        });
-        
-        clearInterval(progressInterval);
-        onProgress(95);
-        
-        if (!uploadRes.ok) {
-          const errorData = await uploadRes.json().catch(() => ({}));
-          console.error('Drive upload error:', errorData);
-          throw new Error('Drive upload failed: ' + (errorData.error?.message || uploadRes.statusText));
-        }
-        const uploaded = await uploadRes.json();
-        
-        // Get file info and make it publicly accessible
-        const infoRes = await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}?fields=id,name,webViewLink,webContentLink,thumbnailLink`, {
-          headers: new Headers({ 'Authorization': 'Bearer ' + token })
-        });
-        const info = await infoRes.json();
-        
-        onProgress(99);
-        
-        // Make file publicly readable
-        try {
-          await fetch(`https://www.googleapis.com/drive/v3/files/${uploaded.id}/permissions`, {
-            method: 'POST',
-            headers: new Headers({
-              'Authorization': 'Bearer ' + token,
-              'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({ role: 'reader', type: 'anyone' })
-          });
-        } catch (err) {
-          console.warn('Failed to set public permissions:', err);
-        }
-        
-        onProgress(100);
-        return info;
-      } catch (err) {
-        clearInterval(progressInterval);
-        throw err;
-      }
+    async function uploadToDriveWithProgress(/* file, parentFolderId, onProgress */) {
+      throw new Error('Google Drive integration has been removed. Use Firebase storage or another upload flow.');
     }
 
     // Initialize when page loads (Email/Password Auth)
@@ -2663,6 +3512,209 @@
         showLoginError(msg);
       }
     }
+
+    // Profile dropdown toggle
+    function updateProfileAvatarUI(imageUrl, fallbackInitial) {
+      const profileButtonEl = document.getElementById('profileButton');
+      const profileInitialEl = document.getElementById('profileInitial');
+      const profileImageEl = document.getElementById('profileAvatarImage');
+
+      const dropdownAvatarWrapEl = document.querySelector('.pd-avatar');
+      const dropdownInitialEl = document.getElementById('profileAvatarInitial');
+      const dropdownImageEl = document.getElementById('profileDropdownAvatarImage');
+
+      const initial = String(fallbackInitial || 'A').charAt(0).toUpperCase();
+      const finalImage = String(imageUrl || '').trim();
+
+      if (profileInitialEl) profileInitialEl.textContent = initial;
+      if (dropdownInitialEl) dropdownInitialEl.textContent = initial;
+
+      if (finalImage) {
+        if (profileImageEl) {
+          profileImageEl.src = finalImage;
+          profileImageEl.style.display = 'block';
+        }
+        if (dropdownImageEl) {
+          dropdownImageEl.src = finalImage;
+          dropdownImageEl.style.display = 'block';
+        }
+        if (profileInitialEl) profileInitialEl.style.display = 'none';
+        if (dropdownInitialEl) dropdownInitialEl.style.display = 'none';
+        if (profileButtonEl) profileButtonEl.classList.add('has-image');
+        if (dropdownAvatarWrapEl) dropdownAvatarWrapEl.classList.add('has-image');
+        return;
+      }
+
+      if (profileImageEl) {
+        profileImageEl.removeAttribute('src');
+        profileImageEl.style.display = 'none';
+      }
+      if (dropdownImageEl) {
+        dropdownImageEl.removeAttribute('src');
+        dropdownImageEl.style.display = 'none';
+      }
+      if (profileInitialEl) profileInitialEl.style.display = 'inline-block';
+      if (dropdownInitialEl) dropdownInitialEl.style.display = 'inline-block';
+      if (profileButtonEl) profileButtonEl.classList.remove('has-image');
+      if (dropdownAvatarWrapEl) dropdownAvatarWrapEl.classList.remove('has-image');
+    }
+
+    function setupProfileDropdown() {
+      const profileBtn = document.getElementById('profileButton');
+      const dropdown = document.getElementById('profileDropdown');
+      const profileNameEl = document.getElementById('profileName');
+      const profileEmailEl = document.getElementById('profileEmail');
+      const profileAvatarEl = document.getElementById('profileAvatarInitial');
+      
+      if (!profileBtn || !dropdown) return;
+
+      // Initialize dropdown with stable user info (avoid placeholder text like "Loading...")
+      const storedName = (localStorage.getItem('adminUserName') || '').trim();
+      const stableEmail = (currentUserEmail || localStorage.getItem('adminUserEmail') || '').trim();
+      const stableName = storedName || (stableEmail ? stableEmail.split('@')[0] : 'Administrator');
+      const initial = stableName.charAt(0).toUpperCase();
+
+      if (profileEmailEl && stableEmail) profileEmailEl.textContent = stableEmail;
+      if (profileNameEl) profileNameEl.textContent = stableName;
+      if (profileAvatarEl) profileAvatarEl.textContent = initial;
+      updateProfileAvatarUI(localStorage.getItem('adminUserPicture') || '', initial);
+
+      profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+      });
+
+      dropdown.addEventListener('click', (e) => e.stopPropagation());
+      document.addEventListener('click', () => dropdown.classList.remove('show'));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') dropdown.classList.remove('show'); });
+    }
+
+    async function openEditProfile() {
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown) dropdown.classList.remove('show');
+      
+      const modal = document.getElementById('editProfileModal');
+      const nameInput = document.getElementById('editProfileName');
+      const emailInput = document.getElementById('editProfileEmail');
+      const roleInput = document.getElementById('editProfileRole');
+      const pictureInput = document.getElementById('editProfilePicture');
+      
+      const currentEmail = (currentUserEmail || localStorage.getItem('adminUserEmail') || '').trim().toLowerCase();
+      
+      if (!currentEmail) {
+        if (modal) modal.classList.add('active');
+        return;
+      }
+      
+      try {
+        // Fetch from Firebase roles collection using email as doc ID
+        const doc = await window.firebaseDB.collection('roles').doc(currentEmail).get();
+
+        let resolvedName = localStorage.getItem('adminUserName') || '';
+        let resolvedRole = localStorage.getItem('adminUserRole') || '';
+        let resolvedPicture = localStorage.getItem('adminUserPicture') || '';
+        let resolvedEmail = currentEmail;
+
+        if (doc.exists) {
+          const data = doc.data();
+          resolvedName = data.name || resolvedName;
+          resolvedEmail = data.email || resolvedEmail;
+          const accessRole = String(data.role || '').trim();
+          resolvedRole = data.jobRole || (accessRole.toLowerCase() === 'superadmin' ? 'Admin Level' : accessRole) || resolvedRole;
+          resolvedPicture = data.profilePicture || resolvedPicture;
+        }
+
+        // Prefer role/picture from team collection
+        const teamProfile = await getTeamProfileData(resolvedEmail, resolvedName);
+        if (teamProfile.role) resolvedRole = teamProfile.role;
+        if (teamProfile.picture) resolvedPicture = teamProfile.picture;
+
+        if (nameInput) nameInput.value = resolvedName;
+        if (emailInput) emailInput.value = resolvedEmail;
+        if (roleInput) roleInput.value = resolvedRole;
+        if (pictureInput) pictureInput.value = resolvedPicture;
+
+        if (modal) modal.classList.add('active');
+      } catch (error) {
+        console.error('Error fetching profile from Firebase:', error);
+        // Fallback to localStorage
+        const currentName = localStorage.getItem('adminUserName') || '';
+        const currentRole = localStorage.getItem('adminUserRole') || '';
+        const currentPicture = localStorage.getItem('adminUserPicture') || '';
+
+        if (nameInput) nameInput.value = currentName;
+        if (emailInput) emailInput.value = currentEmail;
+        if (roleInput) roleInput.value = currentRole;
+        if (pictureInput) pictureInput.value = currentPicture;
+
+        if (modal) modal.classList.add('active');
+      }
+    }
+
+    function closeEditProfileModal() {
+      const modal = document.getElementById('editProfileModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function saveEditProfile(event) {
+      event.preventDefault();
+      
+      const nameInput = document.getElementById('editProfileName');
+      const emailInput = document.getElementById('editProfileEmail');
+      const roleInput = document.getElementById('editProfileRole');
+      const pictureInput = document.getElementById('editProfilePicture');
+      const modal = document.getElementById('editProfileModal');
+      
+      if (!nameInput.value.trim() || !emailInput.value.trim() || !roleInput.value.trim()) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim().toLowerCase();
+      const role = roleInput.value.trim();
+      const picture = (pictureInput && pictureInput.value.trim()) || '';
+      const initial = name.charAt(0).toUpperCase();
+      const firstName = name.split(' ')[0]; // Extract first name
+      currentUserEmail = email;
+      
+      // Update UI elements
+      if (document.getElementById('userEmail')) document.getElementById('userEmail').textContent = firstName;
+      if (document.getElementById('userRole')) document.getElementById('userRole').textContent = role;
+      if (document.getElementById('profileInitial')) document.getElementById('profileInitial').textContent = initial;
+      if (document.getElementById('profileAvatarInitial')) document.getElementById('profileAvatarInitial').textContent = initial;
+      if (document.getElementById('profileName')) document.getElementById('profileName').textContent = name;
+      if (document.getElementById('profileEmail')) document.getElementById('profileEmail').textContent = email;
+      updateProfileAvatarUI(picture, initial);
+      
+      // Save to localStorage
+      localStorage.setItem('adminUserEmail', email);
+      localStorage.setItem('adminUserName', name);
+      localStorage.setItem('adminUserRole', role);
+      localStorage.setItem('adminUserPicture', picture);
+      localStorage.setItem('profileInitialized', 'true');
+      
+      // Save to Firebase roles collection using email as doc ID
+      window.firebaseDB.collection('roles').doc(email).set({
+        email: email,
+        name: name,
+        role: role,
+        jobRole: role,
+        profilePicture: picture,
+        updatedAt: new Date().toISOString()
+      }, { merge: true })
+        .then(() => {
+          // Close modal
+          if (modal) modal.classList.remove('active');
+          alert('Profile updated successfully');
+        })
+        .catch((error) => {
+          console.error('Error saving profile to Firebase:', error);
+          alert('Profile updated locally but failed to save to server. Please try again.');
+        });
+    }
+
+    window.addEventListener('load', setupProfileDropdown);
 
     function showLoginError(message) {
       const el = document.getElementById('loginErrorMessage');
@@ -3198,12 +4250,8 @@
       }
 
       container.innerHTML = marketplaceItems.map(item => {
-        const editButton = googleDriveAccessToken 
-          ? `<button class="edit-btn" onclick="openEditMarketplaceModal('${item.id}')">Edit</button>`
-          : `<button class="edit-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Edit</button>`;
-        const deleteButton = googleDriveAccessToken
-          ? `<button class="delete-btn" onclick="deleteMarketplaceItem('${item.id}')">Delete</button>`
-          : `<button class="delete-btn" style="opacity: 0.5; cursor: not-allowed;" disabled title="Authenticate Google Drive first">Delete</button>`;
+        const editButton = `<button class="edit-btn" onclick="openEditMarketplaceModal('${item.id}')">Edit</button>`;
+        const deleteButton = `<button class="delete-btn" onclick="deleteMarketplaceItem('${item.id}')">Delete</button>`;
         return `
         <div class="card">
           <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
@@ -3810,7 +4858,7 @@
           </div>
           <div class="program-card-body">
             <p class="program-description">${job.description.substring(0, 150)}...</p>
-            ${job.salary ? `<p style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">💰 ${job.salary}</p>` : ''}
+            ${job.salary ? `<p style="color: #7c3aed; font-weight: 600; margin-bottom: 0.5rem;">💰 ${job.salary}</p>` : ''}
             <div class="program-benefits">
               <h4>Requirements:</h4>
               <ul>

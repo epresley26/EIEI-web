@@ -342,10 +342,6 @@
           <span class="sidebar-item-color" style="background: #9c27b0;"></span>
           📞 Contacts
         </div>
-        <div class="sidebar-item" onclick="switchTab('roles')">
-          <span class="sidebar-item-color" style="background: #f44336;"></span>
-          🔐 Roles & Access
-        </div>
       </div>
     </div>
 
@@ -602,47 +598,6 @@
         </div>
       </div>
 
-      <!-- ROLES TAB -->
-      <div id="tab-roles" class="tab-content">
-        <div class="upload-section">
-          <h2>Admin Roles & Access Control</h2>
-          <p>Manage admin users and their permissions</p>
-          <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="color: #2a4175; margin-top: 0;">Add New Admin</h3>
-            <form id="roleForm" style="display: grid; gap: 1rem;">
-              <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Admin Email</label>
-                <input type="email" id="roleEmail" placeholder="admin@example.com" style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 6px;">
-              </div>
-              <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Role Type</label>
-                <select id="roleType" style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 6px;">
-                  <option value="admin">Admin</option>
-                  <option value="superadmin">Superadmin</option>
-                </select>
-              </div>
-              <button type="submit" class="primary-btn" style="width: fit-content;">Save Role</button>
-            </form>
-          </div>
-          <div class="card">
-            <h3 style="color: #2a4175; margin-top: 0;">Current Admins</h3>
-            <div style="overflow: auto;">
-              <table id="rolesTable" style="width: 100%; border-collapse: collapse;">
-                <thead style="background: #f3f4f6;">
-                  <tr>
-                    <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb;">Email</th>
-                    <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb;">Role</th>
-                    <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb;">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="rolesBody">
-                  <tr><td colspan="3" style="color: #9ca3af; padding: 2rem; text-align: center;">No admins yet</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

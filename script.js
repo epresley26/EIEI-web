@@ -129,24 +129,6 @@ if (contactBtn) {
 }
 
 // ==================
-// MOBILE NAV SETUP
-// ==================
-function setupMobileNav() {
-  const menuToggle = document.getElementById("menuToggle");
-  const nav = document.querySelector("header nav");
-
-  if (menuToggle && nav) {
-    menuToggle.addEventListener("click", () => {
-      nav.classList.toggle("active");
-    });
-    // Close nav when a link is clicked
-    nav.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => nav.classList.remove("active"));
-    });
-  }
-}
-
-// ==================
 // MOBILE NAV
 // ==================
 const menuToggle = document.getElementById("menuToggle");
@@ -180,8 +162,6 @@ if ("IntersectionObserver" in window) {
   );
   reveals.forEach(el => observer.observe(el));
 }
-
-// Dark mode removed; no theme scripts
 
 // ==================
 // FAQ TOGGLE
