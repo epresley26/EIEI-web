@@ -43,3 +43,10 @@ For Locations can we add all 3 locations?
 
 Will we be adding all the pictures and videos to the site for creditability. This is crucial for
 funders. They want to see evidence of our work.
+
+
+
+TODO
+1. Programs (3 remaining)
+2. Admin email only
+3.
