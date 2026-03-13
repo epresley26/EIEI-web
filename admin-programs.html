@@ -1076,11 +1076,6 @@
               <span class="sidebar-item-color" style="background: #9c27b0;"></span>
               Contacts
             </div>
-            <div class="sidebar-item" id="rolesNavItem" onclick="switchTab('roles')" style="display:none;">
-              <span class="sidebar-item-color" style="background: #f44336;"></span>
-              Roles & Access
-            </div>
-          </div>
         </div>
 
         </div> <!-- .sidebar-body -->
@@ -1597,73 +1592,6 @@
           </div>
         </div>
 
-        <!-- ROLES TAB (Superadmin only) -->
-        <div id="roles" class="tab-content">
-          <div class="upload-section">
-            <h2>Admin Roles Management</h2>
-            <p id="rolesInfo" style="color:var(--text-muted);margin-bottom:1rem;">Manage admin users and their access.</p>
-            <div class="success-message" id="rolesSuccessMessage"></div>
-            <div class="error-message" id="rolesErrorMessage"></div>
-
-            <form id="roleForm" style="margin-bottom:1.5rem;">
-              <div class="form-group">
-                <label for="roleTeamSearch">Search Team Member By Name *</label>
-                <input type="text" id="roleTeamSearch" placeholder="Type a team member name" autocomplete="off">
-                <div id="roleTeamSearchResults" style="margin-top:8px; border:1px solid var(--border); border-radius:10px; max-height:180px; overflow:auto; display:none; background:#fff;"></div>
-                <div id="roleTeamSelected" style="display:none; margin-top:8px; padding:10px; border:1px solid var(--border); border-radius:10px; background:#faf7ff;"></div>
-              </div>
-              <div class="form-group">
-                <label for="roleEmail">Admin Email *</label>
-                <input type="email" id="roleEmail" required placeholder="admin@example.com">
-              </div>
-              <div class="form-group">
-                <label>Role Type</label>
-                <select id="roleType">
-                  <option value="admin">Admin</option>
-                  <option value="superadmin">Superadmin</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="roleTempPassword">Temporary Password (min 6 chars)</label>
-                <input type="password" id="roleTempPassword" placeholder="Set an initial password">
-              </div>
-              <div class="form-group">
-                <label>Allow Access To Tabs</label>
-                <div class="programs-list" style="grid-template-columns: repeat(3, minmax(200px, 1fr));">
-                  <label><input type="checkbox" class="permCheck" value="programs"> Programs</label>
-                  <label><input type="checkbox" class="permCheck" value="gallery"> Gallery Images</label>
-                  <label><input type="checkbox" class="permCheck" value="team"> Team</label>
-                  <label><input type="checkbox" class="permCheck" value="blog"> Blog</label>
-                  <label><input type="checkbox" class="permCheck" value="marketplace"> Marketplace</label>
-                  <label><input type="checkbox" class="permCheck" value="newsletter"> Newsletter</label>
-                  <label><input type="checkbox" class="permCheck" value="enquiries"> Enquiries</label>
-                  <label><input type="checkbox" class="permCheck" value="contacts"> Contacts</label>
-                </div>
-              </div>
-              <div class="button-group">
-                <button type="submit" class="primary-btn">Save Role</button>
-                <button type="button" class="secondary-btn" onclick="resetRoleForm()">Clear</button>
-              </div>
-            </form>
-
-            <div style="overflow:auto;">
-              <table class="data-table" id="rolesTable" style="width:100%; border-collapse: collapse;">
-                <thead>
-                  <tr>
-                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Email</th>
-                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Role</th>
-                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Permissions</th>
-                    <th style="text-align:left;border-bottom:1px solid var(--border);padding:8px;">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="rolesBody">
-                  <tr><td colspan="4" style="color:var(--text-muted);padding:12px;">Loading roles...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div id="loginPrompt" style="display: flex; height: 100vh; width: 100%; margin: 0; padding: 0; background: #0d3d56; display: none;">
       </div>
@@ -2194,335 +2122,6 @@
       if (parts.length !== 3) return null;
       const json = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'));
       try { return JSON.parse(json); } catch (_) { return null; }
-    }
-
-    // Roles & permissions
-    let isSuperadmin = false;
-    let allowedTabs = new Set();
-    function hasTab(tabName) {
-      return isSuperadmin || allowedTabs.has(tabName);
-    }
-    async function setupRolesAndPermissions() {
-      try {
-        // Try direct doc fetch first
-        if (currentUserEmail) {
-          const doc = await window.firebaseDB.collection('roles').doc(currentUserEmail).get();
-          if (doc.exists) {
-            const data = doc.data();
-            isSuperadmin = String(data.role || '').toLowerCase() === 'superadmin';
-            const tabsObj = data.tabs || {};
-            Object.keys(tabsObj).forEach(k => { if (tabsObj[k]) allowedTabs.add(k); });
-          }
-        }
-
-        // If not superadmin yet, check if collection is empty (bootstrap scenario)
-        if (!isSuperadmin && currentUserEmail) {
-          const rolesSnap = await window.firebaseDB.collection('roles').get();
-          if (rolesSnap.empty) {
-            isSuperadmin = true;
-          }
-        }
-
-        applyTabPermissions();
-        if (isSuperadmin) {
-          document.getElementById('rolesNavItem').style.display = '';
-          loadRoles();
-        }
-      } catch (e) {
-        console.warn('Roles setup failed:', e);
-        // Bootstrap fallback: if we cannot read roles (likely rules), allow current user to see Roles tab
-        if (currentUserEmail) {
-          isSuperadmin = true;
-          applyTabPermissions();
-          document.getElementById('rolesNavItem').style.display = '';
-          // loadRoles may fail under rules; UI will still allow saving roles
-        }
-      }
-    }
-
-    function applyTabPermissions() {
-      const buttons = Array.from(document.querySelectorAll('.admin-tabs .admin-tab'));
-      buttons.forEach(btn => {
-        const on = btn.getAttribute('onclick') || '';
-        const m = on.match(/switchTab\(['"]([^'"]+)['"]\)/);
-        const tabName = m ? m[1] : null;
-        if (!tabName) return;
-        if (tabName === 'roles') {
-          btn.style.display = isSuperadmin ? '' : 'none';
-          return;
-        }
-        if (isSuperadmin) {
-          btn.style.display = '';
-        } else if (allowedTabs.has(tabName)) {
-          btn.style.display = '';
-        } else {
-          btn.style.display = 'none';
-          const content = document.getElementById(tabName);
-          if (content) content.classList.remove('active');
-        }
-      });
-
-      // If the active tab was hidden, switch to the first visible one
-      const activeBtn = document.querySelector('.admin-tabs .admin-tab.active');
-      if (activeBtn && activeBtn.style.display === 'none') {
-        const firstVisible = buttons.find(b => b.style.display !== 'none');
-        if (firstVisible) {
-          const mm = firstVisible.getAttribute('onclick').match(/switchTab\(['"]([^'"]+)['"]\)/);
-          if (mm) switchTab(mm[1]);
-        }
-      }
-    }
-
-    // Roles tab logic (superadmin only)
-    let roles = [];
-    let roleTeamDirectory = [];
-    let selectedRoleTeamMember = null;
-
-    async function loadRoleTeamDirectory() {
-      try {
-        const snap = await window.firebaseDB.collection('team').get();
-        roleTeamDirectory = snap.docs.map(d => {
-          const data = d.data() || {};
-          return {
-            id: d.id,
-            name: String(data.name || '').trim(),
-            role: String(data.role || '').trim(),
-            email: String(data.email || '').trim().toLowerCase(),
-            picture: String(data.profilePicture || data.imageUrl || '').trim()
-          };
-        }).filter(m => m.name);
-      } catch (e) {
-        console.warn('Team directory load failed:', e);
-        roleTeamDirectory = [];
-      }
-    }
-
-    function renderRoleTeamSearchResults(matches) {
-      const resultsEl = document.getElementById('roleTeamSearchResults');
-      if (!resultsEl) return;
-      if (!matches.length) {
-        resultsEl.style.display = 'block';
-        resultsEl.innerHTML = '<div style="padding:10px; color:var(--text-muted);">No matching team member found.</div>';
-        return;
-      }
-      resultsEl.style.display = 'block';
-      resultsEl.innerHTML = matches.map(m => `
-        <button type="button" onclick="selectRoleTeamMember('${m.id}')" style="width:100%; text-align:left; border:none; background:transparent; padding:10px; cursor:pointer; border-bottom:1px solid var(--border);">
-          <div style="font-weight:600; color:#2f1f4d;">${escapeHtml(m.name)}</div>
-          <div style="font-size:0.85rem; color:#7d6b8f;">${escapeHtml(m.role || 'No role in team')} ${m.email ? '• ' + escapeHtml(m.email) : ''}</div>
-        </button>
-      `).join('');
-    }
-
-    function selectRoleTeamMember(memberId) {
-      const member = roleTeamDirectory.find(m => m.id === memberId);
-      if (!member) return;
-      selectedRoleTeamMember = member;
-
-      const selectedEl = document.getElementById('roleTeamSelected');
-      const resultsEl = document.getElementById('roleTeamSearchResults');
-      const searchInput = document.getElementById('roleTeamSearch');
-      const emailInput = document.getElementById('roleEmail');
-
-      if (searchInput) searchInput.value = member.name;
-      if (emailInput && member.email && !emailInput.value.trim()) {
-        emailInput.value = member.email;
-      }
-
-      if (selectedEl) {
-        selectedEl.style.display = 'block';
-        selectedEl.innerHTML = `
-          <div style="display:flex; gap:10px; align-items:center;">
-            ${member.picture ? `<img src="${escapeHtml(member.picture)}" alt="${escapeHtml(member.name)}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'">` : '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">' + escapeHtml(member.name.charAt(0).toUpperCase()) + '</div>'}
-            <div>
-              <div style="font-weight:700; color:#2f1f4d;">${escapeHtml(member.name)}</div>
-              <div style="font-size:0.85rem; color:#7d6b8f;">${escapeHtml(member.role || 'No team role set')}</div>
-            </div>
-          </div>
-        `;
-      }
-      if (resultsEl) {
-        resultsEl.style.display = 'none';
-        resultsEl.innerHTML = '';
-      }
-    }
-
-    function resetRoleForm() {
-      const form = document.getElementById('roleForm');
-      if (form) form.reset();
-      selectedRoleTeamMember = null;
-      const selectedEl = document.getElementById('roleTeamSelected');
-      const resultsEl = document.getElementById('roleTeamSearchResults');
-      if (selectedEl) {
-        selectedEl.style.display = 'none';
-        selectedEl.innerHTML = '';
-      }
-      if (resultsEl) {
-        resultsEl.style.display = 'none';
-        resultsEl.innerHTML = '';
-      }
-    }
-
-    document.getElementById('roleTeamSearch')?.addEventListener('input', async (e) => {
-      const q = String((e.target && e.target.value) || '').trim().toLowerCase();
-      if (!q) {
-        const resultsEl = document.getElementById('roleTeamSearchResults');
-        if (resultsEl) {
-          resultsEl.style.display = 'none';
-          resultsEl.innerHTML = '';
-        }
-        selectedRoleTeamMember = null;
-        const selectedEl = document.getElementById('roleTeamSelected');
-        if (selectedEl) {
-          selectedEl.style.display = 'none';
-          selectedEl.innerHTML = '';
-        }
-        return;
-      }
-      if (!roleTeamDirectory.length) {
-        await loadRoleTeamDirectory();
-      }
-      const matches = roleTeamDirectory
-        .filter(m => m.name.toLowerCase().includes(q))
-        .slice(0, 8);
-      renderRoleTeamSearchResults(matches);
-    });
-
-    async function loadRoles() {
-      const tbody = document.getElementById('rolesBody');
-      if (!tbody) return;
-      tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);padding:12px;">Loading roles...</td></tr>';
-      try {
-        const [snap] = await Promise.all([
-          window.firebaseDB.collection('roles').get(),
-          loadRoleTeamDirectory()
-        ]);
-        roles = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderRoles();
-      } catch (e) {
-        console.error('Roles load error:', e);
-        tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);padding:12px;">Unable to load roles.</td></tr>';
-      }
-    }
-
-    function renderRoles() {
-      const tbody = document.getElementById('rolesBody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      if (!roles.length) {
-        tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);padding:12px;">No roles defined yet.</td></tr>';
-        return;
-      }
-      roles.forEach(r => {
-        const tr = document.createElement('tr');
-        const pad = 'padding:8px;border-bottom:1px solid var(--border);vertical-align:top;';
-        const perms = Object.keys(r.tabs || {}).filter(k => r.tabs[k]).join(', ');
-        tr.innerHTML = `
-          <td style="${pad}">${escapeHtml(r.id)}</td>
-          <td style="${pad}">${escapeHtml(r.role || 'admin')}</td>
-          <td style="${pad}">${escapeHtml(perms)}</td>
-          <td style="${pad}">
-            <button class="delete-btn" onclick="deleteRole('${r.id}')">Delete</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    document.getElementById('roleForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!isSuperadmin) return showRolesError('Only superadmins can manage roles.');
-      const email = String(document.getElementById('roleEmail').value).trim().toLowerCase();
-      const roleType = document.getElementById('roleType').value;
-      const tempPasswordEl = document.getElementById('roleTempPassword');
-      const tempPassword = tempPasswordEl ? String(tempPasswordEl.value) : '';
-      const checks = Array.from(document.querySelectorAll('.permCheck'));
-      const tabs = {};
-      checks.forEach(c => { tabs[c.value] = c.checked; });
-      if (!selectedRoleTeamMember) return showRolesError('Please select a team member from search.');
-      if (!email) return showRolesError('Email is required');
-      if (!tempPassword || tempPassword.length < 6) return showRolesError('Please set a temporary password (minimum 6 characters).');
-      try {
-        // Create auth user with the provided temporary password
-        const authResult = await createAuthUser(email, tempPassword);
-        await window.firebaseDB.collection('roles').doc(email).set({
-          role: roleType,
-          tabs,
-          email,
-          name: selectedRoleTeamMember.name,
-          jobRole: selectedRoleTeamMember.role || 'Admin Level',
-          profilePicture: selectedRoleTeamMember.picture || '',
-          updatedAt: new Date().toISOString()
-        }, { merge: true });
-        showRolesSuccess(authResult === 'exists' ? 'Role saved. Login already exists for this email (password unchanged).' : 'Role saved and admin login created.');
-        resetRoleForm();
-        loadRoles();
-        // Re-evaluate permissions if editing current user
-        if (currentUserEmail === email) {
-          allowedTabs = new Set();
-          isSuperadmin = roleType === 'superadmin';
-          Object.keys(tabs).forEach(k => { if (tabs[k]) allowedTabs.add(k); });
-          applyTabPermissions();
-        }
-      } catch (e) {
-        console.error('Save role error:', e);
-        const code = (e && e.code) ? String(e.code) : '';
-        const msg = (e && e.message) ? String(e.message) : 'Error saving role';
-        if (code === 'permission-denied') {
-          showRolesError('Permission denied. Ensure Firestore rules allow superadmin to write roles.');
-        } else {
-          showRolesError(msg);
-        }
-      }
-    });
-
-    async function createAuthUser(email, password) {
-      // Create user via a secondary Firebase app instance so current session is not affected
-      const cfg = firebase.app().options || {};
-      const appName = `adminCreator-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-      const tempApp = firebase.initializeApp(cfg, appName);
-      try {
-        const tempAuth = firebase.auth(tempApp);
-        await tempAuth.createUserWithEmailAndPassword(email, password);
-        await tempAuth.signOut();
-        return 'created';
-      } catch (err) {
-        const code = String((err && err.code) || '');
-        if (code.includes('email-already-in-use')) {
-          return 'exists';
-        }
-        throw err;
-      } finally {
-        if (typeof tempApp.delete === 'function') {
-          try { await tempApp.delete(); } catch (_) {}
-        }
-      }
-    }
-
-    async function deleteRole(email) {
-      if (!isSuperadmin) return showRolesError('Only superadmins can manage roles.');
-      if (!confirm('Delete this role?')) return;
-      try {
-        await window.firebaseDB.collection('roles').doc(email).delete();
-        showRolesSuccess('Role deleted');
-        loadRoles();
-      } catch (e) {
-        console.error('Delete role error:', e);
-        showRolesError('Error deleting role');
-      }
-    }
-
-    function showRolesSuccess(msg) {
-      const el = document.getElementById('rolesSuccessMessage');
-      el.textContent = '✓ ' + msg;
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3000);
-    }
-    function showRolesError(msg) {
-      const el = document.getElementById('rolesErrorMessage');
-      el.textContent = '✗ ' + msg;
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3000);
     }
 
     // TAB SWITCHING
@@ -3488,10 +3087,15 @@
     function initializeEmailAuth() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+          if (user.email.toLowerCase() !== 'admin@eiforei.org') {
+              firebase.auth().signOut();
+                  window.location.href = 'login.html';
+                      return;
+                        }
           currentUserEmail = (user.email || '').toLowerCase();
           localStorage.setItem('adminUserEmail', currentUserEmail);
           showAdminPanel();
-          setupRolesAndPermissions();
+          
           loadPrograms();
         } else {
           // Redirect to login page if not authenticated
@@ -3606,49 +3210,14 @@
         return;
       }
       
-      try {
-        // Fetch from Firebase roles collection using email as doc ID
-        const doc = await window.firebaseDB.collection('roles').doc(currentEmail).get();
-
-        let resolvedName = localStorage.getItem('adminUserName') || '';
-        let resolvedRole = localStorage.getItem('adminUserRole') || '';
-        let resolvedPicture = localStorage.getItem('adminUserPicture') || '';
-        let resolvedEmail = currentEmail;
-
-        if (doc.exists) {
-          const data = doc.data();
-          resolvedName = data.name || resolvedName;
-          resolvedEmail = data.email || resolvedEmail;
-          const accessRole = String(data.role || '').trim();
-          resolvedRole = data.jobRole || (accessRole.toLowerCase() === 'superadmin' ? 'Admin Level' : accessRole) || resolvedRole;
-          resolvedPicture = data.profilePicture || resolvedPicture;
-        }
-
-        // Prefer role/picture from team collection
-        const teamProfile = await getTeamProfileData(resolvedEmail, resolvedName);
-        if (teamProfile.role) resolvedRole = teamProfile.role;
-        if (teamProfile.picture) resolvedPicture = teamProfile.picture;
-
+const resolvedName = localStorage.getItem('adminUserName') || '';
+const resolvedEmail = currentEmail;
+const resolvedPicture = localStorage.getItem('adminUserPicture') || '';
         if (nameInput) nameInput.value = resolvedName;
         if (emailInput) emailInput.value = resolvedEmail;
-        if (roleInput) roleInput.value = resolvedRole;
         if (pictureInput) pictureInput.value = resolvedPicture;
 
         if (modal) modal.classList.add('active');
-      } catch (error) {
-        console.error('Error fetching profile from Firebase:', error);
-        // Fallback to localStorage
-        const currentName = localStorage.getItem('adminUserName') || '';
-        const currentRole = localStorage.getItem('adminUserRole') || '';
-        const currentPicture = localStorage.getItem('adminUserPicture') || '';
-
-        if (nameInput) nameInput.value = currentName;
-        if (emailInput) emailInput.value = currentEmail;
-        if (roleInput) roleInput.value = currentRole;
-        if (pictureInput) pictureInput.value = currentPicture;
-
-        if (modal) modal.classList.add('active');
-      }
     }
 
     function closeEditProfileModal() {
@@ -3661,18 +3230,16 @@
       
       const nameInput = document.getElementById('editProfileName');
       const emailInput = document.getElementById('editProfileEmail');
-      const roleInput = document.getElementById('editProfileRole');
-      const pictureInput = document.getElementById('editProfilePicture');
       const modal = document.getElementById('editProfileModal');
+      const pictureInput = document.getElementById('editProfilePicture');
       
-      if (!nameInput.value.trim() || !emailInput.value.trim() || !roleInput.value.trim()) {
+      if (!nameInput.value.trim() || !emailInput.value.trim()) {
         alert('Please fill in all required fields');
         return;
       }
       
       const name = nameInput.value.trim();
       const email = emailInput.value.trim().toLowerCase();
-      const role = roleInput.value.trim();
       const picture = (pictureInput && pictureInput.value.trim()) || '';
       const initial = name.charAt(0).toUpperCase();
       const firstName = name.split(' ')[0]; // Extract first name
@@ -3690,30 +3257,11 @@
       // Save to localStorage
       localStorage.setItem('adminUserEmail', email);
       localStorage.setItem('adminUserName', name);
-      localStorage.setItem('adminUserRole', role);
       localStorage.setItem('adminUserPicture', picture);
       localStorage.setItem('profileInitialized', 'true');
+      if (modal) modal.classList.remove('active');
+      alert('Profile updated successfully!');
       
-      // Save to Firebase roles collection using email as doc ID
-      window.firebaseDB.collection('roles').doc(email).set({
-        email: email,
-        name: name,
-        role: role,
-        jobRole: role,
-        profilePicture: picture,
-        updatedAt: new Date().toISOString()
-      }, { merge: true })
-        .then(() => {
-          // Close modal
-          if (modal) modal.classList.remove('active');
-          alert('Profile updated successfully');
-        })
-        .catch((error) => {
-          console.error('Error saving profile to Firebase:', error);
-          alert('Profile updated locally but failed to save to server. Please try again.');
-        });
-    }
-
     window.addEventListener('load', setupProfileDropdown);
 
     function showLoginError(message) {
@@ -3916,194 +3464,7 @@
     switchTab = function(tabName) {
       _switchTabOrig(tabName);
       if (tabName === 'blog') loadBlogPosts();
-      if (tabName === 'roles' && isSuperadmin) loadRoles();
     }
-    // --- TEAM CRUD WITH FIREBASE ---
-    let teamMembers = [];
-    let editingTeamId = null;
-
-    // Load team members from Firestore
-    async function loadTeamMembers() {
-      const teamList = document.getElementById('teamList');
-      teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Loading team members...</p>';
-      try {
-        if (!window.firebaseDB) {
-          throw new Error('Firebase DB not initialized');
-        }
-        const snapshot = await window.firebaseDB.collection('team').get();
-        teamMembers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        renderTeamList();
-      } catch (e) {
-        console.error('Error loading team members:', e);
-        teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Error loading team members: ' + e.message + '</p>';
-      }
-    }
-
-    function renderTeamList() {
-      const teamList = document.getElementById('teamList');
-      teamList.innerHTML = '';
-      if (!teamMembers.length) {
-        teamList.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">No team members added yet.</p>';
-        return;
-      }
-      teamMembers.forEach(member => {
-        const card = document.createElement('div');
-        card.className = 'program-card';
-        const memberImageUrl = member.imageUrl || 'images/default-avatar.jpg';
-        card.innerHTML = `
-          <img src="${memberImageUrl}" alt="${member.name}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:1rem;" onerror="this.src='images/default-avatar.jpg'">
-          <h3>${member.name}</h3>
-          <p>${member.role}</p>
-          <div class="program-actions">
-            <button class="edit-btn" onclick="openEditTeamModal('${member.id}')">Edit</button>
-            <button class="delete-btn" onclick="deleteTeamMember('${member.id}')">Delete</button>
-          </div>
-        `;
-        teamList.appendChild(card);
-      });
-    }
-
-    function openAddTeamModal() {
-      editingTeamId = null;
-      document.getElementById('teamModalTitle').textContent = 'Add New Team Member';
-      document.getElementById('teamForm').reset();
-      document.getElementById('teamModal').classList.add('active');
-    }
-
-    function openEditTeamModal(id) {
-      const member = teamMembers.find(m => m.id === id);
-      if (!member) return;
-      editingTeamId = id;
-      document.getElementById('teamModalTitle').textContent = 'Edit Team Member';
-      document.getElementById('teamName').value = member.name;
-      document.getElementById('teamRole').value = member.role;
-      document.getElementById('teamSection').value = member.section || '';
-      document.getElementById('teamBio').value = member.bio || '';
-      document.getElementById('teamImageUrl').value = member.imageUrl || '';
-      document.getElementById('teamImage').value = '';
-      document.getElementById('teamModal').classList.add('active');
-    }
-
-    function closeTeamModal() {
-      document.getElementById('teamModal').classList.remove('active');
-      editingTeamId = null;
-    }
-
-    document.getElementById('teamForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const saveBtn = document.getElementById('teamSaveBtn');
-      const progressContainer = document.getElementById('teamProgressContainer');
-      const progressBar = document.getElementById('teamProgressBar');
-      const progressPercent = document.getElementById('teamProgressPercent');
-      
-      const name = document.getElementById('teamName').value.trim();
-      const role = document.getElementById('teamRole').value.trim();
-      const section = document.getElementById('teamSection').value.trim();
-      const bio = document.getElementById('teamBio').value.trim();
-      const imageUrl = document.getElementById('teamImageUrl').value.trim();
-      const imageFile = document.getElementById('teamImage').files[0];
-      
-      if (!name || !role || !section) {
-        showTeamError('Name, Role, and Section are required.');
-        return;
-      }
-      
-      try {
-        let finalImageUrl = imageUrl; // Use URL if provided
-        
-        // If image file is provided and no URL, upload to ImgBB
-        if (imageFile && !imageUrl) {
-          // Validate file size (max 32MB for ImgBB)
-          const maxSize = 32 * 1024 * 1024;
-          if (imageFile.size > maxSize) {
-            showTeamError('Image file is too large. Maximum size is 32MB.');
-            return;
-          }
-          
-          // Validate file type
-          if (!imageFile.type.startsWith('image/')) {
-            showTeamError('Please select a valid image file.');
-            return;
-          }
-          
-          // Show progress bar
-          progressContainer.style.display = 'block';
-          saveBtn.disabled = true;
-          progressBar.style.width = '30%';
-          progressPercent.textContent = '30%';
-          
-          // Upload to ImgBB
-          finalImageUrl = await uploadToImgBB(imageFile);
-          
-          progressBar.style.width = '60%';
-          progressPercent.textContent = '60%';
-        }
-        
-        progressBar.style.width = '80%';
-        progressPercent.textContent = '80%';
-        
-        if (editingTeamId) {
-          // Update
-          const updateData = { name, role, section, bio };
-          if (finalImageUrl) updateData.imageUrl = finalImageUrl;
-          await window.firebaseDB.collection('team').doc(editingTeamId).update(updateData);
-          showTeamSuccess('Team member updated!');
-        } else {
-          // Add
-          await window.firebaseDB.collection('team').add({ name, role, section, bio, imageUrl: finalImageUrl || null });
-          showTeamSuccess('Team member added!');
-        }
-        
-        progressBar.style.width = '100%';
-        progressPercent.textContent = '100%';
-        
-        closeTeamModal();
-        setTimeout(() => {
-          progressContainer.style.display = 'none';
-          progressBar.style.width = '0%';
-          progressPercent.textContent = '0%';
-          saveBtn.disabled = false;
-          loadTeamMembers();
-        }, 500);
-      } catch (e) {
-        console.error('Error saving team member:', e);
-        showTeamError('Error saving team member: ' + (e.message || 'Unknown error'));
-        progressContainer.style.display = 'none';
-        saveBtn.disabled = false;
-      }
-    });
-
-    async function deleteTeamMember(id) {
-      if (!confirm('Delete this team member?')) return;
-      try {
-        await window.firebaseDB.collection('team').doc(id).delete();
-        showTeamSuccess('Team member deleted!');
-        loadTeamMembers();
-      } catch (e) {
-        showTeamError('Error deleting team member.');
-      }
-    }
-
-    function showTeamSuccess(msg) {
-      const el = document.getElementById('teamSuccessMessage');
-      el.textContent = '✓ ' + msg;
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3000);
-    }
-    function showTeamError(msg) {
-      const el = document.getElementById('teamErrorMessage');
-      el.textContent = '✗ ' + msg;
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3000);
-    }
-
-    // Load team members when Team tab is activated
-    const originalSwitchTab = switchTab;
-    switchTab = function(tabName) {
-      originalSwitchTab(tabName);
-      if (tabName === 'team') loadTeamMembers();
-    }
-
     // --- NEWSLETTER SUBSCRIBERS ---
     let newsletterSubs = [];
 
@@ -4224,10 +3585,6 @@
     async function loadMarketplaceItems() {
       const container = document.getElementById('marketplaceItemsList');
       if (!container) return;
-      if (!hasTab('marketplace')) {
-        container.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">You do not have permission to manage marketplace items. Enable the "marketplace" tab for this admin in Roles.</p>';
-        return;
-      }
       container.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">Loading items...</p>';
       try {
         const snapshot = await db.collection('marketplace').orderBy('createdAt', 'desc').get();
@@ -4386,11 +3743,6 @@
     async function loadEnquiries() {
       const tbody = document.getElementById('enquiriesBody');
       if (!tbody) return;
-      // Quick permission hint
-      if (!hasTab('enquiries')) {
-        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">You do not have permission to view enquiries. Enable the "enquiries" tab for this admin in Roles.</td></tr>';
-        return;
-      }
       tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading enquiries...</td></tr>';
       try {
         let snap;
@@ -4487,10 +3839,6 @@
     async function loadContacts() {
       const tbody = document.getElementById('contactsBody');
       if (!tbody) return;
-      if (!hasTab('contacts')) {
-        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">You do not have permission to view contacts. Enable the "contacts" tab for this admin in Roles.</td></tr>';
-        return;
-      }
       tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:12px;">Loading contacts...</td></tr>';
       try {
         let snap;
