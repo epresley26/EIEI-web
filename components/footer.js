@@ -32,7 +32,7 @@ function createFooter() {
               <li><a href="services.html">Services</a></li>
               <li><a href="support.html">Support</a></li>
               <li><a href="blog.html">Blog</a></li>
-              <li><a href="nafei.html" class="nav-item">NAFEI</a></li>
+              <li><a href="nafei.html">NAFEI</a></li>
               <li><a href="career-opportunities.html">Careers</a></li>
               <li><a href="contact-us.html">Contact</a></li>
             </ul>
