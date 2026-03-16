@@ -558,6 +558,155 @@
         align-items: flex-start;
       }
     }
+    /* About hero (replaces flat about-header) */
+/* ABOUT HERO – full-width with rotating background from home carousel */
+.about-hero {
+  position: relative;
+  width: 100%;
+  padding: 7rem 2rem 5rem;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Background slideshow + gradient overlay */
+.about-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -3;
+  animation: aboutHeroSlide 21s infinite;
+}
+
+.about-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.18), transparent 60%),
+    radial-gradient(circle at 80% 0%, rgba(248, 250, 252, 0.18), transparent 55%),
+    linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.88),
+      rgba(37, 99, 235, 0.70),
+      rgba(15, 23, 42, 0.94)
+    );
+}
+
+/* Cycle through the same three hero images as index.html */
+@keyframes aboutHeroSlide {
+  0%,
+  33.333% {
+    background-image: url("images/slide1.jpg");
+  }
+  33.334%,
+  66.666% {
+    background-image: url("images/slide2.jpg");
+  }
+  66.667%,
+  100% {
+    background-image: url("images/slide3.jpg");
+  }
+}
+
+/* Hero inner layout */
+.about-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 3rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.about-hero-text h1 {
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.about-hero-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  opacity: 0.96;
+  max-width: 560px;
+}
+
+.about-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.5rem 0 1.75rem;
+}
+
+.about-hero-meta span {
+  font-size: 0.85rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.25);
+  border: 1px solid rgba(248, 250, 252, 0.25);
+}
+
+.about-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Simple secondary button reuse */
+.secondary-btn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: white;
+  color: var(--brand-blue);
+  border: 2px solid var(--brand-blue);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background: var(--brand-blue);
+  color: #fff;
+}
+
+.about-hero-visual img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 24px;
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.45);
+}
+
+/* Responsive hero */
+@media (max-width: 900px) {
+  .about-hero {
+    padding: 6rem 1.75rem 3.5rem;
+  }
+
+  .about-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .about-hero-visual {
+    order: -1;
+    text-align: center;
+  }
+
+  .about-hero-visual img {
+    max-width: 260px;
+    border-radius: 20px;
+  }
+}
+
+
   </style>
 </head>
 <body>
@@ -565,13 +714,32 @@
   <!-- HEADER CONTAINER -->
   <div id="header-container"></div>
 
-  <!-- ABOUT HEADER -->
-  <section class="about-header">
-    <div class="about-header-content">
-      <h1>About The Education Institute for Early Intervention</h1>
-      <p>Empowering childcare professionals and families to create inclusive environments where every child thrives</p>
-    </div>
-  </section>
+    <!-- ABOUT HERO -->
+    <section class="about-hero">
+      <div class="about-hero-inner">
+        <div class="about-hero-text">
+          <h1>The Education Institute for Early Intervention</h1>
+          <p>
+            We partner with childcare programs, families, and communities to build
+            inclusive environments where every child with diverse abilities can learn,
+            play, and thrive from the very beginning.
+          </p>
+          <div class="about-hero-meta">
+            <span>Inclusive Early Intervention</span>
+            <span>Family &amp; Educator Support</span>
+            <span>Research‑informed Practice</span>
+          </div>
+          <div class="about-hero-actions">
+            <a href="services.html" class="primary-btn">Explore Our Services</a>
+            <a href="contact-us.html" class="secondary-btn">Talk with Our Team</a>
+          </div>
+        </div>
+        <div class="about-hero-visual">
+          <img src="images/about-section.svg" alt="Children and educators learning together">
+        </div>
+      </div>
+    </section>
+  
 
   <!-- ABOUT INTRO -->
   <section class="section">
