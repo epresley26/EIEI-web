@@ -6,14 +6,27 @@
   <title>EIEI Blog & News</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-  <!-- Firebase SDK -->
+
+  <!-- Firebase SDK (modular v10, exposed as globals for firebase-init.js) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, setDoc, addDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      getDoc,
+      updateDoc,
+      deleteDoc,
+      setDoc,
+      addDoc,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
     import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    
-    // Make functions global for non-module scripts
+
+    // Expose modular APIs so components/firebase-init.js can build a compat-style wrapper
     window.initializeApp = initializeApp;
     window.getFirestore = getFirestore;
     window.collection = collection;
@@ -28,11 +41,6 @@
     window.orderBy = orderBy;
     window.getStorage = getStorage;
     window.getAuth = getAuth;
-    
-    // Load firebase-init after imports are ready
-    const script = document.createElement('script');
-    script.src = 'components/firebase-init.js';
-    document.head.appendChild(script);
   </script>
 </head>
 <body>
@@ -41,18 +49,35 @@
 
   <section class="section light" style="padding-top: 10%;">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
-      <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem;">Helpful Articles &<br>Stories Guidance</h2>
-      <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6; max-width: 800px; margin: 0 auto;">Discover helpful resources, stories, and guidance to support you on your journey. Learn from our community and stay updated with the latest insights.</p>
+      <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem;">
+        Helpful Articles &<br>Stories Guidance
+      </h2>
+      <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+        Discover helpful resources, stories, and guidance to support you on your journey.
+        Learn from our community and stay updated with the latest insights.
+      </p>
     </div>
-    
+
     <!-- Type Filter Buttons -->
     <div style="display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap;">
-      <button class="type-filter-btn active" onclick="filterByType('All')" data-type="All" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--brand-blue);color:white;cursor:pointer;font-weight:600;transition:all 0.3s;">All</button>
-      <button class="type-filter-btn" onclick="filterByType('Blog')" data-type="Blog" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">Blog</button>
-      <button class="type-filter-btn" onclick="filterByType('News')" data-type="News" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">News</button>
-      <button class="type-filter-btn" onclick="filterByType('Event')" data-type="Event" style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">Event</button>
+      <button class="type-filter-btn active" onclick="filterByType('All')" data-type="All"
+        style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--brand-blue);color:white;cursor:pointer;font-weight:600;transition:all 0.3s;">
+        All
+      </button>
+      <button class="type-filter-btn" onclick="filterByType('Blog')" data-type="Blog"
+        style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">
+        Blog
+      </button>
+      <button class="type-filter-btn" onclick="filterByType('News')" data-type="News"
+        style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">
+        News
+      </button>
+      <button class="type-filter-btn" onclick="filterByType('Event')" data-type="Event"
+        style="padding:0.5rem 1.5rem;border:none;border-radius:8px;background:var(--bg-secondary);color:var(--text);cursor:pointer;font-weight:600;transition:all 0.3s;">
+        Event
+      </button>
     </div>
-    
+
     <div class="cards" id="blogCards" style="max-width: 1200px; margin: 0 auto;">
       <p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Loading posts...</p>
     </div>
@@ -61,31 +86,47 @@
   <!-- FOOTER CONTAINER -->
   <div id="footer-container"></div>
 
+  <!-- Core scripts -->
   <script src="components/header.js"></script>
   <script src="components/footer.js"></script>
   <script src="components/loader.js"></script>
   <script src="script.js"></script>
   <script src="components/firebase-init.js"></script>
   <script src="components/chat-widget.js"></script>
+
   <script>
-    document.addEventListener('DOMContentLoaded', loadComponents);
+    document.addEventListener('DOMContentLoaded', () => {
+      loadComponents();
+      waitForFirebase(); // call once here
+    });
+
+    let allPosts = [];
+    let currentTypeFilter = 'All';
 
     async function loadPosts() {
       const container = document.getElementById('blogCards');
-      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Loading posts...</p>';
-      if (!window.firebaseDB) {
+      container.innerHTML =
+        '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Loading posts...</p>';
+
+      if (!window.firebaseDB || typeof window.firebaseDB.collection !== 'function') {
         console.error('Firebase DB not initialized');
-        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Firebase is not initialized. Please check your Firebase config in components/firebase-init.js.</p>';
+        container.innerHTML =
+          '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Firebase is not initialized. Please check your Firebase config in components/firebase-init.js.</p>';
         return;
       }
+
       try {
         let snap;
         try {
-          snap = await window.firebaseDB.collection('posts').orderBy('createdAt', 'desc').get();
+          snap = await window.firebaseDB
+            .collection('posts')
+            .orderBy('createdAt', 'desc')
+            .get();
         } catch (orderErr) {
           console.warn('Order by createdAt failed, falling back to simple get:', orderErr);
           snap = await window.firebaseDB.collection('posts').get();
         }
+
         let posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         posts = posts.sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
         console.log('Loaded posts:', posts.length);
@@ -93,26 +134,28 @@
         renderPosts(posts);
       } catch (e) {
         console.error('Blog load error:', e);
-        console.error('Error code:', e.code);
-        console.error('Error message:', e.message);
-        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Unable to load posts. Error: ' + e.message + '</p>';
+        const msg = e && e.message ? e.message : 'Unknown error';
+        container.innerHTML =
+          '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Unable to load posts. Error: ' +
+          msg +
+          '</p>';
       }
     }
 
     function renderPosts(posts) {
       const container = document.getElementById('blogCards');
       container.innerHTML = '';
+
       if (!posts.length) {
-        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">No posts yet. Check back soon!</p>';
+        container.innerHTML =
+          '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">No posts yet. Check back soon!</p>';
         return;
       }
-      
-      // Render posts with staggered timing to reduce lag
+
       posts.forEach((post, index) => {
         setTimeout(() => {
           const type = post.type || post.postType || 'Blog';
-          
-          // Convert Firestore Timestamp properly
+
           let date = 'No date';
           if (post.createdAt) {
             try {
@@ -131,41 +174,50 @@
                 month: 'long',
                 day: 'numeric'
               });
-            } catch (e) {
+            } catch {
               date = 'No date';
             }
           }
-          
+
           let imageUrl = post.imageUrl || 'images/placeholder.jpg';
-          // Optimize ImgBB URLs for card display (600px max)
           if (imageUrl.includes('imgbb.com')) {
             imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/600x400');
           }
-          
-          const excerpt = post.excerpt || (post.content ? post.content.slice(0, 120) + '…' : 'Read more about this post');
-          
+
+          const excerpt =
+            post.excerpt ||
+            (post.content ? post.content.slice(0, 120) + '…' : 'Read more about this post');
+
           const card = document.createElement('div');
           card.className = 'card reveal visible post-card';
           card.setAttribute('data-type', type);
           card.innerHTML = `
-            <img src="${imageUrl}" alt="${post.title}" class="card-image" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="${imageUrl}" alt="${post.title}" class="card-image" loading="lazy"
+                 onerror="this.src='images/placeholder.jpg'">
             <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column;">
               <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: capitalize;">
                 <span style="font-weight: 600; color: var(--brand-blue);">${type}</span> ${date}
               </div>
-              <h3 style="font-size: 1.35rem; font-weight: 700; line-height: 1.4; margin: 0 0 1rem 0; color: var(--text);">${post.title}</h3>
-              <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; flex-grow: 1; margin: 0;">${escapeHtml(excerpt)}</p>
-              <button class="primary-btn" onclick="openPostModal('${post.id}')" style="margin-top: 1.5rem; align-self: flex-start;">Read More</button>
+              <h3 style="font-size: 1.35rem; font-weight: 700; line-height: 1.4; margin: 0 0 1rem 0; color: var(--text);">
+                ${post.title}
+              </h3>
+              <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; flex-grow: 1; margin: 0;">
+                ${escapeHtml(excerpt)}
+              </p>
+              <button class="primary-btn"
+        onclick="openBlogPostModal('${post.id}')"
+        style="margin-top: 1.5rem; align-self: flex-start;">
+  Read More
+</button>
+
+
             </div>
           `;
           container.appendChild(card);
-        }, index * 30); // Stagger each post by 30ms
+        }, index * 30);
       });
     }
-    
-    let allPosts = [];
-    let currentTypeFilter = 'All';
-    
+
     function filterByType(type) {
       currentTypeFilter = type;
       const buttons = document.querySelectorAll('.type-filter-btn');
@@ -178,7 +230,7 @@
           btn.style.color = 'var(--text)';
         }
       });
-      
+
       if (type === 'All') {
         renderPosts(allPosts);
       } else {
@@ -186,6 +238,7 @@
         renderPosts(filtered);
       }
     }
+
     function toMillis(value) {
       if (!value) return 0;
       try {
@@ -195,13 +248,13 @@
         const d = new Date(value);
         const t = d.getTime();
         return isNaN(t) ? 0 : t;
-      } catch (_) {
+      } catch {
         return 0;
       }
     }
 
     function escapeHtml(str) {
-      return String(str).replace(/[&<>\"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[s]));
+      return String(str).replace(/[&<>"]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[s]));
     }
 
     // Simple modal for full post view
@@ -211,85 +264,113 @@
       <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 16px;">
         <div style="position: sticky; top: 0; background: white; padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; z-index: 10;">
           <h2 id="postModalTitle" style="margin: 0; font-size: 1.5rem; color: var(--text);">Post</h2>
-          <button class="close-btn" onclick="closePostModal()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-muted); padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">×</button>
+          <button class="close-btn" onclick="closePostModal()"
+                  style="background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-muted); padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            ×
+          </button>
         </div>
-        <img id="postModalImage" src="" alt="" style="width: 100%; height: 400px; object-fit: cover; display: none;">
+        <img id="postModalImage" src="" alt=""
+             style="width: 100%; height: 400px; object-fit: cover; display: none;">
         <div style="padding: 3rem; max-width: 100%;">
-          <div id="postModalMeta" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;"></div>
-          <div id="postModalBody" style="font-size: 1.1rem; line-height: 1.8; color: var(--text); word-break: break-word; white-space: pre-wrap;"></div>
+          <div id="postModalMeta"
+               style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          </div>
+          <div id="postModalBody"
+               style="font-size: 1.1rem; line-height: 1.8; color: var(--text); word-break: break-word; white-space: pre-wrap;">
+          </div>
         </div>
       </div>
     `;
     document.body.appendChild(modal);
 
-    async function openPostModal(id) {
-      try {
-        const doc = await window.firebaseDB.collection('posts').doc(id).get();
-        const post = doc.data();
-        
-        // Title
-        document.getElementById('postModalTitle').textContent = post.title || 'Post';
-        
-        // Image
-        const imgEl = document.getElementById('postModalImage');
-        if (post.imageUrl) {
-          imgEl.src = post.imageUrl;
-          imgEl.style.display = 'block';
-        } else {
-          imgEl.style.display = 'none';
-        }
-        
-        // Metadata
-        const type = post.type || post.postType || 'Blog';
-        let date = 'No date';
-        if (post.createdAt) {
-          try {
-            let dateObj;
-            if (typeof post.createdAt.toDate === 'function') {
-              dateObj = post.createdAt.toDate();
-            } else if (post.createdAt instanceof Date) {
-              dateObj = post.createdAt;
-            } else if (typeof post.createdAt === 'number') {
-              dateObj = new Date(post.createdAt);
-            } else {
-              dateObj = new Date(post.createdAt);
-            }
-            date = dateObj.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            });
-          } catch (e) {
-            console.error('Date conversion error:', e);
-            date = 'No date';
-          }
-        }
-        const metaEl = document.getElementById('postModalMeta');
-        metaEl.innerHTML = `
-          <span style="font-weight: 600; color: var(--brand-blue);">${type}</span>
-          <span style="color: var(--text-muted);">${date}</span>
-        `;
-        
-        // Content
-        document.getElementById('postModalBody').textContent = post.content || '';
-        modal.classList.add('active');
-      } catch (e) {
-        alert('Unable to load post');
-      }
+    async function openBlogPostModal(id) {
+  console.log('openBlogPostModal called with id:', id);
+
+  if (!window.firebaseDB || typeof window.firebaseDB.collection !== 'function') {
+    console.error('Firebase DB not ready when opening post modal');
+    alert('The post could not be loaded yet. Please wait a moment and try again.');
+    return;
+  }
+
+  try {
+    const col = window.firebaseDB.collection('posts');
+    const docRef = col.doc(id);
+    const docSnap = await docRef.get();
+    console.log('docSnap:', docSnap);
+
+    if (!docSnap || (typeof docSnap.exists === 'function' && !docSnap.exists())) {
+      alert('This post is no longer available.');
+      return;
     }
 
-    function closePostModal() { modal.classList.remove('active'); }
+    const post = typeof docSnap.data === 'function' ? docSnap.data() : docSnap.data;
+    console.log('post data:', post);
 
-    // Wait for Firebase to initialize before loading posts
+    if (!post) {
+      alert('This post has no data.');
+      return;
+    }
+
+    document.getElementById('postModalTitle').textContent = post.title || 'Post';
+
+    const imgEl = document.getElementById('postModalImage');
+    if (post.imageUrl) {
+      imgEl.src = post.imageUrl;
+      imgEl.style.display = 'block';
+    } else {
+      imgEl.style.display = 'none';
+    }
+
+    const type = post.type || post.postType || 'Blog';
+    let date = 'No date';
+    if (post.createdAt) {
+      try {
+        let dateObj;
+        if (typeof post.createdAt.toDate === 'function') {
+          dateObj = post.createdAt.toDate();
+        } else if (post.createdAt instanceof Date) {
+          dateObj = post.createdAt;
+        } else if (typeof post.createdAt === 'number') {
+          dateObj = new Date(post.createdAt);
+        } else {
+          dateObj = new Date(post.createdAt);
+        }
+        date = dateObj.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } catch (e) {
+        console.error('Date conversion error:', e);
+        date = 'No date';
+      }
+    }
+    const metaEl = document.getElementById('postModalMeta');
+    metaEl.innerHTML = `
+      <span style="font-weight: 600; color: var(--brand-blue);">${type}</span>
+      <span style="color: var(--text-muted);">${date}</span>
+    `;
+
+    document.getElementById('postModalBody').textContent = post.content || '';
+    modal.classList.add('active');
+  } catch (e) {
+    console.error('openBlogPostModal error:', e);
+    alert('Unable to load post. Please try again.');
+  }
+}
+
+
+    function closePostModal() {
+      modal.classList.remove('active');
+    }
+
     function waitForFirebase() {
-      if (window.firebaseDB) {
+      if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
         loadPosts();
       } else {
         setTimeout(waitForFirebase, 100);
       }
     }
-
-    document.addEventListener('DOMContentLoaded', waitForFirebase);
   </script>
 </body>
 </html>

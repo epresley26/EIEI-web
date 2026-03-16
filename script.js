@@ -9,7 +9,6 @@ if (slides.length > 0) {
     currentSlide = (currentSlide + 1) % slides.length;
     slides[currentSlide].classList.add("active");
   }, 5000);
-  // Cleanup on page unload
   window.addEventListener("beforeunload", () => clearInterval(carouselInterval));
 }
 
@@ -20,113 +19,128 @@ let testimonialCardsData = [];
 let currentTestimonial = 0;
 let testimonialsInterval;
 
-function loadAndInitializeTestimonials() {
-  if (typeof window.firebaseDB === 'undefined') {
-    console.log('Firebase not ready yet');
+async function loadAndInitializeTestimonials() {
+  if (!window.firebaseDB || typeof window.firebaseDB.collection !== "function") {
+    console.log("Firebase not ready yet for testimonials");
     return;
   }
 
-  window.firebaseDB.collection('testimonials').orderBy('createdAt', 'desc').get()
-    .then(snapshot => {
-      testimonialCardsData = [];
-      snapshot.forEach(doc => {
-        testimonialCardsData.push({ id: doc.id, ...doc.data() });
-      });
+  try {
+    // Use wrapper: collection().orderBy().get() -> { docs: [...] }
+    const snapshot = await window.firebaseDB
+      .collection("testimonials")
+      .orderBy("createdAt", "desc")
+      .get();
 
-      if (testimonialCardsData.length === 0) {
-        console.log('No testimonials found');
-        return;
-      }
+    const docs = snapshot && Array.isArray(snapshot.docs) ? snapshot.docs : [];
+    testimonialCardsData = docs.map(doc => {
+      const data = typeof doc.data === "function" ? doc.data() : doc.data;
+      return { id: doc.id, ...(data || {}) };
+    });
 
-      renderTestimonials();
-      initializeTestimonialCarousel();
-    })
-    .catch(err => console.error('Error loading testimonials:', err));
+    if (!testimonialCardsData.length) {
+      console.log("No testimonials found");
+      return;
+    }
+
+    renderTestimonials();
+    initializeTestimonialCarousel();
+  } catch (err) {
+    console.error("Error loading testimonials:", err);
+  }
 }
 
 function renderTestimonials() {
-  const container = document.getElementById('testimonialsContainer');
+  const container = document.getElementById("testimonialsContainer");
   if (!container) return;
 
-  container.innerHTML = '';
+  container.innerHTML = "";
   testimonialCardsData.forEach(t => {
-    const card = document.createElement('div');
-    card.className = 'card';
+    const card = document.createElement("div");
+    card.className = "card";
     card.innerHTML = `
-      <p>"${escapeHtmlContent(t.text || '')}"</p>
-      <h3>- ${escapeHtmlContent(t.name || '')}${t.designation ? ', ' + escapeHtmlContent(t.designation) : ''}</h3>
+      <p>"${escapeHtmlContent(t.text || "")}"</p>
+      <h3>- ${escapeHtmlContent(t.name || "")}${
+        t.designation ? ", " + escapeHtmlContent(t.designation) : ""
+      }</h3>
     `;
     container.appendChild(card);
   });
 }
 
 function escapeHtmlContent(text) {
-  const div = document.createElement('div');
+  const div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;
 }
 
 function initializeTestimonialCarousel() {
-  const container = document.getElementById('testimonialsContainer');
+  const container = document.getElementById("testimonialsContainer");
   if (!container) return;
 
-  const testimonialCards = container.querySelectorAll('.card');
-  if (testimonialCards.length === 0) return;
+  const testimonialCards = container.querySelectorAll(".card");
+  if (!testimonialCards.length) return;
 
   currentTestimonial = 0;
-  testimonialCards[0].classList.add('active');
+  testimonialCards[0].classList.add("active");
 
   function showTestimonial(index) {
-    testimonialCards.forEach(card => card.classList.remove('active'));
-    testimonialCards[index].classList.add('active');
+    testimonialCards.forEach(card => card.classList.remove("active"));
+    testimonialCards[index].classList.add("active");
   }
 
   function startAutoRotate() {
     testimonialsInterval = setInterval(() => {
-      currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
+      currentTestimonial =
+        (currentTestimonial + 1) % testimonialCards.length;
       showTestimonial(currentTestimonial);
     }, 5000);
   }
 
   startAutoRotate();
 
-  const prevBtn = document.getElementById('prevTestimonial');
-  const nextBtn = document.getElementById('nextTestimonial');
+  const prevBtn = document.getElementById("prevTestimonial");
+  const nextBtn = document.getElementById("nextTestimonial");
 
   if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
+    prevBtn.addEventListener("click", () => {
       clearInterval(testimonialsInterval);
-      currentTestimonial = (currentTestimonial - 1 + testimonialCards.length) % testimonialCards.length;
+      currentTestimonial =
+        (currentTestimonial - 1 + testimonialCards.length) %
+        testimonialCards.length;
       showTestimonial(currentTestimonial);
       startAutoRotate();
     });
   }
 
   if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener("click", () => {
       clearInterval(testimonialsInterval);
-      currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
+      currentTestimonial =
+        (currentTestimonial + 1) % testimonialCards.length;
       showTestimonial(currentTestimonial);
       startAutoRotate();
     });
   }
 
-  window.addEventListener('beforeunload', () => clearInterval(testimonialsInterval));
+  window.addEventListener("beforeunload", () =>
+    clearInterval(testimonialsInterval)
+  );
 }
 
 // Wait for Firebase to initialize (with retries)
 function waitForFirebaseAndLoad(attempts = 0) {
-  if (typeof window.firebaseDB !== 'undefined') {
+  if (window.firebaseDB && typeof window.firebaseDB.collection === "function") {
     loadAndInitializeTestimonials();
-  } else if (attempts < 20) { // retry up to ~5 seconds
+  } else if (attempts < 20) {
     setTimeout(() => waitForFirebaseAndLoad(attempts + 1), 250);
   } else {
-    console.warn('Firebase not available after 5s — testimonials not loaded.');
+    console.warn(
+      "Firebase not available after 5s — testimonials not loaded."
+    );
   }
 }
-
 waitForFirebaseAndLoad();
-
 
 // ==================
 // CONTACT BUTTON
@@ -149,7 +163,6 @@ if (menuToggle && nav) {
   menuToggle.addEventListener("click", () => {
     nav.classList.toggle("active");
   });
-  // Close nav when a link is clicked
   nav.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", () => nav.classList.remove("active"));
   });
@@ -181,9 +194,9 @@ document.querySelectorAll(".faq-question").forEach(btn => {
   btn.addEventListener("click", () => {
     const answer = btn.nextElementSibling;
     const isOpen = answer.classList.contains("open");
-    // Close all answers
-    document.querySelectorAll(".faq-answer").forEach(a => a.classList.remove("open"));
-    // Toggle current answer
+    document
+      .querySelectorAll(".faq-answer")
+      .forEach(a => a.classList.remove("open"));
     if (!isOpen) answer.classList.add("open");
   });
 });
@@ -194,11 +207,13 @@ document.querySelectorAll(".faq-question").forEach(btn => {
 function toggleHomeLink() {
   const homeLink = document.getElementById("navHome");
   if (!homeLink) return;
-  
-  // Check if we're on the homepage
+
   const currentPath = window.location.pathname;
-  const isHomepage = currentPath.endsWith("index.html") || currentPath.endsWith("/") || currentPath === "";
-  
+  const isHomepage =
+    currentPath.endsWith("index.html") ||
+    currentPath.endsWith("/") ||
+    currentPath === "";
+
   if (isHomepage) {
     homeLink.classList.remove("show");
   } else {
@@ -206,7 +221,6 @@ function toggleHomeLink() {
   }
 }
 
-// Call on page load and after components load
 document.addEventListener("DOMContentLoaded", toggleHomeLink);
 window.addEventListener("load", toggleHomeLink);
 
@@ -217,32 +231,53 @@ function handleNewsletterSignup(event) {
   event.preventDefault();
   const form = event.target;
   const email = form.querySelector(".newsletter-input").value.trim();
-  
-  if (email) {
-    // Normalize and try saving to Firestore via SDK if available, else REST fallback
-    const emailNorm = email.toLowerCase();
-    const subscriber = { email: emailNorm, createdAt: new Date().toISOString(), source: window.location.pathname || 'unknown' };
-    if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
-      // Use deterministic doc ID (email) to prevent duplicates; rules will allow only create
-      window.firebaseDB.collection('newsletter').doc(emailNorm).set({
+
+  if (!email) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  const emailNorm = email.toLowerCase();
+  const subscriber = {
+    email: emailNorm,
+    createdAt: new Date().toISOString(),
+    source: window.location.pathname || "unknown"
+  };
+
+  if (window.firebaseDB && typeof window.firebaseDB.collection === "function") {
+    // Using compat-style FieldValue only if firebase compat is present
+    const serverTs =
+      window.firebase &&
+      window.firebase.firestore &&
+      window.firebase.firestore.FieldValue
+        ? window.firebase.firestore.FieldValue.serverTimestamp()
+        : new Date();
+
+    window.firebaseDB
+      .collection("newsletter")
+      .doc(emailNorm)
+      .set({
         email: subscriber.email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAt: serverTs,
         source: subscriber.source
-      }).then(() => {
+      })
+      .then(() => {
         form.reset();
         alert("🎉 Thank you for subscribing! You're on our list.");
-      }).catch(() => {
-        // If rules reject because doc exists, treat as already subscribed
+      })
+      .catch(() => {
         form.reset();
         alert("You're already subscribed. Thank you!");
       });
-    } else {
-      // REST API fallback (requires rules to allow public write)
-      const PROJECT_ID = 'eiei-e1a76';
-      // Create with deterministic documentId so duplicates fail
-      fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/newsletter?documentId=${encodeURIComponent(emailNorm)}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+  } else {
+    const PROJECT_ID = "eiei-e1a76";
+    fetch(
+      `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/newsletter?documentId=${encodeURIComponent(
+        emailNorm
+      )}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fields: {
             email: { stringValue: subscriber.email },
@@ -250,120 +285,143 @@ function handleNewsletterSignup(event) {
             source: { stringValue: subscriber.source }
           }
         })
-      }).then(res => {
-        if (!res.ok) throw new Error('exists or write denied');
+      }
+    )
+      .then(res => {
+        if (!res.ok) throw new Error("exists or write denied");
         form.reset();
         alert("🎉 Thank you for subscribing! You're on our list.");
-      }).catch(() => {
+      })
+      .catch(() => {
         form.reset();
         alert("You're already subscribed or write blocked. Thank you!");
       });
-    }
-  } else {
-    alert("Please enter a valid email address.");
   }
 }
 
 // ========== TESTIMONIAL GALLERY LOADING ==========
-function loadTestimonialGallery() {
-  const container = document.getElementById('testimonialGalleryContainer');
+async function loadTestimonialGallery() {
+  const container = document.getElementById("testimonialGalleryContainer");
   if (!container) return;
 
-  const db = firebase.firestore();
-  db.collection('testimonialGalleries').doc('main').get()
-    .then(doc => {
-      if (doc.exists && doc.data().images && doc.data().images.length > 0) {
-        const images = doc.data().images;
-        container.innerHTML = '';
-        
-        images.forEach((img, idx) => {
-          setTimeout(() => {
-            const imgElement = document.createElement('div');
-            imgElement.style.cssText = 'border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; contain: layout style paint;';
-            imgElement.innerHTML = `<img src="${img.url}" alt="Testimonial Gallery" style="width: 100%; height: 220px; object-fit: cover;" loading="lazy">`;
-            imgElement.addEventListener('mouseenter', function() {
-              this.style.transform = 'translateY(-8px)';
-              this.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
-            });
-            imgElement.addEventListener('mouseleave', function() {
-              this.style.transform = 'translateY(0)';
-              this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-            });
-            container.appendChild(imgElement);
-          }, idx * 50);
+  try {
+    if (!window.firebaseDB || typeof window.firebaseDB.collection !== "function") {
+      console.warn("firebaseDB not ready for testimonial gallery");
+      return;
+    }
+
+    const snap = await window.firebaseDB
+      .collection("testimonialGalleries")
+      .doc("main")
+      .get();
+    const data =
+      snap && typeof snap.data === "function" ? snap.data() : snap.data;
+
+    if (!data || !Array.isArray(data.images) || !data.images.length) return;
+
+    const images = data.images;
+    container.innerHTML = "";
+
+    images.forEach((img, idx) => {
+      setTimeout(() => {
+        const imgElement = document.createElement("div");
+        imgElement.style.cssText =
+          "border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; contain: layout style paint;";
+        imgElement.innerHTML = `<img src="${img.url}" alt="Testimonial Gallery" style="width: 100%; height: 220px; object-fit: cover;" loading="lazy">`;
+        imgElement.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-8px)";
+          this.style.boxShadow = "0 8px 24px rgba(0,0,0,0.15)";
         });
-      }
-    })
-    .catch(err => console.error('Error loading testimonial gallery:', err));
+        imgElement.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0)";
+          this.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+        });
+        container.appendChild(imgElement);
+      }, idx * 50);
+    });
+  } catch (err) {
+    console.error("Error loading testimonial gallery:", err);
+  }
 }
 
-// Load testimonial gallery when window loads
-window.addEventListener('load', loadTestimonialGallery);
+window.addEventListener("load", loadTestimonialGallery);
 
 // ========== PAGE-SPECIFIC TESTIMONIAL GALLERY LOADING ==========
-function loadPageTestimonialGallery(containerId) {
+async function loadPageTestimonialGallery(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const db = firebase.firestore();
-  db.collection('testimonialGalleries').doc('main').get()
-    .then(doc => {
-      if (doc.exists && doc.data().images && doc.data().images.length > 0) {
-        const images = doc.data().images;
-        container.innerHTML = '';
-        
-        images.forEach((img, idx) => {
-          setTimeout(() => {
-            const imgElement = document.createElement('div');
-            imgElement.style.cssText = 'border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; contain: layout style paint;';
-            imgElement.innerHTML = `<img src="${img.url}" alt="Testimonial Gallery" style="width: 100%; height: 200px; object-fit: cover;" loading="lazy">`;
-            imgElement.addEventListener('mouseenter', function() {
-              this.style.transform = 'translateY(-8px)';
-              this.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
-            });
-            imgElement.addEventListener('mouseleave', function() {
-              this.style.transform = 'translateY(0)';
-              this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-            });
-            container.appendChild(imgElement);
-          }, idx * 50);
+  try {
+    if (!window.firebaseDB || typeof window.firebaseDB.collection !== "function") {
+      console.warn("firebaseDB not ready for page testimonial gallery");
+      return;
+    }
+
+    const snap = await window.firebaseDB
+      .collection("testimonialGalleries")
+      .doc("main")
+      .get();
+    const data =
+      snap && typeof snap.data === "function" ? snap.data() : snap.data;
+
+    if (!data || !Array.isArray(data.images) || !data.images.length) return;
+
+    const images = data.images;
+    container.innerHTML = "";
+
+    images.forEach((img, idx) => {
+      setTimeout(() => {
+        const imgElement = document.createElement("div");
+        imgElement.style.cssText =
+          "border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; contain: layout style paint;";
+        imgElement.innerHTML = `<img src="${img.url}" alt="Testimonial Gallery" style="width: 100%; height: 200px; object-fit: cover;" loading="lazy">`;
+        imgElement.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-8px)";
+          this.style.boxShadow = "0 8px 24px rgba(0,0,0,0.15)";
         });
-      }
-    })
-    .catch(err => console.error('Error loading testimonial gallery:', err));
+        imgElement.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0)";
+          this.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+        });
+        container.appendChild(imgElement);
+      }, idx * 50);
+    });
+  } catch (err) {
+    console.error("Error loading testimonial gallery (page):", err);
+  }
 }
 
-// Load page-specific testimonial galleries
-window.addEventListener('load', () => {
-  if (document.getElementById('trainingTestimonialGalleryContainer')) {
-    loadPageTestimonialGallery('trainingTestimonialGalleryContainer');
+window.addEventListener("load", () => {
+  if (document.getElementById("trainingTestimonialGalleryContainer")) {
+    loadPageTestimonialGallery("trainingTestimonialGalleryContainer");
   }
-  if (document.getElementById('earlyInterventionTestimonialGalleryContainer')) {
-    loadPageTestimonialGallery('earlyInterventionTestimonialGalleryContainer');
+  if (
+    document.getElementById("earlyInterventionTestimonialGalleryContainer")
+  ) {
+    loadPageTestimonialGallery(
+      "earlyInterventionTestimonialGalleryContainer"
+    );
   }
 });
+
 // ==================
 // TOUR REQUEST MODAL
 // ==================
-
 function openTourRequestModal() {
-  const modal = document.getElementById('tourRequestModal');
+  const modal = document.getElementById("tourRequestModal");
   if (modal) {
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Prevent scrolling
-    console.log('Tour request modal opened');
-  } else {
-    console.error('Tour request modal element not found');
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
   }
 }
 
 function closeTourRequestModal() {
-  const modal = document.getElementById('tourRequestModal');
+  const modal = document.getElementById("tourRequestModal");
   if (modal) {
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto'; // Re-enable scrolling
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
   }
-  const form = document.getElementById('tourRequestForm');
+  const form = document.getElementById("tourRequestForm");
   if (form) {
     form.reset();
   }
@@ -372,73 +430,96 @@ function closeTourRequestModal() {
 function submitTourRequest(event) {
   event.preventDefault();
 
-  if (typeof window.firebaseDB === 'undefined') {
-    alert('Database not ready. Please refresh and try again.');
+  if (!window.firebaseDB || typeof window.firebaseDB.collection !== "function") {
+    alert("Database not ready. Please refresh and try again.");
     return;
   }
 
-  // Get all form values
-  const parentName = document.getElementById('tourParentName').value.trim();
-  const childName = document.getElementById('tourChildName').value.trim();
-  const childDOB = document.getElementById('tourChildDOB').value;
-  const childAge = document.getElementById('tourChildAge').value;
-  const lea = document.getElementById('tourLEA').value.trim();
-  const phone = document.getElementById('tourPhone').value.trim();
-  const address = document.getElementById('tourAddress').value.trim();
-  const email = document.getElementById('tourEmail').value.trim();
-  const transportation = document.querySelector('input[name="tourTransportation"]:checked');
-  const preschool = document.querySelector('input[name="tourPreschool"]:checked');
-  const language = document.getElementById('tourLanguage').value.trim();
-  const services = Array.from(document.querySelectorAll('input[name="tourServices"]:checked')).map(el => el.value);
-  const preferredTime = document.querySelector('input[name="tourTime"]:checked');
+  const parentName = document.getElementById("tourParentName").value.trim();
+  const childName = document.getElementById("tourChildName").value.trim();
+  const childDOB = document.getElementById("tourChildDOB").value;
+  const childAge = document.getElementById("tourChildAge").value;
+  const lea = document.getElementById("tourLEA").value.trim();
+  const phone = document.getElementById("tourPhone").value.trim();
+  const address = document.getElementById("tourAddress").value.trim();
+  const email = document.getElementById("tourEmail").value.trim();
+  const transportation = document.querySelector(
+    'input[name="tourTransportation"]:checked'
+  );
+  const preschool = document.querySelector(
+    'input[name="tourPreschool"]:checked'
+  );
+  const language = document.getElementById("tourLanguage").value.trim();
+  const services = Array.from(
+    document.querySelectorAll('input[name="tourServices"]:checked')
+  ).map(el => el.value);
+  const preferredTime = document.querySelector(
+    'input[name="tourTime"]:checked'
+  );
 
-  // Validate required fields
-  if (!parentName || !childName || !childDOB || !childAge || !lea || !phone || !address || !email || !transportation || !preschool || !language || services.length === 0 || !preferredTime) {
-    alert('Please fill in all required fields');
+  if (
+    !parentName ||
+    !childName ||
+    !childDOB ||
+    !childAge ||
+    !lea ||
+    !phone ||
+    !address ||
+    !email ||
+    !transportation ||
+    !preschool ||
+    !language ||
+    !services.length ||
+    !preferredTime
+  ) {
+    alert("Please fill in all required fields");
     return;
   }
 
-  // Show loading state
   const btn = event.target.querySelector('button[type="submit"]');
   const originalText = btn.textContent;
-  btn.textContent = 'Submitting...';
+  btn.textContent = "Submitting...";
   btn.disabled = true;
 
-  // Save to Firestore
-  window.firebaseDB.collection('tourRequests').add({
-    parentName: parentName,
-    childName: childName,
-    childDOB: childDOB,
-    childAge: parseInt(childAge),
-    lea: lea,
-    phone: phone,
-    address: address,
-    email: email,
-    needsTransportation: transportation.value === 'yes',
-    attendingPreschool: preschool.value === 'yes',
-    primaryLanguage: language,
-    services: services,
-    preferredTime: preferredTime.value,
-    submittedAt: new Date(),
-    status: 'pending'
-  })
-  .then(() => {
-    alert('✓ Tour request submitted successfully! We will contact you soon at ' + phone + ' to confirm your tour.');
-    closeTourRequestModal();
-  })
-  .catch(error => {
-    console.error('Error submitting tour request:', error);
-    alert('Error submitting tour request. Please try again.');
-  })
-  .finally(() => {
-    btn.textContent = originalText;
-    btn.disabled = false;
-  });
+  window.firebaseDB
+    .collection("tourRequests")
+    .add({
+      parentName,
+      childName,
+      childDOB,
+      childAge: parseInt(childAge, 10),
+      lea,
+      phone,
+      address,
+      email,
+      needsTransportation: transportation.value === "yes",
+      attendingPreschool: preschool.value === "yes",
+      primaryLanguage: language,
+      services,
+      preferredTime: preferredTime.value,
+      submittedAt: new Date(),
+      status: "pending"
+    })
+    .then(() => {
+      alert(
+        "✓ Tour request submitted successfully! We will contact you soon at " +
+          phone +
+          " to confirm your tour."
+      );
+      closeTourRequestModal();
+    })
+    .catch(error => {
+      console.error("Error submitting tour request:", error);
+      alert("Error submitting tour request. Please try again.");
+    })
+    .finally(() => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    });
 }
 
-// Close modal when clicking outside of it
-window.addEventListener('click', (event) => {
-  const modal = document.getElementById('tourRequestModal');
+window.addEventListener("click", event => {
+  const modal = document.getElementById("tourRequestModal");
   if (event.target === modal) {
     closeTourRequestModal();
   }
