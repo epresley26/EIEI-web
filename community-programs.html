@@ -12,6 +12,8 @@
       line-height: 1.6;
       color: #1f2937;
       background-color: #f3f4f6;
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
     .container {
@@ -149,80 +151,346 @@
     .cta-button:hover {
       background-color: #ff9500;
     }
+
+    /* New styles for additional content */
+    .divider {
+      height: 4px;
+      width: 20%;
+      background-color: #2a4175;
+      margin: 1rem 0 1.5rem 0;
+    }
+
+    .image-gallery-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .image-container {
+      margin-bottom: 1rem;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .image-gallery {
+      margin-top: 2rem;
+    }
+
+    .image-gallery .row {
+      margin-bottom: 1rem;
+    }
+
+    .image-gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .newsletter-section h2 {
+      color: #2a4175;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #fca311;
+      padding-bottom: 0.5rem;
+    }
+
+    .newsletter-section p {
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+
+    .newsletter-section strong {
+      color: #2a4175;
+    }
+
+    .services-header {
+      width: 100%;
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+      margin: 0;
+      max-width: none;
+      border-radius: 0;
+    }
+
+    .services-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .services-header p {
+      width: 100%;
+      font-size: 1.1rem;
+      opacity: 0.95;
+      max-width: none;
+      margin: 0 auto;
+    }
+
+    /* Carousel styles (service-specific) */
+    .services-carousel {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      padding: 2rem;
+    }
+
+    .slide-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .slide-content p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
   </style>
 </head>
 <body>
   <!-- HEADER CONTAINER -->
   <div id="header-container"></div>
 
+  <!-- SERVICE CAROUSEL -->
+  <section class="services-carousel">
+    <div class="carousel" id="pageCarousel">
+      <div class="slide active" style="background-image: url('images/slide1.jpg')">
+        <div class="slide-content">
+          <h1>Community Programs &amp; Partnerships</h1>
+          <p>Partnering with communities to support children</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide2.jpg')">
+        <div class="slide-content">
+          <h1>Community Programs &amp; Partnerships</h1>
+          <p>Strengthening ECE programs through collaboration</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide3.jpg')">
+        <div class="slide-content">
+          <h1>Community Programs &amp; Partnerships</h1>
+          <p>Building inclusive, supportive learning environments</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls" id="pageCarouselControls"></div>
+  </section>
+
+  <div class="services-header">
+    <h1>Community Programs &amp; Partnerships</h1>
+    <p>EIEI partners with communities to create safe, stimulating learning environments and support children’s education at home and in school.</p>
+  </div>
+
   <div class="container">
     <div class="breadcrumb">
       <a href="index.html">Home</a> / <a href="services.html">Services</a> / Community Programs & Partnerships
     </div>
 
-    <div class="program-header">
-      <h1 class="program-title">Community Programs & Partnerships</h1>
-      <p class="program-subtitle">Supporting Early Childhood Education through collaboration and shared mission</p>
-    </div>
-
     <div class="content-section">
-      <h2 class="section-title">About Our Partnership</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        EIEI has proudly been awarded a 5-year grant in partnership with Pennsylvania's Pre-K Counts initiative. This significant partnership allows us to support 20+ Early Childhood Education (ECE) programs throughout the region with comprehensive training, coaching, and professional development.
-      </p>
-      <p style="line-height: 1.8;">
-        Through this collaborative effort, we work together with ECE programs to strengthen inclusive practices, enhance classroom management, engage families, and support the growth and development of children with diverse abilities.
-      </p>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">By The Numbers</h2>
-      <div class="stats">
-        <div class="stat-box">
-          <div class="stat-number">5</div>
-          <div class="stat-label">Year Grant</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-number">20+</div>
-          <div class="stat-label">ECE Programs Supported</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-number">800+</div>
-          <div class="stat-label">Children Served</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-number">100+</div>
-          <div class="stat-label">Educators Trained</div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-title">Pre-K Counts Lead Agency From 2021</h2>
+            <div class="divider"></div>
+            <p>The Education Institute for Early Intervention has been awarded Lead Agency for three early childhood programs in Philadelphia from The Office of Child Development and Early Learning (OCDEL) for 2021-22. EIEI was awarded slots for the 2022-23 school year and will support six childcare programs in Delaware and Philadelphia counties.</p>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="content-section">
-      <h2 class="section-title">What We Offer</h2>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-title">Consultation & Technical Assistance</div>
-          <div class="benefit-desc">Expert guidance on implementing best practices in early childhood education and special needs support.</div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-title">Social Emotional Development Curriculum for Early Childcare Programs 2021-23</h2>
+            <div class="divider"></div>
+            <p>EIEI is excited to launch the <span>Social Emotional Learning</span> Program with a pilot of early childhood programs. This course is rooted in social-emotional learning (SEL) that helps transform childcare facilities into supportive, successful learning environments uniquely equipped to help children thrive. Programs learn what social-emotional learning, executive function, and self-regulation are and why it's essential in childcare. Implementing this practice increases children's school readiness and social success and decreases problem behaviors. It does this by building children's self-regulation skills and social-emotional competence. We are excited about launching this program and look forward to the results.</p>
+          </div>
         </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Staff Training & Development</div>
-          <div class="benefit-desc">Professional development workshops and coaching for teachers and staff members.</div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-title">Suspension and Expulsion "Warm Line"</h2>
+            <div class="divider"></div>
+            <p>EIEI warm line is a service to childcare providers who need a caring and sympathetic listener about children with challenging behaviors in their childcare program. EIEI friendly line is an alternative way of accessing support and services non-threatening or punitively. The warm line is run by "peers," generally those who have had their own experiences of operating a childcare program. Unlike other coaches in ECE, a warm line operator is unlikely to call the state on an owner or provider because they are unsure how to support a child or family. The warm line helps providers keep the lines of communication open through conversations, not advice or lectures. EIEI's warmlines offer understanding, respectful, and supportive discussions to providers. The warm line will also refer you to other avenues of help and support.</p>
+          </div>
         </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Inclusive Classroom Implementation</div>
-          <div class="benefit-desc">Support for creating classrooms where all children can learn and succeed together.</div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-title">Inclusion Coaches & Advisors</h2>
+            <div class="divider"></div>
+            <p>EIEI Trainers play a crucial role in coaching ECE programs in Early Childhood Specia Education. EIEI seeks a creative coach/mentor to implement our effective evidence-based programs to educate the ECE field on how to service more families needing support in the Early Intervention Systems.</p>
+          </div>
         </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Family Engagement Programs</div>
-          <div class="benefit-desc">Strategies and support for meaningful family involvement in children's learning.</div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-title">National Association for Family Childcare Accreditation (NAFCC)</h2>
+            <div class="divider"></div>
+            <p>The Education Institute for Early Intervention (EIEI) has been awarded a grant from First Up as a sub-grantee and partnered with the Family Child Care Advisory Council to train and assist providers in achieving national accreditation. The Pennsylvania State Representative's goal is to increase the number of family or group (in-home) providers across the state to become nationally accredited. The goal is to have 300 family early learning programs become NAFCC accredited across the state. National accreditation of family child care within the State of Pennsylvania remains the highest priority.</p>
+          </div>
         </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Quality Improvement Initiatives</div>
-          <div class="benefit-desc">Data-driven approaches to continuous improvement and program evaluation.</div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-title">K-12 Partnerships</h2>
+            <div class="divider"></div>
+            <p>EIEI provides parent and community training to K-12 schools. EIEI works alongside principals and Parent/Teacher Associations. EIEI assists schools in identifying and prioritizing the school's needs, engaging stakeholders, leveraging resources, and coordinating with service providers to offer on-site programming and support to students and families at the school.</p>
+          </div>
         </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Resource Development</div>
-          <div class="benefit-desc">Access to materials, curricula, and resources aligned with Pennsylvania Pre-K standards.</div>
+      </div>
+    </div>
+
+    <div class="image-gallery-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="image-container">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/EIEI-X-Rapid-Response-Flyers.png?resize=1080%2C1528&ssl=1" alt="EIEI X Rapid Response Flyers" class="img-responsive">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="image-container">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/Rapid-Response.png?resize=1080%2C699&ssl=1" alt="Rapid Response" class="img-responsive">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="newsletter-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-title">The Education Institute for Early Intervention (EIEI) Newsletter – Summer 2025</h2>
+            <div class="divider"></div>
+            <p>Dear EIEI Community,<br>
+            As we close out another impactful school year, we're filled with gratitude and pride for all we've accomplished together in support of our children, families, and educators. From powerful community conversations to joyful celebrations, 2024–2025 was a year of meaningful growth, connection, and achievement.</p>
+            
+            <p><strong>EIEI Joins Forces to Advocate for Black Children</strong><br>
+            We proudly participated in the Philadelphia Regional Meeting for the Black Child Development Institute, engaging in vital conversations around mobilizing our city and region to better serve and empower Black children and families through education.</p>
+            
+            <p><strong>Celebrating Our Educators</strong><br>
+            Our team came together for a heartfelt Teacher Appreciation Dinner, where we were honored by the powerful words of City Council leaders and reminded of the lasting impact educators have on young lives.</p>
+            
+            <p><strong>2nd Annual Graduation & Carnival Celebration</strong><br>
+            We marked a major milestone with our Second Annual Preschool Graduation and Carnival, celebrating the growth and achievements of our youngest learners with families, staff, and community partners. The day was filled with joy, pride, and promise.</p>
+            
+            <p><strong>Dr. Essence Presley Inspires at Pre-K Counts Graduation</strong><br>
+            On June 10, Dr. Presley delivered a keynote address at Community Concern #13's Pre-K Counts Graduation, inspiring children and families with words of empowerment and hope for the future.</p>
+            
+            <p><strong>Team Bonding with a Twist</strong><br>
+            The EIEI staff wrapped up the year with a fun outing to Bury The Hatchet, where we sharpened our aim (and had some great eats) during our end of year celebration.</p>
+            
+            <p><strong>Words That Inspire</strong><br>
+            "Good evening – I wanted to say THANK YOU, THANK YOU, and THANK YOU. You pushed and believed in me and encouraged me to go forward with STARS. Two years later we are finally STAR 4."<br>
+            — Partner Provider</p>
+            
+            <p>"The Special Education class not only strengthened my professional skills but also renewed my passion for early childhood education and the critical role we play in shaping young lives."<br>
+            — Glenny Alvarado, June 2025</p>
+            
+            <p>"Even with 20 years of experience in early childhood, this course reignited my passion. The instructors honored our experience while introducing new tools and perspectives I could use immediately."<br>
+            — Aixa Lopez, June 2025</p>
+            
+            <p><strong>Thank You</strong><br>
+            To every family, educator, community partner, and supporter — thank you for making this year such a success. Together, we are building stronger foundations and brighter futures for all children.</p>
+            
+            <p>Wishing you a joyful, restful summer!</p>
+            
+            <p>With gratitude,<br>
+            The EIEI Team</p>
+          </div>
         </div>
       </div>
     </div>
@@ -257,6 +525,39 @@
       if (footerContainer) {
         footerContainer.innerHTML = createFooter();
       }
+
+      // Carousel setup
+      const slides = document.querySelectorAll('#pageCarousel .slide');
+      const totalSlides = slides.length;
+      let currentSlide = 0;
+
+      const controlsContainer = document.getElementById('pageCarouselControls');
+      if (controlsContainer) {
+        for (let i = 0; i < totalSlides; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          dot.onclick = () => goToSlide(i);
+          controlsContainer.appendChild(dot);
+        }
+      }
+
+      function goToSlide(n) {
+        currentSlide = (n + totalSlides) % totalSlides;
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[currentSlide].classList.add('active');
+
+        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[currentSlide]) {
+          dots[currentSlide].classList.add('active');
+        }
+      }
+
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+
+      setInterval(nextSlide, 5000);
     });
   </script>
 </body>

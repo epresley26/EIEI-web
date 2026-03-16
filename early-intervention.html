@@ -12,6 +12,8 @@
       line-height: 1.6;
       color: #1f2937;
       background-color: #f3f4f6;
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
     .container {
@@ -44,13 +46,66 @@
     }
 
     .location-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       background-color: #fca311;
       color: #2a4175;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
       font-weight: 600;
-      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      white-space: nowrap;
+    }
+
+    .location-badges-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .program-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tour-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fca311;
+      color: #2a4175;
+      padding: 0.6rem 1.75rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 2px solid #2a4175;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tour-btn:hover {
+      background-color: #ffb52a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 768px) {
+      .program-header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .tour-btn {
+        align-self: stretch;
+        justify-content: center;
+        width: 100%;
+      }
     }
 
     .program-title {
@@ -204,11 +259,142 @@
     .testimonial-nav:hover {
       color: #fca311;
     }
+
+    .services-header {
+      width: 100%;
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+      margin: 0;
+      max-width: none;
+      border-radius: 0;
+    }
+
+    .services-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .services-header p {
+      width: 100%;
+      font-size: 1.1rem;
+      opacity: 0.95;
+      max-width: none;
+      margin: 0 auto;
+    }
+
+    /* Carousel styles (service-specific) */
+    .services-carousel {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      padding: 2rem;
+    }
+
+    .slide-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .slide-content p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
   </style>
 </head>
 <body>
   <!-- HEADER CONTAINER -->
   <div id="header-container"></div>
+
+  <!-- SERVICE CAROUSEL -->
+  <section class="services-carousel">
+    <div class="carousel" id="pageCarousel">
+      <div class="slide active" style="background-image: url('images/slide1.jpg')">
+        <div class="slide-content">
+          <h1>Early Intervention Services &amp; Behavioral Health</h1>
+          <p>Comprehensive support for children ages 3–5</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide2.jpg')">
+        <div class="slide-content">
+          <h1>Early Intervention Services &amp; Behavioral Health</h1>
+          <p>Nurturing every child’s unique potential</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide3.jpg')">
+        <div class="slide-content">
+          <h1>Early Intervention Services &amp; Behavioral Health</h1>
+          <p>Partnering with families for lifelong success</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls" id="pageCarouselControls"></div>
+  </section>
+
+  <div class="services-header">
+    <h1>Early Intervention Services &amp; Behavioral Health</h1>
+    <p>Comprehensive support for children ages 3–5 with diverse abilities and needs.</p>
+  </div>
 
   <div class="container">
     <div class="breadcrumb">
@@ -216,9 +402,12 @@
     </div>
 
     <div class="program-header">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-        <div class="location-badge">📍 4704 Leiper Street, Philadelphia, PA 19124</div>
-        <a href="#" onclick="openTourRequestModal(); return false;" class="tour-btn" style="display: inline-block; background-color: #fca311; color: #2a4175; padding: 0.5rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: 600; border: 2px solid #2a4175; transition: all 0.3s ease;">Schedule a Tour</a>
+      <div class="program-header-top">
+        <div class="location-badges-group">
+          <div class="location-badge">📍 4704 Leiper St., Philadelphia, PA 19124</div>
+          <div class="location-badge">📍 5024 Penn St., Philadelphia, PA 19124</div>
+        </div>
+        <a href="#" onclick="openTourRequestModal(); return false;" class="tour-btn">Schedule a Tour</a>
       </div>
       <h1 class="program-title">Early Intervention Services & Behavioral Health</h1>
       <p class="program-subtitle">Comprehensive support for children ages 3-5 with diverse abilities</p>
@@ -353,6 +542,10 @@
           <div style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">📚 Yearbook 2024 - Spanish</div>
           <div style="color: #6b7280; font-size: 0.9rem;">Ver nuestro anuario y momentos especiales</div>
         </a>
+        <a href="https://drive.google.com/file/d/1t5vnTdpQj1iVUN2eYqEnIAQr7FjUTZLN/view?usp=sharing" target="_blank" style="display: block; padding: 1.5rem; background-color: #f3f4f6; border-left: 4px solid #fca311; border-radius: 4px; text-decoration: none; transition: transform 0.3s ease;">
+          <div style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">📚 Yearbook 2025 - English</div>
+          <div style="color: #6b7280; font-size: 0.9rem;">View our yearbook highlights and cherished moments</div>
+        </a>
       </div>
     </div>
 
@@ -473,6 +666,39 @@
       if (footerContainer) {
         footerContainer.innerHTML = createFooter();
       }
+
+      // Carousel setup
+      const slides = document.querySelectorAll('#pageCarousel .slide');
+      const totalSlides = slides.length;
+      let currentSlide = 0;
+
+      const controlsContainer = document.getElementById('pageCarouselControls');
+      if (controlsContainer) {
+        for (let i = 0; i < totalSlides; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          dot.onclick = () => goToSlide(i);
+          controlsContainer.appendChild(dot);
+        }
+      }
+
+      function goToSlide(n) {
+        currentSlide = (n + totalSlides) % totalSlides;
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[currentSlide].classList.add('active');
+
+        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[currentSlide]) {
+          dots[currentSlide].classList.add('active');
+        }
+      }
+
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+
+      setInterval(nextSlide, 5000);
     });
   </script>
 </body>

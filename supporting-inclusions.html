@@ -12,6 +12,8 @@
       line-height: 1.6;
       color: #1f2937;
       background-color: #f3f4f6;
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
     .container {
@@ -137,20 +139,146 @@
     .cta-button:hover {
       background-color: #ff9500;
     }
+
+    .services-header {
+      width: 100%;
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+      margin: 0;
+      max-width: none;
+      border-radius: 0;
+    }
+
+    .services-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .services-header p {
+      width: 100%;
+      font-size: 1.1rem;
+      opacity: 0.95;
+      max-width: none;
+      margin: 0 auto;
+    }
+
+    /* Carousel styles (service-specific) */
+    .services-carousel {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      padding: 2rem;
+    }
+
+    .slide-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .slide-content p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
   </style>
 </head>
 <body>
   <!-- HEADER CONTAINER -->
   <div id="header-container"></div>
 
+  <!-- SERVICE CAROUSEL -->
+  <section class="services-carousel">
+    <div class="carousel" id="pageCarousel">
+      <div class="slide active" style="background-image: url('images/slide1.jpg')">
+        <div class="slide-content">
+          <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
+          <p>Building collaborative partnerships for inclusion</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide2.jpg')">
+        <div class="slide-content">
+          <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
+          <p>Strengthening systems that serve children and families</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide3.jpg')">
+        <div class="slide-content">
+          <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
+          <p>Partnering to expand inclusive opportunities</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls" id="pageCarouselControls"></div>
+  </section>
+
+  <div class="services-header">
+    <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
+    <p>Building collaborative partnerships to advance inclusive education and support children with diverse abilities.</p>
+  </div>
+
   <div class="container">
     <div class="breadcrumb">
       <a href="index.html">Home</a> / <a href="services.html">Services</a> / Supporting Inclusions Through Programs & Affiliates
-    </div>
-
-    <div class="program-header">
-      <h1 class="program-title">Supporting Inclusions Through Programs & Affiliates</h1>
-      <p class="program-subtitle">Building collaborative partnerships to advance inclusive education and support children with diverse abilities</p>
     </div>
 
     <div class="content-section">
@@ -160,6 +288,93 @@
       </p>
       <p style="line-height: 1.8;">
         EIEI believes in the power of collaboration to create systemic change. Through strategic partnerships with organizations that share our commitment to inclusion, we can amplify our impact and reach more children and families in our community.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">ECE Rapid Response Program – Delaware County, PA</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        The Early Childhood Education (ECE) Rapid Response Program is designed to provide swift and effective support to families
+        and early childhood programs in Delaware County, PA. Whether questions relate to language, social-emotional, cognitive,
+        or physical development, the Rapid Response team helps programs and families navigate these critical early years.
+      </p>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+        This initiative of the Office of Child Development &amp; Early Learning focuses on children at risk of expulsion from
+        early childhood education settings, offering immediate, comprehensive assistance so that children can remain successfully
+        included in their programs.
+      </p>
+
+      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Key Features</h3>
+      <ul style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
+        <li><strong>48-hour response time</strong> – Families and programs receive support within 48 hours of reaching out.</li>
+        <li><strong>Expert support</strong> – A team of seasoned professionals addresses a wide range of early childhood challenges and behaviors.</li>
+        <li><strong>Comprehensive solutions</strong> – From assessment and planning to on-site support and follow-up.</li>
+        <li><strong>Personalized response</strong> – Every plan is tailored to the unique needs of each child, family, and program.</li>
+      </ul>
+
+      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Areas of Support</h3>
+      <ul style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
+        <li>Language development and communication skills</li>
+        <li>Family support and home–school collaboration</li>
+        <li>Social-emotional development and behavior strategies</li>
+        <li>Cognitive development and learning supports</li>
+        <li>Physical development, health, and coordination</li>
+      </ul>
+
+      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">How It Works</h3>
+      <ol style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
+        <li><strong>Immediate contact</strong> – Programs or families reach out via hotline or online forms.</li>
+        <li><strong>Assessment</strong> – The Rapid Response team quickly assesses the situation.</li>
+        <li><strong>Collaborative plan of action</strong> – A tailored plan is created with the family and program.</li>
+        <li><strong>Resource deployment</strong> – The team connects families and programs with the supports they need.</li>
+        <li><strong>Follow-up</strong> – Continued check-ins to ensure progress and stability.</li>
+      </ol>
+
+      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Our Rapid Response Team Has Grown!</h3>
+      <p style="line-height: 1.9; margin-bottom: 1rem;">
+        We’re excited to share that our Rapid Response Program team has expanded to nine talented professionals, each bringing
+        invaluable skills and expertise to support children and families in need. Our team is more equipped than ever to
+        provide immediate assistance and tailored solutions for early childhood development.
+      </p>
+      <p style="line-height: 1.9; margin-bottom: 0.75rem;">
+        <strong>Meet the experts behind our Rapid Response Program:</strong>
+      </p>
+      <ul style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
+        <li>Lakia Wilson</li>
+        <li>Shilpa Barrantes</li>
+        <li>Jennifer McDuffie</li>
+        <li>Lien Vo Jones</li>
+        <li>Nikita Kumari Kushwaha</li>
+        <li>Amy Saia</li>
+        <li>Francyne Wharton</li>
+        <li>Essence Allen-Presley</li>
+        <li>Abel Mapenzi</li>
+      </ul>
+      <p style="line-height: 1.9; margin-bottom: 1.5rem;">
+        With this talented team, we continue our commitment to supporting children’s growth and thriving in all areas of their
+        development. Together, we’re making a difference—one child at a time.
+      </p>
+
+      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">State Response Flyer</h3>
+      <p style="line-height: 1.9; margin-bottom: 1rem;">
+        View the full details of the ECE Rapid Response Program in the official state response flyer. You can access the flyer
+        directly from our Supporting Inclusion Through Programs &amp; Affiliates page:
+        <a href="https://eieiservices.com/supporting-inclusion-through-programs-affiliates/" target="_blank" rel="noopener" style="color:#2a4175; text-decoration:none;">
+          View the Full State Response Flyer
+        </a>.
+      </p>
+
+      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Contact Information</h3>
+      <p style="line-height: 1.9; margin-bottom: 0.5rem;">
+        <strong>Hotline:</strong> (484) 501-9101<br>
+        <strong>Email:</strong> RRT15@EIFOREI.ORG<br>
+        <strong>Website:</strong> www.eieiservices.com
+      </p>
+      <p style="line-height: 1.9;">
+        Program Contact Form:
+        <a href="https://forms.gle/tbRKhDqQ62GvjxU28" target="_blank" rel="noopener" style="color:#2a4175; text-decoration:none;">ECE Rapid Response Program Form</a><br>
+        Parent Contact Form:
+        <a href="https://forms.gle/1dfc12hRxNXTMfSx7" target="_blank" rel="noopener" style="color:#2a4175; text-decoration:none;">Parent Contact Form</a>
       </p>
     </div>
 
@@ -256,6 +471,39 @@
       if (footerContainer) {
         footerContainer.innerHTML = createFooter();
       }
+
+      // Carousel setup
+      const slides = document.querySelectorAll('#pageCarousel .slide');
+      const totalSlides = slides.length;
+      let currentSlide = 0;
+
+      const controlsContainer = document.getElementById('pageCarouselControls');
+      if (controlsContainer) {
+        for (let i = 0; i < totalSlides; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          dot.onclick = () => goToSlide(i);
+          controlsContainer.appendChild(dot);
+        }
+      }
+
+      function goToSlide(n) {
+        currentSlide = (n + totalSlides) % totalSlides;
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[currentSlide].classList.add('active');
+
+        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[currentSlide]) {
+          dots[currentSlide].classList.add('active');
+        }
+      }
+
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+
+      setInterval(nextSlide, 5000);
     });
   </script>
 </body>
