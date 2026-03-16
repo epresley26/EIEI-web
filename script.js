@@ -114,8 +114,19 @@ function initializeTestimonialCarousel() {
   window.addEventListener('beforeunload', () => clearInterval(testimonialsInterval));
 }
 
-// Wait a bit for Firebase to initialize
-setTimeout(loadAndInitializeTestimonials, 500);
+// Wait for Firebase to initialize (with retries)
+function waitForFirebaseAndLoad(attempts = 0) {
+  if (typeof window.firebaseDB !== 'undefined') {
+    loadAndInitializeTestimonials();
+  } else if (attempts < 20) { // retry up to ~5 seconds
+    setTimeout(() => waitForFirebaseAndLoad(attempts + 1), 250);
+  } else {
+    console.warn('Firebase not available after 5s — testimonials not loaded.');
+  }
+}
+
+waitForFirebaseAndLoad();
+
 
 // ==================
 // CONTACT BUTTON
