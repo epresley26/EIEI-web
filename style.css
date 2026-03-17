@@ -3178,7 +3178,7 @@ input:focus, textarea:focus, select:focus {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 2000;
 }
 
 .modal.active {
@@ -3189,4 +3189,42 @@ input:focus, textarea:focus, select:focus {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.donate-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  background: #fca311;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(252, 163, 17, 0.35);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.donate-pill:hover {
+  background: #ff9500;
+  box-shadow: 0 10px 22px rgba(252, 163, 17, 0.45);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    margin-left: auto;
+  }
 }

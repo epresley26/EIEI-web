@@ -14,96 +14,248 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   
   <style>
-    .about-header {
-      background: linear-gradient(135deg, var(--brand-blue) 0%, #4a6fa5 100%);
-      color: white;
-      padding: 6rem 2rem;
-      text-align: center;
-      margin-bottom: 0;
+    /* About hero (replaces flat about-header) */
+    .about-hero {
+      position: relative;
+      width: 100%;
+      padding: 7rem 2rem 5rem;
+      color: #fff;
+      overflow: hidden;
     }
 
-    .about-header-content h1 {
-      font-size: 2.5rem;
+    /* Background slideshow + gradient overlay */
+    .about-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -3;
+      animation: aboutHeroSlide 21s infinite;
+    }
+
+    .about-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.18), transparent 60%),
+        radial-gradient(circle at 80% 0%, rgba(248, 250, 252, 0.18), transparent 55%),
+        linear-gradient(
+          135deg,
+          rgba(15, 23, 42, 0.88),
+          rgba(37, 99, 235, 0.70),
+          rgba(15, 23, 42, 0.94)
+        );
+    }
+
+    /* Cycle through the same three hero images as index.html */
+    @keyframes aboutHeroSlide {
+      0%,
+      33.333% {
+        background-image: url("images/slide1.jpg");
+      }
+      33.334%,
+      66.666% {
+        background-image: url("images/slide2.jpg");
+      }
+      66.667%,
+      100% {
+        background-image: url("images/slide3.jpg");
+      }
+    }
+
+    /* Hero inner layout */
+    .about-hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 3rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-hero-text h1 {
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
       margin-bottom: 1rem;
       font-weight: 700;
+      letter-spacing: -0.04em;
     }
 
-    .about-header-content p {
-      font-size: 1.1rem;
-      max-width: 700px;
-      margin: 0 auto;
-      opacity: 0.95;
+    .about-hero-text p {
+      font-size: 1.05rem;
       line-height: 1.8;
+      opacity: 0.96;
+      max-width: 560px;
     }
 
-    /* Responsive image styles */
-    .responsive-image {
+    .about-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 1.5rem 0 1.75rem;
+    }
+
+    .about-hero-meta span {
+      font-size: 0.85rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.25);
+      border: 1px solid rgba(248, 250, 252, 0.25);
+    }
+
+    .about-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .about-hero-visual img {
       max-width: 100%;
       height: auto;
-      display: block;
-      margin: 0 auto;
+      border-radius: 24px;
+      box-shadow: 0 24px 50px rgba(15, 23, 42, 0.45);
     }
 
-    .team-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
-      transition: transform 0.3s ease;
+    @media (max-width: 900px) {
+      .about-hero {
+        padding: 6rem 1.75rem 3.5rem;
+      }
+
+      .about-hero-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-hero-visual {
+        order: -1;
+        text-align: center;
+      }
+
+      .about-hero-visual img {
+        max-width: 260px;
+        border-radius: 20px;
+      }
     }
 
-    .team-card:hover .team-image {
-      transform: scale(1.05);
-    }
-
-    .about-container {
+    /* ABOUT INTRO */
+    .about-intro {
       max-width: 900px;
       margin: 0 auto;
     }
 
-    .about-text p {
+    .about-intro h2 {
+      color: var(--brand-blue);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .about-intro p {
       font-size: 1.05rem;
       line-height: 1.8;
       color: var(--text);
       margin-bottom: 1.5rem;
     }
 
+    /* MODERN SECTION HEADERS */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      color: var(--brand-blue);
+      font-size: 2.4rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .section-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* MODERN CORE VALUES GRID - 4x2 Centered */
     .values-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.8rem;
+      max-width: 1100px;
+      margin: 0 auto;
     }
 
     .value-card {
       background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      border-left: 5px solid var(--brand-orange);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      padding: 2rem 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand-orange), var(--brand-blue));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
     }
 
     .value-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.15);
+      border-color: var(--brand-blue);
+    }
+
+    .value-card:hover::before {
+      transform: scaleX(1);
     }
 
     .value-card h3 {
       color: var(--brand-blue);
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
     }
 
     .value-card p {
       color: var(--text-muted);
+      font-size: 0.9rem;
       line-height: 1.6;
-      font-size: 0.95rem;
+      margin: 0;
     }
 
+    @media (max-width: 1024px) {
+      .values-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    /* WHY EIEI SECTION */
     .why-eiei-container {
       max-width: 1000px;
       margin: 0 auto;
@@ -112,38 +264,53 @@
     .problem-section {
       background: white;
       padding: 2.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.8);
     }
 
-    .issue-box, .impact-section {
-      background: #f9fafb;
+    .problem-section h3 {
+      color: var(--brand-blue);
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .issue-box,
+    .impact-section {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       padding: 1.5rem;
-      border-radius: 8px;
+      border-radius: 12px;
       margin-bottom: 1.5rem;
       border-left: 4px solid var(--brand-orange);
     }
 
-    .issue-box h4, .impact-section h4 {
+    .issue-box h4,
+    .impact-section h4 {
       color: var(--brand-blue);
       margin-bottom: 1rem;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      font-weight: 700;
     }
 
-    .issue-box ul, .impact-section ul {
+    .issue-box ul,
+    .impact-section ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    .issue-box li, .impact-section li {
+    .issue-box li,
+    .impact-section li {
       padding: 0.5rem 0 0.5rem 2rem;
       position: relative;
       color: var(--text);
       line-height: 1.6;
+      font-size: 0.95rem;
     }
 
-    .issue-box li:before, .impact-section li:before {
+    .issue-box li:before,
+    .impact-section li:before {
       content: "▸";
       position: absolute;
       left: 0;
@@ -151,99 +318,87 @@
       font-weight: bold;
     }
 
+    /* MODERN PROMISE GRID - 2x2 Centered */
     .promise-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .promise-card {
       background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.8);
       text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .promise-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(248, 113, 22, 0.05));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
     }
 
     .promise-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transform: translateY(-8px);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.16);
+      border-color: var(--brand-blue);
+    }
+
+    .promise-card:hover::before {
+      opacity: 1;
     }
 
     .promise-icon {
-      width: 50px;
-      height: 50px;
-      background: var(--brand-orange);
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--brand-blue), #4a6fa5);
       color: white;
-      border-radius: 50%;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: bold;
-      margin: 0 auto 1rem;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
     }
 
     .promise-card h3 {
       color: var(--brand-blue);
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
+      font-size: 1.35rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
     }
 
     .promise-card p {
       color: var(--text-muted);
-      line-height: 1.6;
       font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
     }
 
-    .policy-container {
-      background: #f9fafb;
-      padding: 2rem;
-      border-radius: 12px;
-      border-left: 4px solid var(--brand-blue);
+    @media (max-width: 768px) {
+      .promise-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
     }
 
-    .policy-container p {
-      color: var(--text);
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-    }
-
-    .policy-container p:last-child {
-      margin-bottom: 0;
-    }
-
-    .cta-container {
-      background: white;
-      padding: 3rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .cta-container h2 {
-      color: var(--brand-blue);
-      margin-bottom: 1rem;
-    }
-
-    .secondary-btn {
-      display: inline-block;
-      padding: 0.75rem 2rem;
-      background: white;
-      color: var(--brand-blue);
-      border: 2px solid var(--brand-blue);
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .secondary-btn:hover {
-      background: var(--brand-blue);
-      color: white;
-    }
-
-    /* Team Section Styles */
+    /* TEAM SECTION */
     .team-section-header {
       text-align: center;
       margin-bottom: 3rem;
@@ -251,8 +406,9 @@
 
     .team-section-header h2 {
       color: var(--brand-blue);
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       margin-bottom: 0.5rem;
+      font-weight: 700;
     }
 
     .team-section-header p {
@@ -291,7 +447,7 @@
 
     .team-card {
       position: relative;
-      border-radius: 24px;
+      border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
@@ -302,7 +458,7 @@
 
     .team-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.15);
     }
 
     .team-image {
@@ -352,18 +508,6 @@
       margin: 0;
     }
 
-    .team-bio {
-      display: none;
-    }
-
-    .team-stats {
-      display: none;
-    }
-
-    .team-cta-btn {
-      display: none;
-    }
-
     .team-loading {
       text-align: center;
       padding: 3rem 2rem;
@@ -371,7 +515,7 @@
       grid-column: 1/-1;
     }
 
-    /* Team Modal Styles */
+    /* Team modal */
     .team-modal {
       display: none;
       position: fixed;
@@ -557,156 +701,56 @@
         flex-direction: column;
         align-items: flex-start;
       }
+
+      .team-section-grid {
+        grid-template-columns: 1fr;
+      }
     }
-    /* About hero (replaces flat about-header) */
-/* ABOUT HERO – full-width with rotating background from home carousel */
-.about-hero {
-  position: relative;
-  width: 100%;
-  padding: 7rem 2rem 5rem;
-  color: #fff;
-  overflow: hidden;
-}
 
-/* Background slideshow + gradient overlay */
-.about-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: -3;
-  animation: aboutHeroSlide 21s infinite;
-}
+    /* CTA SECTION */
+    .cta-container {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-.about-hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.18), transparent 60%),
-    radial-gradient(circle at 80% 0%, rgba(248, 250, 252, 0.18), transparent 55%),
-    linear-gradient(
-      135deg,
-      rgba(15, 23, 42, 0.88),
-      rgba(37, 99, 235, 0.70),
-      rgba(15, 23, 42, 0.94)
-    );
-}
+    .cta-container h2 {
+      color: var(--brand-blue);
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      font-weight: 700;
+    }
 
-/* Cycle through the same three hero images as index.html */
-@keyframes aboutHeroSlide {
-  0%,
-  33.333% {
-    background-image: url("images/slide1.jpg");
-  }
-  33.334%,
-  66.666% {
-    background-image: url("images/slide2.jpg");
-  }
-  66.667%,
-  100% {
-    background-image: url("images/slide3.jpg");
-  }
-}
+    .cta-container p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
 
-/* Hero inner layout */
-.about-hero-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  gap: 3rem;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-}
+    .secondary-btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: white;
+      color: var(--brand-blue);
+      border: 2px solid var(--brand-blue);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
 
-.about-hero-text h1 {
-  font-size: clamp(2.4rem, 4vw, 3.2rem);
-  margin-bottom: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-}
-
-.about-hero-text p {
-  font-size: 1.05rem;
-  line-height: 1.8;
-  opacity: 0.96;
-  max-width: 560px;
-}
-
-.about-hero-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin: 1.5rem 0 1.75rem;
-}
-
-.about-hero-meta span {
-  font-size: 0.85rem;
-  padding: 0.45rem 0.8rem;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.25);
-  border: 1px solid rgba(248, 250, 252, 0.25);
-}
-
-.about-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-/* Simple secondary button reuse */
-.secondary-btn {
-  display: inline-block;
-  padding: 0.75rem 2rem;
-  background: white;
-  color: var(--brand-blue);
-  border: 2px solid var(--brand-blue);
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.secondary-btn:hover {
-  background: var(--brand-blue);
-  color: #fff;
-}
-
-.about-hero-visual img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 24px;
-  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.45);
-}
-
-/* Responsive hero */
-@media (max-width: 900px) {
-  .about-hero {
-    padding: 6rem 1.75rem 3.5rem;
-  }
-
-  .about-hero-inner {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-
-  .about-hero-visual {
-    order: -1;
-    text-align: center;
-  }
-
-  .about-hero-visual img {
-    max-width: 260px;
-    border-radius: 20px;
-  }
-}
-
-
+    .secondary-btn:hover {
+      background: var(--brand-blue);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -714,93 +758,96 @@
   <!-- HEADER CONTAINER -->
   <div id="header-container"></div>
 
-    <!-- ABOUT HERO -->
-    <section class="about-hero">
-      <div class="about-hero-inner">
-        <div class="about-hero-text">
-          <h1>The Education Institute for Early Intervention</h1>
-          <p>
-            We partner with childcare programs, families, and communities to build
-            inclusive environments where every child with diverse abilities can learn,
-            play, and thrive from the very beginning.
-          </p>
-          <div class="about-hero-meta">
-            <span>Inclusive Early Intervention</span>
-            <span>Family &amp; Educator Support</span>
-            <span>Research‑informed Practice</span>
-          </div>
-          <div class="about-hero-actions">
-            <a href="services.html" class="primary-btn">Explore Our Services</a>
-            <a href="contact-us.html" class="secondary-btn">Talk with Our Team</a>
-          </div>
+  <!-- ABOUT HERO -->
+  <section class="about-hero">
+    <div class="about-hero-inner">
+      <div class="about-hero-text">
+        <h1>The Education Institute for Early Intervention</h1>
+        <p>
+          We partner with childcare programs, families, and communities to build
+          inclusive environments where every child with diverse abilities can learn,
+          play, and thrive from the very beginning.
+        </p>
+        <div class="about-hero-meta">
+          <span>Inclusive Early Intervention</span>
+          <span>Family &amp; Educator Support</span>
+          <span>Research‑informed Practice</span>
         </div>
-        <div class="about-hero-visual">
-          <img src="images/about-section.svg" alt="Children and educators learning together">
+        <div class="about-hero-actions">
+          <a href="services.html" class="primary-btn">Explore Our Services</a>
+          <a href="contact-us.html" class="secondary-btn">Talk with Our Team</a>
         </div>
       </div>
-    </section>
-  
-
-  <!-- ABOUT INTRO -->
-  <section class="section">
-    <div class="about-container">
-      <div class="about-text">
-        <h2>Our Mission</h2>
-        <p>
-          At The Education Institute for Early Intervention (EIEI), we address a critical issue in childcare—suspensions and expulsions of young children, often due to behavioral challenges linked to inadequate support for children with Individual Family Service Plans (IFSPs) or Individual Education Plans (IEPs). 
-        </p>
-        <p>
-          EIEI educates and empowers childcare professionals to create inclusive environments that foster children's development and well-being. We collaborate with families, educators, and community partners to drive meaningful change, ensuring all children receive the support they need to thrive.
-        </p>
+      <div class="about-hero-visual">
+        <img src="images/about-section.svg" alt="Children and educators learning together">
       </div>
     </div>
   </section>
 
-  <!-- CORE VALUES -->
+  <!-- ABOUT INTRO -->
+  <section class="section">
+    <div class="about-intro">
+      <h2>Our Mission</h2>
+      <p>
+        At The Education Institute for Early Intervention (EIEI), we address a critical issue in childcare—suspensions and expulsions of young children, often due to behavioral challenges linked to inadequate support for children with Individual Family Service Plans (IFSPs) or Individual Education Plans (IEPs).
+      </p>
+      <p>
+        EIEI educates and empowers childcare professionals to create inclusive environments that foster children's development and well-being. We collaborate with families, educators, and community partners to drive meaningful change, ensuring all children receive the support they need to thrive.
+      </p>
+    </div>
+  </section>
+
+  <!-- CORE VALUES - 4x2 CENTERED -->
   <section class="section light">
-    <h2 style="text-align: center; margin-bottom: 3rem;">EIEI Core Values</h2>
+    <div class="section-header">
+      <h2>EIEI Core Values</h2>
+      <p>These values guide every classroom observation, coaching session, training, and family conversation.</p>
+    </div>
     <div class="values-grid">
       <div class="value-card">
         <h3>Empathy</h3>
-        <p>We understand and share the feelings of children and families, providing compassionate and respectful support for their experiences and challenges.</p>
+        <p>We understand and share the feelings of children and families, providing compassionate and respectful support.</p>
       </div>
       <div class="value-card">
         <h3>Equity</h3>
-        <p>We are committed to ensuring that every child, regardless of background or ability, receives equal opportunities to succeed and thrive in their educational journey.</p>
+        <p>We ensure every child, regardless of background or ability, receives equal opportunities to succeed and thrive.</p>
       </div>
       <div class="value-card">
         <h3>Integrity</h3>
-        <p>We commit to maintaining the highest ethical standards, ensuring trust and transparency in all interactions with children, families, and colleagues.</p>
+        <p>We maintain the highest ethical standards, ensuring trust and transparency in all our interactions and relationships.</p>
       </div>
       <div class="value-card">
         <h3>Inclusivity</h3>
-        <p>We value diversity and strive to create an environment where every child, regardless of ability, background, or need, feels welcomed and supported.</p>
+        <p>We create an environment where every child, regardless of ability or background, feels welcomed and supported.</p>
       </div>
       <div class="value-card">
         <h3>Empowerment</h3>
-        <p>We encourage and support children with special needs to become confident, independent learners and help families advocate for their child's rights and needs.</p>
+        <p>We encourage children and families to become confident, independent advocates for their needs and rights.</p>
       </div>
       <div class="value-card">
         <h3>Engagement</h3>
-        <p>We actively involve children, families, and educators in the learning process, fostering strong connections that enhance each child's development.</p>
+        <p>We actively involve children, families, and educators in the learning process, fostering strong, meaningful connections.</p>
       </div>
       <div class="value-card">
         <h3>Involvement</h3>
-        <p>We actively engage with families, educators, and the community to build strong partnerships that support the holistic development of every child.</p>
+        <p>We actively engage with families, educators, and the community to build strong partnerships and lasting change.</p>
       </div>
       <div class="value-card">
         <h3>Impact</h3>
-        <p>We dedicate ourselves to making a positive and lasting difference in the lives of children with special needs and their families.</p>
+        <p>We dedicate ourselves to making a positive and lasting difference in the lives of children and their families.</p>
       </div>
     </div>
   </section>
 
   <!-- WHY EIEI -->
   <section class="section">
-    <h2 style="text-align: center; margin-bottom: 3rem;">Why EIEI?</h2>
+    <div class="section-header">
+      <h2>Why EIEI?</h2>
+      <p>Addressing systemic gaps in early childhood education and support</p>
+    </div>
     <div class="why-eiei-container">
       <div class="problem-section">
-        <h3 style="color: var(--brand-blue); margin-bottom: 1.5rem;">The Challenge: Expulsions & Suspensions in Childcare</h3>
+        <h3>The Challenge: Expulsions &amp; Suspensions in Childcare</h3>
         
         <div class="issue-box">
           <h4>Current Reality</h4>
@@ -845,34 +892,36 @@
     </div>
   </section>
 
-  <!-- EIEI PROMISE -->
+  <!-- EIEI PROMISE - 2x2 CENTERED -->
   <section class="section light">
-    <h2 style="text-align: center; margin-bottom: 3rem;">The EIEI Promise</h2>
+    <div class="section-header">
+      <h2>The EIEI Promise</h2>
+      <p>Our four pillars of change and support</p>
+    </div>
     <div class="promise-container">
       <div class="promise-card">
-        <div class="promise-icon">A</div>
+        <div class="promise-icon">📚</div>
         <h3>Educate</h3>
         <p>Educate the workforce to provide appropriate teaching and learning environments to children entitled to IDEA services</p>
       </div>
       <div class="promise-card">
-        <div class="promise-icon">A</div>
+        <div class="promise-icon">💼</div>
         <h3>Invest</h3>
         <p>Invest in the workforce with a commitment to impartiality and integrity for children</p>
       </div>
       <div class="promise-card">
-        <div class="promise-icon">A</div>
+        <div class="promise-icon">🤝</div>
         <h3>Embrace</h3>
         <p>Embrace the individuality of children and celebrate their unique strengths and abilities</p>
       </div>
       <div class="promise-card">
-        <div class="promise-icon">A</div>
+        <div class="promise-icon">🚀</div>
         <h3>Initiate</h3>
-        <p>Initiate change, growth, and innovation with parents, business owners, stakeholders, and community partners in all programs</p>
+        <p>Initiate change, growth, and innovation with parents, business owners, stakeholders, and community partners</p>
       </div>
     </div>
   </section>
 
-  
   <!-- MEET THE TEAM -->
   <section class="section">
     <div class="team-section-header">
@@ -886,9 +935,9 @@
 
   <!-- CALL TO ACTION -->
   <section class="section light">
-    <div class="cta-container" style="text-align: center;">
+    <div class="cta-container">
       <h2>Ready to Join Us?</h2>
-      <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+      <p>
         Whether you're an educator, family, or organization partner, we're here to support you on the journey to inclusive excellence.
       </p>
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
@@ -946,7 +995,6 @@
           return { id: doc.id, ...doc.data() };
         });
         
-        // Render all team members in grid
         renderTeamGrid(teamMembers);
       } catch (error) {
         console.error('Error loading team members:', error);
@@ -966,7 +1014,6 @@
         return;
       }
       
-      // Group members by section
       const groupedMembers = {
         founder: [],
         executive: [],
@@ -990,27 +1037,23 @@
         staff: 'Staff'
       };
       
-      let cardIndex = 0; // Track card index for staggered loading
+      let cardIndex = 0;
       
       sectionOrder.forEach(sectionKey => {
         const sectionMembers = groupedMembers[sectionKey];
         if (sectionMembers.length === 0) return;
         
-        // Create section container
         const sectionDiv = document.createElement('div');
         sectionDiv.className = 'team-section';
         
-        // Create section title
         const sectionTitle = document.createElement('h3');
         sectionTitle.className = 'team-section-title';
         sectionTitle.textContent = sectionLabels[sectionKey];
         sectionDiv.appendChild(sectionTitle);
         
-        // Create grid for this section
         const gridDiv = document.createElement('div');
         gridDiv.className = 'team-section-grid';
         
-        // Add cards to grid with staggered rendering
         sectionMembers.forEach(member => {
           const currentCardIndex = cardIndex;
           cardIndex++;
@@ -1020,7 +1063,6 @@
             card.className = 'team-card';
             
             let imageUrl = member.imageUrl || 'images/team/default.jpg';
-            // Optimize ImgBB URLs for team display (280x280px)
             if (imageUrl.includes('imgbb.com')) {
               imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/280x280');
             }
@@ -1031,21 +1073,10 @@
                 <div class="team-name">${member.name}</div>
                 <div class="team-role">${member.role}</div>
               </div>
-              <div class="team-stats">
-                <div class="team-stat">
-                  <span class="team-stat-icon">👥</span>
-                  <span class="team-stat-value">120</span>
-                </div>
-                <div class="team-stat">
-                  <span class="team-stat-icon">⭐</span>
-                  <span class="team-stat-value">4.8</span>
-                </div>
-              </div>
-              <button class="team-cta-btn" onclick="event.stopPropagation();">View Profile</button>
             `;
             card.addEventListener('click', () => openTeamModal(member));
             gridDiv.appendChild(card);
-          }, currentCardIndex * 40); // Stagger each card by 40ms
+          }, currentCardIndex * 40);
         });
         
         sectionDiv.appendChild(gridDiv);
@@ -1074,7 +1105,6 @@
       }
     }
 
-    // Modal close event listeners
     document.addEventListener('DOMContentLoaded', () => {
       loadComponents();
       
@@ -1095,7 +1125,6 @@
       setTimeout(initTeamLoading, 500);
     });
 
-    // Load team members when Firebase is ready
     let attemptCount = 0;
     const maxAttempts = 15;
     
@@ -1109,8 +1138,10 @@
           console.log('Firebase DB not ready, retrying... (attempt ' + attemptCount + '/' + maxAttempts + ')');
           setTimeout(initTeamLoading, 1000);
         } else {
-          console.error('Firebase DB initialization timeout - team members may not load');
+          console.error('Firebase DB initialization timeout');
         }
       }
     }
   </script>
+</body>
+</html>
