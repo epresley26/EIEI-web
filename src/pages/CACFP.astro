@@ -1,662 +1,923 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="The CACFP Initiative - EIEI">
-<style is:global>
-
-    /* Page wrapper uses global body tokens; no body override */
-
-    .program-shell {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 4rem;
-    }
-
-    .program-breadcrumb {
-      font-size: 0.85rem;
-      color: var(--muted, #6b7280);
-      margin-bottom: 1rem;
-    }
-
-    .program-breadcrumb a {
-      color: var(--brand-blue);
-      text-decoration: none;
-    }
-
-    .program-breadcrumb a:hover {
-      color: var(--brand-orange);
-    }
-
-    .program-hero-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 2.5rem 2.25rem;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-      margin-bottom: 2.5rem;
-    }
-
-    .program-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--brand-blue);
-      background: rgba(37, 99, 235, 0.08);
-      padding: 0.35rem 0.7rem;
-      border-radius: 999px;
-      margin-bottom: 0.9rem;
-    }
-
-    .program-title {
-      color: var(--brand-blue);
-      font-size: 2.1rem;
-      letter-spacing: -0.04em;
-      margin-bottom: 0.8rem;
-      font-weight: 700;
-    }
-
-    .program-subtitle {
-      font-size: 1.02rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      margin-bottom: 0.75rem;
-    }
-
-    .program-subnote {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-    }
-
-    .program-section {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 2rem 2rem 2.2rem;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-      border: 1px solid rgba(226, 232, 240, 0.85);
-      margin-bottom: 2rem;
-    }
-
-    .program-section-title {
-      color: var(--brand-blue);
-      font-size: 1.4rem;
-      margin-bottom: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      border-bottom: 3px solid var(--brand-orange);
-      padding-bottom: 0.5rem;
-      display: inline-block;
-    }
-
-    .program-section p {
-      font-size: 0.98rem;
-      color: var(--text);
-      line-height: 1.7;
-      margin-bottom: 1rem;
-    }
-
-    .quote-box {
-      background: #f8fafc;
-      border-radius: 10px;
-      border-left: 4px solid var(--brand-orange);
-      padding: 1.3rem 1.4rem;
-      margin: 1.5rem 0;
-    }
-
-    .quote-text {
-      font-style: italic;
-      font-size: 1rem;
-      color: #374151;
-      margin-bottom: 0.7rem;
-    }
-
-    .quote-author {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--brand-blue);
-      text-align: right;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.2rem;
-      margin-top: 1.25rem;
-    }
-
-    .benefit-card {
-      background: #f9fafb;
-      border-radius: 10px;
-      padding: 1.2rem 1.15rem;
-      border-left: 4px solid var(--brand-orange);
-    }
-
-    .benefit-title {
-      font-size: 0.98rem;
-      font-weight: 600;
-      color: var(--brand-blue);
-      margin-bottom: 0.35rem;
-    }
-
-    .benefit-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .program-list {
-      list-style: none;
-      margin: 0 0 1.2rem 0;
-      padding: 0;
-    }
-
-    .program-list li {
+  <style is:global>
+    /* PREMIUM MODERN STYLES */
+    .service-hero {
       position: relative;
-      padding-left: 1.4rem;
-      margin-bottom: 0.45rem;
-      font-size: 0.95rem;
-      color: var(--text);
+      width: 100%;
+      min-height: 45vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10rem 2rem 5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .service-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .service-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .service-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    .service-hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.9;
       line-height: 1.6;
     }
 
-    .program-list li::before {
-      content: "▸";
-      position: absolute;
-      left: 0;
-      top: 0.1rem;
-      color: var(--brand-orange);
+    .main-content {
+      background: #f8fafc;
+      padding: 5rem 2rem;
+      min-height: 50vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .breadcrumb a {
+      color: #2563eb;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .breadcrumb a:hover {
+      color: #f97316;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: flex-start;
+      margin-bottom: 5rem;
+    }
+
+    .intro-text h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .intro-text p {
+      font-size: 1.1rem;
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .glass-card h4 {
+      font-size: 1.1rem;
       font-weight: 700;
+      color: #0f172a;
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .quote-block {
+      border-left: 4px solid #f97316;
+      padding-left: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .quote-block p {
+      font-size: 1.2rem;
+      font-style: italic;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+
+    .quote-block span {
+      font-weight: 700;
+      color: #f97316;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      margin-top: 5rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1rem;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      margin: 1.8rem 0 0.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
     }
 
-    .stat-box {
+    .stat-card {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem 2rem;
       text-align: center;
-      padding: 1.5rem 1.2rem;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      border: 1px solid #e2e8f0;
     }
 
-    .stat-number {
-      font-size: 2.1rem;
-      color: var(--brand-orange);
-      font-weight: 700;
-      margin-bottom: 0.3rem;
+    .stats-grid .stat-number {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #2563eb;
+      margin-bottom: 0.5rem;
+      line-height: 1;
     }
 
-    .stat-label {
-      font-size: 0.9rem;
-      color: var(--brand-blue);
+    .stats-grid .stat-label {
+      font-size: 1.1rem;
       font-weight: 600;
+      color: #475569;
     }
 
-    .image-row {
+    .services-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 5rem;
     }
 
-    .image-card img {
-      width: 100%;
-      border-radius: 12px;
-      display: block;
-    }
-
-    .image-caption {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: 0.4rem;
-    }
-
-    .updates-list {
-      list-style: none;
-      margin: 0 0 1.4rem;
-      padding: 0;
-    }
-
-    .updates-list li {
-      padding-left: 1.3rem;
+    .service-box {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
       position: relative;
-      margin-bottom: 0.4rem;
-      font-size: 0.95rem;
-      color: var(--text);
     }
 
-    .updates-list li::before {
-      content: "✓";
+    .service-box:hover {
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+      transform: translateY(-5px);
+      border-color: #93c5fd;
+    }
+
+    .icon-wrapper {
+      width: 50px;
+      height: 50px;
+      background: #eff6ff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #2563eb;
+    }
+
+    .service-box h4 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 1rem;
+    }
+
+    .service-box p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .image-block {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .image-block img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Document/Flyer Gallery Styles */
+    .flyer-gallery-wrapper {
+      margin: 6rem 0 4rem;
+    }
+    
+    .flyer-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .flyer-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .flyer-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      border-color: #93c5fd;
+    }
+    
+    .flyer-img-wrapper {
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .flyer-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      transition: transform 0.5s ease;
+    }
+
+    .flyer-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .flyer-card-info {
+      padding: 1.5rem;
+      text-align: center;
+      background: white;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .flyer-card-info h5 {
+      color: #0f172a;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .flyer-card-info a {
+      color: #2563eb;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .flyer-card-info a:hover {
+      text-decoration: underline;
+    }
+    
+    /* FAQ Accordions for Guidelines */
+    .faq-container {
+      max-width: 900px;
+      margin: 0 auto 5rem;
+    }
+    
+    .faq-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 1.5rem 2rem;
+      background: white;
+      border: none;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    
+    .faq-question:hover {
+      background: #f8fafc;
+      color: #2563eb;
+    }
+    
+    .faq-question::after {
+      content: '+';
+      font-size: 1.5rem;
+      color: #94a3b8;
+      transition: transform 0.3s;
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+    }
+    
+    .faq-answer.open {
+      max-height: 1000px; /* arbitrary large value */
+      transition: max-height 0.5s ease-in;
+    }
+    
+    .faq-answer-inner {
+      padding: 2rem;
+      color: #475569;
+      line-height: 1.8;
+    }
+    
+    .faq-answer h4 {
+      color: #0f172a;
+      margin: 1.5rem 0 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .faq-answer h4:first-child {
+      margin-top: 0;
+    }
+    
+    .faq-answer ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    
+    .faq-answer li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Steps Timeline */
+    .timeline {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 0 4rem;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 1.5rem;
+      height: 100%;
+      width: 2px;
+      background: #e2e8f0;
+    }
+    
+    .timeline-step {
+      position: relative;
+      padding-left: 4.5rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .step-number {
       position: absolute;
       left: 0;
       top: 0;
-      color: var(--brand-orange);
+      width: 3rem;
+      height: 3rem;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+      z-index: 2;
+    }
+    
+    .timeline-step h4 {
+      font-size: 1.15rem;
       font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      padding-top: 0.5rem;
+    }
+    
+    .timeline-step p {
+      color: #64748b;
+      line-height: 1.6;
     }
 
-    .program-cta {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: #ffffff;
-      border-radius: 16px;
-      padding: 2.3rem 2rem;
+    .cta-banner {
+      background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+      border-radius: 20px;
+      padding: 4rem;
       text-align: center;
-      margin-top: 2rem;
+      color: white;
+      margin-top: 5rem;
     }
 
-    .program-cta h2 {
-      font-size: 1.6rem;
-      margin-bottom: 0.8rem;
-      letter-spacing: -0.02em;
+    .cta-banner h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
     }
 
-    .program-cta p {
-      font-size: 0.98rem;
-      opacity: 0.96;
-      max-width: 520px;
-      margin: 0 auto 1.4rem;
-    }
-
-    .program-cta a {
+    .cta-button {
       display: inline-block;
-      background: #fca311;
-      color: #2a4175;
-      padding: 0.8rem 2rem;
-      border-radius: 999px;
-      font-weight: 600;
+      background: #f97316;
+      color: white;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
       text-decoration: none;
-      font-size: 0.95rem;
-      transition: background-color 0.2s ease, transform 0.2s ease;
+      margin-top: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .program-cta a:hover {
-      background: #ff9500;
-      transform: translateY(-2px);
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+      background: #ea580c;
     }
 
-    @media (max-width: 640px) {
-      .program-hero-card,
-      .program-section,
-      .program-cta {
-        padding: 1.6rem 1.4rem 1.7rem;
+    @media (max-width: 900px) {
+      .intro-grid {
+        grid-template-columns: 1fr;
       }
-
-      .program-title {
-        font-size: 1.8rem;
+      .image-block {
+        grid-template-columns: 1fr;
+      }
+      .service-hero {
+        padding-top: 8rem;
+        min-height: 40vh;
+      }
+      .cta-banner {
+        padding: 3rem 1.5rem;
+      }
+      .stats-grid .stat-number {
+        font-size: 2.5rem;
       }
     }
-    .services-carousel {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  height: 70vh;
-  position: relative;
-  overflow: hidden;
-  border-radius: 0;
-}
+  </style>
 
-.carousel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.slide {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.8s ease-in-out;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.slide.active {
-  opacity: 1;
-}
-
-.slide-content {
-  text-align: center;
-  color: white;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  max-width: 600px;
-  padding: 2rem;
-}
-
-.slide-content h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
-}
-
-.slide-content p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-}
-
-.carousel-controls {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 10;
-}
-
-.carousel-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.carousel-dot.active {
-  background: white;
-  transform: scale(1.2);
-}
-
-  
-</style>
-
-  
-  
-  <!-- SERVICES CAROUSEL (same as services.html) -->
-<section class="services-carousel">
-  <div class="carousel" id="servicesCarousel">
-    <div class="slide active" style="background-image: url('images/slide1.jpg')">
-      <div class="slide-content">
-        <h1>The CACFP Initiative</h1>
-        <p>Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.</p>
-      </div>
-    </div>
-    <div class="slide" style="background-image: url('images/slide2.jpg')">
-      <div class="slide-content">
-        <h1>The CACFP Initiative</h1>
-        <p>Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.</p>
-      </div>
-    </div>
-    <div class="slide" style="background-image: url('images/slide3.jpg')">
-      <div class="slide-content">
-        <h1>The CACFP Initiative</h1>
-        <p>Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.</p>
-      </div>
-    </div>
-  </div>
-  <div class="carousel-controls" id="carouselControls"></div>
-</section>
-
-
-  <main class="program-shell">
-    <div class="program-breadcrumb">
-      <a href="/">Home</a> / <a href="/services">Services &amp; Programs</a> / The CACFP Initiative
-    </div>
-
-    <!-- HERO / INTRO -->
-    <section class="program-hero-card">
-      <div class="program-tag">Program • Nutrition &amp; Food Security</div>
-      <h1 class="program-title">The CACFP Initiative</h1>
-      <p class="program-subtitle">
-        The Child and Adult Care Food Program (CACFP) is a federal program that provides reimbursements for nutritious meals
-        and snacks to eligible children and adults. Through the CACFP Initiative, EIEI partners with childcare providers to
-        strengthen healthy eating, food security, and quality in early childhood settings.
-      </p>
-      <p class="program-subnote">
-        We focus especially on family and group childcare programs serving young children in under‑resourced communities.
-      </p>
-    </section>
-
-    <!-- WHAT IS CACFP -->
-    <section class="program-section">
-      <h2 class="program-section-title">What is CACFP?</h2>
+  <section class="service-hero">
+    <div class="service-hero-content">
+      <h1>The CACFP Initiative</h1>
       <p>
-        The Child and Adult Care Food Program (CACFP) is a federally funded program that provides reimbursement for nutritious
-        meals and snacks to eligible children and adults enrolled in participating child care centers, family child care homes,
-        adult day care centers, and emergency shelters.
+        Transforming lives one meal at a time by helping childcare providers
+        deliver nutritious, fully reimbursable meals.
       </p>
-      <div class="quote-box">
-        <div class="quote-text">
-          "CACFP plays a vital role in ensuring that children in our care receive the nutrition they need to grow, learn, and thrive."
-        </div>
-        <div class="quote-author">— EIEI Nutrition Specialist</div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/services">Services</a> / CACFP
       </div>
-      <p>
-        CACFP helps ensure that children and adults in participating facilities receive nutritious meals and snacks every day.
-        The program also promotes healthy eating and physical activity through education, menu planning support, and ongoing
-        training for providers.
-      </p>
-    </section>
 
-    <!-- BENEFITS -->
-    <section class="program-section">
-      <h2 class="program-section-title">Benefits of CACFP Participation</h2>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-title">Financial Support</div>
-          <div class="benefit-desc">Receive reimbursements for serving nutritious meals and snacks that meet federal nutrition standards.</div>
+      <div class="intro-grid">
+        <div class="intro-text">
+          <h2>Nourishing the Next Generation</h2>
+          <p>
+            The Child and Adult Care Food Program (CACFP) is a federally funded
+            program that provides vital reimbursements for nutritious meals and
+            snacks to eligible children.
+          </p>
+          <p>
+            Through the CACFP Initiative, EIEI partners aggressively with local
+            childcare providers to massively strengthen healthy eating, food
+            security, and physical quality in early childhood settings. We cast
+            a specific focus on group and family childcare programs operating
+            within historically under-resourced communities.
+          </p>
+
+          <div class="quote-block">
+            <p>
+              "CACFP plays an indispensable role in ensuring that the children
+              in our care receive the foundational nutrition they desperately
+              need to grow, learn, and thrive properly."
+            </p>
+            <span>— EIEI Nutrition Specialist</span>
+          </div>
         </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Improved Nutrition</div>
-          <div class="benefit-desc">Access resources and training to serve balanced, age‑appropriate meals every day.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Professional Development</div>
-          <div class="benefit-desc">Gain ongoing training for staff on nutrition, food safety, and healthy practices.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Enhanced Quality</div>
-          <div class="benefit-desc">Strengthen your program’s quality rating and appeal to families seeking healthy options.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Support for All Children</div>
-          <div class="benefit-desc">Better serve children with special dietary needs and honor diverse cultural food traditions.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Community Impact</div>
-          <div class="benefit-desc">Help reduce food insecurity and promote healthier communities across your region.</div>
+
+        <div class="glass-cards-wrapper" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="glass-card" style="background: #fff7ed; border-color: #ffedd5;">
+            <h3 style="color: #ea580c; font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 800;">
+              Who Can Participate?
+            </h3>
+            <ul style="list-style: none; padding: 0; color: #431407;">
+              <li style="margin-bottom: 0.8rem; display: flex; gap: 0.5rem;">
+                <span style="color: #f97316;">✓</span> Licensed child-care centers & Head Start classrooms (55 Pa. Code §3270/3280)
+              </li>
+              <li style="margin-bottom: 0.8rem; display: flex; gap: 0.5rem;">
+                <span style="color: #f97316;">✓</span> Emergency shelters that house children
+              </li>
+              <li style="margin-bottom: 0.8rem; display: flex; gap: 0.5rem;">
+                <span style="color: #f97316;">✓</span> Outside-school-hours centers attached to private schools
+              </li>
+              <li style="margin-bottom: 0.8rem; display: flex; gap: 0.5rem;">
+                <span style="color: #f97316;">✓</span> Licensed adult day service centers (adults ≥ 60 or with disabilities)
+              </li>
+              <li style="margin-bottom: 0.8rem; display: flex; gap: 0.5rem;">
+                <span style="color: #f97316;">✓</span> At-risk afterschool programs in low-income areas
+              </li>
+            </ul>
+            
+            <h4>Baseline Requirements:</h4>
+            <p style="font-size: 0.9rem; color: #78350f;">DHS or PDE certificate of compliance, current food-service inspection, non-profit tax status (or for-profit centers with ≥25% free-eligible enrollees), not on the USDA National Disqualified List, and an executed management agreement with EIEI.</p>
+          </div>
+          
+          <div class="glass-card" style="background: #eff6ff; border-color: #bfdbfe;">
+            <h3 style="color: #2563eb; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 800;">Why Sponsor Instead of Going It Alone?</h3>
+            <p style="color: #1e3a8a; font-size: 0.95rem;">EIEI files the CN PEARS application, trains your staff, handles audits, and fronts all monitoring costs—removing the state-agency paperwork barrier so you can join in as little as 30 days.</p>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- WHO CAN PARTICIPATE -->
-    <section class="program-section">
-      <h2 class="program-section-title">Who Can Participate?</h2>
-      <p>The CACFP is available to a range of facilities that provide care for children and adults, including:</p>
-      <ul class="program-list">
-        <li>Child care centers (public and private)</li>
-        <li>Family child care homes</li>
-        <li>After‑school and out‑of‑school time programs</li>
-        <li>Emergency and homeless shelters serving children</li>
-        <li>Adult day care centers</li>
-        <li>At‑risk afterschool programs</li>
-      </ul>
-      <p>
-        Eligibility requirements vary by facility type, but all participating programs must meet federal nutrition standards
-        and maintain proper documentation for meal service and attendance.
-      </p>
-    </section>
-
-    <!-- HOW CACFP WORKS -->
-    <section class="program-section">
-      <h2 class="program-section-title">How CACFP Works</h2>
-      <p>
-        Participating facilities receive reimbursements for each eligible meal and snack they serve. Reimbursement rates vary
-        based on the type of meal (breakfast, lunch, dinner, or snack) and the economic needs of the children being served.
-      </p>
       <div class="stats-grid">
-        <div class="stat-box">
+        <div class="stat-card">
           <div class="stat-number">3</div>
-          <div class="stat-label">Meals per Day</div>
+          <div class="stat-label">Meals / Day Covered</div>
         </div>
-        <div class="stat-box">
+        <div class="stat-card">
           <div class="stat-number">2</div>
-          <div class="stat-label">Snacks per Day</div>
+          <div class="stat-label">Snacks / Day Covered</div>
         </div>
-        <div class="stat-box">
+        <div class="stat-card">
           <div class="stat-number">6</div>
           <div class="stat-label">Total Reimbursable</div>
         </div>
-        <div class="stat-box">
+        <div class="stat-card">
           <div class="stat-number">100%</div>
           <div class="stat-label">Free for Eligible</div>
         </div>
       </div>
-      <p>
-        Programs must maintain accurate records of meals served, attendance, and compliance with nutrition standards.
-        Regular monitoring and training help ensure program integrity and high‑quality implementation.
-      </p>
-    </section>
 
-    <!-- EIEI ROLE -->
-    <section class="program-section">
-      <h2 class="program-section-title">EIEI’s Role in CACFP</h2>
-      <p>
-        The Education Institute for Early Intervention (EIEI) partners with childcare providers to understand and implement
-        CACFP requirements with confidence. Our support includes:
-      </p>
-      <ul class="program-list">
-        <li>CACFP training and technical assistance</li>
-        <li>Menu planning and nutrition education</li>
-        <li>Documentation and record‑keeping support</li>
-        <li>Staff training on food safety and nutrition</li>
-        <li>Assistance with the CACFP application and renewal process</li>
-        <li>Ongoing consultation and problem‑solving support</li>
-      </ul>
-      <p>
-        Our goal is to help providers successfully participate in CACFP while improving the nutritional quality of meals
-        served to children in their care.
-      </p>
-    </section>
+      <div class="section-header">
+        <h2>Unmatched CACFP Benefits</h2>
+        <p style="color: #64748b; font-size: 1.1rem;">
+          Why partnering with EIEI for food security changes everything.
+        </p>
+      </div>
 
-    <!-- IMAGES + SUCCESS STORIES -->
-    <section class="program-section">
-      <h2 class="program-section-title">In Action: Training & Success Stories</h2>
-      <div class="image-row">
-        <div class="image-card">
-          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/EIEI-X-Rapid-Response-Flyers.png?resize=1080%2C1528&ssl=1" alt="CACFP Training Session">
+      <div class="services-grid">
+        <div class="service-box">
+          <div class="icon-wrapper">💵</div>
+          <h4>Financial Support</h4>
+          <p>
+            Receive immediate, direct monetary reimbursements for serving
+            nutritious meals and snacks that continually meet rigorous federal
+            nutrition standards.
+          </p>
         </div>
-        <div class="image-card">
-          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/Rapid-Response.png?resize=1080%2C699&ssl=1" alt="Healthy Meal Preparation">
+        <div class="service-box">
+          <div class="icon-wrapper">🥗</div>
+          <h4>Improved Nutrition</h4>
+          <p>
+            Gain unhindered access to expert resources, training, and
+            scientifically balanced menus to serve age-appropriate meals
+            confidently every single day.
+          </p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">🎓</div>
+          <h4>Professional Development</h4>
+          <p>
+            Attain on-going professional training for your entire staff centering
+            specifically on complex nutrition, food safety logistics, and
+            healthy physical practices.
+          </p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">⭐</div>
+          <h4>Enhanced Program Quality</h4>
+          <p>
+            Dramatically strengthen your childcare program's overall public
+            quality rating, making it immensely appealing to meticulous families
+            seeking healthy options.
+          </p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">❤️</div>
+          <h4>Dietary Inclusivity</h4>
+          <p>
+            Drastically increase your capacity to effectively serve children
+            diagnosed with special dietary needs, allergies, and uniquely
+            diverse cultural food traditions.
+          </p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">🌍</div>
+          <h4>Community Impact</h4>
+          <p>
+            Actively assist in abolishing neighborhood food insecurity
+            block-by-block, promoting significantly healthier, deeply resilient
+            communities across your region.
+          </p>
+        </div>
+      </div>
+      
+      <div class="section-header">
+        <h2>Initiative Protocol & Guidelines</h2>
+        <p style="color: #64748b; font-size: 1.1rem;">Everything you need to know about reimbursements, training, and documentation.</p>
+      </div>
+
+      <div class="faq-container">
+        
+        <div class="faq-item">
+          <button class="faq-question">Which meals/snacks are reimbursable, and what must they contain?</button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <h4>Meal service limits</h4>
+              <p>Up to 3 total services per participant each day in any combination of: breakfast, A.M. snack, lunch, P.M. snack, supper, or late-evening snack.</p>
+              
+              <h4>Key nutrient standards</h4>
+              <ul>
+                <li>≥ 1 whole-grain-rich item per day</li>
+                <li>≤ 6 g sugar per dry-ounce in cereals; ≤ 23 g sugar/6 oz yogurt</li>
+                <li>Milk fat limits: unflavored 1% or non-fat for ages 2+, whole for 1-yr-olds, breast-milk/iron-fortified formula for infants.</li>
+                <li>Deep-fat frying on site is prohibited.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">How much will my site be reimbursed and when are funds deposited?</button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p>Based on FY 2024–2025 Center Reimbursement Rates, payouts scale depending on participant eligibility (Free, Reduced, or Paid). The claim timeline proceeds as follows:</p>
+              <ul>
+                <li><strong>Daily:</strong> Record point-of-service meal counts by participant name.</li>
+                <li><strong>Monthly:</strong> Submit the claim package to EIEI by the 5th business day.</li>
+                <li><strong>EIEI Review:</strong> We audit for errors and transmit to PDE’s CN PEARS by the 20th.</li>
+                <li><strong>State Processing:</strong> ACH hits your bank within 4–6 weeks of PDE acceptance.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">What records must we keep, and for how long?</button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p>To comply with PDE Field Services, records must be retained for 3 years plus the current fiscal year (or until all audit findings are cleared!). Keep the following on site daily:</p>
+              <ul>
+                <li><strong>Daily signed attendance & meal count sheets</strong> (submit copies monthly).</li>
+                <li><strong>Menus & production records</strong> (food quantities, recipes, CN labels; submit monthly).</li>
+                <li><strong>Income eligibility & enrollment forms</strong> (submit updates only).</li>
+                <li><strong>Vendor invoices, delivery receipts, milk statements</strong> (submit totals monthly).</li>
+                <li><em>Monitoring reports & CAPs are not required on-site, as EIEI retains originals.</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <button class="faq-question">What training and monitoring does EIEI provide?</button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <h4>Annual Training</h4>
+              <ul>
+                <li><strong>Meal-pattern & crediting updates:</strong> Live webinar + on-demand clips (Every July & January).</li>
+                <li><strong>Civil Rights & non-discrimination:</strong> Self-paced module with quiz via USDA FNS (Once per fiscal year).</li>
+                <li><strong>Recordkeeping & CN PEARS claim entry:</strong> Hands-on workshop (Within 30 days of start & annually).</li>
+                <li><strong>Food safety & allergen control:</strong> Video + checklist (Onboarding & refresher).</li>
+              </ul>
+              <h4>Sponsor Monitoring</h4>
+              <p>We provide 3 reviews/year (2 unannounced), including a first-4-weeks visit for totally new sites. Corrective Action Plan (CAP) templates and direct coaching are always provided.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-header">
+        <h2>How Do We Enroll With EIEI?</h2>
+        <p style="color: #64748b; font-size: 1.1rem;">Follow these step-by-step milestones to secure reimbursement sponsorship quickly.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-step">
+          <div class="step-number">1</div>
+          <h4>Application Interest</h4>
+          <p>Complete the 5-minute EIEI New-Site Interest Form, detailing your license number, operational capacity, and projected meal times.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="step-number">2</div>
+          <h4>Introductory Call</h4>
+          <p>Within 48 hours we will call you to discuss our claiming software, your current staffing, and your kitchen setup viability.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="step-number">3</div>
+          <h4>Pre-Approval Site Visit (Week 1)</h4>
+          <p>An on-site visit where we verify safe food service, meal pattern readiness, and the posting of the mandatory "And Justice for All" poster.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="step-number">4</div>
+          <h4>Document Assembly (Weeks 1-2)</h4>
+          <p>You provide your DHS/PDE license, fire/health inspections, IRS 501(c)(3) letter (or for-profit income worksheet), W-9, EFT form for reimbursements, and an authoritative board resolution authorizing CACFP participation.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="step-number">5</div>
+          <h4>PEARS Application Push</h4>
+          <p>EIEI automatically uploads the comprehensive CN PEARS application and the required sponsors' agreement for your simple electronic signature.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="step-number">6</div>
+          <h4>PDE State Approval</h4>
+          <p>Approval typically takes 15 business days or less once completeness is assured. You may officially start claiming on the very first day of the month following the confirmed approval.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="step-number">7</div>
+          <h4>First Claim & Reimbursement</h4>
+          <p>Your highly-anticipated first claim will be filed accurately with EIEI's robust assistance! Expect your initial reimbursement payout to land roughly 6–8 weeks after active meal services begin.</p>
         </div>
       </div>
 
-      <div class="image-row" style="margin-top: 1.6rem;">
-        <div class="image-card">
-          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/10/IMG_20251010_133625-1.jpg?resize=400%2C284&ssl=1" alt="CACFP Training Workshop">
-          <div class="image-caption">CACFP training workshop for providers</div>
+      <div class="image-block">
+        <img
+          src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/EIEI-X-Rapid-Response-Flyers.png?resize=1080%2C1528&ssl=1"
+          alt="CACFP Certification Training Documentation"
+        />
+        <img
+          src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/10/IMG_20251010_133631-1.jpg?resize=400%2C284&ssl=1"
+          alt="Live Collaborative Menu Planning Session"
+        />
+      </div>
+
+      <div class="flyer-gallery-wrapper">
+        <div class="section-header" style="margin-top: 0; margin-bottom: 2rem;">
+          <h2>Initiative Flyers & Official Resources</h2>
+          <p style="color: #64748b; font-size: 1.1rem;">Browse our library of beautifully designed outreach marketing materials and programmatic fact sheets.</p>
         </div>
-        <div class="image-card">
-          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/10/IMG_20251010_133631-1.jpg?resize=400%2C284&ssl=1" alt="Menu Planning Session">
-          <div class="image-caption">Collaborative menu planning session</div>
+        
+        <h3 style="font-size: 1.5rem; font-weight: 800; color: #1e3a8a; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">Awareness & Marketing Campaigns</h3>
+        <div class="flyer-gallery" style="margin-top: 0; margin-bottom: 4rem;">
+          <div class="flyer-card">
+            <div class="flyer-img-wrapper">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/cacfp.png?resize=1080%2C1393&ssl=1" alt="CACFP Impact Flyer" />
+            </div>
+            <div class="flyer-card-info">
+              <h5>CACFP Global Impact</h5>
+              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/cacfp.png" target="_blank">View Full Screen 🔍</a>
+            </div>
+          </div>
+          
+          <div class="flyer-card">
+            <div class="flyer-img-wrapper">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/eiei-cacfp.png?resize=1080%2C1402&ssl=1" alt="EIEI CACFP Partnership Flyer" />
+            </div>
+            <div class="flyer-card-info">
+              <h5>Partnership Breakdown</h5>
+              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/eiei-cacfp.png" target="_blank">View Full Screen 🔍</a>
+            </div>
+          </div>
+          
+          <div class="flyer-card">
+            <div class="flyer-img-wrapper">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/03/Heart-Month-Social-Media-6-1024x1024-1.jpg?resize=1024%2C1024&ssl=1" alt="Healthy Heart Month CACFP Menu" />
+            </div>
+            <div class="flyer-card-info">
+              <h5>Healthy Heart Month Notice</h5>
+              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/03/Heart-Month-Social-Media-6-1024x1024-1.jpg" target="_blank">View Full Screen 🔍</a>
+            </div>
+          </div>
         </div>
-        <div class="image-card">
-          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/10/IMG_20251010_133637.jpg?resize=400%2C284&ssl=1" alt="Nutrition Education">
-          <div class="image-caption">Hands‑on nutrition education</div>
+
+        <h3 style="font-size: 1.5rem; font-weight: 800; color: #1e3a8a; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">Operational Fact Sheets & Snapshots</h3>
+        <div class="flyer-gallery" style="margin-top: 0;">
+          <div class="flyer-card">
+            <div class="flyer-img-wrapper">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.41-AM-e1758898053575-1.png?resize=612%2C485&ssl=1" alt="CACFP Eligibility Matrix" />
+            </div>
+            <div class="flyer-card-info">
+              <h5>Eligibility Standards (Visual)</h5>
+              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.41-AM-e1758898053575-1.png" target="_blank">View Full Screen 🔍</a>
+            </div>
+          </div>
+
+          <div class="flyer-card">
+            <div class="flyer-img-wrapper">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.34-AM-e1758897891411-1.png?resize=602%2C655&ssl=1" alt="Daily Menu Nutrition Sheet" />
+            </div>
+            <div class="flyer-card-info">
+              <h5>Nutrition Breakdown Matrix</h5>
+              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.34-AM-e1758897891411-1.png" target="_blank">View Full Screen 🔍</a>
+            </div>
+          </div>
+
+          <div class="flyer-card">
+            <div class="flyer-img-wrapper">
+              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/07/Screenshot-2025-07-30-at-9.51.58-AM.png?resize=608%2C548&ssl=1" alt="Enrollment Steps Notice" />
+            </div>
+            <div class="flyer-card-info">
+              <h5>Reimbursement Core Rules</h5>
+              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/07/Screenshot-2025-07-30-at-9.51.58-AM.png" target="_blank">View Full Screen 🔍</a>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- UPDATES -->
-    <section class="program-section">
-      <h2 class="program-section-title">CACFP Initiative Updates</h2>
-      <p>
-        EIEI is actively working with local childcare providers to increase CACFP participation across the region. Through our
-        training programs and technical assistance, we help centers strengthen both their meal service and documentation practices.
-      </p>
-
-      <p><strong>Recent achievements include:</strong></p>
-      <ul class="updates-list">
-        <li>Training 50+ childcare providers on CACFP requirements</li>
-        <li>Assisting 15 centers with the CACFP application process</li>
-        <li>Providing ongoing technical assistance to 25 participating centers</li>
-        <li>Delivering nutrition education workshops for 200+ staff members</li>
-      </ul>
-
-      <p><strong>Upcoming events:</strong> We regularly host CACFP training sessions and workshops for childcare providers.
-      Contact us to learn about our next training opportunity or to schedule a consultation for your program.</p>
-
-      <div class="quote-box">
-        <div class="quote-text">
-          "Thanks to EIEI's CACFP training, we've improved our meal service and provide better nutrition for the children in our care.
-          The support has been invaluable."
-        </div>
-        <div class="quote-author">— Childcare Center Director</div>
+      <div class="cta-banner">
+        <h2>Deploy CACFP In Your Organization</h2>
+        <p
+          style="font-size: 1.2rem; opacity: 0.9; max-width: 650px; margin: 0 auto; line-height: 1.6;"
+        >
+          If your childcare center is aggressively interested in joining CACFP
+          with full backend support from EIEI, we are entirely ready to launch
+          your application.
+        </p>
+        <a href="/contact-us" class="cta-button">Begin Initiative Application</a>
+        <p style="margin-top: 2rem; font-size: 0.95rem; opacity: 0.8;">
+          Have questions? Email <strong style="color: #ffedd5;">cacfp@eiforei.com</strong> or call our Help Desk at <strong style="color: #ffedd5;">267-415-6724</strong> (Answers within one business day).
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; font-style: italic;">
+          Prepared 07/7/2025 – All rates and citations current through the Federal Register notice dated July 10, 2024. EIEI manually updates this portal each July when USDA issues new rates.
+        </p>
       </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="program-cta">
-      <h2>Get Started with the CACFP Initiative</h2>
-      <p>
-        If your childcare center or program is interested in CACFP participation and would like support from EIEI, we’re ready
-        to help you take the next step.
-      </p>
-      <a href="/contact-us">Contact Us Today</a>
-    </section>
+      
+    </div>
   </main>
-
   
-  
-
-  
-  
-  
-
   <script is:inline>
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerContainer = document.getElementById('header-container');
-      if (headerContainer) headerContainer.innerHTML = "";
-
-      const footerContainer = document.getElementById('footer-container');
-      if (footerContainer) footerContainer.innerHTML = "";
+    document.addEventListener('DOMContentLoaded', () => {
+      // Priority Accordion Logic for dynamic height
+      document.querySelectorAll(".faq-question").forEach(btn => {
+        // Clone and replace to blow away any existing listeners from public/script.js 
+        // to prevent double-firing that instantly closes the accordion
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        newBtn.addEventListener("click", () => {
+          const answer = newBtn.nextElementSibling;
+          const isOpen = answer.classList.contains("open");
+          
+          // Close all others
+          document.querySelectorAll(".faq-answer").forEach(a => {
+            a.classList.remove("open");
+            a.style.maxHeight = null;
+          });
+          
+          if (!isOpen) {
+            answer.classList.add("open");
+            answer.style.maxHeight = answer.scrollHeight + 50 + "px";
+          }
+        });
+      });
     });
-    
-  let currentSlide = 0;
-  const pageSlides = document.querySelectorAll('#servicesCarousel .slide');
-  const totalSlides = pageSlides.length;
-
-  function initCarouselControls() {
-    const controlsContainer = document.getElementById('carouselControls');
-    for (let i = 0; i < totalSlides; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-      dot.onclick = () => goToSlide(i);
-      controlsContainer.appendChild(dot);
-    }
-  }
-
-  function goToSlide(n) {
-    currentSlide = (n + totalSlides) % totalSlides;
-    pageSlides.forEach(slide => slide.classList.remove('active'));
-    pageSlides[currentSlide].classList.add('active');
-
-    const dots = document.querySelectorAll('.carousel-dot');
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[currentSlide].classList.add('active');
-  }
-
-  function nextSlide() {
-    goToSlide(currentSlide + 1);
-  }
-
-  // Auto-rotate
-  setInterval(nextSlide, 5000);
-
-  window.addEventListener('DOMContentLoaded', function() {
-    initCarouselControls();
-  });
-
-
   </script>
-
 </Layout>

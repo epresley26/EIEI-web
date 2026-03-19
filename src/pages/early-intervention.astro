@@ -1,697 +1,1084 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Early Intervention Services & Behavioral Health - EIEI">
-<style is:global>
+<Layout title="Early Intervention & Behavioral Health - EIEI">
+  <style is:global>
+    /* PREMIUM MODERN STYLES */
+    .service-hero {
+      position: relative;
+      width: 100%;
+      min-height: 45vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10rem 2rem 5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    .service-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .service-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .service-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    .service-hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.9;
       line-height: 1.6;
-      color: #1f2937;
-      background-color: #f3f4f6;
-      width: 100% !important;
-      max-width: 100% !important;
+    }
+
+    .main-content {
+      background: #f8fafc;
+      padding: 5rem 2rem;
+      min-height: 50vh;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem;
     }
 
     .breadcrumb {
-      margin-bottom: 2rem;
-      font-size: 0.9rem;
-      color: #6b7280;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 500;
     }
 
     .breadcrumb a {
-      color: #2a4175;
+      color: #2563eb;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     .breadcrumb a:hover {
-      color: #fca311;
+      color: #f97316;
     }
 
-    .program-header {
-      background-color: white;
-      padding: 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-
-    .location-badge {
-      display: inline-flex;
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
       align-items: center;
-      background-color: #fca311;
-      color: #2a4175;
-      padding: 0.5rem 1.25rem;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-      white-space: nowrap;
+      margin-bottom: 5rem;
     }
 
-    .location-badges-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .program-header-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.5rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .tour-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #fca311;
-      color: #2a4175;
-      padding: 0.6rem 1.75rem;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: 600;
-      border: 2px solid #2a4175;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-
-    .tour-btn:hover {
-      background-color: #ffb52a;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-    }
-
-    @media (max-width: 768px) {
-      .program-header-top {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .tour-btn {
-        align-self: stretch;
-        justify-content: center;
-        width: 100%;
-      }
-    }
-
-    .program-title {
-      color: #2a4175;
+    .intro-text h2 {
       font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .intro-text p {
+      font-size: 1.1rem;
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .intro-highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .highlight-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    }
+
+    .highlight-item h4 {
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .highlight-item p {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .intro-cards {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .glass-card h3 {
+      font-size: 1.4rem;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-weight: 800;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      margin-top: 4rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
       margin-bottom: 1rem;
     }
 
-    .program-subtitle {
-      font-size: 1.2rem;
-      color: #6b7280;
-      margin-bottom: 1.5rem;
-      line-height: 1.8;
+    .yearbooks-container {
+      background: #eff6ff;
+      border: 2px dashed #bfdbfe;
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      margin: 4rem 0;
     }
 
-    .content-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+    .yearbooks-container h3 {
+      font-size: 2rem;
+      color: #1e3a8a;
+      margin-bottom: 1rem;
+      font-weight: 800;
     }
 
-    .section-title {
-      color: #2a4175;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 3px solid #fca311;
-      padding-bottom: 0.5rem;
+    .yearbooks-container p {
+      color: #475569;
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
     }
 
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    .yearbook-links {
+      display: flex;
+      justify-content: center;
       gap: 1.5rem;
     }
 
-    .benefit-card {
+    .yearbook-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #2563eb;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .yearbook-btn:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+    }
+
+    /* TIER GRID STYLES (EXPANDED) */
+    .tier-system {
+      background: white;
+      border-radius: 30px;
+      padding: 5rem;
+      margin: 5rem 0;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    }
+
+    .tier-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .tier-header h2 {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .tier-header p {
+      font-size: 1.2rem;
+      color: #64748b;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .tier-block {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 3rem;
+      margin-bottom: 2rem;
+      border-left: 6px solid #2563eb;
+    }
+
+    .tier-block.t2 {
+      border-color: #f97316;
+    }
+    .tier-block.t3 {
+      border-color: #dc2626;
+    }
+
+    .tier-block h3 {
+      font-size: 2rem;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+
+    .tier-block p {
+      color: #475569;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .tier-items {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .program-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
       padding: 1.5rem;
-      background-color: #f3f4f6;
-      border-left: 4px solid #fca311;
-      border-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     }
 
-    .benefit-card:hover {
-      transform: translateY(-4px);
+    .program-card h4 {
+      color: #1e293b;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
     }
 
-    .benefit-title {
-      color: #2a4175;
-      font-weight: 600;
+    .program-card p {
+      font-size: 1rem;
+      color: #64748b;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .tier-bullet-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .tier-bullet-list li {
+      position: relative;
+      padding-left: 2rem;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .tier-bullet-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #dc2626;
+      font-weight: 900;
+    }
+
+    .delegate-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 20px;
+      padding: 3rem;
+      color: white;
+      text-align: center;
+      margin: 4rem 0;
+    }
+
+    .delegate-banner h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #f97316;
+      font-weight: 800;
+    }
+
+    .delegate-banner p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .delegate-phone {
+      display: inline-block;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem 3rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .policy-block {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 5rem;
+    }
+
+    .policy-block h4 {
+      color: #0f172a;
+      font-size: 1.1rem;
       margin-bottom: 0.5rem;
     }
 
-    .benefit-desc {
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-
-    .highlight-box {
-      background-color: #e8f4f8;
-      border-left: 4px solid #2a4175;
-      padding: 1.5rem;
-      border-radius: 4px;
-      margin: 1.5rem 0;
-    }
-
-    .highlight-box strong {
-      color: #2a4175;
-    }
-
-    .cta-section {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      padding: 2.5rem;
-      border-radius: 8px;
+    .cta-banner {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      border-radius: 20px;
+      padding: 4rem;
       text-align: center;
-      margin-top: 2rem;
+      color: white;
+      margin-top: 5rem;
+    }
+
+    .cta-banner h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
     }
 
     .cta-button {
       display: inline-block;
-      background-color: #fca311;
-      color: #2a4175;
-      padding: 0.75rem 2rem;
-      border-radius: 4px;
+      background: white;
+      color: #ea580c;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
       text-decoration: none;
-      font-weight: 600;
-      margin-top: 1rem;
+      margin-top: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .cta-button:hover {
-      background-color: #ff9500;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
 
-    .testimonials-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+    @media (max-width: 900px) {
+      .intro-grid {
+        grid-template-columns: 1fr;
+      }
+      .intro-highlights {
+        grid-template-columns: 1fr;
+      }
+      .service-hero {
+        padding-top: 8rem;
+        min-height: 40vh;
+      }
+      .tier-system {
+        padding: 2rem;
+      }
+      .tier-block {
+        padding: 2rem;
+      }
+      .cta-banner {
+        padding: 3rem 1.5rem;
+      }
+      .delegate-phone {
+        font-size: 1.8rem;
+        padding: 1rem 1.5rem;
+      }
+      .yearbook-links {
+        flex-direction: column;
+      }
     }
 
-    .testimonials-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-    }
-
-    .testimonials {
-      flex: 1;
-      min-height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #testimonialsContainer .card {
+    /* TOUR MODAL CSS */
+    #tourRequestModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
       display: none;
-      text-align: center;
+      align-items: center;
+      justify-content: center;
       padding: 2rem;
     }
 
-    #testimonialsContainer .card.active {
-      display: block;
+    .tour-modal-content {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 3rem;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
 
-    #testimonialsContainer .card p {
-      color: #6b7280;
-      font-size: 1rem;
-      margin: 1rem 0;
-      line-height: 1.8;
+    .tour-modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+      font-size: 2.5rem;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
     }
 
-    #testimonialsContainer .card h3 {
-      color: #2a4175;
+    .tour-modal-close:hover {
+      color: #ef4444;
+    }
+
+    .tour-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .tour-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .tour-form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .tour-form-group label {
       font-weight: 600;
+      color: #1e293b;
       font-size: 0.95rem;
     }
 
-    .testimonial-nav {
-      background: none;
-      border: none;
-      font-size: 2rem;
-      cursor: pointer;
-      color: #2a4175;
-      padding: 0.5rem;
-    }
-
-    .testimonial-nav:hover {
-      color: #fca311;
-    }
-
-    .services-header {
+    .tour-form-group input[type="text"],
+    .tour-form-group input[type="email"],
+    .tour-form-group input[type="tel"],
+    .tour-form-group input[type="date"],
+    .tour-form-group input[type="number"],
+    .tour-form-group select {
       width: 100%;
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      text-align: center;
-      padding: 3rem 2rem;
-      margin: 0;
-      max-width: none;
-      border-radius: 0;
+      padding: 0.8rem 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: inherit;
+      color: #0f172a;
+      transition: all 0.3s;
     }
 
-    .services-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .tour-form-group input:focus,
+    .tour-form-group select:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
-    .services-header p {
-      width: 100%;
-      font-size: 1.1rem;
-      opacity: 0.95;
-      max-width: none;
-      margin: 0 auto;
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
-    /* Carousel styles (service-specific) */
-    .services-carousel {
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      height: 60vh;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-      background-size: cover;
-      background-position: center;
+    .radio-group label,
+    .checkbox-group label {
+      font-weight: 400;
       display: flex;
       align-items: center;
-      justify-content: center;
-    }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .slide-content {
-      text-align: center;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      padding: 2rem;
-    }
-
-    .slide-content h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .slide-content p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-    }
-
-    .carousel-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .carousel-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
+      gap: 0.5rem;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
-    .carousel-dot.active {
-      background: white;
-      transform: scale(1.2);
+    @media (max-width: 768px) {
+      .tour-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .tour-modal-content {
+        padding: 2rem 1.5rem;
+      }
     }
-  
-</style>
+  </style>
 
-  
-  
-
-  <!-- SERVICE CAROUSEL -->
-  <section class="services-carousel">
-    <div class="carousel" id="pageCarousel">
-      <div class="slide active" style="background-image: url('images/slide1.jpg')">
-        <div class="slide-content">
-          <h1>Early Intervention Services &amp; Behavioral Health</h1>
-          <p>Comprehensive support for children ages 3–5</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide2.jpg')">
-        <div class="slide-content">
-          <h1>Early Intervention Services &amp; Behavioral Health</h1>
-          <p>Nurturing every child’s unique potential</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide3.jpg')">
-        <div class="slide-content">
-          <h1>Early Intervention Services &amp; Behavioral Health</h1>
-          <p>Partnering with families for lifelong success</p>
-        </div>
-      </div>
+  <section class="service-hero">
+    <div class="service-hero-content">
+      <h1>Early Intervention & Behavioral Health</h1>
+      <p>
+        Comprehensive, specialized support empowering children ages 3–5 to
+        thrive and reach their unique potential.
+      </p>
     </div>
-    <div class="carousel-controls" id="pageCarouselControls"></div>
   </section>
 
-  <div class="services-header">
-    <h1>Early Intervention Services &amp; Behavioral Health</h1>
-    <p>Comprehensive support for children ages 3–5 with diverse abilities and needs.</p>
+  <main class="main-content">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/services">Services</a> / Early Intervention
+      </div>
+
+      <div class="intro-grid">
+        <div class="intro-text">
+          <h2>Welcome to ECSE: A Place Where Every Child Shines</h2>
+          <p>
+            Discover a world where your child’s potential takes center stage.
+            Early Childhood Special Education (ECSE) at EIEI is dedicated to
+            nurturing unique abilities, fostering growth, and celebrating every
+            milestone.
+          </p>
+          <p>
+            Our team of experienced professionals works closely with families to
+            create individualized plans that address each child's unique needs.
+            We believe in the power of early intervention to make a significant
+            impact on a child's future success and well-being.
+          </p>
+
+          <div class="intro-highlights">
+            <div class="highlight-item">
+              <h4>Why Choose ECSE at EIEI?</h4>
+              <p>
+                Personalized Support tailored to your child’s needs. Inclusive
+                Environment where every child is welcomed, valued, and
+                supported. Expert Guidance led by experienced educators and
+                specialists.
+              </p>
+            </div>
+            <div class="highlight-item">
+              <h4>Family-Focused Care</h4>
+              <p>
+                You are at the heart of your child’s success. Our
+                family-centered approach ensures you’re supported every step of
+                the way. Together, we build a brighter future.
+              </p>
+            </div>
+            <div class="highlight-item">
+              <h4>Smooth Transitions, Lifelong Skills</h4>
+              <p>
+                Change can be challenging, but we make it seamless. From
+                preschool to kindergarten, our transition planning equips
+                children with the tools they need to thrive.
+              </p>
+            </div>
+            <div class="highlight-item">
+              <h4>Programs Designed for Growth</h4>
+              <p>
+                Experience programs built on kindness, inclusivity, and
+                excellence. Every activity and service is designed to help your
+                child thrive, learn, and grow confidently.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="intro-cards">
+          <div class="glass-card">
+            <h3>📍 Key Service Locations</h3>
+            <p style="color: #475569; margin-bottom: 0.5rem;">
+              4704 Leiper St., Philadelphia, PA
+            </p>
+            <p style="color: #475569;">5024 Penn St., Philadelphia, PA</p>
+            <a
+              href="#"
+              onclick="openTourRequestModal(); return false;"
+              class="cta-button"
+              style="margin-top: 1rem; display: inline-block; padding: 0.8rem 1.5rem; font-size: 0.95rem; background: #2563eb; color: white;"
+              >🗓️ Schedule a Tour</a
+            >
+          </div>
+          <div
+            class="glass-card"
+            style="background: #eff6ff; border-color: #bfdbfe;"
+          >
+            <h3>🛡️ Comprehensive Services</h3>
+            <p style="color: #1e3a8a;">
+              From speech therapy to behavioral support, our team provides
+              holistic care that empowers children to succeed in every aspect of
+              life.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="yearbooks-container">
+        <h3>Celebrating a Year of Growth! 🎓</h3>
+        <p>
+          As we wrap up another successful school year, we want to extend our
+          heartfelt thanks to all the families, students, and staff. We've seen
+          tremendous growth, celebrated countless achievements, and created
+          wonderful memories. To commemorate this incredible year, we are
+          excited to share our yearbooks!
+        </p>
+        <div class="yearbook-links">
+          <a
+            href="https://drive.google.com/file/d/1TgOgmtelAV1Llsmv-FQAycP71tgh5lf8/view?usp=sharing"
+            target="_blank"
+            class="yearbook-btn">📖 View Yearbook 2024 (English)</a
+          >
+          <a
+            href="https://drive.google.com/file/d/1l6LzfiTz0IQ0RrTe57DG1bt80VuKuH7k/view?usp=sharing"
+            target="_blank"
+            class="yearbook-btn"
+            style="background: #f97316;">📖 Ver Anuario 2024 (Español)</a
+          >
+        </div>
+      </div>
+
+      <div class="tier-system">
+        <div class="tier-header">
+          <h2>Our Kids Are Off to a Fantastic Year!</h2>
+          <p>
+            Behavioral Health parameters and frameworks providing structured
+            supports and services to help all students succeed across the entire
+            school year.
+          </p>
+        </div>
+
+        <div class="tier-block">
+          <h3>Universal Supports (Tier 1)</h3>
+          <p>
+            Every school has support for all students. All students are taught
+            basic expected behaviors (or ways to act), like how to show respect
+            and kindness. The school staff praises children for their excellent
+            behavior. Sometimes small rewards like tokens or prizes are used to
+            reward good and positive school behavior.
+          </p>
+
+          <div class="tier-items">
+            <div class="program-card">
+              <h4>Positive Behavior Interventions and Supports (PBIS)</h4>
+              <p>
+                PBIS promotes positive school safety and good behavior among all
+                students by school staff teaching students about emotions,
+                mindfulness, and their ability to do well in their school, home,
+                and community. PBIS is not a program or a curriculum; it’s a
+                team of school employees focused on creating a safe and fun
+                school environment.
+              </p>
+            </div>
+            <div class="program-card">
+              <h4>Restorative Justice</h4>
+              <p>
+                A process that teaches students how to resolve conflicts on
+                their own and in small groups. Through safe and supportive
+                spaces in the schools, students can meet to talk, ask questions,
+                and air their grievances in ways that all parties feel
+                acknowledged.
+              </p>
+            </div>
+            <div class="program-card">
+              <h4>Social and Emotional Learning (SEL)</h4>
+              <p>
+                Teaches students how to manage their emotions, make good
+                decisions, and work with other children on a team. They learn
+                critical thinking, emotion management, conflict resolution,
+                decision-making, and teamwork so children can value themselves
+                and others.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tier-block t2">
+          <h3>Individualized Support (Tier 2)</h3>
+          <p>
+            At this level, your child will receive all the support above, and
+            they may start to receive small group or individualized support to
+            help them experience success. For example, if your child is
+            struggling with social interactions, they might get help in a small
+            group of peers. The parent engages with the school team to determine
+            appropriate supports, such as daily reports, behavior contracts, or
+            counseling.
+          </p>
+
+          <div class="tier-items">
+            <div class="program-card">
+              <h4>Student Assistance Program (SAP)</h4>
+              <p>
+                A team of experts at the school that starts the intervention
+                process. The group decides which resources are a good match for
+                your child so they can stay in school and keep learning. Staff
+                talk with students to determine if they need additional support
+                services and refer them accordingly.
+              </p>
+            </div>
+            <div class="program-card">
+              <h4>Support Team for Education Project (STEP)</h4>
+              <p>
+                A full-time school team that talks with students to figure out
+                if they need behavioral health/counseling/therapy services. They
+                guide students to social services such as housing, insurance, or
+                food assistance. STEP staff can provide counseling services for
+                a short time while they wait to start referred services.
+              </p>
+            </div>
+            <div class="program-card">
+              <h4>STEP "Like" Schools</h4>
+              <p>
+                Schools that offer some of the STEP services and supports but
+                not everything in the original program. A STEP "like" may look
+                different at each location.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tier-block t3">
+          <h3>Intensive Behavioral Health Services (Tier 3)</h3>
+          <p>
+            For students with the most distress/needs, who need more support
+            than an hour of counseling a week, and who are at risk of being
+            unable to stay at home and school because they need treatment. These
+            high-level services aim to help students stay at home and school
+            instead of being placed in a hospital setting.
+          </p>
+          <p>
+            These individualized services are provided by a licensed behavioral
+            health agency assigned to your child’s school. Services may include
+            multiple weekly sessions focusing on specific skills.
+          </p>
+
+          <ul class="tier-bullet-list">
+            <li>Individual Sessions</li>
+            <li>Student Group Sessions</li>
+            <li>Family Sessions</li>
+            <li>Case Management</li>
+            <li>Behavior Management Planning</li>
+            <li>Crisis Intervention</li>
+            <li>Outpatient Satellite in Schools</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="delegate-banner">
+        <h3>Additional Mental Health Resources</h3>
+        <p>
+          If emergency mental health resources are needed, the following
+          constant support line may be utilized at any hour:
+        </p>
+        <div class="delegate-phone">
+          24-Hour Mental Health Delegate Line: 215-685-6440
+        </div>
+      </div>
+
+      <div class="cta-banner">
+        <h2>Join Our ECSE Waitlist Today</h2>
+        <p
+          style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto;"
+        >
+          Secure a spot in our world-class specialized classrooms. We are deeply
+          committed to nurturing your child's brilliance.
+        </p>
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLScr1u66TzSngd0mO3bT1yZq1N89Tig3Nl87z1p1b1X_U8-i2w/viewform"
+          target="_blank"
+          class="cta-button">Apply to Waitlist</a
+        >
+      </div>
+    </div>
+  </main>
+
+  <!-- Tour Request Modal -->
+  <div id="tourRequestModal">
+    <div class="tour-modal-content">
+      <button class="tour-modal-close" onclick="closeTourRequestModal()"
+        >&times;</button
+      >
+      <h2
+        style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;"
+      >
+        ECSE Classroom Tour Request
+      </h2>
+      <p style="color: #64748b; margin-bottom: 2rem; font-size: 1.05rem;">
+        We are delighted by your interest in visiting our Early Intervention
+        Classrooms. Please fill out the criteria below so we can schedule
+        optimally.
+      </p>
+
+      <form id="tourRequestForm" onsubmit="submitTourRequest(event)">
+        <div class="tour-form-grid">
+          <div class="tour-form-group">
+            <label for="tourParentName"
+              >Parent/Guardian Full Name <span style="color: #ef4444;">*</span>
+            </label>
+            <input
+              type="text"
+              id="tourParentName"
+              required
+              placeholder="John Doe"
+            />
+          </div>
+
+          <div class="tour-form-group">
+            <label for="tourChildName"
+              >Child's Full Name <span style="color: #ef4444;">*</span>
+            </label>
+            <input
+              type="text"
+              id="tourChildName"
+              required
+              placeholder="Jane Doe"
+            />
+          </div>
+
+          <div class="tour-form-group">
+            <label for="tourChildDOB"
+              >Child's Date of Birth <span style="color: #ef4444;">*</span>
+            </label>
+            <input type="date" id="tourChildDOB" required />
+          </div>
+
+          <div class="tour-form-group">
+            <label for="tourChildAge"
+              >Child's Current Age <span style="color: #ef4444;">*</span>
+            </label>
+            <input
+              type="number"
+              id="tourChildAge"
+              required
+              placeholder="e.g. 4"
+            />
+          </div>
+
+          <div class="tour-form-group full">
+            <label for="tourLEA"
+              >Sending LEA (School District / County) <span
+                style="color: #ef4444;">*</span
+              >
+            </label>
+            <input
+              type="text"
+              id="tourLEA"
+              required
+              placeholder="e.g. Philadelphia School District"
+            />
+          </div>
+
+          <div class="tour-form-group">
+            <label for="tourPhone"
+              >Parent Phone Number <span style="color: #ef4444;">*</span>
+            </label>
+            <input
+              type="tel"
+              id="tourPhone"
+              required
+              placeholder="(123) 456-7890"
+            />
+          </div>
+
+          <div class="tour-form-group">
+            <label for="tourEmail"
+              >Parent Email Address <span style="color: #ef4444;">*</span>
+            </label>
+            <input
+              type="email"
+              id="tourEmail"
+              required
+              placeholder="johndoe@email.com"
+            />
+          </div>
+
+          <div class="tour-form-group full">
+            <label for="tourAddress"
+              >Home Address <span style="color: #ef4444;">*</span>
+            </label>
+            <input
+              type="text"
+              id="tourAddress"
+              required
+              placeholder="123 Main St, City, State ZIP"
+            />
+          </div>
+
+          <div class="tour-form-group">
+            <label
+              >Child's Current IEP Services <span style="color: #ef4444;"
+                >*</span
+              >
+            </label>
+            <div class="checkbox-group">
+              <label
+                ><input
+                  type="checkbox"
+                  name="tourServices"
+                  value="Speech/Language"
+                /> Speech/Language</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  name="tourServices"
+                  value="Occupational Therapy"
+                /> Occupational Therapy (OT)</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  name="tourServices"
+                  value="Physical Therapy"
+                /> Physical Therapy (PT)</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  name="tourServices"
+                  value="Special Instruction"
+                /> Special Instruction (SI)</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  name="tourServices"
+                  value="Behavior Support"
+                /> Behavior Support</label
+              >
+              <label
+                ><input type="checkbox" name="tourServices" value="None" /> None
+                Currently</label
+              >
+            </div>
+          </div>
+
+          <div class="tour-form-group">
+            <label>Primary Language Spoken at Home</label>
+            <input
+              type="text"
+              id="tourLanguage"
+              placeholder="e.g. English, Spanish"
+            />
+          </div>
+
+          <div class="tour-form-group">
+            <label>Does your child currently attend preschool or daycare?</label
+            >
+            <div class="radio-group">
+              <label
+                ><input
+                  type="radio"
+                  name="tourPreschool"
+                  value="Yes"
+                  required
+                /> Yes</label
+              >
+              <label
+                ><input type="radio" name="tourPreschool" value="No" /> No</label
+              >
+            </div>
+          </div>
+
+          <div class="tour-form-group">
+            <label>If accepted, will transportation be needed?</label>
+            <div class="radio-group">
+              <label
+                ><input
+                  type="radio"
+                  name="tourTransportation"
+                  value="Yes"
+                  required
+                /> Yes</label
+              >
+              <label
+                ><input type="radio" name="tourTransportation" value="No" /> No</label
+              >
+            </div>
+          </div>
+
+          <div class="tour-form-group full">
+            <label
+              >Preferred Time of Day for Tour <span style="color: #ef4444;"
+                >*</span
+              >
+            </label>
+            <div class="radio-group">
+              <label
+                ><input
+                  type="radio"
+                  name="tourTime"
+                  value="Morning (9AM - 11AM)"
+                  required
+                /> Morning (9AM - 11AM)</label
+              >
+              <label
+                ><input
+                  type="radio"
+                  name="tourTime"
+                  value="Afternoon (1PM - 3PM)"
+                /> Afternoon (1PM - 3PM)</label
+              >
+            </div>
+          </div>
+
+          <div class="tour-form-group full" style="margin-top: 1rem;">
+            <button
+              type="submit"
+              class="cta-button"
+              style="width: 100%; text-align: center; border: none; cursor: pointer; padding: 1.2rem;"
+              >Submit Tour Request</button
+            >
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-
-  <div class="container">
-    <div class="breadcrumb">
-      <a href="/">Home</a> / <a href="/services">Services</a> / Early Intervention Services & Behavioral Health
-    </div>
-
-    <div class="program-header">
-      <div class="program-header-top">
-        <div class="location-badges-group">
-          <div class="location-badge">📍 4704 Leiper St., Philadelphia, PA 19124</div>
-          <div class="location-badge">📍 5024 Penn St., Philadelphia, PA 19124</div>
-        </div>
-        <a href="#" onclick="openTourRequestModal(); return false;" class="tour-btn">Schedule a Tour</a>
-      </div>
-      <h1 class="program-title">Early Intervention Services & Behavioral Health</h1>
-      <p class="program-subtitle">Comprehensive support for children ages 3-5 with diverse abilities</p>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Welcome to ECSE: A Place Where Every Child Shines</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        Discover a world where your child's potential takes center stage. Early Childhood Special Education (ECSE) at EIEI is dedicated to nurturing unique abilities, fostering growth, and celebrating every milestone.
-      </p>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        At EIEI, we are dedicated to providing the highest quality early intervention services to support your child's development. Our team of experienced professionals works closely with families to create individualized plans that address each child's unique needs. We believe in the power of early intervention to make a significant impact on a child's future success and well-being.
-      </p>
-      <div class="highlight-box">
-        <strong>Our Mission:</strong> To provide a safe, nurturing, and developmentally appropriate environment for children and their families to thrive, both in school and in life-long success!
-      </div>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Why Choose ECSE at EIEI?</h2>
-      <ul style="list-style: none; padding: 0;">
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Personalized Support:</strong> Tailored programs that adapt to your child's needs.</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Inclusive Environment:</strong> Every child is welcomed, valued, and supported.</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓ Expert Guidance:</strong> Led by experienced educators and specialists.</li>
-      </ul>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Family-Focused Care</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        You are at the heart of your child's success. Our family-centered approach ensures you're supported every step of the way. Together, we build a brighter future.
-      </p>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Smooth Transitions, Lifelong Skills</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        Change can be challenging, but we make it seamless. From preschool to kindergarten, our transition planning equips children with the tools they need to thrive in their next educational setting.
-      </p>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Comprehensive Services</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        From speech therapy to behavioral support, our team provides holistic care that empowers children to succeed in every aspect of life.
-      </p>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-title">Special Education Classrooms</div>
-          <div class="benefit-desc">Ages 3-5 classrooms designed for children with special needs and diverse learning styles.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Social Playgroups</div>
-          <div class="benefit-desc">Supportive, inclusive environments where children develop social and communication skills.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">In-Home Services</div>
-          <div class="benefit-desc">Bring services directly to your family - coaching, guidance, and support at home.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">In-School Services</div>
-          <div class="benefit-desc">Collaborate with school programs to ensure continuity of care and support.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Speech & Language Therapy</div>
-          <div class="benefit-desc">Professional speech-language pathologists support communication development.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Occupational Therapy</div>
-          <div class="benefit-desc">Support for daily living skills, sensory development, and motor skill growth.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Our Team</h2>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-title">Certified Early Childhood & Special Needs Educators</div>
-          <div class="benefit-desc">Expert educators with specialized training in supporting diverse learners.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Registered Behavior Technicians (RBTs)</div>
-          <div class="benefit-desc">Trained professionals who implement behavioral strategies and support positive development.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Speech-Language Pathologists</div>
-          <div class="benefit-desc">Specialists in communication development and speech therapy.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Occupational Therapists</div>
-          <div class="benefit-desc">Professionals focused on developing skills for daily living and independence.</div>
-        </div>
-      </div>
-    </div>
-    <div class="content-section">
-      <h2 class="section-title">Our Esteemed Faculty</h2>
-      <p style="margin-bottom: 2rem; line-height: 1.8;">
-        Meet the experienced educators and specialists dedicated to supporting your child's growth and success.
-      </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-        <div style="text-align: center;">
-          <img src="/images/essence-allen-presley.jpg" alt="Dr. Essence Allen Presley" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-          <div style="color: #2a4175; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">Dr. Essence Allen Presley</div>
-          <div style="color: #6b7280; font-size: 0.9rem;">Program Director & Founder</div>
-        </div>
-        <div style="text-align: center;">
-          <img src="/images/lien-vo-jones.jpg" alt="Lien Vo-Jones" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-          <div style="color: #2a4175; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">Lien Vo-Jones</div>
-          <div style="color: #6b7280; font-size: 0.9rem;">Behavioral Health Specialist</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Our Kids Are Off to a Fantastic Year!</h2>
-      <p style="margin-bottom: 2rem; line-height: 1.8;">
-        Celebrating a year of growth and achievement. As we wrap up another successful school year, we want to extend our heartfelt thanks to all the families, students, and staff who have made this year truly special. We've seen tremendous growth, celebrated countless achievements, and created wonderful memories together.
-      </p>
-      
-      <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1.5rem; margin-top: 1.5rem;">Year-End Highlights & Yearbook 2023-24</h3>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        To commemorate this incredible year, we are excited to share our yearbook, which captures the highlights and cherished moments from this school year. We hope you enjoy looking back on these memories as much as we do. Thank you for being a part of the EIEI community. We look forward to continuing our journey together in the upcoming year!
-      </p>
-      
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-        <a href="https://drive.google.com/file/d/1TgOgmtelAV1Llsmv-FQAycP71tgh5lf8/view?usp=sharing" target="_blank" style="display: block; padding: 1.5rem; background-color: #f3f4f6; border-left: 4px solid #fca311; border-radius: 4px; text-decoration: none; transition: transform 0.3s ease;">
-          <div style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">📚 Yearbook 2024 - English</div>
-          <div style="color: #6b7280; font-size: 0.9rem;">View our yearbook highlights and cherished moments</div>
-        </a>
-        <a href="https://drive.google.com/file/d/1l6LzfiTz0IQ0RrTe57DG1bt80VuKuH7k/view?usp=sharing" target="_blank" style="display: block; padding: 1.5rem; background-color: #f3f4f6; border-left: 4px solid #fca311; border-radius: 4px; text-decoration: none; transition: transform 0.3s ease;">
-          <div style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">📚 Yearbook 2024 - Spanish</div>
-          <div style="color: #6b7280; font-size: 0.9rem;">Ver nuestro anuario y momentos especiales</div>
-        </a>
-        <a href="https://drive.google.com/file/d/1t5vnTdpQj1iVUN2eYqEnIAQr7FjUTZLN/view?usp=sharing" target="_blank" style="display: block; padding: 1.5rem; background-color: #f3f4f6; border-left: 4px solid #fca311; border-radius: 4px; text-decoration: none; transition: transform 0.3s ease;">
-          <div style="color: #2a4175; font-weight: 600; margin-bottom: 0.5rem;">📚 Yearbook 2025 - English</div>
-          <div style="color: #6b7280; font-size: 0.9rem;">View our yearbook highlights and cherished moments</div>
-        </a>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">What People Are Saying</h2>
-      <div class="testimonials-wrapper" style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
-        <button class="testimonial-nav prev" id="prevTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❮</button>
-        <div class="testimonials" id="testimonialsContainer" style="flex: 1; min-height: 200px;">
-          <!-- Testimonials will be loaded here by script.js -->
-        </div>
-        <button class="testimonial-nav next" id="nextTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❯</button>
-      </div>
-    </div>
-    <div class="cta-section">
-      <h2 style="color: white;">Join Our Early Childhood Special Education Classroom Waitlist</h2>
-      <p style="margin: 1rem 0;">We are committed to providing a nurturing and inclusive learning environment for young children with diverse abilities. If you're interested in enrolling your child in our program, join our waitlist today!</p>
-      <a href="https://forms.gle/WZ6PKpwzhVqG3AJy7" class="cta-button" target="_blank">Join the Waitlist</a>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Behavioral Health Services</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        We recognize that supporting children's behavioral and mental health is integral to their overall development. Our comprehensive behavioral health services are designed to help all students succeed.
-      </p>
-
-      <div style="margin-bottom: 2rem;">
-        <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.5rem;">Tier 1 - Universal Supports & Services for All Students</h3>
-        <p style="margin-bottom: 1rem; line-height: 1.8;">Every school has support for all students. All students are taught expected behaviors like how to show respect and kindness. School staff praises children for their excellent behavior.</p>
-        <p style="font-weight: 600; margin-bottom: 1rem;">Examples of services for all students include:</p>
-        <ul style="list-style-position: inside; line-height: 2; margin-left: 1rem;">
-          <li><strong>Positive Behavioral Intervention & Supports (PBIS)</strong> - Promotes positive school safety and good behavior among all students through emotional learning and mindfulness programs.</li>
-          <li><strong>Restorative Justice Programs</strong> - Teaches students how to resolve conflicts on their own and in small groups through safe and supportive spaces.</li>
-          <li><strong>Social-Emotional Learning (SEL)</strong> - Teaches students how to manage their emotions, make good decisions, and work with other children on a team.</li>
-        </ul>
-      </div>
-
-      <div style="margin-bottom: 2rem;">
-        <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.5rem;">Tier 2 - Individual Supports & Services (30-90 days)</h3>
-        <p style="margin-bottom: 1rem; line-height: 1.8;">These services identify students with some distress or issues and connect them to resources in or outside the school. Your child receives all Tier 1 supports plus small group or individualized support.</p>
-        <p style="font-weight: 600; margin-bottom: 1rem;">Examples of services may include:</p>
-        <ul style="list-style-position: inside; line-height: 2; margin-left: 1rem;">
-          <li><strong>Student Assistance Program (SAP)</strong> - A team of experts who determine which resources are a good match for your child.</li>
-          <li><strong>Support Team for Education Project (STEP)</strong> - Provides behavioral health, counseling, and therapy services plus social services support.</li>
-          <li>Daily behavior reports, behavior contracts, school counseling, check-ins and check-outs</li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 style="color: #2a4175; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.5rem;">Tier 3 - Intensive Support & Services (60-120 days)</h3>
-        <p style="margin-bottom: 1rem; line-height: 1.8;">Students with the most distress or needs receive intensive behavioral health services (IBHS). These services aim to help students stay at home and school instead of being placed in a hospital setting.</p>
-        <p style="font-weight: 600; margin-bottom: 1rem;">Examples of IBHS services include:</p>
-        <ul style="list-style-position: inside; line-height: 2; margin-left: 1rem;">
-          <li>Individual and group sessions</li>
-          <li>Family therapy and case management</li>
-          <li>Behavior management planning</li>
-          <li>Crisis intervention and referrals</li>
-          <li>Outpatient satellite services in schools</li>
-        </ul>
-        <div class="highlight-box" style="margin-top: 1.5rem;">
-          <strong>24-Hour Mental Health Support:</strong> If additional mental health resources are needed, our 24-Hour Mental Health Delegate Line is available at 215-685-6440.
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Programs Designed for Growth</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        Experience programs built on kindness, inclusivity, and excellence. Every activity and service is designed to help your child thrive, learn, and grow confidently.
-      </p>
-      <ul style="list-style: none; padding: 0;">
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Services for children ages 3-5 - specialized programs for early childhood development</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Comprehensive approach - addressing multiple areas of child development</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Family-centered - supporting not just the child, but the entire family</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Certified professionals - experienced team dedicated to your child's success</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Inclusive environment - celebrating diversity and supporting all learners</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Evidence-based practices - programs built on proven successful strategies</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Location convenience - services at our Northeast Philadelphia location</li>
-      </ul>
-    </div>
-
-    
-
-    
-
-
-  </div>
-
-  
-  
-
-  <!-- Header Component -->
-  
-  
-  <!-- Footer Component -->
-  
-
-  <!-- Chat Widget -->
-  
-
-  <!-- Firebase & Testimonials -->
-  
-  
-
-  <script is:inline>
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerContainer = document.getElementById('header-container');
-      if (headerContainer) {
-        headerContainer.innerHTML = "";
-      }
-      
-      const footerContainer = document.getElementById('footer-container');
-      if (footerContainer) {
-        footerContainer.innerHTML = "";
-      }
-
-      // Carousel setup
-      const pageSlides = document.querySelectorAll('#pageCarousel .slide');
-      const totalSlides = pageSlides.length;
-      let currentSlide = 0;
-
-      const controlsContainer = document.getElementById('pageCarouselControls');
-      if (controlsContainer) {
-        for (let i = 0; i < totalSlides; i++) {
-          const dot = document.createElement('div');
-          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-          dot.onclick = () => goToSlide(i);
-          controlsContainer.appendChild(dot);
-        }
-      }
-
-      function goToSlide(n) {
-        currentSlide = (n + totalSlides) % totalSlides;
-        pageSlides.forEach(slide => slide.classList.remove('active'));
-        pageSlides[currentSlide].classList.add('active');
-
-        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
-        dots.forEach(dot => dot.classList.remove('active'));
-        if (dots[currentSlide]) {
-          dots[currentSlide].classList.add('active');
-        }
-      }
-
-      function nextSlide() {
-        goToSlide(currentSlide + 1);
-      }
-
-      setInterval(nextSlide, 5000);
-    });
-  </script>
-
 </Layout>

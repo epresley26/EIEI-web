@@ -2,520 +2,374 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Training, Coaching & Professional Development - EIEI">
-<style is:global>
+<Layout title="Training & Professional Development - EIEI">
+  <style is:global>
+    /* PREMIUM MODERN STYLES */
+    .service-hero {
+      position: relative;
+      width: 100%;
+      min-height: 45vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10rem 2rem 5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    .service-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .service-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .service-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    .service-hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.9;
       line-height: 1.6;
-      color: #1f2937;
-      background-color: #f3f4f6;
-      width: 100% !important;
-      max-width: 100% !important;
+    }
+
+    .main-content {
+      background: #f8fafc;
+      padding: 5rem 2rem;
+      min-height: 50vh;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem;
     }
 
     .breadcrumb {
-      margin-bottom: 2rem;
-      font-size: 0.9rem;
-      color: #6b7280;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 500;
     }
 
     .breadcrumb a {
-      color: #2a4175;
+      color: #2563eb;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     .breadcrumb a:hover {
-      color: #fca311;
+      color: #f97316;
     }
 
-    .program-header {
-      background-color: white;
-      padding: 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      margin-top: 4rem;
     }
 
-    .program-title {
-      color: #2a4175;
+    .section-header h2 {
       font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
       margin-bottom: 1rem;
     }
 
-    .program-subtitle {
-      font-size: 1.2rem;
-      color: #6b7280;
-      margin-bottom: 1.5rem;
-      line-height: 1.8;
-    }
-
-    .content-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-
-    .section-title {
-      color: #2a4175;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 3px solid #fca311;
-      padding-bottom: 0.5rem;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .benefit-card {
-      padding: 1.5rem;
-      background-color: #f3f4f6;
-      border-left: 4px solid #fca311;
-      border-radius: 4px;
-    }
-
-    .benefit-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .benefit-title {
-      color: #2a4175;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .benefit-desc {
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-
-    .cta-section {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+    .certification-banner {
+      background: linear-gradient(90deg, #f97316, #dc2626);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
       color: white;
-      padding: 2.5rem;
-      border-radius: 8px;
       text-align: center;
-      margin-top: 2rem;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 10px 30px rgba(249, 115, 22, 0.2);
+      margin-bottom: 4rem;
+    }
+
+    .knowledge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .knowledge-card {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .knowledge-card:hover {
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+      transform: translateY(-8px);
+      border-color: #cbd5e1;
+    }
+
+    .knowledge-card h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #f97316;
+      padding-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .knowledge-prop {
+      margin-bottom: 1.2rem;
+      font-size: 0.95rem;
+      color: #334155;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .knowledge-prop strong {
+      color: #1e293b;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.2rem;
+      color: #2563eb;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .service-box {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: #2563eb;
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+      transform-origin: bottom;
+    }
+
+    .service-box:hover {
+      box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+      transform: translateX(5px);
+    }
+
+    .service-box:hover::before {
+      transform: scaleY(1);
+    }
+
+    .service-box h4 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 1rem;
+    }
+
+    .service-box p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin: 4rem 0;
+    }
+
+    .photo-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .photo-grid img:hover {
+      transform: scale(1.05);
+      z-index: 5;
+    }
+
+    .cta-banner {
+      background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+      border-radius: 20px;
+      padding: 4rem;
+      text-align: center;
+      color: white;
+      margin-top: 5rem;
+    }
+
+    .cta-banner h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
     }
 
     .cta-button {
       display: inline-block;
-      background-color: #fca311;
-      color: #2a4175;
-      padding: 0.75rem 2rem;
-      border-radius: 4px;
+      background: #f97316;
+      color: white;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
       text-decoration: none;
-      font-weight: 600;
-      margin-top: 1rem;
+      margin-top: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .cta-button:hover {
-      background-color: #ff9500;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+      background: #ea580c;
     }
 
-    .testimonials-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+    @media (max-width: 1100px) {
+      .knowledge-grid { grid-template-columns: 1fr; }
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
     }
-
-    .testimonials-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
+    @media (max-width: 768px) {
+      .service-hero { padding-top: 8rem; min-height: 40vh; }
+      .cta-banner { padding: 3rem 1.5rem; }
+      .photo-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
     }
+  </style>
 
-    .testimonials {
-      flex: 1;
-      min-height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #testimonialsContainer .card {
-      display: none;
-      text-align: center;
-      padding: 2rem;
-    }
-
-    #testimonialsContainer .card.active {
-      display: block;
-    }
-
-    #testimonialsContainer .card p {
-      color: #6b7280;
-      font-size: 1rem;
-      margin: 1rem 0;
-      line-height: 1.8;
-    }
-
-    #testimonialsContainer .card h3 {
-      color: #2a4175;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .testimonial-nav {
-      background: none;
-      border: none;
-      font-size: 2rem;
-      cursor: pointer;
-      color: #2a4175;
-      padding: 0.5rem;
-    }
-
-    .testimonial-nav:hover {
-      color: #fca311;
-    }
-
-    .services-header {
-      width: 100%;
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      text-align: center;
-      padding: 3rem 2rem;
-      margin: 0;
-      max-width: none;
-      border-radius: 0;
-    }
-
-    .services-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .services-header p {
-      width: 100%;
-      font-size: 1.1rem;
-      opacity: 0.95;
-      max-width: none;
-      margin: 0 auto;
-    }
-
-    /* Carousel styles (service-specific) */
-    .services-carousel {
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      height: 60vh;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .slide-content {
-      text-align: center;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      padding: 2rem;
-    }
-
-    .slide-content h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .slide-content p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-    }
-
-    .carousel-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .carousel-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .carousel-dot.active {
-      background: white;
-      transform: scale(1.2);
-    }
-  
-</style>
-
-  
-  
-
-  <!-- SERVICE CAROUSEL -->
-  <section class="services-carousel">
-    <div class="carousel" id="pageCarousel">
-      <div class="slide active" style="background-image: url('images/slide1.jpg')">
-        <div class="slide-content">
-          <h1>Training, Coaching &amp; Professional Development</h1>
-          <p>Empowering educators and leaders</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide2.jpg')">
-        <div class="slide-content">
-          <h1>Training, Coaching &amp; Professional Development</h1>
-          <p>Building skills for inclusive classrooms</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide3.jpg')">
-        <div class="slide-content">
-          <h1>Training, Coaching &amp; Professional Development</h1>
-          <p>Supporting continuous professional growth</p>
-        </div>
-      </div>
+  <section class="service-hero">
+    <div class="service-hero-content">
+      <h1>Training & Professional Development</h1>
+      <p>Aggressively empowering brilliant educators and leaders to expand their specialized knowledge pipelines.</p>
     </div>
-    <div class="carousel-controls" id="pageCarouselControls"></div>
   </section>
 
-  <div class="services-header">
-    <h1>Training, Coaching, and Professional Development</h1>
-    <p>Empowering early childhood professionals with comprehensive training, coaching, and leadership development.</p>
-  </div>
-
-  <div class="container">
-    <div class="breadcrumb">
-      <a href="/">Home</a> / <a href="/services">Services</a> / Training, Coaching & Professional Development
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Professional Development at EIEI</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        Empower your team with our comprehensive training programs designed to equip professionals in early childhood education, early intervention, and leadership development with the skills and knowledge they need to thrive. Our hands-on, practical training focuses on essential competencies, from supporting young children's developmental milestones to effectively leading teams in early learning environments.
-      </p>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        Whether onboarding new staff, providing specialized early intervention training, or cultivating leadership skills, our tailored solutions meet the evolving needs of your organization.
-      </p>
-      <div style="background-color: #e8f4f8; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #fca311;">
-        <p style="margin: 0;"><strong style="color: #2a4175;">EIEI is PQAS and ACT 48 Approved for Professional Development Certification</strong></p>
+  <main class="main-content">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/services">Services</a> / Professional Development
       </div>
-    </div>
 
-    <div class="content-section">
-      <h2 class="section-title">Training: Building Foundational Skills</h2>
-      <div style="background-color: #f3f4f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Purpose:</strong> Training focuses on teaching specific skills or knowledge needed to perform a job or task. It is structured and formal, ensuring employees have the essential tools for success.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Scope:</strong> Short-term and task-oriented, often aimed at new hires or employees learning a new system or process.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Method:</strong> Delivered through workshops, classes, or online modules with clear objectives.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Example:</strong> Understanding safety procedures and regulations or mastering specific teaching methods.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Why:</strong> Training ensures employees have the basic skills and knowledge to perform their tasks efficiently and safely, preventing struggles with core responsibilities.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">When:</strong> When introducing new tools, systems, processes, or onboarding new employees.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Outcome:</strong> Improved job performance, greater operational efficiency, and compliance with industry standards.</p>
+      <div class="certification-banner">
+        ✓ Officially PQAS and ACT 48 Approved for Professional Development Certification
       </div>
-    </div>
 
-    <div class="content-section">
-      <h2 class="section-title">Coaching: Enhancing Performance and Development</h2>
-      <div style="background-color: #f3f4f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Purpose:</strong> Coaching focuses on personal and professional growth, helping individuals improve their performance through guidance, feedback, and support.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Scope:</strong> Long-term and individualized, supporting employees in developing skills, behaviors, and mindset.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Method:</strong> One-on-one sessions involving discussions, goal setting, and feedback.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Example:</strong> Helping an employee incorporate quality standards with behavior modification or improving culture and classroom management.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Why:</strong> Coaching provides tailored support for improving specific behaviors, overcoming challenges, and refining skills. It builds confidence, leadership, and critical thinking abilities.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">When:</strong> For leadership development, managing transitions, or improving specific skills (e.g., communication, time management).</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Outcome:</strong> Enhanced personal growth, better performance, increased engagement, and motivation.</p>
+      <div class="section-header">
+        <h2>The 3 Pillars of EIEI Empowerment</h2>
+        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Establishing comprehensive frameworks to ensure no operational gaps remain unaddressed.</p>
       </div>
-    </div>
 
-    <div class="content-section">
-      <h2 class="section-title">Professional Development: Fostering Long-Term Growth</h2>
-      <div style="background-color: #f3f4f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Purpose:</strong> Professional development focuses on broad, ongoing learning that helps individuals advance in their careers by acquiring new skills, knowledge, and competencies.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Scope:</strong> Long-term, aimed at personal growth and career progression, often self-driven or organizationally supported.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Method:</strong> Delivered through workshops, seminars, certifications, conferences, and mentorship.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Why:</strong> Provides opportunities for career growth, skill advancement, and staying current with industry trends and emerging skills. It helps retain top talent and keep employees motivated.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">When:</strong> Continually, as part of an employee's career path to encourage ongoing learning and adaptability.</p>
-        <p style="margin: 0.5rem 0;"><strong style="color: #2a4175;">Outcome:</strong> Increased expertise, career advancement opportunities, and a more innovative, forward-thinking workforce.</p>
-      </div>
-    </div>
+      <div class="knowledge-grid">
+        <div class="knowledge-card">
+          <h3>1. Training Base</h3>
+          <div class="knowledge-prop"><strong>Purpose</strong> Structured fundamentals teaching explicit, required skills instantly.</div>
+          <div class="knowledge-prop"><strong>Scope</strong> Accelerated, short-term task-orientation for boarding personnel.</div>
+          <div class="knowledge-prop"><strong>Method</strong> Dynamic workshop drills, interactive classes, precise online modules.</div>
+          <div class="knowledge-prop"><strong>Why It Matters</strong> Eradicates struggle with core responsibilities permanently and secures zero-failure compliance standards.</div>
+        </div>
 
-    <div class="content-section">
-      <h2 class="section-title">Before Registering for Our Programs, Remember:</h2>
-      <ul style="list-style: none; padding: 0;">
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Training establishes the basics, ensuring employees can perform their tasks.</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Coaching hones personal development and improves on-the-job performance.</li>
-        <li style="margin-bottom: 1rem;"><strong style="color: #fca311;">✓</strong> Professional Development prepares individuals for future challenges, innovations, and career progression.</li>
-      </ul>
-      <p style="margin-top: 1.5rem; line-height: 1.8;">
-        <strong style="color: #2a4175;">Together, our programs provide a comprehensive framework for improving the immediate and long-term success of employees and the organization.</strong> Each component plays a critical role in skill development, performance improvement, and career growth, ensuring no gaps are left unaddressed.
-      </p>
-    </div>
+        <div class="knowledge-card">
+          <h3>2. VIP Coaching</h3>
+          <div class="knowledge-prop"><strong>Purpose</strong> Intense one-on-one personal advancement through direct, surgical feedback.</div>
+          <div class="knowledge-prop"><strong>Scope</strong> Customized behavioral trajectory tracking applied directly to your specific mentality.</div>
+          <div class="knowledge-prop"><strong>Method</strong> Live situational guidance and meticulous goal-setting interrogations.</div>
+          <div class="knowledge-prop"><strong>Why It Matters</strong> Obliterates cognitive barriers, forcing confidence, extreme communication, and classroom culture modifications rapidly.</div>
+        </div>
 
-    <div class="content-section">
-      <h2 class="section-title">List of Available Trainings</h2>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-title">Generational Health Estate Planning (Wills & Trust)</div>
-          <div class="benefit-desc">Understanding financial planning and estate management for families.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Problem-Solving Techniques For Early Intervention & Special Needs</div>
-          <div class="benefit-desc">Evidence-based strategies for addressing challenges in special education settings.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Early Intervention Curriculum For Special Needs Children</div>
-          <div class="benefit-desc">Comprehensive curriculum design for supporting developmental milestones.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Kindergarten Transition for Special Needs Students</div>
-          <div class="benefit-desc">Strategies for smooth transitions from early intervention to kindergarten.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Special Needs Students In Early Intervention</div>
-          <div class="benefit-desc">Best practices and interventions for students with special needs.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">De-escalation for Early Childhood</div>
-          <div class="benefit-desc">Practical de-escalation techniques for managing challenging behaviors.</div>
+        <div class="knowledge-card">
+          <h3>3. Deep Professional</h3>
+          <div class="knowledge-prop"><strong>Purpose</strong> Broad-spectrum, future-proofed institutional advancement strategies.</div>
+          <div class="knowledge-prop"><strong>Scope</strong> Massive long-term visionary upscaling for organizational continuity logic.</div>
+          <div class="knowledge-prop"><strong>Method</strong> Huge seminars, regional summits, and prolonged high-tier mentorship.</div>
+          <div class="knowledge-prop"><strong>Why It Matters</strong> Transforms organizations into elite bastions of forward-thinking early learning innovation ecosystems effortlessly.</div>
         </div>
       </div>
-    </div>
 
-    <div class="content-section">
-      <h2 class="section-title">Professional Moments Gallery</h2>
-      <p style="margin-bottom: 2rem; line-height: 1.8;">
-        See our training programs in action! These images showcase professional development moments, team collaboration, and educators engaged in continuous learning.
-      </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-        <img src="/images/training-gallery-1.jpg" alt="Professional Development Moment 1" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <img src="/images/training-gallery-2.jpg" alt="Professional Development Moment 2" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <img src="/images/training-gallery-3.jpg" alt="Professional Development Moment 3" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <img src="/images/training-gallery-4.jpg" alt="Professional Development Moment 4" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <div class="section-header">
+        <h2>Active Specialized Syllabus</h2>
+        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Select from our elite portfolio of advanced tactical learning engagements.</p>
       </div>
-    </div>
 
-    <div class="content-section">
-      <h2 class="section-title">What People Are Saying</h2>
-      <div class="testimonials-wrapper" style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
-        <button class="testimonial-nav prev" id="prevTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❮</button>
-        <div class="testimonials" id="testimonialsContainer" style="flex: 1; min-height: 200px;">
-          <!-- Testimonials will be loaded here by script.js -->
+      <div class="services-grid">
+        <div class="service-box">
+          <h4>Problem-Solving Early Intervention Needs</h4>
+          <p>Scientific evidence-based strategic deployment matrices designed precisely for dismantling extreme challenges rapidly in special education settings.</p>
         </div>
-        <button class="testimonial-nav next" id="nextTestimonial" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #2a4175;">❯</button>
+        <div class="service-box">
+          <h4>Early Ed Curriculum Design</h4>
+          <p>Holistic structural blueprinting that ensures chronological developmental milestones are seamlessly achieved through play geometry.</p>
+        </div>
+        <div class="service-box">
+          <h4>Definitive K-12 Transmutation</h4>
+          <p>Advanced navigational techniques ensuring special-needs toddlers transition with unshakeable confidence smoothly into kindergarten parameters.</p>
+        </div>
+        <div class="service-box">
+          <h4>Aggressive De-escalation Protocol</h4>
+          <p>Hard tactical psychological anchoring techniques formulated strictly to calmly isolate and manage heavily volatile early childhood behaviors.</p>
+        </div>
+        <div class="service-box">
+          <h4>Generational Health & Trust Planning</h4>
+          <p>A crucial financial intelligence breakdown explaining the vital frameworks protecting special-need family asset security across lifetimes.</p>
+        </div>
+        <div class="service-box">
+          <h4>Inclusive Action Best Practices</h4>
+          <p>A high-velocity masterclass summarizing the absolute most optimal modern interventions deployed successfully within neurodivergent environments.</p>
+        </div>
       </div>
-    </div>
 
-    <div class="content-section" style="background: #f9fafb; border-radius: 12px; padding: 3rem; margin: 2rem 0;">
-      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Moments of Impact</h2>
-      <div id="trainingTestimonialGalleryContainer" class="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
-        <!-- Testimonial gallery images loaded here -->
+      <div class="section-header" style="margin-top: 8rem;">
+        <h2>The Laboratory of Innovation</h2>
+        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Our elite educator squads engaging heavily in continuous action-learning combat.</p>
       </div>
+
+      <div class="photo-grid">
+        <img src="/images/training-gallery-1.jpg" alt="Educators analyzing structural intervention tactics" />
+        <img src="/images/training-gallery-2.jpg" alt="Team mapping holistic child outcomes" />
+        <img src="/images/training-gallery-3.jpg" alt="Live instructional behavioral modifications" />
+        <img src="/images/training-gallery-4.jpg" alt="Active professional development graduation" />
+      </div>
+
+      <div class="cta-banner">
+        <h2>Arm Your Teachers Today</h2>
+        <p style="font-size: 1.2rem; opacity: 0.9; max-width: 650px; margin: 0 auto;">Do not let your workforce decay. Demand the ultimate professional development structural training deployed immediately inside your organization.</p>
+        <a href="tel:484-501-9101" class="cta-button">Engage Logistics: 484-501-9101</a>
+      </div>
+
     </div>
-
-    <div class="cta-section">
-      <h2 style="color: white;">Ready to Strengthen Your Workforce?</h2>
-      <p style="margin: 1rem 0;">Invest in professional development and training programs tailored to your organization's needs. Contact us today to learn about our comprehensive training solutions.</p>
-      <a href="tel:484-501-9101" class="cta-button">Call: 484-501-9101</a>
-    </div>
-  </div>
-
-  
-  
-
-  <!-- Header Component -->
-  
-  
-  <!-- Footer Component -->
-  
-
-  <!-- Chat Widget -->
-  
-
-  <!-- Firebase & Testimonials -->
-  
-  
-
-  <script is:inline>
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerContainer = document.getElementById('header-container');
-      if (headerContainer) {
-        headerContainer.innerHTML = "";
-      }
-      
-      const footerContainer = document.getElementById('footer-container');
-      if (footerContainer) {
-        footerContainer.innerHTML = "";
-      }
-
-      // Carousel setup
-      const pageSlides = document.querySelectorAll('#pageCarousel .slide');
-      const totalSlides = pageSlides.length;
-      let currentSlide = 0;
-
-      const controlsContainer = document.getElementById('pageCarouselControls');
-      if (controlsContainer) {
-        for (let i = 0; i < totalSlides; i++) {
-          const dot = document.createElement('div');
-          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-          dot.onclick = () => goToSlide(i);
-          controlsContainer.appendChild(dot);
-        }
-      }
-
-      function goToSlide(n) {
-        currentSlide = (n + totalSlides) % totalSlides;
-        pageSlides.forEach(slide => slide.classList.remove('active'));
-        pageSlides[currentSlide].classList.add('active');
-
-        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
-        dots.forEach(dot => dot.classList.remove('active'));
-        if (dots[currentSlide]) {
-          dots[currentSlide].classList.add('active');
-        }
-      }
-
-      function nextSlide() {
-        goToSlide(currentSlide + 1);
-      }
-
-      setInterval(nextSlide, 5000);
-    });
-  </script>
-
+  </main>
 </Layout>

@@ -2,507 +2,359 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Supporting Inclusions Through Programs & Affiliates - EIEI">
-<style is:global>
+<Layout title="Supporting Inclusions & Partnerships - EIEI">
+  <style is:global>
+    /* PREMIUM MODERN STYLES */
+    .service-hero {
+      position: relative;
+      width: 100%;
+      min-height: 45vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10rem 2rem 5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    .service-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .service-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .service-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    .service-hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.9;
       line-height: 1.6;
-      color: #1f2937;
-      background-color: #f3f4f6;
-      width: 100% !important;
-      max-width: 100% !important;
+    }
+
+    .main-content {
+      background: #f8fafc;
+      padding: 5rem 2rem;
+      min-height: 50vh;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem;
     }
 
     .breadcrumb {
-      margin-bottom: 2rem;
-      font-size: 0.9rem;
-      color: #6b7280;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 500;
     }
 
     .breadcrumb a {
-      color: #2a4175;
+      color: #2563eb;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     .breadcrumb a:hover {
-      color: #fca311;
+      color: #f97316;
     }
 
-    .program-header {
-      background-color: white;
-      padding: 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      margin-top: 4rem;
     }
 
-    .program-title {
-      color: #2a4175;
+    .section-header h2 {
       font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
       margin-bottom: 1rem;
     }
 
-    .program-subtitle {
-      font-size: 1.2rem;
-      color: #6b7280;
-      margin-bottom: 1.5rem;
-      line-height: 1.8;
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 5rem;
     }
 
-    .content-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+    .service-box {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .section-title {
-      color: #2a4175;
+    .service-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: #f97316;
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+      transform-origin: bottom;
+    }
+
+    .service-box:hover {
+      box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+      transform: translateY(-5px);
+    }
+
+    .service-box:hover::before {
+      transform: scaleY(1);
+    }
+
+    .icon-wrapper {
+      width: 50px; height: 50px;
+      background: #eff6ff;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.5rem;
       margin-bottom: 1.5rem;
-      border-bottom: 3px solid #fca311;
-      padding-bottom: 0.5rem;
+      color: #2563eb;
     }
 
-    .benefits-grid {
+    .service-box h4 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 1rem;
+    }
+
+    .service-box p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    
+    .dual-pane {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      background: white;
+      border-radius: 20px;
+      padding: 4rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      margin: 5rem 0;
+    }
+
+    .dual-pane h3 {
+      font-size: 2rem;
+      color: #0f172a;
+      margin-bottom: 1.5rem;
+      font-weight: 800;
+    }
+
+    .dual-pane p {
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .dual-pane ul {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0;
+    }
+
+    .dual-pane li {
+      margin-bottom: 1rem;
+      padding-left: 2rem;
+      position: relative;
+      color: #1e293b;
+      font-weight: 500;
+    }
+
+    .dual-pane li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #f97316;
+      font-weight: 900;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
+      margin: 4rem 0;
     }
 
-    .benefit-card {
-      padding: 1.5rem;
-      background-color: #f3f4f6;
-      border-left: 4px solid #fca311;
-      border-radius: 4px;
+    .photo-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
     }
 
-    .benefit-card:hover {
-      transform: translateY(-4px);
+    .photo-grid img:hover {
+      transform: scale(1.05);
     }
 
-    .benefit-title {
-      color: #2a4175;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .benefit-desc {
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-
-    .partnership-approach {
-      background-color: #e8f4f8;
-      border-left: 4px solid #2a4175;
-      padding: 1.5rem;
-      border-radius: 4px;
-      margin: 1.5rem 0;
-    }
-
-    .partnership-approach strong {
-      color: #2a4175;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    .cta-section {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      padding: 2.5rem;
-      border-radius: 8px;
+    .cta-banner {
+      background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+      border-radius: 20px;
+      padding: 4rem;
       text-align: center;
-      margin-top: 2rem;
+      color: white;
+      margin-top: 5rem;
+    }
+
+    .cta-banner h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
     }
 
     .cta-button {
       display: inline-block;
-      background-color: #fca311;
-      color: #2a4175;
-      padding: 0.75rem 2rem;
-      border-radius: 4px;
+      background: #f97316;
+      color: white;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
       text-decoration: none;
-      font-weight: 600;
-      margin-top: 1rem;
+      margin-top: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .cta-button:hover {
-      background-color: #ff9500;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+      background: #ea580c;
     }
 
-    .services-header {
-      width: 100%;
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      text-align: center;
-      padding: 3rem 2rem;
-      margin: 0;
-      max-width: none;
-      border-radius: 0;
+    @media (max-width: 900px) {
+      .dual-pane { grid-template-columns: 1fr; padding: 2rem; gap: 2rem; }
+      .photo-grid { grid-template-columns: 1fr; }
+      .service-hero { padding-top: 8rem; min-height: 40vh; }
+      .cta-banner { padding: 3rem 1.5rem; }
     }
+  </style>
 
-    .services-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .services-header p {
-      width: 100%;
-      font-size: 1.1rem;
-      opacity: 0.95;
-      max-width: none;
-      margin: 0 auto;
-    }
-
-    /* Carousel styles (service-specific) */
-    .services-carousel {
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      height: 60vh;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .slide-content {
-      text-align: center;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      padding: 2rem;
-    }
-
-    .slide-content h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .slide-content p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-    }
-
-    .carousel-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .carousel-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .carousel-dot.active {
-      background: white;
-      transform: scale(1.2);
-    }
-  
-</style>
-
-  
-  
-
-  <!-- SERVICE CAROUSEL -->
-  <section class="services-carousel">
-    <div class="carousel" id="pageCarousel">
-      <div class="slide active" style="background-image: url('images/slide1.jpg')">
-        <div class="slide-content">
-          <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
-          <p>Building collaborative partnerships for inclusion</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide2.jpg')">
-        <div class="slide-content">
-          <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
-          <p>Strengthening systems that serve children and families</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide3.jpg')">
-        <div class="slide-content">
-          <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
-          <p>Partnering to expand inclusive opportunities</p>
-        </div>
-      </div>
+  <section class="service-hero">
+    <div class="service-hero-content">
+      <h1>Supporting Inclusions Through Affiliates</h1>
+      <p>Building vast, collaborative partnership networks to aggressively advance inclusive special education and dynamically support children.</p>
     </div>
-    <div class="carousel-controls" id="pageCarouselControls"></div>
   </section>
 
-  <div class="services-header">
-    <h1>Supporting Inclusions Through Programs &amp; Affiliates</h1>
-    <p>Building collaborative partnerships to advance inclusive education and support children with diverse abilities.</p>
-  </div>
+  <main class="main-content">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/services">Services</a> / Supporting Inclusions
+      </div>
 
-  <div class="container">
-    <div class="breadcrumb">
-      <a href="/">Home</a> / <a href="/services">Services</a> / Supporting Inclusions Through Programs & Affiliates
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Our Partnership Philosophy</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        We join hands with non-profit and for-profit partners, aligning our efforts to support their mission through essential resources, empowering education, and collaborative efforts. By working together with community organizations, we create a stronger network of support for children and families.
-      </p>
-      <p style="line-height: 1.8;">
-        EIEI believes in the power of collaboration to create systemic change. Through strategic partnerships with organizations that share our commitment to inclusion, we can amplify our impact and reach more children and families in our community.
-      </p>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">ECE Rapid Response Program – Delaware County, PA</h2>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        The Early Childhood Education (ECE) Rapid Response Program is designed to provide swift and effective support to families
-        and early childhood programs in Delaware County, PA. Whether questions relate to language, social-emotional, cognitive,
-        or physical development, the Rapid Response team helps programs and families navigate these critical early years.
-      </p>
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
-        This initiative of the Office of Child Development &amp; Early Learning focuses on children at risk of expulsion from
-        early childhood education settings, offering immediate, comprehensive assistance so that children can remain successfully
-        included in their programs.
-      </p>
-
-      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Key Features</h3>
-      <ul style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
-        <li><strong>48-hour response time</strong> – Families and programs receive support within 48 hours of reaching out.</li>
-        <li><strong>Expert support</strong> – A team of seasoned professionals addresses a wide range of early childhood challenges and behaviors.</li>
-        <li><strong>Comprehensive solutions</strong> – From assessment and planning to on-site support and follow-up.</li>
-        <li><strong>Personalized response</strong> – Every plan is tailored to the unique needs of each child, family, and program.</li>
-      </ul>
-
-      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Areas of Support</h3>
-      <ul style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
-        <li>Language development and communication skills</li>
-        <li>Family support and home–school collaboration</li>
-        <li>Social-emotional development and behavior strategies</li>
-        <li>Cognitive development and learning supports</li>
-        <li>Physical development, health, and coordination</li>
-      </ul>
-
-      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">How It Works</h3>
-      <ol style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
-        <li><strong>Immediate contact</strong> – Programs or families reach out via hotline or online forms.</li>
-        <li><strong>Assessment</strong> – The Rapid Response team quickly assesses the situation.</li>
-        <li><strong>Collaborative plan of action</strong> – A tailored plan is created with the family and program.</li>
-        <li><strong>Resource deployment</strong> – The team connects families and programs with the supports they need.</li>
-        <li><strong>Follow-up</strong> – Continued check-ins to ensure progress and stability.</li>
-      </ol>
-
-      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Our Rapid Response Team Has Grown!</h3>
-      <p style="line-height: 1.9; margin-bottom: 1rem;">
-        We’re excited to share that our Rapid Response Program team has expanded to nine talented professionals, each bringing
-        invaluable skills and expertise to support children and families in need. Our team is more equipped than ever to
-        provide immediate assistance and tailored solutions for early childhood development.
-      </p>
-      <p style="line-height: 1.9; margin-bottom: 0.75rem;">
-        <strong>Meet the experts behind our Rapid Response Program:</strong>
-      </p>
-      <ul style="list-style-position: inside; line-height: 1.9; margin-bottom: 1.5rem;">
-        <li>Lakia Wilson</li>
-        <li>Shilpa Barrantes</li>
-        <li>Jennifer McDuffie</li>
-        <li>Lien Vo Jones</li>
-        <li>Nikita Kumari Kushwaha</li>
-        <li>Amy Saia</li>
-        <li>Francyne Wharton</li>
-        <li>Essence Allen-Presley</li>
-        <li>Abel Mapenzi</li>
-      </ul>
-      <p style="line-height: 1.9; margin-bottom: 1.5rem;">
-        With this talented team, we continue our commitment to supporting children’s growth and thriving in all areas of their
-        development. Together, we’re making a difference—one child at a time.
-      </p>
-
-      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">State Response Flyer</h3>
-      <p style="line-height: 1.9; margin-bottom: 1rem;">
-        View the full details of the ECE Rapid Response Program in the official state response flyer. You can access the flyer
-        directly from our Supporting Inclusion Through Programs &amp; Affiliates page:
-        <a href="https://eieiservices.com/supporting-inclusion-through-programs-affiliates/" target="_blank" rel="noopener" style="color:#2a4175; text-decoration:none;">
-          View the Full State Response Flyer
-        </a>.
-      </p>
-
-      <h3 style="color: #2a4175; font-size: 1.1rem; margin: 1.5rem 0 0.75rem 0;">Contact Information</h3>
-      <p style="line-height: 1.9; margin-bottom: 0.5rem;">
-        <strong>Hotline:</strong> (484) 501-9101<br>
-        <strong>Email:</strong> RRT15@EIFOREI.ORG<br>
-        <strong>Website:</strong> www.eieiservices.com
-      </p>
-      <p style="line-height: 1.9;">
-        Program Contact Form:
-        <a href="https://forms.gle/tbRKhDqQ62GvjxU28" target="_blank" rel="noopener" style="color:#2a4175; text-decoration:none;">ECE Rapid Response Program Form</a><br>
-        Parent Contact Form:
-        <a href="https://forms.gle/1dfc12hRxNXTMfSx7" target="_blank" rel="noopener" style="color:#2a4175; text-decoration:none;">Parent Contact Form</a>
-      </p>
-    </div>
-
-    <div class="content-section">
-      <h2 class="section-title">How We Support Partners</h2>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-title">Strategic Partnership Development</div>
-          <div class="benefit-desc">Work together to identify shared goals and develop meaningful collaborative initiatives.</div>
+      <div class="dual-pane">
+        <div>
+          <h3>Our Partnership Philosophy</h3>
+          <p>We actively join hands with non-profit and for-profit partners, strictly aligning our efforts to profoundly support their mission through essential resources, empowering administrative education, and deep collaborative systemic efforts.</p>
+          <p>EIEI firmly believes in the sheer power of collaboration to orchestrate widespread systemic change across communities. Through strategic lateral partnerships with organizations that share our relentless commitment to classroom inclusion, we significantly amplify our operational impact and seamlessly reach far more families collectively than individually.</p>
         </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Financial Resources & Grants</div>
-          <div class="benefit-desc">Access to funding opportunities and resources to support program growth and sustainability.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Staff Training & Capacity Building</div>
-          <div class="benefit-desc">Professional development for your team to strengthen inclusive practices and special education expertise.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Program Evaluation & Improvement</div>
-          <div class="benefit-desc">Data-driven assessment and guidance for continuous program improvement and quality enhancement.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Collaborative Community Initiatives</div>
-          <div class="benefit-desc">Joint programs and projects that strengthen the entire early childhood ecosystem.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-title">Advocacy & Support</div>
-          <div class="benefit-desc">Partner with us to advocate for inclusive policies and support families in our community.</div>
+        <div style="background: #f8fafc; border-radius: 20px; padding: 3rem; border: 1px solid #e2e8f0;">
+          <h4 style="color: #2563eb; font-size: 1.3rem; margin-bottom: 1.5rem; font-weight: 800;">Target Alliance Categories</h4>
+          <ul style="margin: 0;">
+            <li>ECE and pre-K centers</li>
+            <li>Non-profit social service systems</li>
+            <li>Local School districts networks</li>
+            <li>Community health & wellness entities</li>
+            <li>Family support & legal advocates</li>
+            <li>Government child agencies</li>
+          </ul>
         </div>
       </div>
-    </div>
 
-    <div class="content-section">
-      <h2 class="section-title">Our Partnership Approach</h2>
-      <div class="partnership-approach">
-        <strong>🤝 Collaborative Model</strong>
-        We listen to your organization's unique needs and work together to develop customized solutions that align with your mission and goals.
+      <div class="section-header">
+        <h2>How We Support Our Partners</h2>
+        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Establishing fortified community integrations.</p>
       </div>
-      <div class="partnership-approach">
-        <strong>🎯 Mission-Driven</strong>
-        We partner with organizations committed to serving children with diverse abilities and fostering inclusive communities.
+
+      <div class="services-grid">
+        <div class="service-box">
+          <div class="icon-wrapper">🤝</div>
+          <h4>Strategic Development</h4>
+          <p>We work intimately together to identify structurally shared goals, engineering meaningful programmatic inclusion initiatives that scale effortlessly.</p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">💰</div>
+          <h4>Financial Resource Grants</h4>
+          <p>Providing direct backdoor access to high-tier state funding opportunities and cash resources to immediately support partner program sustainability.</p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">🎓</div>
+          <h4>Capacity Building Training</h4>
+          <p>Executing on-site professional classroom development for your staff directly, strengthening inclusive special education practices rapidly.</p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">📊</div>
+          <h4>Program Evaluation Data</h4>
+          <p>Rigorous, data-driven systemic assessment charting, identifying key guidance metrics for continuous program execution and quality enhancement.</p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">🌍</div>
+          <h4>Collaborative Execution</h4>
+          <p>Launching massive joint-venture initiatives and projects that holistically strengthen the entire geographical early childhood ecosystem simultaneously.</p>
+        </div>
+        <div class="service-box">
+          <div class="icon-wrapper">⚖️</div>
+          <h4>State Advocacy Force</h4>
+          <p>Partnering with our organizational weight to jointly demand critical legislative inclusive policies, protecting vulnerable families regionally.</p>
+        </div>
       </div>
-      <div class="partnership-approach">
-        <strong>💪 Strength in Numbers</strong>
-        Together, we create a stronger network that can accomplish more than we could individually, benefiting more children and families.
+
+      <div class="dual-pane" style="background: #fff7ed; border: none;">
+        <div>
+          <h3 style="color: #ea580c;">ECE Rapid Response Program</h3>
+          <p style="color: #78350f;">Our legendary Rapid Response mechanism is structured to provide incredibly swift and surgically effective intervention support to classrooms in Delaware County, PA.</p>
+          <p style="color: #78350f;">Triggered instantaneously to prevent the behavioral expulsion of at-risk youths from early childhood settings, we guarantee a comprehensive action response exactly within 48 hours to secure stability parameters.</p>
+          <ul>
+            <li>Immediate 48-Hour Assessment Time</li>
+            <li>Dedicated Behavioral Crisis Team deployment</li>
+            <li>Cognitive, Language, & Physiological stabilization</li>
+            <li>Comprehensive Home/School Action Contracts</li>
+          </ul>
+        </div>
+        <div style="display: flex; gap: 1rem; flex-direction: column;">
+          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/EIEI-X-Rapid-Response-Flyers.png?resize=1080%2C1528&ssl=1" alt="Rapid Response Intervention Flyer" style="border-radius: 12px; width: 100%; border: 1px solid #fdba74;" />
+        </div>
       </div>
-      <div class="partnership-approach">
-        <strong>📈 Sustainability</strong>
-        We help ensure your organization's long-term success through resource sharing, capacity building, and collaborative funding efforts.
+
+      <div class="cta-banner">
+        <h2>Activate Affiliate Status</h2>
+        <p style="font-size: 1.2rem; opacity: 0.9; max-width: 650px; margin: 0 auto;">Join the vast network of elite facilities, districts, and non-profits allied with EIEI. Let us multiply our power structure together.</p>
+        <a href="/contact-us" class="cta-button">Initiate Partnership</a>
       </div>
+
     </div>
-
-    <div class="content-section">
-      <h2 class="section-title">Types of Organizations We Partner With</h2>
-      <ul style="list-style-position: inside; line-height: 2;">
-        <li>Early Childhood Education (ECE) programs and pre-K centers</li>
-        <li>Non-profit social service organizations</li>
-        <li>School districts and educational institutions</li>
-        <li>Community health and wellness organizations</li>
-        <li>Family support and advocacy organizations</li>
-        <li>For-profit businesses committed to community impact</li>
-        <li>Government agencies serving children and families</li>
-      </ul>
-    </div>
-
-    <div class="cta-section">
-      <h2>Interested in Partnership?</h2>
-      <p style="margin: 1rem 0;">Let's explore how we can work together to advance inclusive education and support children with diverse abilities in our community.</p>
-      <a href="/contact-us" class="cta-button">Start a Conversation</a>
-    </div>
-  </div>
-
-  
-  
-
-  <!-- Header Component -->
-  
-  
-  <!-- Footer Component -->
-  
-
-  <!-- Chat Widget -->
-  
-
-  <script is:inline>
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerContainer = document.getElementById('header-container');
-      if (headerContainer) {
-        headerContainer.innerHTML = "";
-      }
-      
-      const footerContainer = document.getElementById('footer-container');
-      if (footerContainer) {
-        footerContainer.innerHTML = "";
-      }
-
-      // Carousel setup
-      const pageSlides = document.querySelectorAll('#pageCarousel .slide');
-      const totalSlides = pageSlides.length;
-      let currentSlide = 0;
-
-      const controlsContainer = document.getElementById('pageCarouselControls');
-      if (controlsContainer) {
-        for (let i = 0; i < totalSlides; i++) {
-          const dot = document.createElement('div');
-          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-          dot.onclick = () => goToSlide(i);
-          controlsContainer.appendChild(dot);
-        }
-      }
-
-      function goToSlide(n) {
-        currentSlide = (n + totalSlides) % totalSlides;
-        pageSlides.forEach(slide => slide.classList.remove('active'));
-        pageSlides[currentSlide].classList.add('active');
-
-        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
-        dots.forEach(dot => dot.classList.remove('active'));
-        if (dots[currentSlide]) {
-          dots[currentSlide].classList.add('active');
-        }
-      }
-
-      function nextSlide() {
-        goToSlide(currentSlide + 1);
-      }
-
-      setInterval(nextSlide, 5000);
-    });
-  </script>
-
+  </main>
 </Layout>

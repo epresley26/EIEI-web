@@ -2,561 +2,388 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Community Programs & Partnerships - EIEI">
-<style is:global>
+<Layout title="Community Programs - EIEI">
+  <style is:global>
+    /* PREMIUM MODERN STYLES */
+    .service-hero {
+      position: relative;
+      width: 100%;
+      min-height: 45vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10rem 2rem 5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    .service-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .service-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .service-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    .service-hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.9;
       line-height: 1.6;
-      color: #1f2937;
-      background-color: #f3f4f6;
-      width: 100% !important;
-      max-width: 100% !important;
+    }
+
+    .main-content {
+      background: #f8fafc;
+      padding: 5rem 2rem;
+      min-height: 50vh;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem;
     }
 
     .breadcrumb {
-      margin-bottom: 2rem;
-      font-size: 0.9rem;
-      color: #6b7280;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 500;
     }
 
     .breadcrumb a {
-      color: #2a4175;
+      color: #2563eb;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     .breadcrumb a:hover {
-      color: #fca311;
+      color: #f97316;
     }
 
-    .program-header {
-      background-color: white;
-      padding: 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      margin-top: 4rem;
     }
 
-    .program-title {
-      color: #2a4175;
+    .section-header h2 {
       font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
       margin-bottom: 1rem;
     }
 
-    .program-subtitle {
-      font-size: 1.2rem;
-      color: #6b7280;
+    .initiatives-container {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      margin-bottom: 5rem;
+    }
+
+    .initiative-card {
+      background: white;
+      border-radius: 20px;
+      padding: 4rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+      border: 1px solid #e2e8f0;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .initiative-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 6px; height: 100%;
+      background: #2563eb;
+    }
+
+    .initiative-card:nth-child(even)::before {
+      background: #f97316;
+    }
+    
+    .initiative-card:nth-child(even) {
+      grid-template-columns: 1.5fr 1fr;
+    }
+
+    .initiative-graphic {
+      width: 100%;
+      height: 300px;
+      background: #eff6ff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border: 2px dashed #93c5fd;
+      position: relative;
+    }
+    
+    .initiative-card:nth-child(even) .initiative-graphic {
+      order: 2;
+      background: #fff7ed;
+      border-color: #fdba74;
+    }
+
+    .initiative-card:nth-child(even) .initiative-text {
+      order: 1;
+    }
+
+    .initiative-text h3 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #0f172a;
       margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .initiative-text p {
+      font-size: 1.05rem;
+      color: #475569;
       line-height: 1.8;
-    }
-
-    .content-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-
-    .section-title {
-      color: #2a4175;
-      font-size: 1.5rem;
       margin-bottom: 1.5rem;
-      border-bottom: 3px solid #fca311;
-      padding-bottom: 0.5rem;
     }
 
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .benefit-card {
-      padding: 1.5rem;
-      background-color: #f3f4f6;
-      border-left: 4px solid #fca311;
-      border-radius: 4px;
-    }
-
-    .benefit-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .benefit-title {
-      color: #2a4175;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .benefit-desc {
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin: 2rem 0;
-    }
-
-    .stat-box {
-      text-align: center;
-      padding: 2rem;
-      background-color: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-      border-radius: 8px;
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      color: #fca311;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-      color: #2a4175;
-      font-weight: 600;
-    }
-
-    .cta-section {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+    .newsletter-system {
+      background: #0f172a;
+      border-radius: 30px;
+      padding: 5rem;
       color: white;
+      margin: 5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-system::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(37,99,235,0.2) 100%);
+      pointer-events: none;
+    }
+
+    .newsletter-header {
+      margin-bottom: 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .newsletter-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .news-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
       padding: 2.5rem;
-      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      transition: background 0.3s;
+    }
+
+    .news-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .news-item h4 {
+      font-size: 1.3rem;
+      color: #f97316;
+      margin-bottom: 1rem;
+    }
+
+    .news-item p {
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .cta-banner {
+      background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+      border-radius: 20px;
+      padding: 4rem;
       text-align: center;
-      margin-top: 2rem;
+      color: white;
+      margin-top: 5rem;
+    }
+
+    .cta-banner h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
     }
 
     .cta-button {
       display: inline-block;
-      background-color: #fca311;
-      color: #2a4175;
-      padding: 0.75rem 2rem;
-      border-radius: 4px;
+      background: #f97316;
+      color: white;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
       text-decoration: none;
-      font-weight: 600;
-      margin-top: 1rem;
+      margin-top: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .cta-button:hover {
-      background-color: #ff9500;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+      background: #ea580c;
     }
 
-    /* New styles for additional content */
-    .divider {
-      height: 4px;
-      width: 20%;
-      background-color: #2a4175;
-      margin: 1rem 0 1.5rem 0;
+    @media (max-width: 900px) {
+      .initiative-card { grid-template-columns: 1fr; padding: 2rem; }
+      .initiative-card:nth-child(even) { grid-template-columns: 1fr; }
+      .initiative-card:nth-child(even) .initiative-graphic { order: 1; }
+      .initiative-card:nth-child(even) .initiative-text { order: 2; }
+      .news-grid { grid-template-columns: 1fr; }
+      .service-hero { padding-top: 8rem; min-height: 40vh; }
+      .newsletter-system { padding: 3rem 1.5rem; }
+      .cta-banner { padding: 3rem 1.5rem; }
     }
+  </style>
 
-    .image-gallery-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-
-    .image-container {
-      margin-bottom: 1rem;
-    }
-
-    .image-container img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-
-    .image-gallery {
-      margin-top: 2rem;
-    }
-
-    .image-gallery .row {
-      margin-bottom: 1rem;
-    }
-
-    .image-gallery img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-
-    .newsletter-section {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-
-    .newsletter-section h2 {
-      color: #2a4175;
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      border-bottom: 3px solid #fca311;
-      padding-bottom: 0.5rem;
-    }
-
-    .newsletter-section p {
-      margin-bottom: 1rem;
-      line-height: 1.8;
-    }
-
-    .newsletter-section strong {
-      color: #2a4175;
-    }
-
-    .services-header {
-      width: 100%;
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      text-align: center;
-      padding: 3rem 2rem;
-      margin: 0;
-      max-width: none;
-      border-radius: 0;
-    }
-
-    .services-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .services-header p {
-      width: 100%;
-      font-size: 1.1rem;
-      opacity: 0.95;
-      max-width: none;
-      margin: 0 auto;
-    }
-
-    /* Carousel styles (service-specific) */
-    .services-carousel {
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      height: 60vh;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .slide-content {
-      text-align: center;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      padding: 2rem;
-    }
-
-    .slide-content h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .slide-content p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-    }
-
-    .carousel-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .carousel-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .carousel-dot.active {
-      background: white;
-      transform: scale(1.2);
-    }
-  
-</style>
-
-  
-  
-
-  <!-- SERVICE CAROUSEL -->
-  <section class="services-carousel">
-    <div class="carousel" id="pageCarousel">
-      <div class="slide active" style="background-image: url('images/slide1.jpg')">
-        <div class="slide-content">
-          <h1>Community Programs &amp; Partnerships</h1>
-          <p>Partnering with communities to support children</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide2.jpg')">
-        <div class="slide-content">
-          <h1>Community Programs &amp; Partnerships</h1>
-          <p>Strengthening ECE programs through collaboration</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide3.jpg')">
-        <div class="slide-content">
-          <h1>Community Programs &amp; Partnerships</h1>
-          <p>Building inclusive, supportive learning environments</p>
-        </div>
-      </div>
+  <section class="service-hero">
+    <div class="service-hero-content">
+      <h1>Community Outreach & Programs</h1>
+      <p>Partnering ruthlessly with major regional networks to forcibly stabilize safe, highly stimulating early learning environments.</p>
     </div>
-    <div class="carousel-controls" id="pageCarouselControls"></div>
   </section>
 
-  <div class="services-header">
-    <h1>Community Programs &amp; Partnerships</h1>
-    <p>EIEI partners with communities to create safe, stimulating learning environments and support children’s education at home and in school.</p>
-  </div>
+  <main class="main-content">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/services">Services</a> / Community Outreach
+      </div>
 
-  <div class="container">
-    <div class="breadcrumb">
-      <a href="/">Home</a> / <a href="/services">Services</a> / Community Programs & Partnerships
-    </div>
+      <div class="section-header">
+        <h2>Active Community Pacts</h2>
+        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Review our active deployment contracts securing early childcare stability.</p>
+      </div>
 
-    <div class="content-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="section-title">Pre-K Counts Lead Agency From 2021</h2>
-            <div class="divider"></div>
-            <p>The Education Institute for Early Intervention has been awarded Lead Agency for three early childhood programs in Philadelphia from The Office of Child Development and Early Learning (OCDEL) for 2021-22. EIEI was awarded slots for the 2022-23 school year and will support six childcare programs in Delaware and Philadelphia counties.</p>
+      <div class="initiatives-container">
+
+        <div class="initiative-card">
+          <div class="initiative-graphic">
+            🌟
+          </div>
+          <div class="initiative-text">
+            <h3>Pre-K Counts Lead Agency Command</h3>
+            <p>EIEI secured absolute Lead Agency status from the prestigious Office of Child Development and Early Learning (OCDEL). Entrusted with tremendous oversight, EIEI massively funds and fundamentally supports six massive childcare grids entirely across Delaware and Philadelphia counties.</p>
+          </div>
+        </div>
+
+        <div class="initiative-card">
+          <div class="initiative-graphic">
+            🧠
+          </div>
+          <div class="initiative-text">
+            <h3>SEL Curriculum Implementation</h3>
+            <p>We are unleashing an intensive Social Emotional Learning (SEL) operational pilot deep within early childhood sectors. This framework utterly replaces toxic paradigms, forging executive function and advanced self-regulation protocols inside classrooms preventing catastrophic behavioral meltdowns instantly.</p>
+          </div>
+        </div>
+
+        <div class="initiative-card">
+          <div class="initiative-graphic">
+            ☎️
+          </div>
+          <div class="initiative-text">
+            <h3>The Suspension "Warm Line" Matrix</h3>
+            <p>An elite, non-threatening crisis line shielding panicked childcare providers. Rather than punitive state action, our peers provide absolutely immune, judgment-free operational counseling dismantling the threat of immediate child expulsion through extreme empathetic diplomacy and direct resource connections.</p>
+          </div>
+        </div>
+
+        <div class="initiative-card">
+          <div class="initiative-graphic">
+            🏆
+          </div>
+          <div class="initiative-text">
+            <h3>NAFCC National Accreditation Strike</h3>
+            <p>Armed by sub-grants from First Up, EIEI is aggressively forcing quality metrics up—coaching family-owned networks through the brutal compliance gauntlets required to achieve National Family Child Care integration status, heavily uplifting Pennsylvania's raw educational quality standards.</p>
+          </div>
+        </div>
+
+        <div class="initiative-card">
+          <div class="initiative-graphic">
+            🏫
+          </div>
+          <div class="initiative-text">
+            <h3>K-12 District Takeovers</h3>
+            <p>Infiltrating K-12 systems deeply, we lock administrative shields alongside Principals and PTAs. We deploy heavy-duty assessment scans identifying the deepest prioritized structural weaknesses, immediately bridging gaps with on-site, fully stacked service providers and operational funding levers.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="newsletter-system">
+        <div class="newsletter-header">
+          <h2>State of the Institute Report</h2>
+          <p style="color: #94a3b8; font-size: 1.1rem; max-width: 700px;">Internal dispatches tracking our massive geographical progress deploying educational dominance.</p>
+        </div>
+        
+        <div class="news-grid">
+          <div class="news-item">
+            <h4>Black Child Advocacy Front</h4>
+            <p>At the Philadelphia Regional Meeting for the Black Child Development Institute, we commanded the structural conversation entirely, dictating precisely how our massive metropolitan area must aggressively mobilize protective legislation for Black excellence in educational sectors.</p>
+          </div>
+          
+          <div class="news-item">
+            <h4>Pre-K Counts Graduation Impact</h4>
+            <p>Dr. Essence Presley deployed an incredible keynote intervention at Community Concern #13, violently inspiring young graduations with unshakeable truth concerning empowerment, long-term survival intelligence, and boundless potential.</p>
+          </div>
+          
+          <div class="news-item">
+            <h4>Live Testimonial Feedback</h4>
+            <p><em>"THANK YOU! You mercilessly pushed, believed, and relentlessly forced my program through the gauntlet. Exactly two brutal years later, under your absolute command, we are officially completely STAR 4 operational."</em> — Partner Provider</p>
+          </div>
+          
+          <div class="news-item">
+            <h4>Educator Re-Ignition</h4>
+            <p><em>"20 total years of combat in early childhood parameters, and this EIEI protocol completely obliterated my burnout, reigniting my passion instantly with incredibly lethal new administrative tools."</em> — Aixa Lopez, EIEI Graduate</p>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="content-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="section-title">Social Emotional Development Curriculum for Early Childcare Programs 2021-23</h2>
-            <div class="divider"></div>
-            <p>EIEI is excited to launch the <span>Social Emotional Learning</span> Program with a pilot of early childhood programs. This course is rooted in social-emotional learning (SEL) that helps transform childcare facilities into supportive, successful learning environments uniquely equipped to help children thrive. Programs learn what social-emotional learning, executive function, and self-regulation are and why it's essential in childcare. Implementing this practice increases children's school readiness and social success and decreases problem behaviors. It does this by building children's self-regulation skills and social-emotional competence. We are excited about launching this program and look forward to the results.</p>
-          </div>
-        </div>
+      <div class="cta-banner">
+        <h2>Merge Your Organization Today</h2>
+        <p style="font-size: 1.2rem; opacity: 0.9; max-width: 650px; margin: 0 auto;">Does your structural grid require massive oversight, funding channels, and behavioral interventions? Request immediate integration.</p>
+        <a href="/contact-us" class="cta-button">Initiate Grant Proposal</a>
       </div>
+
     </div>
-
-    <div class="content-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="section-title">Suspension and Expulsion "Warm Line"</h2>
-            <div class="divider"></div>
-            <p>EIEI warm line is a service to childcare providers who need a caring and sympathetic listener about children with challenging behaviors in their childcare program. EIEI friendly line is an alternative way of accessing support and services non-threatening or punitively. The warm line is run by "peers," generally those who have had their own experiences of operating a childcare program. Unlike other coaches in ECE, a warm line operator is unlikely to call the state on an owner or provider because they are unsure how to support a child or family. The warm line helps providers keep the lines of communication open through conversations, not advice or lectures. EIEI's warmlines offer understanding, respectful, and supportive discussions to providers. The warm line will also refer you to other avenues of help and support.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="section-title">Inclusion Coaches & Advisors</h2>
-            <div class="divider"></div>
-            <p>EIEI Trainers play a crucial role in coaching ECE programs in Early Childhood Specia Education. EIEI seeks a creative coach/mentor to implement our effective evidence-based programs to educate the ECE field on how to service more families needing support in the Early Intervention Systems.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="section-title">National Association for Family Childcare Accreditation (NAFCC)</h2>
-            <div class="divider"></div>
-            <p>The Education Institute for Early Intervention (EIEI) has been awarded a grant from First Up as a sub-grantee and partnered with the Family Child Care Advisory Council to train and assist providers in achieving national accreditation. The Pennsylvania State Representative's goal is to increase the number of family or group (in-home) providers across the state to become nationally accredited. The goal is to have 300 family early learning programs become NAFCC accredited across the state. National accreditation of family child care within the State of Pennsylvania remains the highest priority.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="section-title">K-12 Partnerships</h2>
-            <div class="divider"></div>
-            <p>EIEI provides parent and community training to K-12 schools. EIEI works alongside principals and Parent/Teacher Associations. EIEI assists schools in identifying and prioritizing the school's needs, engaging stakeholders, leveraging resources, and coordinating with service providers to offer on-site programming and support to students and families at the school.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="image-gallery-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="image-container">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/EIEI-X-Rapid-Response-Flyers.png?resize=1080%2C1528&ssl=1" alt="EIEI X Rapid Response Flyers" class="img-responsive">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="image-container">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/Rapid-Response.png?resize=1080%2C699&ssl=1" alt="Rapid Response" class="img-responsive">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    
-    <div class="newsletter-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="section-title">The Education Institute for Early Intervention (EIEI) Newsletter – Summer 2025</h2>
-            <div class="divider"></div>
-            <p>Dear EIEI Community,<br>
-            As we close out another impactful school year, we're filled with gratitude and pride for all we've accomplished together in support of our children, families, and educators. From powerful community conversations to joyful celebrations, 2024–2025 was a year of meaningful growth, connection, and achievement.</p>
-            
-            <p><strong>EIEI Joins Forces to Advocate for Black Children</strong><br>
-            We proudly participated in the Philadelphia Regional Meeting for the Black Child Development Institute, engaging in vital conversations around mobilizing our city and region to better serve and empower Black children and families through education.</p>
-            
-            <p><strong>Celebrating Our Educators</strong><br>
-            Our team came together for a heartfelt Teacher Appreciation Dinner, where we were honored by the powerful words of City Council leaders and reminded of the lasting impact educators have on young lives.</p>
-            
-            <p><strong>2nd Annual Graduation & Carnival Celebration</strong><br>
-            We marked a major milestone with our Second Annual Preschool Graduation and Carnival, celebrating the growth and achievements of our youngest learners with families, staff, and community partners. The day was filled with joy, pride, and promise.</p>
-            
-            <p><strong>Dr. Essence Presley Inspires at Pre-K Counts Graduation</strong><br>
-            On June 10, Dr. Presley delivered a keynote address at Community Concern #13's Pre-K Counts Graduation, inspiring children and families with words of empowerment and hope for the future.</p>
-            
-            <p><strong>Team Bonding with a Twist</strong><br>
-            The EIEI staff wrapped up the year with a fun outing to Bury The Hatchet, where we sharpened our aim (and had some great eats) during our end of year celebration.</p>
-            
-            <p><strong>Words That Inspire</strong><br>
-            "Good evening – I wanted to say THANK YOU, THANK YOU, and THANK YOU. You pushed and believed in me and encouraged me to go forward with STARS. Two years later we are finally STAR 4."<br>
-            — Partner Provider</p>
-            
-            <p>"The Special Education class not only strengthened my professional skills but also renewed my passion for early childhood education and the critical role we play in shaping young lives."<br>
-            — Glenny Alvarado, June 2025</p>
-            
-            <p>"Even with 20 years of experience in early childhood, this course reignited my passion. The instructors honored our experience while introducing new tools and perspectives I could use immediately."<br>
-            — Aixa Lopez, June 2025</p>
-            
-            <p><strong>Thank You</strong><br>
-            To every family, educator, community partner, and supporter — thank you for making this year such a success. Together, we are building stronger foundations and brighter futures for all children.</p>
-            
-            <p>Wishing you a joyful, restful summer!</p>
-            
-            <p>With gratitude,<br>
-            The EIEI Team</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cta-section">
-      <h2>Partner with Us</h2>
-      <p style="margin: 1rem 0;">If your ECE program is interested in partnership and support through our grants and initiatives, we'd love to hear from you.</p>
-      <a href="/contact-us" class="cta-button">Learn About Partnership</a>
-    </div>
-  </div>
-
-  
-  
-
-  <!-- Header Component -->
-  
-  
-  <!-- Footer Component -->
-  
-
-  <!-- Chat Widget -->
-  
-
-  <script is:inline>
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerContainer = document.getElementById('header-container');
-      if (headerContainer) {
-        headerContainer.innerHTML = "";
-      }
-      
-      const footerContainer = document.getElementById('footer-container');
-      if (footerContainer) {
-        footerContainer.innerHTML = "";
-      }
-
-      // Carousel setup
-      const pageSlides = document.querySelectorAll('#pageCarousel .slide');
-      const totalSlides = pageSlides.length;
-      let currentSlide = 0;
-
-      const controlsContainer = document.getElementById('pageCarouselControls');
-      if (controlsContainer) {
-        for (let i = 0; i < totalSlides; i++) {
-          const dot = document.createElement('div');
-          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-          dot.onclick = () => goToSlide(i);
-          controlsContainer.appendChild(dot);
-        }
-      }
-
-      function goToSlide(n) {
-        currentSlide = (n + totalSlides) % totalSlides;
-        pageSlides.forEach(slide => slide.classList.remove('active'));
-        pageSlides[currentSlide].classList.add('active');
-
-        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
-        dots.forEach(dot => dot.classList.remove('active'));
-        if (dots[currentSlide]) {
-          dots[currentSlide].classList.add('active');
-        }
-      }
-
-      function nextSlide() {
-        goToSlide(currentSlide + 1);
-      }
-
-      setInterval(nextSlide, 5000);
-    });
-  </script>
-
+  </main>
 </Layout>
