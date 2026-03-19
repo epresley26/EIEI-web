@@ -3,18 +3,22 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="About Us - EIEI">
-<style is:global>
-
-    /* About hero (replaces flat about-header) */
+  <style is:global>
+    /* --- Premium Modern Styling for About --- */
+    
+    /* HERO SLIDESHOW */
     .about-hero {
       position: relative;
       width: 100%;
-      padding: 7rem 2rem 5rem;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #fff;
       overflow: hidden;
+      padding: 9rem 2rem 6rem;
     }
 
-    /* Background slideshow + gradient overlay */
     .about-hero::before {
       content: "";
       position: absolute;
@@ -22,434 +26,345 @@ import Layout from '../layouts/Layout.astro';
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      z-index: -3;
-      animation: aboutHeroSlide 21s infinite;
+      z-index: -2;
+      animation: aboutHeroSlide 21s infinite blur;
+      filter: blur(2px) contrast(1.1);
+      transform: scale(1.05); /* hide blur edges */
     }
 
     .about-hero::after {
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -2;
-      background:
-        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.18), transparent 60%),
-        radial-gradient(circle at 80% 0%, rgba(248, 250, 252, 0.18), transparent 55%),
-        linear-gradient(
-          135deg,
-          rgba(15, 23, 42, 0.88),
-          rgba(37, 99, 235, 0.70),
-          rgba(15, 23, 42, 0.94)
-        );
+      z-index: -1;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(37, 99, 235, 0.6) 50%, rgba(15, 23, 42, 0.95) 100%);
     }
 
-    /* Cycle through the same three hero images as index.html */
     @keyframes aboutHeroSlide {
-      0%,
-      33.333% {
-        background-image: url('/images/slide1.jpg");
-      }
-      33.334%,
-      66.666% {
-        background-image: url('/images/slide2.jpg");
-      }
-      66.667%,
-      100% {
-        background-image: url('/images/slide3.jpg");
-      }
+      0%, 33.333% { background-image: url('/images/slide1.jpg'); }
+      33.334%, 66.666% { background-image: url('/images/slide2.jpg'); }
+      66.667%, 100% { background-image: url('/images/slide3.jpg'); }
     }
 
-    /* Hero inner layout */
-    .about-hero-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      gap: 3rem;
-      align-items: center;
+    .hero-content {
       position: relative;
       z-index: 1;
-    }
-
-    .about-hero-text h1 {
-      font-size: clamp(2.4rem, 4vw, 3.2rem);
-      margin-bottom: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-    }
-
-    .about-hero-text p {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      opacity: 0.96;
-      max-width: 560px;
-    }
-
-    .about-hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      margin: 1.5rem 0 1.75rem;
-    }
-
-    .about-hero-meta span {
-      font-size: 0.85rem;
-      padding: 0.45rem 0.8rem;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.25);
-      border: 1px solid rgba(248, 250, 252, 0.25);
-    }
-
-    .about-hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .about-hero-visual img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 24px;
-      box-shadow: 0 24px 50px rgba(15, 23, 42, 0.45);
-    }
-
-    @media (max-width: 900px) {
-      .about-hero {
-        padding: 6rem 1.75rem 3.5rem;
-      }
-
-      .about-hero-inner {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-hero-visual {
-        order: -1;
-        text-align: center;
-      }
-
-      .about-hero-visual img {
-        max-width: 260px;
-        border-radius: 20px;
-      }
-    }
-
-    /* ABOUT INTRO */
-    .about-intro {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .about-intro h2 {
-      color: var(--brand-blue);
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-    }
-
-    .about-intro p {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--text);
-      margin-bottom: 1.5rem;
-    }
-
-    /* MODERN SECTION HEADERS */
-    .section-header {
+      max-width: 1200px;
       text-align: center;
+      animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hero-content h1 {
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #ffffff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-content p {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      color: #e2e8f0;
+      max-width: 800px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
       margin-bottom: 3rem;
     }
 
-    .section-header h2 {
-      color: var(--brand-blue);
-      font-size: 2.4rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
+    .badge {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
     }
 
-    .section-header p {
-      font-size: 1rem;
-      color: var(--text-muted);
-      max-width: 600px;
+    /* TYPOGRAPHY & LAYOUT */
+    .section-wrap {
+      padding: 7rem 2rem;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
-    /* MODERN CORE VALUES GRID - 4x2 Centered */
-    .values-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1.8rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .value-card {
-      background: white;
-      padding: 2rem 1.5rem;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    .section-title {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #0f172a;
       text-align: center;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #475569;
+      max-width: 700px;
+      margin: 0 auto 4rem;
+      line-height: 1.6;
+    }
+
+    /* MISSION SECTION */
+    .mission-box {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border-radius: 24px;
+      padding: 4rem;
+      color: white;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       position: relative;
       overflow: hidden;
     }
 
-    .value-card::before {
-      content: "";
+    .mission-box::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: 30px;
+      font-size: 12rem;
+      color: rgba(255,255,255,0.05);
+      font-family: serif;
+      line-height: 1;
+    }
+
+    .mission-box p {
+      font-size: 1.3rem;
+      line-height: 1.8;
+      color: #cbd5e1;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* VALUES GRID */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .value-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2.5rem;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-box:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+      border-color: #bfdbfe;
+    }
+
+    .value-box::before {
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--brand-orange), var(--brand-blue));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
+      width: 4px;
+      height: 100%;
+      background: var(--brand-orange);
+      transform: scaleY(0);
+      transition: transform 0.4s ease;
+      transform-origin: bottom;
     }
 
-    .value-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.15);
-      border-color: var(--brand-blue);
+    .value-box:hover::before {
+      transform: scaleY(1);
     }
 
-    .value-card:hover::before {
-      transform: scaleX(1);
+    .value-box h3 {
+      font-size: 1.4rem;
+      color: #2563eb;
+      margin-bottom: 1rem;
+      font-weight: 800;
     }
 
-    .value-card h3 {
-      color: var(--brand-blue);
-      font-size: 1.2rem;
-      margin-bottom: 0.75rem;
-      font-weight: 700;
-    }
-
-    .value-card p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
+    .value-box p {
+      color: #475569;
       line-height: 1.6;
-      margin: 0;
-    }
-
-    @media (max-width: 1024px) {
-      .values-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.5rem;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .values-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
     }
 
     /* WHY EIEI SECTION */
-    .why-eiei-container {
-      max-width: 1000px;
-      margin: 0 auto;
+    .why-bg {
+      background: #f8fafc;
+      padding: 6rem 0;
     }
 
-    .problem-section {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(226, 232, 240, 0.8);
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
     }
 
-    .problem-section h3 {
-      color: var(--brand-blue);
-      font-size: 1.5rem;
+    @media (max-width: 900px) {
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .why-sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .why-sidebar h3 {
+      font-size: 2.2rem;
+      color: #0f172a;
+      line-height: 1.2;
       margin-bottom: 1.5rem;
-      font-weight: 700;
     }
 
-    .issue-box,
-    .impact-section {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      padding: 1.5rem;
+    .impact-card {
+      background: #ffffff;
+      border-left: 5px solid var(--brand-orange);
+      padding: 2rem;
       border-radius: 12px;
-      margin-bottom: 1.5rem;
-      border-left: 4px solid var(--brand-orange);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      margin-bottom: 2rem;
     }
 
-    .issue-box h4,
-    .impact-section h4 {
-      color: var(--brand-blue);
+    .impact-card h4 {
+      font-size: 1.2rem;
+      color: #2563eb;
       margin-bottom: 1rem;
-      font-size: 1.05rem;
       font-weight: 700;
     }
 
-    .issue-box ul,
-    .impact-section ul {
+    .impact-card ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    .issue-box li,
-    .impact-section li {
-      padding: 0.5rem 0 0.5rem 2rem;
+    .impact-card li {
       position: relative;
-      color: var(--text);
+      padding-left: 1.8rem;
+      margin-bottom: 0.8rem;
+      color: #334155;
       line-height: 1.6;
-      font-size: 0.95rem;
     }
 
-    .issue-box li:before,
-    .impact-section li:before {
-      content: "▸";
+    .impact-card li::before {
+      content: '→';
       position: absolute;
       left: 0;
       color: var(--brand-orange);
       font-weight: bold;
     }
 
-    /* MODERN PROMISE GRID - 2x2 Centered */
-    .promise-container {
+    /* PROMISE SECTION */
+    .promise-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 2rem;
-      max-width: 900px;
-      margin: 0 auto;
     }
 
     .promise-card {
-      background: white;
-      padding: 2.5rem 2rem;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(226, 232, 240, 0.8);
       text-align: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .promise-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(248, 113, 22, 0.05));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
+      padding: 3rem 2rem;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
     }
 
     .promise-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.16);
-      border-color: var(--brand-blue);
-    }
-
-    .promise-card:hover::before {
-      opacity: 1;
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.08);
+      border-color: #bfdbfe;
     }
 
     .promise-icon {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--brand-blue), #4a6fa5);
-      color: white;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin: 0 auto 1.25rem;
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      padding: 1rem;
+      background: #eff6ff;
+      border-radius: 20px;
     }
 
     .promise-card h3 {
-      color: var(--brand-blue);
-      font-size: 1.35rem;
-      margin-bottom: 0.75rem;
-      font-weight: 700;
+      font-size: 1.5rem;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      font-weight: 800;
     }
 
     .promise-card p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      color: #475569;
       line-height: 1.6;
-      margin: 0;
     }
 
-    @media (max-width: 768px) {
-      .promise-container {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-    }
-
-    /* TEAM SECTION */
-    .team-section-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .team-section-header h2 {
-      color: var(--brand-blue);
-      font-size: 2.4rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-    }
-
-    .team-section-header p {
-      color: var(--text-muted);
-      font-size: 1rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
+    /* TEAM SECTION SPECIFIC STYLES */
     .team-grid {
       display: flex;
       flex-direction: column;
-      gap: 3rem;
+      gap: 4rem;
     }
 
     .team-section {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
     .team-section-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--brand-blue);
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0f172a;
       margin-bottom: 1rem;
       padding-bottom: 1rem;
-      border-bottom: 3px solid var(--brand-orange);
+      border-bottom: 4px solid var(--brand-orange);
+      display: inline-block;
     }
 
     .team-section-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
     }
 
     .team-card {
       position: relative;
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
-      height: 300px;
+      height: 480px;
+      background: #f1f5f9;
     }
 
     .team-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.15);
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
+    }
+
+    .team-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.5) 40%, transparent 100%);
+      z-index: 2;
     }
 
     .team-image {
@@ -459,54 +374,49 @@ import Layout from '../layouts/Layout.astro';
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: top;
       z-index: 1;
+      transition: transform 0.5s ease;
+    }
+
+    .team-card:hover .team-image {
+      transform: scale(1.05);
     }
 
     .team-info {
       position: absolute;
       bottom: 0;
       left: 0;
-      right: 0;
-      z-index: 2;
       width: 100%;
-      padding: 1.5rem;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.8) 80%,
-        rgba(0, 0, 0, 0.9) 100%
-      );
-      backdrop-filter: blur(2px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: auto;
+      padding: 2rem;
+      z-index: 3;
+      text-align: left;
     }
 
     .team-name {
-      color: white;
-      font-size: 1.15rem;
-      font-weight: 700;
+      color: #ffffff;
+      font-size: 1.4rem;
+      font-weight: 800;
       margin-bottom: 0.3rem;
-      letter-spacing: -0.3px;
     }
 
     .team-role {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 0.9rem;
-      font-weight: 400;
-      margin: 0;
+      color: #fbbf24;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .team-loading {
       text-align: center;
-      padding: 3rem 2rem;
-      color: var(--text-muted);
-      grid-column: 1/-1;
+      padding: 4rem;
+      color: #64748b;
+      font-size: 1.2rem;
+      font-weight: 500;
     }
 
-    /* Team modal */
+    /* TEAM MODAL STYLES */
     .team-modal {
       display: none;
       position: fixed;
@@ -514,466 +424,291 @@ import Layout from '../layouts/Layout.astro';
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 1000;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
       align-items: center;
       justify-content: center;
-      animation: fadeIn 0.3s ease;
       padding: 2rem;
+      animation: fadeIn 0.3s ease;
     }
 
     .team-modal.active {
       display: flex;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
     .team-modal-content {
       background: white;
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
-      max-width: 1800px;
-      width: 90%;
+      max-width: 1000px;
+      width: 100%;
       max-height: 85vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: row;
-      animation: slideUp 0.3s ease;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      position: relative;
+      animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    @keyframes slideUp {
-      from {
-        transform: translateY(30px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
+    @media (max-width: 768px) {
+      .team-modal-content {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
       }
     }
 
     .team-modal-left {
-      flex: 0 0 35%;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .team-modal-image-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      background: #f1f5f9;
     }
 
     .team-modal-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: top;
+      min-height: 350px;
     }
 
     .team-modal-right {
-      padding: 2.5rem 2rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+      padding: 3rem;
+      overflow-y: auto;
     }
 
-    .team-modal-header {
+    .team-modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(15, 23, 42, 0.1);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      color: #0f172a;
+      cursor: pointer;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
     }
 
-    .team-modal-title {
-      flex: 1;
+    .team-modal-close:hover {
+      background: #0f172a;
+      color: #ffffff;
     }
 
     .team-modal-name {
-      color: var(--brand-blue);
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 0 0 0.3rem 0;
-      letter-spacing: -0.5px;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      line-height: 1.1;
     }
 
     .team-modal-role {
       color: var(--brand-orange);
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin: 0 0 1.5rem 0;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .team-modal-close {
-      background: none;
-      border: none;
-      font-size: 2rem;
-      color: #999;
-      cursor: pointer;
-      padding: 0;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 0.3s ease;
-      font-weight: 300;
-    }
-
-    .team-modal-close:hover {
-      color: var(--brand-blue);
-    }
-
-    .team-modal-bio {
-      color: #666;
-      font-size: 0.95rem;
-      line-height: 1.8;
-      margin: 0 0 2rem 0;
-      flex: 1;
-    }
-
-    .team-modal-footer {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #eee;
-    }
-
-    .team-modal-section {
-      color: #999;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .team-modal-section-value {
-      color: var(--brand-blue);
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-top: 0.3rem;
-    }
-
-    @media (max-width: 768px) {
-      .team-modal-content {
-        flex-direction: column;
-      }
-
-      .team-modal-left {
-        min-width: 100%;
-        padding: 2rem 2rem;
-      }
-
-      .team-modal-image-container {
-        width: 400px;
-        height: 400px;
-      }
-
-      .team-modal-right {
-        padding: 2rem;
-      }
-
-      .team-modal-name {
-        font-size: 1.5rem;
-      }
-
-      .team-modal-footer {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .team-section-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* CTA SECTION */
-    .cta-container {
-      background: white;
-      padding: 3rem 2rem;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .cta-container h2 {
-      color: var(--brand-blue);
-      margin-bottom: 1rem;
-      font-size: 2rem;
+      font-size: 1.1rem;
       font-weight: 700;
-    }
-
-    .cta-container p {
-      font-size: 1.05rem;
-      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
       margin-bottom: 2rem;
     }
 
-    .secondary-btn {
-      display: inline-block;
-      padding: 0.8rem 2rem;
-      background: white;
-      color: var(--brand-blue);
-      border: 2px solid var(--brand-blue);
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      font-size: 0.95rem;
+    .team-modal-bio {
+      color: #475569;
+      line-height: 1.8;
+      font-size: 1.05rem;
+      white-space: pre-wrap;
     }
 
-    .secondary-btn:hover {
-      background: var(--brand-blue);
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-  
-</style>
+  </style>
 
-
-  
-  
-
-  <!-- ABOUT HERO -->
+  <!-- HERO SECTION -->
   <section class="about-hero">
-    <div class="about-hero-inner">
-      <div class="about-hero-text">
-        <h1>The Education Institute for Early Intervention</h1>
-        <p>
-          We partner with childcare programs, families, and communities to build
-          inclusive environments where every child with diverse abilities can learn,
-          play, and thrive from the very beginning.
-        </p>
-        <div class="about-hero-meta">
-          <span>Inclusive Early Intervention</span>
-          <span>Family &amp; Educator Support</span>
-          <span>Research‑informed Practice</span>
-        </div>
-        <div class="about-hero-actions">
-          <a href="/services" class="primary-btn">Explore Our Services</a>
-          <a href="/contact-us" class="secondary-btn">Talk with Our Team</a>
-        </div>
+    <div class="hero-content">
+      <h1>The Education Institute for Early Intervention</h1>
+      <p>We partner with childcare programs, families, and communities to build inclusive environments where every child with diverse abilities can learn, play, and thrive from the very beginning.</p>
+      
+      <div class="hero-badges">
+        <span class="badge">Inclusive Early Intervention</span>
+        <span class="badge">Family &amp; Educator Support</span>
+        <span class="badge">Research‑informed Practice</span>
       </div>
-      <div class="about-hero-visual">
-        <img src="/images/about-section.svg" alt="Children and educators learning together">
+
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/services" class="primary-btn">Explore Our Services</a>
+        <a href="/contact-us" class="primary-btn" style="background: white; color: #0f172a;">Talk with Our Team</a>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT INTRO -->
-  <section class="section">
-    <div class="about-intro">
-      <h2>Our Mission</h2>
-      <p>
-        At The Education Institute for Early Intervention (EIEI), we address a critical issue in childcare—suspensions and expulsions of young children, often due to behavioral challenges linked to inadequate support for children with Individual Family Service Plans (IFSPs) or Individual Education Plans (IEPs).
-      </p>
-      <p>
-        EIEI educates and empowers childcare professionals to create inclusive environments that foster children's development and well-being. We collaborate with families, educators, and community partners to drive meaningful change, ensuring all children receive the support they need to thrive.
-      </p>
+  <!-- OUR MISSION -->
+  <section class="section-wrap">
+    <div class="mission-box">
+      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; font-weight: 800;">Our Mission</h2>
+      <p>At The Education Institute for Early Intervention (EIEI), we address a critical issue in childcare—suspensions and expulsions of young children, often due to behavioral challenges linked to inadequate support for children with Individual Family Service Plans (IFSPs) or Individual Education Plans (IEPs).</p>
+      <p>EIEI educates and empowers childcare professionals to create inclusive environments that foster children's development and well-being. We collaborate with families, educators, and community partners to drive meaningful change, ensuring all children receive the support they need to thrive.</p>
     </div>
   </section>
 
-  <!-- CORE VALUES - 4x2 CENTERED -->
-  <section class="section light">
-    <div class="section-header">
-      <h2>EIEI Core Values</h2>
-      <p>These values guide every classroom observation, coaching session, training, and family conversation.</p>
-    </div>
-    <div class="values-grid">
-      <div class="value-card">
-        <h3>Empathy</h3>
-        <p>We understand and share the feelings of children and families, providing compassionate and respectful support.</p>
-      </div>
-      <div class="value-card">
-        <h3>Equity</h3>
-        <p>We ensure every child, regardless of background or ability, receives equal opportunities to succeed and thrive.</p>
-      </div>
-      <div class="value-card">
-        <h3>Integrity</h3>
-        <p>We maintain the highest ethical standards, ensuring trust and transparency in all our interactions and relationships.</p>
-      </div>
-      <div class="value-card">
-        <h3>Inclusivity</h3>
-        <p>We create an environment where every child, regardless of ability or background, feels welcomed and supported.</p>
-      </div>
-      <div class="value-card">
-        <h3>Empowerment</h3>
-        <p>We encourage children and families to become confident, independent advocates for their needs and rights.</p>
-      </div>
-      <div class="value-card">
-        <h3>Engagement</h3>
-        <p>We actively involve children, families, and educators in the learning process, fostering strong, meaningful connections.</p>
-      </div>
-      <div class="value-card">
-        <h3>Involvement</h3>
-        <p>We actively engage with families, educators, and the community to build strong partnerships and lasting change.</p>
-      </div>
-      <div class="value-card">
-        <h3>Impact</h3>
-        <p>We dedicate ourselves to making a positive and lasting difference in the lives of children and their families.</p>
+  <!-- CORE VALUES -->
+  <section class="why-bg">
+    <div class="section-wrap" style="padding: 0 2rem;">
+      <h2 class="section-title">EIEI Core Values</h2>
+      <p class="section-subtitle">These values guide every classroom observation, coaching session, training, and family conversation.</p>
+      
+      <div class="values-grid">
+        <div class="value-box">
+          <h3>Empathy</h3>
+          <p>We understand and share the feelings of children and families, providing compassionate and respectful support.</p>
+        </div>
+        <div class="value-box">
+          <h3>Equity</h3>
+          <p>We ensure every child, regardless of background or ability, receives equal opportunities to succeed and thrive.</p>
+        </div>
+        <div class="value-box">
+          <h3>Integrity</h3>
+          <p>We maintain the highest ethical standards, ensuring trust and transparency in all our interactions and relationships.</p>
+        </div>
+        <div class="value-box">
+          <h3>Inclusivity</h3>
+          <p>We create an environment where every child, regardless of ability or background, feels welcomed and supported.</p>
+        </div>
+        <div class="value-box">
+          <h3>Empowerment</h3>
+          <p>We encourage children and families to become confident, independent advocates for their needs and rights.</p>
+        </div>
+        <div class="value-box">
+          <h3>Engagement</h3>
+          <p>We actively involve children, families, and educators in the learning process, fostering strong, meaningful connections.</p>
+        </div>
+        <div class="value-box">
+          <h3>Involvement</h3>
+          <p>We actively engage with families, educators, and the community to build strong partnerships and lasting change.</p>
+        </div>
+        <div class="value-box">
+          <h3>Impact</h3>
+          <p>We dedicate ourselves to making a positive and lasting difference in the lives of children and their families.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- WHY EIEI -->
-  <section class="section">
-    <div class="section-header">
-      <h2>Why EIEI?</h2>
-      <p>Addressing systemic gaps in early childhood education and support</p>
-    </div>
-    <div class="why-eiei-container">
-      <div class="problem-section">
-        <h3>The Challenge: Expulsions &amp; Suspensions in Childcare</h3>
-        
-        <div class="issue-box">
-          <h4>Current Reality</h4>
+  <section class="section-wrap">
+    <div class="why-grid">
+      <div class="why-sidebar">
+        <h3>Why EIEI?</h3>
+        <p style="font-size: 1.2rem; color: #475569; line-height: 1.7; margin-bottom: 2rem;">Addressing systemic gaps in early childhood education and support to stop the cycle of expulsions and suspensions.</p>
+        <a href="/contact-us" class="primary-btn" style="width: auto;">Partner With Us</a>
+      </div>
+
+      <div class="impact-content">
+        <div class="impact-card">
+          <h4>The Current Reality</h4>
           <ul>
-            <li>Young children ages 1-5 are suspended and expelled from programs due to behavioral challenges</li>
-            <li>Many full-time and part-time childcare professionals lack training to support children with IFSPs and IEPs</li>
-            <li>Children are never able to return to programs after expulsion</li>
+            <li>Young children ages 1-5 are suspended and expelled from programs due to behavioral challenges.</li>
+            <li>Many childcare professionals lack training to support children with IFSPs and IEPs.</li>
+            <li>Children are never able to return to programs after expulsion.</li>
           </ul>
         </div>
-
-        <div class="impact-section">
-          <h4>Impact on Children Who Are Expelled:</h4>
+        <div class="impact-card">
+          <h4>Impact on Expelled Children</h4>
           <ul>
-            <li>Miss opportunities to grow, develop, and practice social and emotional skills</li>
-            <li>Continue to develop behavior problems that lead to difficulties adjusting to kindergarten</li>
-            <li>Experience harmful effects on development, relationships, education, and health</li>
-            <li>Develop negative views towards school, teachers, and the world around them</li>
+            <li>Miss opportunities to grow, develop, and practice skills.</li>
+            <li>Continue developing behavior problems affecting kindergarten adjustments.</li>
+            <li>Develop negative views towards school, teachers, and the world.</li>
           </ul>
         </div>
-
-        <div class="impact-section">
-          <h4>Impact on Families with Children with IFSP/IEP:</h4>
+        <div class="impact-card">
+          <h4>Impact on Families</h4>
           <ul>
-            <li>Become frustrated with childcare programs where employees lack training in Special Education Services</li>
-            <li>Experience difficulty with parenting, leading to potential detachment and family risk factors</li>
-            <li>May disassociate from family, friends, and social activities due to child's disability</li>
-            <li>Experience increased stress and financial challenges</li>
-            <li>More likely to seek alternative care, leading to employment instability</li>
+            <li>Frustration with programs lacking Special Education Services training.</li>
+            <li>Difficulty parenting, creating increased stress and financial challenges.</li>
+            <li>Employment instability due to seeking alternative care.</li>
           </ul>
         </div>
-
-        <div class="impact-section">
-          <h4>Impact on Childcare Staff:</h4>
+        <div class="impact-card">
+          <h4>Impact on Childcare Staff</h4>
           <ul>
-            <li>Required to manage children with challenging behaviors but often lack education and skills to respond appropriately</li>
-            <li>Low salaries, poor working conditions, and high teacher-to-child ratios</li>
-            <li>Implicit bias leading to stress, burn-out, and low retention rates</li>
-            <li>Limited ability to manage behaviors effectively</li>
+            <li>Required to manage challenging behaviors without proper skills.</li>
+            <li>Implicit bias leading to stress, burn-out, and low retention.</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- EIEI PROMISE - 2x2 CENTERED -->
-  <section class="section light">
-    <div class="section-header">
-      <h2>The EIEI Promise</h2>
-      <p>Our four pillars of change and support</p>
-    </div>
-    <div class="promise-container">
-      <div class="promise-card">
-        <div class="promise-icon">📚</div>
-        <h3>Educate</h3>
-        <p>Educate the workforce to provide appropriate teaching and learning environments to children entitled to IDEA services</p>
-      </div>
-      <div class="promise-card">
-        <div class="promise-icon">💼</div>
-        <h3>Invest</h3>
-        <p>Invest in the workforce with a commitment to impartiality and integrity for children</p>
-      </div>
-      <div class="promise-card">
-        <div class="promise-icon">🤝</div>
-        <h3>Embrace</h3>
-        <p>Embrace the individuality of children and celebrate their unique strengths and abilities</p>
-      </div>
-      <div class="promise-card">
-        <div class="promise-icon">🚀</div>
-        <h3>Initiate</h3>
-        <p>Initiate change, growth, and innovation with parents, business owners, stakeholders, and community partners</p>
+  <!-- THE PROMISE -->
+  <section class="why-bg" style="background: transparent;">
+    <div class="section-wrap" style="padding-top: 0;">
+      <h2 class="section-title">The EIEI Promise</h2>
+      <p class="section-subtitle">Our four pillars of change and support</p>
+
+      <div class="promise-grid">
+        <div class="promise-card">
+          <div class="promise-icon">📚</div>
+          <h3>Educate</h3>
+          <p>Educate the workforce to provide appropriate teaching and learning environments to children entitled to IDEA services.</p>
+        </div>
+        <div class="promise-card">
+          <div class="promise-icon">💼</div>
+          <h3>Invest</h3>
+          <p>Invest in the workforce with a commitment to impartiality and integrity for children.</p>
+        </div>
+        <div class="promise-card">
+          <div class="promise-icon">🤝</div>
+          <h3>Embrace</h3>
+          <p>Embrace the individuality of children and celebrate their unique strengths and abilities.</p>
+        </div>
+        <div class="promise-card">
+          <div class="promise-icon">🚀</div>
+          <h3>Initiate</h3>
+          <p>Initiate change, growth, and innovation with parents, business owners, stakeholders, and community partners.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- MEET THE TEAM -->
-  <section class="section">
-    <div class="team-section-header">
-      <h2>Meet the Team</h2>
-      <p>Dedicated professionals committed to transforming childcare and creating inclusive spaces for all children.</p>
-    </div>
-    <div class="team-grid" id="team-grid">
-      <div class="team-loading">Loading team members...</div>
-    </div>
-  </section>
-
-  <!-- CALL TO ACTION -->
-  <section class="section light">
-    <div class="cta-container">
-      <h2>Ready to Join Us?</h2>
-      <p>
-        Whether you're an educator, family, or organization partner, we're here to support you on the journey to inclusive excellence.
-      </p>
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <a href="/services" class="primary-btn">Explore Our Services</a>
-        <a href="/contact-us" class="secondary-btn">Get in Touch</a>
+  <!-- MEET THE TEAM SECTION (DYNAMIC) -->
+  <section class="why-bg">
+    <div class="section-wrap">
+      <h2 class="section-title">Meet the Team</h2>
+      <p class="section-subtitle">Dedicated professionals committed to transforming childcare curriculum and creating inclusive spaces.</p>
+      
+      <div id="team-grid" class="team-grid">
+        <div class="team-loading">Loading team members...</div>
       </div>
     </div>
   </section>
 
-  
-  
+  <!-- CTA -->
+  <section class="section-wrap" style="text-align: center; padding-top: 4rem;">
+    <h2 class="section-title">Ready to Join Us?</h2>
+    <p class="section-subtitle" style="margin-bottom: 2rem;">Whether you're an educator, family, or organization partner, we're here to support you on the journey to inclusive excellence.</p>
+    <a href="/services" class="primary-btn">Explore Our Services</a>
+  </section>
 
-  <!-- Team Member Modal -->
+  <!-- TEAM MODAL -->
   <div class="team-modal" id="teamModal">
     <div class="team-modal-content">
+      <button class="team-modal-close" id="closeTeamModal">&times;</button>
       <div class="team-modal-left">
-        <div class="team-modal-image-container">
-          <img class="team-modal-image" id="modalImage" src="" alt="Team Member">
-        </div>
+        <img class="team-modal-image" id="modalImage" src="" alt="Team Member">
       </div>
       <div class="team-modal-right">
-        <div class="team-modal-header">
-          <div class="team-modal-title">
-            <h2 class="team-modal-name" id="modalName"></h2>
-            <p class="team-modal-role" id="modalRole"></p>
-          </div>
-          <button class="team-modal-close" id="closeTeamModal">&times;</button>
-        </div>
-        <p class="team-modal-bio" id="modalBio"></p>
-        <div class="team-modal-footer">
-          <div>
-            <div class="team-modal-section">Section</div>
-            <div class="team-modal-section-value" id="modalSection"></div>
-          </div>
-        </div>
+        <h2 class="team-modal-name" id="modalName"></h2>
+        <div class="team-modal-role" id="modalRole"></div>
+        <div class="team-modal-bio" id="modalBio"></div>
       </div>
     </div>
   </div>
 
-  
-  
-  
-  
-  
-  
   <script is:inline>
     // Load team members dynamically from Firestore
     async function loadTeamMembers() {
@@ -982,7 +717,6 @@ import Layout from '../layouts/Layout.astro';
         const snapshot = await window.firebaseDB.collection('team').get();
         console.log('Firestore query completed, found ' + snapshot.size + ' documents');
         const teamMembers = snapshot.docs.map(doc => {
-          console.log('Team member:', doc.data());
           return { id: doc.id, ...doc.data() };
         });
         
@@ -1055,11 +789,11 @@ import Layout from '../layouts/Layout.astro';
             
             let imageUrl = member.imageUrl || 'images/team/default.jpg';
             if (imageUrl.includes('imgbb.com')) {
-              imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/280x280');
+              imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/400x500'); // Higher res version for bigger cards
             }
             
             card.innerHTML = `
-              <img src="${imageUrl}" alt="${member.name}" class="team-image" loading="lazy" onerror="this.src='images/team/default.jpg'" style="width: 100%; height: 100%; object-fit: cover;">
+              <img src="${imageUrl}" alt="${member.name}" class="team-image" loading="lazy" onerror="this.src='/images/team/default.jpg'">
               <div class="team-info">
                 <div class="team-name">${member.name}</div>
                 <div class="team-role">${member.role}</div>
@@ -1079,12 +813,12 @@ import Layout from '../layouts/Layout.astro';
       const modal = document.getElementById('teamModal');
       if (!modal) return;
       
-      document.getElementById('modalImage').src = member.imageUrl || 'images/team/default.jpg';
+      let imageUrl = member.imageUrl || 'images/team/default.jpg';
+      document.getElementById('modalImage').src = imageUrl;
       document.getElementById('modalImage').alt = member.name;
       document.getElementById('modalName').textContent = member.name;
       document.getElementById('modalRole').textContent = member.role;
-      document.getElementById('modalBio').textContent = member.bio || 'No bio available';
-      document.getElementById('modalSection').textContent = member.section || 'Team';
+      document.getElementById('modalBio').textContent = member.bio || 'No bio available.';
       
       modal.classList.add('active');
     }
@@ -1097,8 +831,6 @@ import Layout from '../layouts/Layout.astro';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      
-      
       const modal = document.getElementById('teamModal');
       if (modal) {
         const closeBtn = modal.querySelector('.team-modal-close');
@@ -1126,7 +858,6 @@ import Layout from '../layouts/Layout.astro';
       } else {
         attemptCount++;
         if (attemptCount < maxAttempts) {
-          console.log('Firebase DB not ready, retrying... (attempt ' + attemptCount + '/' + maxAttempts + ')');
           setTimeout(initTeamLoading, 1000);
         } else {
           console.error('Firebase DB initialization timeout');
@@ -1134,5 +865,4 @@ import Layout from '../layouts/Layout.astro';
       }
     }
   </script>
-
 </Layout>

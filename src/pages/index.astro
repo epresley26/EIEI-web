@@ -1,27 +1,663 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
+
 <Layout title="EIEI Services">
+  <style is:global>
+    /* --- Premium Modern Styling for Index --- */
+
+    /* HERO CAROUSEL */
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 800px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .carousel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.85) 0%,
+        rgba(37, 99, 235, 0.4) 100%
+      );
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      position: absolute;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 2rem;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      text-align: left;
+    }
+
+    .slide-content h1 {
+      font-size: clamp(2.5rem, 4.5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      max-width: 650px;
+    }
+
+    .slide-content p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.95;
+      max-width: 650px;
+    }
+
+    @media (max-width: 1024px) {
+      .slide-content {
+        padding: 0 2rem;
+        text-align: center;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: 35%;
+      }
+    }
+
+    /* ENQUIRY BOX - MODERN GLASSMORPHISM */
+    .enquiry-box {
+      position: absolute;
+      right: 5%;
+      top: 55%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 1.8rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 380px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .enquiry-box h3 {
+      font-size: 1.4rem;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .enquiry-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .enquiry-form input,
+    .enquiry-form textarea {
+      padding: 0.75rem 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #f8fafc;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      color: #0f172a;
+    }
+
+    .enquiry-form input:focus,
+    .enquiry-form textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      background: white;
+    }
+
+    .enquiry-form textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    @media (max-width: 1024px) {
+      .enquiry-box {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        margin: 28rem auto 4rem auto;
+      }
+      .hero-carousel {
+        height: auto;
+        display: block;
+      }
+      .slide {
+        position: absolute;
+        height: 100vh;
+      }
+    }
+
+    /* TYPOGRAPHY & LAYOUT */
+    .section-wrap {
+      padding: 8rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .bg-light {
+      background: #f8fafc;
+    }
+    .bg-white {
+      background: #ffffff;
+    }
+
+    .section-title {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #475569;
+      max-width: 700px;
+      margin: 0 auto 4rem;
+      line-height: 1.6;
+    }
+
+    /* ABOUT SECTION */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #2563eb;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .about-text p {
+      font-size: 1.15rem;
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+      .about-image {
+        order: -1;
+      }
+    }
+
+    /* SERVICES GRID */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .service-card {
+      padding: 0 !important;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 550px;
+    }
+
+    .card-image-wrap {
+      margin: 0;
+      position: relative;
+      flex: 0 0 60%;
+      width: 100%;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+    }
+
+    .service-card .card-content {
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .service-card h3 {
+      font-size: 1.4rem;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+    .service-card p {
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    /* CLASSROOMS HERO */
+    .classrooms-hero {
+      position: relative;
+      padding: 8rem 2rem;
+      background: linear-gradient(135deg, #2563eb 0%, #0f172a 100%);
+      color: white;
+      text-align: center;
+      border-radius: 40px;
+      margin: 4rem 2rem;
+      box-shadow: 0 30px 60px rgba(37, 99, 235, 0.2);
+      overflow: hidden;
+    }
+
+    .classrooms-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("/images/special_classroom.jpg");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      z-index: 1;
+    }
+
+    .classroom-box {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 3rem;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .classroom-box h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+    }
+    .classroom-box p.loc {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+    }
+
+    .features-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .feature-tag {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .hiring-alert {
+      font-style: italic;
+      color: var(--brand-orange);
+      font-weight: 600;
+      font-size: 1.1rem;
+      background: rgba(245, 158, 11, 0.1);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .classrooms-hero {
+        margin: 2rem 1rem;
+        padding: 4rem 1.5rem;
+        border-radius: 24px;
+      }
+      .classroom-box {
+        padding: 2rem;
+      }
+    }
+
+    /* ACCOMPLISHMENTS */
+    .acc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .acc-card {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+      transition: transform 0.3s ease;
+    }
+
+    .acc-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+    .acc-num {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+    .acc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    .acc-desc {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .detail-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+    }
+
+    .detail-card h3 {
+      font-size: 1.4rem;
+      color: #2563eb;
+      margin-bottom: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .detail-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .detail-card li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+    .detail-card li:last-child {
+      border: none;
+    }
+
+    /* FAQ SECTION */
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      margin-bottom: 1rem;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 1.5rem 2rem;
+      background: white;
+      border: none;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    .faq-question:hover {
+      background: #f8fafc;
+    }
+    .faq-answer {
+      padding: 0 2rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      background: white;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .faq-item.active .faq-answer {
+      padding: 1rem 2rem 2rem;
+      max-height: 500px;
+    }
+    .faq-item.active .faq-question {
+      color: #2563eb;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* PARTNERS */
+    .partners-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3rem;
+      align-items: center;
+    }
+    .partner-item {
+      flex: 0 1 200px;
+      filter: grayscale(100%) opacity(0.6);
+      transition: all 0.3s ease;
+    }
+    .partner-item:hover {
+      filter: grayscale(0%) opacity(1);
+      transform: scale(1.05);
+    }
+    .partner-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* GALLERY OVERRIDES */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .gallery-item {
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fullscreen-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .fullscreen-modal.active {
+      display: flex;
+    }
+    .fullscreen-modal img {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 12px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      color: white;
+      font-size: 3rem;
+      cursor: pointer;
+    }
+
+    /* TESTIMONIALS (Needed for script to function properly) */
+    .testimonials-wrapper {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+    }
+    .testimonials {
+      flex: 1;
+      overflow: hidden;
+      padding: 2rem 0;
+    }
+    .testimonial-card {
+      background: white;
+      padding: 3rem;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      margin: 0 1rem;
+      border: 1px solid #e2e8f0;
+    }
+    .testimonial-nav {
+      background: white;
+      min-width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      z-index: 5;
+    }
+    .testimonial-nav:hover {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+  </style>
+
   <!-- FULLSCREEN HERO CAROUSEL -->
   <section class="hero-carousel fade-in">
     <div class="carousel">
-      <div class="slide active" style="background-image: url('/images/slide1.jpg')">
+      <div
+        class="slide active"
+        style="background-image: url('/images/slide1.jpg')"
+      >
         <div class="slide-content">
-          <h1>Early intervention,<br>designed with care.</h1>
+          <h1>Early intervention,<br />designed with care.</h1>
           <p>Inclusive services that empower children and families.</p>
         </div>
       </div>
 
       <div class="slide" style="background-image: url('/images/slide2.jpg')">
         <div class="slide-content">
-          <h1>Supporting educators<br>and communities.</h1>
+          <h1>Supporting educators<br />and communities.</h1>
           <p>Professional development rooted in inclusion.</p>
         </div>
       </div>
 
       <div class="slide" style="background-image: url('/images/slide3.jpg')">
         <div class="slide-content">
-          <h1>Every child deserves<br>to thrive.</h1>
+          <h1>Every child deserves<br />to thrive.</h1>
           <p>Human-centered education from the very beginning.</p>
         </div>
       </div>
@@ -32,480 +668,599 @@ import Layout from '../layouts/Layout.astro';
       <h3>Enquire Now</h3>
       <form class="enquiry-form" onsubmit="handleEnquiry(event)">
         <input type="text" id="enqName" placeholder="Full Name" required />
-        <input type="email" id="enqEmail" placeholder="Email Address" required />
+        <input
+          type="email"
+          id="enqEmail"
+          placeholder="Email Address"
+          required
+        />
         <input type="tel" id="enqPhone" placeholder="Phone Number" required />
         <input type="text" id="enqAddress" placeholder="Address" required />
-        <input type="number" id="enqChildAge" placeholder="Age of Child" min="0" max="21" required />
-        <textarea id="enqMessage" placeholder="How can we help?" required></textarea>
-        <button type="submit" class="primary-btn">Submit</button>
+        <input
+          type="number"
+          id="enqChildAge"
+          placeholder="Age of Child"
+          min="0"
+          max="21"
+          required
+        />
+        <textarea id="enqMessage" placeholder="How can we help?" required
+        ></textarea>
+        <button type="submit" class="primary-btn">Submit Request</button>
       </form>
     </div>
   </section>
 
   <!-- ABOUT -->
-  <section id="about" class="section slide-up" style="max-width: none !important;">
-    <div class="about-container" style="width: 85%; margin: 0 auto;">
+  <section id="about" class="bg-light">
+    <div class="section-wrap about-grid">
       <div class="about-text">
-        <h2 style="font-size: 2rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">The Education Institute for Early Intervention (EIEI)</h2>
+        <h2>The Education Institute for Early Intervention (EIEI)</h2>
         <p>
-          We reshape learning by fostering inclusivity and equipping community programs, professionals, and families with the necessary support, resources, training and development to uplift every child with diverse abilities, setting the highest standard in special education, early childhood development, and life-time success!
+          We reshape learning by fostering inclusivity and equipping community
+          programs, professionals, and families with the necessary support,
+          resources, training, and development to uplift every child with
+          diverse abilities.
         </p>
+        <p>
+          Our mission focuses on setting the highest standard in special
+          education, early childhood development, and establishing foundations
+          for lifetime success!
+        </p>
+        <a
+          href="/about"
+          class="primary-btn"
+          style="width: auto; margin-top: 1rem;">Learn More About Us</a
+        >
       </div>
       <div class="about-image">
-        <img src="/images/logo.png" alt="EIEI Team" loading="lazy">
+        <img
+          src="/images/logo.png"
+          alt="EIEI Team"
+          loading="lazy"
+          style="background: white; border-radius: 50%; padding: 2rem;"
+        />
       </div>
     </div>
   </section>
 
   <!-- SERVICES -->
-  <section id="programs" class="section light" style="max-width: none !important;">
-    <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Empowering Minds, Nurturing Hearts</h2>
-    <div class="cards" style="width: 85%; margin: 0 auto;">
-      <div class="card reveal">
-        <div class="card-image-wrap">
-          <img src="/images/early.jpg" alt="Early Intervention Services" class="card-image" loading="lazy">
-          <h3 class="card-title-overlay">Early Intervention Services</h3>
-        </div>
-        <p>
-          Free to low-cost on-site special education social playgroups and classrooms for children ages 3-5, supported by Certified Educators, Special Needs Instructors, RBTs, and Occupational and Speech Therapy support.
-        </p>
-      </div>
+  <section id="programs" class="bg-white">
+    <div class="section-wrap">
+      <h2 class="section-title">Empowering Minds, Nurturing Hearts</h2>
+      <p class="section-subtitle">
+        Comprehensive programs designed to support children, empower educators,
+        and strengthen communities across all dimensions of early development.
+      </p>
 
-      <div class="card reveal">
-        <img src="/images/training.jpg" alt="Training & Professional Development" class="card-image" loading="lazy">
-        <h3>Training & Professional Development</h3>
-        <p>Empowering owners, directors, and educators to expand their knowledge of special education and its legal aspects concerning the children and families they serve.</p>
-      </div>
-      <div class="card reveal">
-        <img src="/images/service3.svg" alt="Community Programs" class="card-image" loading="lazy">
-        <h3>Community Programs</h3>
-        <p>Supporting 20+ Early Childhood Education programs with training, coaching, professional development, and fostering family engagement through Pre-K Counts partnership.</p>
-      </div>
-      <div class="card reveal">
-        <img src="/images/service4.svg" alt="Family Empowerment" class="card-image" loading="lazy">
-        <h3>Family Empowerment</h3>
-        <p>Join our vibrant online community and Family Empowerment Corner Sessions where families and educators support one another.</p>
-      </div>
-      <div class="card reveal">
-        <img src="/images/service5.svg" alt="Supporting Communities" class="card-image" loading="lazy">
-        <h3>Supporting Communities</h3>
-        <p>We join hands with non-profit and for-profit partners, aligning our efforts to support their mission through financial resources and collaborative efforts.</p>
-      </div>
-      <div class="card reveal">
-        <img src="/images/service6.svg" alt="CACFP Sponsorship" class="card-image" loading="lazy">
-        <h3>CACFP Sponsorship</h3>
-        <p>As a sponsoring organization of the Child and Adult Care Food Program, we offer vital administrative support ensuring child and adult care providers deliver quality care and nutritious meals.</p>
+      <div class="services-grid">
+        <div class="card service-card reveal">
+          <div class="card-image-wrap">
+            <img
+              src="/images/early.jpg"
+              alt="Early Intervention Services"
+              class="card-image"
+              loading="lazy"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Early Intervention</h3>
+            <p>
+              Free to low-cost on-site special education social playgroups and
+              classrooms for children ages 3-5, supported by Certified
+              Educators, Special Needs Instructors, RBTs, and Occupational and
+              Speech Therapy support.
+            </p>
+          </div>
+        </div>
+
+        <div class="card service-card reveal">
+          <div class="card-image-wrap">
+            <img
+              src="/images/training.jpg"
+              alt="Training"
+              class="card-image"
+              loading="lazy"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Training &amp; Development</h3>
+            <p>
+              Empowering owners, directors, and educators to expand their
+              knowledge of special education and its legal aspects concerning
+              the children and families they serve.
+            </p>
+          </div>
+        </div>
+
+        <div class="card service-card reveal">
+          <div class="card-image-wrap">
+            <img
+              src="/images/gen_community.png"
+              alt="Community"
+              class="card-image"
+              loading="lazy"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Community Programs</h3>
+            <p>
+              Supporting 20+ Early Childhood Education programs with training,
+              coaching, professional development, and fostering family
+              engagement through Pre-K Counts partnership.
+            </p>
+          </div>
+        </div>
+
+        <div class="card service-card reveal">
+          <div class="card-image-wrap">
+            <img
+              src="/images/gen_family.png"
+              alt="Family"
+              class="card-image"
+              loading="lazy"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Family Empowerment</h3>
+            <p>
+              Join our vibrant online community and Family Empowerment Corner
+              Sessions where families and educators support one another through
+              shared experiences.
+            </p>
+          </div>
+        </div>
+
+        <div class="card service-card reveal">
+          <div class="card-image-wrap">
+            <img
+              src="/images/gen_supporting.png"
+              alt="Supporting"
+              class="card-image"
+              loading="lazy"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Supporting Communities</h3>
+            <p>
+              We join hands with non-profit and for-profit partners, aligning
+              our efforts to support their mission through financial resources
+              and collaborative efforts.
+            </p>
+          </div>
+        </div>
+
+        <div class="card service-card reveal">
+          <div class="card-image-wrap">
+            <img
+              src="/images/gen_cacfp.png"
+              alt="CACFP"
+              class="card-image"
+              loading="lazy"
+            />
+          </div>
+          <div class="card-content">
+            <h3>CACFP Sponsorship</h3>
+            <p>
+              As a sponsoring organization of the Child and Adult Care Food
+              Program, we offer vital administrative support ensuring providers
+              deliver quality care and nutritious meals.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- SPECIAL EDUCATION CLASSROOMS -->
-  <section id="classrooms" class="classroom-hero" style="max-width: none !important;">
-    <div class="classroom-hero-bg" style="background-image: url('/images/special_classroom.jpg')"></div>
-    <div class="classroom-overlay"></div>
-    <div class="classroom-content" style="width: 85%; margin: 0 auto;">
-      <div class="classroom-details">
-        <h2 style="font-size: 1.5rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Special Education Classrooms - Ages 3 to 5</h2>
-        <p><strong>Location:</strong> 4704 Leiper Street, Philadelphia, PA 19124</p>
-        <div class="features">
-          <div class="feature-item">✓ Certified Early Ed & Special Needs Teachers</div>
-          <div class="feature-item">✓ Registered Behavior Technicians (RBT)</div>
-          <div class="feature-item">✓ Speech & Language Therapy Support</div>
-          <div class="feature-item">✓ Occupational Therapy Support</div>
+  <section id="classrooms">
+    <div class="classrooms-hero">
+      <div class="classroom-box">
+        <h2>Special Education Classrooms</h2>
+        <p class="loc">
+          📍 4704 Leiper Street, Philadelphia, PA 19124 • Ages 3 to 5
+        </p>
+
+        <div class="features-flex">
+          <span class="feature-tag">✓ Certified Early Ed Teachers</span>
+          <span class="feature-tag">✓ Registered Behavior Techs</span>
+          <span class="feature-tag">✓ Speech Therapy</span>
+          <span class="feature-tag">✓ Occupational Therapy</span>
         </div>
-        <p style="margin-top: 2rem; font-style: italic; color: var(--brand-orange);"><strong>NOW HIRING:</strong> We're seeking passionate Early Childhood and Special Needs Educators, RBTs, and Therapists. Full-time positions with benefits available!</p>
-        <a href="#contact" class="primary-btn" style="max-width: 300px; display: inline-block; margin-top: 1.5rem;">Learn More</a>
+
+        <div class="hiring-alert">
+          NOW HIRING: We're seeking passionate Early Childhood and Special Needs
+          Educators, RBTs, and Therapists. Full-time positions with benefits!
+        </div>
+
+        <a
+          href="#about"
+          class="primary-btn"
+          style="background: white; color: #0f172a; border-color: white; width: auto;"
+          >Learn More</a
+        >
       </div>
     </div>
   </section>
 
-  <!-- TESTIMONIALS SECTION -->
-  <section class="section testimonials-section section-light" style="max-width: none !important;">
-    <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">TESTIMONIALS</h2>
-    <div class="testimonials-wrapper" style="width: 85%; margin: 0 auto;">
-      <button class="testimonial-nav prev" id="prevTestimonial">❮</button>
-      <div class="testimonials" id="testimonialsContainer">
-        <!-- Testimonials will be loaded here by script.js -->
-      </div>
-      <button class="testimonial-nav next" id="nextTestimonial">❯</button>
-    </div>
-  </section>
+  <!-- ACCOMPLISHMENTS -->
+  <section class="bg-light">
+    <div class="section-wrap">
+      <h2 class="section-title">Our Accomplishments</h2>
+      <p class="section-subtitle">
+        A decade of excellence in early intervention and professional
+        development improving paths for thousands of children.
+      </p>
 
-
-  <!-- GALLERY SECTION -->
-  <section class="section gallery-section" style="max-width: none !important;">
-    <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Image Gallery</h2>
-    <div class="gallery" id="galleryContainer" style="width: 85%; margin: 0 auto;">
-      <!-- Images will be loaded dynamically from admin uploads -->
-    </div>
-  </section>
-
-  <!-- FULLSCREEN IMAGE MODAL -->
-  <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
-    <span class="close-btn">&times;</span>
-    <img id="fullscreenImage" src="" alt="Fullscreen Image">
-  </div>
-
-  <!-- ACCOMPLISHMENTS SECTION -->
-  <section class="section accomplishments-section" style="background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%); padding: 5rem 0; max-width: none !important;">
-    <div style="width: 85%; margin: 0 auto;">
-      <div style="text-align: center; margin-bottom: 4rem;">
-        <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Our Accomplishments</h2>
-        <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6;">A decade of excellence in early intervention and professional development</p>
-      </div>
-      
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 4rem;">
-        <!-- Year in Review -->
-        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid var(--brand-blue); transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="font-size: 2.5rem; font-weight: 900; color: var(--brand-blue); margin-bottom: 0.5rem;">2019-2022</div>
-          <h3 style="color: var(--text); margin: 0 0 0.5rem 0; font-size: 1.2rem;">Year in Review</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Years Combined Due to Covid-19</p>
+      <div class="acc-grid">
+        <div class="acc-card">
+          <div class="acc-num" style="color: #2563eb;">2019</div>
+          <div class="acc-title">Onwards</div>
+          <div class="acc-desc">Growing steadily since our foundation</div>
         </div>
-        
-        <!-- Grants Awarded -->
-        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid var(--brand-orange); transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="font-size: 2.5rem; font-weight: 900; color: var(--brand-orange); margin-bottom: 0.5rem;">$800K+</div>
-          <h3 style="color: var(--text); margin: 0 0 0.5rem 0; font-size: 1.2rem;">Grants Awarded</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">From federal and state agencies</p>
+        <div class="acc-card">
+          <div class="acc-num" style="color: var(--brand-orange);">$800K</div>
+          <div class="acc-title">Grants Awarded</div>
+          <div class="acc-desc">Federal and state agency support</div>
         </div>
-        
-        <!-- Training Provider -->
-        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #10b981; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="font-size: 2.5rem; font-weight: 900; color: #10b981; margin-bottom: 0.5rem;">3+</div>
-          <h3 style="color: var(--text); margin: 0 0 0.5rem 0; font-size: 1.2rem;">Training Certifications</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">PA ACT 48, PQAS & CDA</p>
+        <div class="acc-card">
+          <div class="acc-num" style="color: #10b981;">3+</div>
+          <div class="acc-title">Certifications</div>
+          <div class="acc-desc">PA ACT 48, PQAS &amp; CDA Providers</div>
         </div>
-        
-        <!-- Awards -->
-        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #f59e0b; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="font-size: 2.5rem; font-weight: 900; color: #f59e0b; margin-bottom: 0.5rem;">4</div>
-          <h3 style="color: var(--text); margin: 0 0 0.5rem 0; font-size: 1.2rem;">Major Awards</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">CEO Dr. Allen-Presley honors</p>
-        </div>
-        
-        <!-- Publications -->
-        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #8b5cf6; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="font-size: 2.5rem; font-weight: 900; color: #8b5cf6; margin-bottom: 0.5rem;">2</div>
-          <h3 style="color: var(--text); margin: 0 0 0.5rem 0; font-size: 1.2rem;">Published Works</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Academic contributions</p>
-        </div>
-        
-        <!-- Community -->
-        <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #ec4899; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="font-size: 2.5rem; font-weight: 900; color: #ec4899; margin-bottom: 0.5rem;">34+</div>
-          <h3 style="color: var(--text); margin: 0 0 0.5rem 0; font-size: 1.2rem;">Workshops</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Special education training</p>
+        <div class="acc-card">
+          <div class="acc-num" style="color: #8b5cf6;">34+</div>
+          <div class="acc-title">Workshops</div>
+          <div class="acc-desc">Special education trainings hosted</div>
         </div>
       </div>
 
-      <!-- Details Grid -->
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 4rem;">
-        <!-- Conferences -->
-        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-          <h3 style="color: var(--brand-blue); margin-top: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🎓</span> Conferences
-          </h3>
-          <ul style="color: var(--text); line-height: 2; padding-left: 1.5rem; margin: 0; list-style-position: inside;">
+      <div class="details-grid">
+        <div class="detail-card">
+          <h3>🎓 Conferences</h3>
+          <ul>
             <li>Council for Exceptional Children</li>
             <li>National Association for Family Childcare</li>
             <li>Kappa Delta Pi International</li>
             <li>Ball State University Community</li>
           </ul>
         </div>
-
-        <!-- National Appointments -->
-        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-          <h3 style="color: var(--brand-blue); margin-top: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🌍</span> National Leadership
-          </h3>
-          <ul style="color: var(--text); line-height: 2; padding-left: 1.5rem; margin: 0; list-style-position: inside;">
+        <div class="detail-card">
+          <h3>🌍 National Leadership</h3>
+          <ul>
             <li>AUCD Emerging Leaders</li>
-            <li>ECPC & DEC Leadership Cohort</li>
-            <li>Recognized educator</li>
-            <li>Community advocate</li>
+            <li>ECPC &amp; DEC Leadership Cohort</li>
+            <li>Recognized educator &amp; Advocate</li>
           </ul>
         </div>
-
-        <!-- Community Impact -->
-        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-          <h3 style="color: var(--brand-blue); margin-top: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">❤️</span> Community Impact
-          </h3>
-          <ul style="color: var(--text); line-height: 2; padding-left: 1.5rem; margin: 0; list-style-position: inside;">
+        <div class="detail-card">
+          <h3>❤️ Community Impact</h3>
+          <ul>
             <li>Supported Black authors</li>
             <li>Founded Chester Alliance</li>
-            <li>SEL initiatives</li>
-            <li>Career fair hosting</li>
+            <li>SEL initiatives &amp; Career fair hosting</li>
           </ul>
         </div>
       </div>
 
-      <!-- EIEI Awards Highlight -->
-      <div style="background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;">
-        <h3 style="color: var(--brand-blue); margin-top: 0; font-size: 1.5rem;">🏆 EIEI Awards</h3>
-        <img src="/images/eiei-cert.png" alt="EIEI CCPN Membership Certificate" style="max-width: 100%; height: auto; max-height: 650px; margin: 1.5rem 0; border-radius: 8px;">
-        <p style="color: var(--text); font-weight: 600; font-size: 1.1rem; margin: 0;">Child Care Professionals Network (CCPN)<br>Membership Certificate</p>
+      <div
+        class="card"
+        style="text-align: center; max-width: 600px; margin: 0 auto; padding: 3rem;"
+      >
+        <h3
+          style="font-size: 1.5rem; color: #2563eb; margin-bottom: 2rem; font-weight: 800;"
+        >
+          🏆 Major Awards
+        </h3>
+        <img
+          src="/images/eiei-cert.png"
+          alt="EIEI CCPN Certificate"
+          style="width: 100%; border-radius: 12px; margin-bottom: 1.5rem;"
+        />
+        <p style="font-weight: 600;">
+          Child Care Professionals Network (CCPN) Membership Certificate
+        </p>
       </div>
     </div>
   </section>
 
+  <!-- TESTIMONIALS SECTION -->
+  <section class="bg-white">
+    <div class="section-wrap">
+      <h2 class="section-title">What They Say</h2>
+      <p class="section-subtitle">
+        Real experiences from our partners, educators, and the families we
+        support.
+      </p>
+
+      <div class="testimonials-wrapper">
+        <button class="testimonial-nav prev" id="prevTestimonial">❮</button>
+        <div class="testimonials" id="testimonialsContainer">
+          <!-- Loaded dynamically -->
+        </div>
+        <button class="testimonial-nav next" id="nextTestimonial">❯</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY SECTION -->
+  <section class="bg-light">
+    <div class="section-wrap">
+      <h2 class="section-title">Image Gallery</h2>
+      <p class="section-subtitle">
+        Vibrant moments of learning, teaching, and connecting inside and outside
+        the classroom.
+      </p>
+
+      <div class="gallery" id="galleryContainer">
+        <!-- Images loaded dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FULLSCREEN IMAGE MODAL -->
+  <div
+    id="fullscreenModal"
+    class="fullscreen-modal"
+    onclick="closeFullscreen()"
+  >
+    <span class="close-btn">&times;</span>
+    <img id="fullscreenImage" src="" alt="Fullscreen Image" />
+  </div>
+
   <!-- FAQ SECTION -->
-  <section class="section faq-section" style="max-width: none !important;">
-    <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Frequently Asked Questions</h2>
-    <div class="faq" style="width: 85%; margin: 0 auto;">
-      <div class="faq-item">
-        <button class="faq-question">How do I get in contact with EIEI?</button>
-        <div class="faq-answer">You can reach us by Phone: 484-501-9101 or Email: admin@eiforei.org. You can also visit us at our office located at 4704 Leiper Street, Philadelphia, PA 19124.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">What areas do you offer services?</button>
-        <div class="faq-answer">We provide services throughout Pennsylvania, with our main Special Education Classrooms located in Northeast Philadelphia (19124). We also offer community-based programs, in-home services, and professional training throughout the state.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">What age groups do you serve?</button>
-        <div class="faq-answer">Our primary services focus on children ages 3-5 years old. We offer specialized early intervention services, social playgroups, and classroom-based support for this age group through certified educators and therapy professionals.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">Do you offer online sessions or training?</button>
-        <div class="faq-answer">Yes, we provide both in-person and virtual sessions. Our Family Empowerment Corner Sessions and professional development programs are available online, making it convenient for families and educators to participate.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">How do I apply for a job at EIEI?</button>
-        <div class="faq-answer">We're currently hiring! We seek Early Childhood and Special Needs Educators, Registered Behavior Technicians (RBTs), and Occupational and Speech Language Therapists. Full-time positions with benefits are available. Visit our career opportunities page or contact us for application details.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">Are your services covered by insurance or assistance programs?</button>
-        <div class="faq-answer">We offer free to low-cost services for many programs. We also participate in CACFP (Child and Adult Care Food Program) and work with various funding sources. Please contact us to discuss specific coverage options for your situation.</div>
+  <section class="bg-white">
+    <div class="section-wrap">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">
+        Everything you need to know about our services and process.
+      </p>
+
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-question"
+            >How do I get in contact with EIEI? <span>+</span>
+          </button>
+          <div class="faq-answer">
+            You can reach us by Phone: 484-501-9101 or Email: admin@eiforei.org.
+            You can also visit us at our office located at 4704 Leiper Street,
+            Philadelphia, PA 19124.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"
+            >What areas do you offer services? <span>+</span>
+          </button>
+          <div class="faq-answer">
+            We provide services throughout Pennsylvania, with our main Special
+            Education Classrooms located in Northeast Philadelphia (19124). We
+            also offer community-based programs, in-home services, and
+            professional training throughout the state.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"
+            >What age groups do you serve? <span>+</span>
+          </button>
+          <div class="faq-answer">
+            Our primary services focus on children ages 3-5 years old. We offer
+            specialized early intervention services, social playgroups, and
+            classroom-based support for this age group through certified
+            educators and therapy professionals.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"
+            >Do you offer online sessions or training? <span>+</span>
+          </button>
+          <div class="faq-answer">
+            Yes, we provide both in-person and virtual sessions. Our Family
+            Empowerment Corner Sessions and professional development programs
+            are available online, making it convenient for families and
+            educators to participate.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"
+            >How do I apply for a job at EIEI? <span>+</span>
+          </button>
+          <div class="faq-answer">
+            We're currently hiring! We seek Early Childhood and Special Needs
+            Educators, Registered Behavior Technicians (RBTs), and Occupational
+            and Speech Language Therapists. Full-time positions with benefits
+            are available. Visit our career opportunities page or contact us for
+            application details.
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- PARTNERS SECTION -->
-  <section class="section partners-section" style="max-width: none !important;">
-    <h2 style="font-size: 3rem; font-weight: 900; color: var(--text); margin-bottom: 1rem;">Our Partners</h2>
-    <div class="partners-grid" style="width: 85%; margin: 0 auto;">
-      <div class="partner-item">
-        <img src="/images/p1.webp" alt="Partner 1" loading="lazy">
-      </div>
-      <div class="partner-item">
-        <img src="/images/p2.webp" alt="Partner 2" loading="lazy">
-      </div>
-      <div class="partner-item">
-        <img src="/images/p3.webp" alt="Partner 3" loading="lazy">
-      </div>
-      <div class="partner-item">
-        <img src="/images/p4.webp" alt="Partner 4" loading="lazy">
+  <section class="bg-light">
+    <div class="section-wrap">
+      <h2 class="section-title">Our Partners</h2>
+      <div class="partners-grid">
+        <div class="partner-item">
+          <img src="/images/p1.webp" alt="Partner 1" loading="lazy" />
+        </div>
+        <div class="partner-item">
+          <img src="/images/p2.webp" alt="Partner 2" loading="lazy" />
+        </div>
+        <div class="partner-item">
+          <img src="/images/p3.webp" alt="Partner 3" loading="lazy" />
+        </div>
+        <div class="partner-item">
+          <img src="/images/p4.webp" alt="Partner 4" loading="lazy" />
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- FIREBASE AND JS LOGIC -->
   <script is:inline>
-    // Load gallery images from Firestore with local fallback
+    // FAQ Toggle Logic
+    document.querySelectorAll(".faq-question").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".faq-item");
+        const isActive = item.classList.contains("active");
+        // close all
+        document.querySelectorAll(".faq-item").forEach((el) => {
+          el.classList.remove("active");
+          el.querySelector("span").textContent = "+";
+        });
+        // toggle clicked
+        if (!isActive) {
+          item.classList.add("active");
+          btn.querySelector("span").textContent = "−";
+        }
+      });
+    });
+
+    // Gallery Logic
     let galleryLoadingTimeout = null;
     let galleryCache = null;
     let galleryFullyLoaded = false;
-    
+
     function loadGalleryImages() {
-      // Debounce gallery loading - prevents reload spam
       if (galleryLoadingTimeout) return;
-      galleryLoadingTimeout = setTimeout(() => { galleryLoadingTimeout = null; }, 3000);
-      
-      const galleryContainer = document.getElementById('galleryContainer');
-      if(galleryContainer) {
-          const localGalleryImages = [
-            '/images/training-gallery-1.jpg',
-            '/images/training-gallery-2.jpg',
-            '/images/training-gallery-3.jpg',
-            '/images/training-gallery-4.jpg'
-          ];
-          
-          console.log('loadGalleryImages called. Firebase DB available:', !!window.firebaseDB);
-          
-          // Try to load from cache first
-          const cachedData = localStorage.getItem('galleryCache');
-          if (cachedData) {
-            try {
-              galleryCache = JSON.parse(cachedData);
-              console.log('Using cached gallery data:', galleryCache.length, 'images');
-              displayGalleryImages(galleryCache);
-              return;
-            } catch (e) {
-              console.warn('Cache parse failed, fetching from Firestore');
-            }
-          }
-          
-          // Load images from Firestore gallery collection
-          if (window.firebaseDB) {
-            window.firebaseDB.collection('gallery').get()
-              .then(snapshot => {
-                console.log('Firestore query returned', snapshot.size, 'images');
-                if (snapshot.size > 0) {
-                  console.log('Displaying images from Firestore');
-                  
-                  // Sort by uploadedAt in memory instead of using orderBy (which requires composite index)
-                  const docs = snapshot.docs.sort((a, b) => {
-                    const timeA = a.data().uploadedAt?.toDate?.() || new Date(0);
-                    const timeB = b.data().uploadedAt?.toDate?.() || new Date(0);
-                    return timeB - timeA;
-                  });
-                  
-                  // Limit to latest 12 images
-                  const latestDocs = docs.slice(0, 12);
-                  
-                  // Cache the gallery data (expires after 5 minutes)
-                  galleryCache = latestDocs.map(doc => {
-                    const data = doc.data();
-                    let imageUrl = data.imageUrl;
-                    if (!imageUrl) imageUrl = '/images/training-gallery-1.jpg';
-                    if (imageUrl.includes('imgbb.com')) {
-                      imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/320x320');
-                    }
-                    return { id: doc.id, fileName: data.fileName, imageUrl };
-                  });
-                  
-                  // Cache for 5 minutes
-                  localStorage.setItem('galleryCache', JSON.stringify(galleryCache));
-                  setTimeout(() => localStorage.removeItem('galleryCache'), 5 * 60 * 1000);
-                  
-                  displayGalleryImages(galleryCache);
-                  console.log(`Successfully loaded ${galleryCache.length} images from Firestore`);
-                } else {
-                  console.log('No images in Firestore, loading local images');
-                  loadLocalGallery();
-                }
-              })
-              .catch(error => {
-                console.error('Error loading gallery from Firestore:', error);
-                console.log('Falling back to local images');
+      galleryLoadingTimeout = setTimeout(() => {
+        galleryLoadingTimeout = null;
+      }, 3000);
+
+      const galleryContainer = document.getElementById("galleryContainer");
+      if (galleryContainer) {
+        const localGalleryImages = [
+          "/images/training-gallery-1.jpg",
+          "/images/training-gallery-2.jpg",
+          "/images/training-gallery-3.jpg",
+          "/images/training-gallery-4.jpg",
+        ];
+
+        const cachedData = localStorage.getItem("galleryCache");
+        if (cachedData) {
+          try {
+            galleryCache = JSON.parse(cachedData);
+            displayGalleryImages(galleryCache);
+            return;
+          } catch (e) {}
+        }
+
+        if (window.firebaseDB) {
+          window.firebaseDB
+            .collection("gallery")
+            .get()
+            .then((snapshot) => {
+              if (snapshot.size > 0) {
+                const docs = snapshot.docs.sort((a, b) => {
+                  const timeA = a.data().uploadedAt?.toDate?.() || new Date(0);
+                  const timeB = b.data().uploadedAt?.toDate?.() || new Date(0);
+                  return timeB - timeA;
+                });
+                const latestDocs = docs.slice(0, 12);
+
+                galleryCache = latestDocs.map((doc) => {
+                  const data = doc.data();
+                  let imageUrl =
+                    data.imageUrl || "/images/training-gallery-1.jpg";
+                  if (imageUrl.includes("imgbb.com")) {
+                    imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, "/c/400x400");
+                  }
+                  return { id: doc.id, fileName: data.fileName, imageUrl };
+                });
+
+                localStorage.setItem(
+                  "galleryCache",
+                  JSON.stringify(galleryCache)
+                );
+                setTimeout(
+                  () => localStorage.removeItem("galleryCache"),
+                  5 * 60 * 1000
+                );
+                displayGalleryImages(galleryCache);
+              } else {
                 loadLocalGallery();
-              });
-          } else {
-            console.log('Firebase DB not available, loading local images');
-            loadLocalGallery();
-          }
-          
-          function displayGalleryImages(images) {
-            const galleryContainer = document.getElementById('galleryContainer');
-            galleryContainer.innerHTML = '';
-            
-            // Load only first 6 images immediately
-            const initialImages = images.slice(0, 6);
-            const remainingImages = images.slice(6);
-            
-            initialImages.forEach((item, index) => {
-              setTimeout(() => {
-                addGalleryImage(galleryContainer, item);
-              }, index * 40);
-            });
-            
-            // Load remaining images with lazy loading using Intersection Observer
-            if (remainingImages.length > 0) {
-              setTimeout(() => {
-                const loadMoreObserver = new IntersectionObserver((entries) => {
-                  entries.forEach(entry => {
-                    if (entry.isIntersecting && !galleryFullyLoaded) {
-                      console.log('Gallery visible, loading remaining images');
-                      remainingImages.forEach((item, idx) => {
-                        setTimeout(() => {
-                          addGalleryImage(galleryContainer, item);
-                        }, idx * 40);
-                      });
-                      galleryFullyLoaded = true;
-                      loadMoreObserver.unobserve(entry.target);
-                    }
-                  });
-                }, { rootMargin: '100px' });
-                
-                loadMoreObserver.observe(galleryContainer);
-              }, 100);
-            } else {
-              galleryFullyLoaded = true;
-            }
-          }
-          
-          function addGalleryImage(container, item) {
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            div.style.willChange = 'transform'; // Optimize repaints
-            div.onclick = function() { openFullscreen(this); };
-            div.innerHTML = `<img src="${item.imageUrl}" alt="${item.fileName}" loading="lazy" onerror="this.src='/images/training-gallery-1.jpg'">`;
-            container.appendChild(div);
-          }
-          
-          function loadLocalGallery() {
-            console.log('Loading local gallery images');
-            galleryContainer.innerHTML = '';
-            localGalleryImages.forEach((imagePath, index) => {
-              setTimeout(() => {
-                const div = document.createElement('div');
-                div.className = 'gallery-item';
-                div.style.willChange = 'transform';
-                div.onclick = function() { openFullscreen(this); };
-                div.innerHTML = `<img src="${imagePath}" alt="Gallery image" loading="lazy">`;
-                galleryContainer.appendChild(div);
-              }, index * 40);
-            });
-            galleryFullyLoaded = true;
-          }
+              }
+            })
+            .catch(() => loadLocalGallery());
+        } else {
+          loadLocalGallery();
+        }
+
+        function displayGalleryImages(images) {
+          const galleryContainer = document.getElementById("galleryContainer");
+          galleryContainer.innerHTML = "";
+          const initialImages = images.slice(0, 6);
+          initialImages.forEach((item, index) =>
+            setTimeout(
+              () => addGalleryImage(galleryContainer, item),
+              index * 50
+            )
+          );
+        }
+
+        function addGalleryImage(container, item) {
+          const div = document.createElement("div");
+          div.className = "gallery-item";
+          div.onclick = function () {
+            openFullscreen(this);
+          };
+          div.innerHTML = `<img src="${item.imageUrl}" alt="${item.fileName}" loading="lazy" onerror="this.src='/images/training-gallery-1.jpg'">`;
+          container.appendChild(div);
+        }
+
+        function loadLocalGallery() {
+          galleryContainer.innerHTML = "";
+          localGalleryImages.forEach((imagePath, index) => {
+            setTimeout(() => {
+              const div = document.createElement("div");
+              div.className = "gallery-item";
+              div.onclick = function () {
+                openFullscreen(this);
+              };
+              div.innerHTML = `<img src="${imagePath}" alt="Gallery image" loading="lazy">`;
+              galleryContainer.appendChild(div);
+            }, index * 50);
+          });
+        }
       }
     }
 
-    // Enquiry form handler
+    // Enquiry Handler
     async function handleEnquiry(event) {
       event.preventDefault();
       const form = event.target;
-      const name = document.getElementById('enqName').value.trim();
-      const email = document.getElementById('enqEmail').value.trim();
-      const phone = document.getElementById('enqPhone').value.trim();
-      const address = document.getElementById('enqAddress').value.trim();
-      const childAge = document.getElementById('enqChildAge').value.trim();
-      const message = document.getElementById('enqMessage').value.trim();
-
-      if (!(name && email && phone && address && childAge && message)) {
-        alert('Please fill in all required fields.');
-        return;
-      }
-
-      const data = { 
-        name,
-        email: email.toLowerCase(),
-        phone,
-        address,
-        childAge: Number(childAge),
-        message,
+      const data = {
+        name: document.getElementById("enqName").value.trim(),
+        email: document.getElementById("enqEmail").value.trim().toLowerCase(),
+        phone: document.getElementById("enqPhone").value.trim(),
+        address: document.getElementById("enqAddress").value.trim(),
+        childAge: Number(document.getElementById("enqChildAge").value.trim()),
+        message: document.getElementById("enqMessage").value.trim(),
         createdAt: new Date().toISOString(),
-        source: 'index-hero-enquiry'
+        source: "index-hero-enquiry",
       };
 
-      // Prefer Firebase SDK if available
-      if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
+      if (
+        window.firebaseDB &&
+        typeof window.firebaseDB.collection === "function"
+      ) {
         try {
-          // Fallback to server timestamp
-          const ts = window.firebase && window.firebase.firestore 
-            ? window.firebase.firestore.FieldValue.serverTimestamp()
-            : new Date();
-            
-          await window.firebaseDB.collection('enquiries').add({
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            address: data.address,
-            childAge: data.childAge,
-            message: data.message,
-            createdAt: ts,
-            source: data.source
-          });
+          const ts =
+            window.firebase && window.firebase.firestore
+              ? window.firebase.firestore.FieldValue.serverTimestamp()
+              : new Date();
+          await window.firebaseDB
+            .collection("enquiries")
+            .add({ ...data, createdAt: ts });
           form.reset();
           alert("Thank you! We'll be in touch soon.");
           return;
-        } catch (e) {
-          console.warn('SDK write failed, falling back to REST', e);
-        }
+        } catch (e) {}
       }
 
-      // REST fallback
       try {
-        const PROJECT_ID = 'eiei-e1a76';
+        const PROJECT_ID = "eiei-e1a76";
         const body = {
           fields: {
             name: { stringValue: data.name },
@@ -515,55 +1270,43 @@ import Layout from '../layouts/Layout.astro';
             childAge: { integerValue: String(data.childAge) },
             message: { stringValue: data.message },
             createdAt: { timestampValue: data.createdAt },
-            source: { stringValue: data.source }
-          }
+            source: { stringValue: data.source },
+          },
         };
-        const res = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/enquiries`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-        if (!res.ok) {
-          const txt = await res.text();
-          console.error('Enquiry REST write failed:', res.status, txt);
-          throw new Error('REST write failed');
-        }
+        const res = await fetch(
+          `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/enquiries`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }
+        );
+        if (!res.ok) throw new Error("REST write failed");
         form.reset();
         alert("Thank you! We'll be in touch soon.");
       } catch (err) {
-        console.error('Enquiry submit error:', err);
-        alert('Unable to submit enquiry right now. Please try again later.');
+        alert("Unable to submit enquiry right now. Please try again later.");
       }
     }
-  
-    // Gallery fullscreen functions
+
     function openFullscreen(element) {
-      const img = element.querySelector('img');
-      const modal = document.getElementById('fullscreenModal');
-      const fullscreenImg = document.getElementById('fullscreenImage');
-      
-      fullscreenImg.src = img.src;
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      const img = element.querySelector("img");
+      const modal = document.getElementById("fullscreenModal");
+      document.getElementById("fullscreenImage").src = img.src;
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
     }
-    
+
     function closeFullscreen() {
-      const modal = document.getElementById('fullscreenModal');
-      modal.classList.remove('active');
-      document.body.style.overflow = 'auto';
+      document.getElementById("fullscreenModal").classList.remove("active");
+      document.body.style.overflow = "auto";
     }
-    
-    // Close fullscreen on Escape key
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Escape') {
-        closeFullscreen();
-      }
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeFullscreen();
     });
 
-    window.addEventListener('load', () => {
-      setTimeout(loadGalleryImages, 1000);
-    });
-    
+    window.addEventListener("load", () => setTimeout(loadGalleryImages, 1000));
     setInterval(loadGalleryImages, 5 * 60 * 1000);
   </script>
 </Layout>
