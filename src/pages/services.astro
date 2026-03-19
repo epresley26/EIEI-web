@@ -1,0 +1,425 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Services & Programs - EIEI">
+<style is:global>
+
+    body {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+      gap: 2rem;
+      margin: 3rem auto 3rem;
+      padding: 0 2rem;
+      max-width: 1400px;
+      width: calc(100% - 4rem);
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 1024px) {
+      .programs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .programs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .program-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .program-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    .program-card-header {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      padding: 1.5rem;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .program-card-header h3 {
+      font-size: 1.3rem;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .program-card-body {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .program-description {
+      color: #6b7280;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+
+    .program-benefits {
+      background: #f3f4f6;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .program-benefits h4 {
+      color: #2a4175;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .program-benefits ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .program-benefits li {
+      color: #6b7280;
+      font-size: 0.85rem;
+      padding: 0.25rem 0;
+    }
+
+    .program-benefits li:before {
+      content: "✓ ";
+      color: #fca311;
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+
+    .program-link-btn {
+      display: inline-block;
+      background-color: #fca311;
+      color: #2a4175;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .program-link-btn:hover {
+      background-color: #ff9500;
+    }
+
+    .services-header {
+      width: 100%;
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+      margin: 0;
+      max-width: none;
+      border-radius: 0px;
+    }
+
+    .services-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .services-header p {
+      width: 100%;
+      font-size: 1.1rem;
+      opacity: 0.95;
+      max-width: none;
+      margin: 0 auto;
+    }
+
+    .services-container {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      
+    }
+
+    /* CAROUSEL STYLES */
+    .services-carousel {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      height: 70vh;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      padding: 2rem;
+    }
+
+    .slide-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .slide-content p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
+  
+</style>
+
+
+  
+  
+
+  <!-- SERVICES CAROUSEL -->
+  <section class="services-carousel">
+    <div class="carousel" id="servicesCarousel">
+      <div class="slide active" style="background-image: url('images/slide1.jpg')">
+        <div class="slide-content">
+          <h1>Our Services & Programs</h1>
+          <p>Comprehensive early intervention and special education services</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide2.jpg')">
+        <div class="slide-content">
+          <h1>Empowering Communities</h1>
+          <p>Professional development and support for educators</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide3.jpg')">
+        <div class="slide-content">
+          <h1>Supporting Families</h1>
+          <p>Building inclusive, supportive environments for all</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls" id="carouselControls"></div>
+  </section>
+  <div class="services-header">
+    <h1>Our Services & Programs</h1>
+    <p>Comprehensive early intervention and special education services designed to empower children, families, and communities.</p>
+  </div>
+
+  <!-- SERVICES CONTENT -->
+  <div class="programs-grid" id="programsGrid"></div>
+
+  
+  
+
+  <!-- Header Component -->
+  
+  
+  <!-- Footer Component -->
+  
+
+  <!-- Firebase Init -->
+  
+
+  <script is:inline>
+    let currentSlide = 0;
+    const pageSlides = document.querySelectorAll('#servicesCarousel .slide');
+    const totalSlides = pageSlides.length;
+
+    // Create carousel controls/dots
+    function initCarouselControls() {
+      const controlsContainer = document.getElementById('carouselControls');
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        controlsContainer.appendChild(dot);
+      }
+    }
+
+    function goToSlide(n) {
+      currentSlide = (n + totalSlides) % totalSlides;
+      pageSlides.forEach(slide => slide.classList.remove('active'));
+      pageSlides[currentSlide].classList.add('active');
+      
+      const dots = document.querySelectorAll('.carousel-dot');
+      dots.forEach(dot => dot.classList.remove('active'));
+      dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+      goToSlide(currentSlide + 1);
+    }
+
+    // Auto-rotate carousel every 5 seconds
+    setInterval(nextSlide, 5000);
+
+    // Initialize carousel when page loads
+    window.addEventListener('DOMContentLoaded', function() {
+      initCarouselControls();
+    });
+
+    // Inject header and footer
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerContainer = document.getElementById('header-container');
+      if (headerContainer) {
+        headerContainer.innerHTML = "";
+      }
+
+      const footerContainer = document.getElementById('footer-container');
+      if (footerContainer) {
+        footerContainer.innerHTML = "";
+      }
+
+      // Load and display programs
+      loadAndDisplayPrograms();
+    });
+
+    // Programs data
+    const programsData = [
+      {
+        id: 'career-development',
+        name: 'Career Development Program',
+        description: 'Join our Early Intervention Dream Team! We are NOW HIRING full-time positions with comprehensive benefits.',
+        link: 'career-development.html',
+        benefits: ['Full-time positions', 'Benefits package', 'Professional team', 'Impact work']
+      },
+      {
+        id: 'training-development',
+        name: 'Training, Coaching & Professional Development',
+        description: 'Empowering educators to expand their knowledge of special education and inclusive practices.',
+        link: 'training-development.html',
+        benefits: ['Expert training', 'Custom workshops', 'Ongoing coaching', 'Certification']
+      },
+      {
+        id: 'community-programs',
+        name: 'Community Programs & Partnerships',
+        description: 'Supporting 20+ Early Childhood Education programs through our Pre-K Counts partnership.',
+        link: 'community-programs.html',
+        benefits: ['20+ programs', 'Training support', 'Quality improvement', 'Grant funded']
+      },
+      {
+        id: 'family-empowerment',
+        name: 'Family Empowerment',
+        description: 'Join our vibrant online community where families and educators come together for support.',
+        link: 'family-empowerment.html',
+        benefits: ['Support groups', 'Workshops', 'Resources', 'Community']
+      },
+      {
+        id: 'early-intervention',
+        name: 'Early Intervention Services & Behavioral Health',
+        description: 'Free to low-cost services for children ages 3-5 with comprehensive classroom and in-home support.',
+        link: 'early-intervention.html',
+        benefits: ['Ages 3-5', 'Certified staff', 'In-home & school', 'Therapy support']
+      },
+      {
+        id: 'supporting-inclusions',
+        name: 'Supporting Inclusions Through Programs & Affiliates',
+        description: 'Strategic partnerships with organizations committed to inclusive education and community support.',
+        link: 'supporting-inclusions.html',
+        benefits: ['Partnerships', 'Resources', 'Capacity building', 'Collaboration']
+      },
+      {
+        id: 'cacfp-initiative',
+        name: 'The CACFP Initiative',
+        description: 'Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.',
+        link: 'CACFP.html',
+        benefits: [
+          'Administrative sponsorship & CACFP compliance support',
+          'Nutrition education and menu planning for home‑based programs',
+          'Focus on food and health security for children',
+          'Support for providers serving marginalized communities' ]
+      }
+
+    ];
+
+    function loadAndDisplayPrograms() {
+      const grid = document.getElementById('programsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = programsData.map(program => `
+        <div class="program-card">
+          <div class="program-card-header">
+            <h3>${program.name}</h3>
+          </div>
+          <div class="program-card-body">
+            <p class="program-description">${program.description}</p>
+            <div class="program-benefits">
+              <h4>Key Benefits:</h4>
+              <ul>
+                ${program.benefits.map(benefit => `<li>${benefit}</li>`).join('')}
+              </ul>
+            </div>
+            <a href="${program.link}" class="program-link-btn">Learn More →</a>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+
+</Layout>

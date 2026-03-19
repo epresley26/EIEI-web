@@ -1,0 +1,231 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contact Us - EIEI">
+
+
+
+  
+  
+
+  <!-- CONTACT HEADER -->
+  <div class="contact-header">
+    <img src="/images/contact-hero.svg" alt="Get In Touch" class="contact-header-image" loading="lazy">
+    <div class="contact-header-content">
+      <h1>Get In Touch</h1>
+      <p>Have questions? We'd love to hear from you. Contact us today and let's discuss how we can support you.</p>
+    </div>
+  </div>
+
+  <!-- CONTACT CONTENT -->
+  <div class="contact-container">
+    <div class="contact-grid">
+      <!-- CONTACT FORM -->
+      <div class="contact-form">
+        <h2>Send us a Message</h2>
+        <div class="success-message" id="successMessage">✓ Message sent successfully! We'll get back to you soon.</div>
+        
+        <form onsubmit="handleContactForm(event)">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Phone Number (Optional)</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+          
+          <div class="form-group">
+            <label for="subject">Subject *</label>
+            <input type="text" id="subject" name="subject" placeholder="How can we help?" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" placeholder="Tell us more about your inquiry..." required></textarea>
+          </div>
+          
+          <button type="submit" class="primary-btn">Send Message</button>
+        </form>
+      </div>
+
+      <!-- CONTACT INFO -->
+      <div class="contact-info">
+        <!-- PHONE -->
+        <div class="info-card">
+          <h3>📞 Phone</h3>
+          <p>Call us to speak with our team:</p>
+          <a href="tel:4845667311">484-566-7311</a>
+          <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">Secondary line: 484-501-9101</p>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="info-card">
+          <h3>📧 Email</h3>
+          <p>Reach out via email anytime:</p>
+          <a href="mailto:admin@eiforei.org">admin@eiforei.org</a>
+          <p style="margin-top: 0.5rem;"><a href="mailto:info@eiforei.org">info@eiforei.org</a></p>
+        </div>
+
+        <!-- ADDRESS -->
+        <div class="info-card">
+          <h3>📍 Locations</h3>
+          <p><strong>The Education Institute for Early Intervention (EIEI)</strong></p>
+          <p>
+            4704 Leiper St.<br>
+            Philadelphia, PA 19124
+          </p>
+          <p style="margin-top: 0.75rem;">
+            5024 Penn St.<br>
+            Philadelphia, PA 19124
+          </p>
+          <p style="margin-top: 0.75rem;">
+            252 Melrose Ave.<br>
+            Lansdowne, PA 19050
+          </p>
+        </div>
+
+        <!-- SOCIAL MEDIA -->
+        <div class="info-card">
+          <h3>🌐 Connect With Us</h3>
+          <p>Follow us on social media for updates and resources:</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/TheEducationInstituteforEarlyIntervention/" target="_blank" title="Facebook">f</a>
+            <a href="https://www.instagram.com/eieiorg/" target="_blank" title="Instagram">📷</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-section">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3058.5656394155207!2d-75.1259188!3d39.9859157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c6c8d8d8d8d8d9%3A0x0!2s4704%20Leiper%20Street%2C%20Philadelphia%2C%20PA%2019124!5e0!3m2!1sen!2sus!4v1234567890" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <!-- SERVICE AREAS -->
+    <div style="margin-top: 3rem; background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+      <h2 style="color: var(--brand-blue); margin-bottom: 1.5rem;">Service Areas</h2>
+      <p style="margin-bottom: 1.5rem;">We provide comprehensive early intervention and special education services throughout the Philadelphia area and Pennsylvania, including:</p>
+      
+      <div class="contact-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="location-card">
+          <h4>In-School Services</h4>
+          <p>Classroom-based interventions and support for students with special needs</p>
+        </div>
+        <div class="location-card">
+          <h4>In-Home Services</h4>
+          <p>One-on-one therapy and coaching in the comfort of your home</p>
+        </div>
+        <div class="location-card">
+          <h4>Community Programs</h4>
+          <p>Partnership with ECE programs and childcare centers throughout the state</p>
+        </div>
+        <div class="location-card">
+          <h4>Professional Training</h4>
+          <p>Staff development and training for educational professionals</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  <script is:inline>
+    // Load components when DOM is ready
+    
+
+    async function handleContactForm(event) {
+      event.preventDefault();
+      const form = event.target;
+      const name = form.querySelector('#name').value.trim();
+      const email = form.querySelector('#email').value.trim();
+      const phone = form.querySelector('#phone').value.trim();
+      const subject = form.querySelector('#subject').value.trim();
+      const message = form.querySelector('#message').value.trim();
+      
+      if (!(name && email && subject && message)) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      const data = {
+        name,
+        email: email.toLowerCase(),
+        phone: phone || '',
+        subject,
+        message,
+        createdAt: new Date().toISOString(),
+        source: 'contact-us'
+      };
+
+      // Prefer Firebase SDK if available
+      if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
+        try {
+          await window.firebaseDB.collection('contacts').add({
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            subject: data.subject,
+            message: data.message,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            source: data.source
+          });
+        } catch (e) {
+          console.warn('SDK write failed, falling back to REST', e);
+          await writeContactREST(data);
+        }
+      } else {
+        await writeContactREST(data);
+      }
+
+      const successMsg = document.getElementById('successMessage');
+      successMsg.classList.add('show');
+      form.reset();
+      setTimeout(() => successMsg.classList.remove('show'), 5000);
+    }
+
+    async function writeContactREST(data) {
+      try {
+        const PROJECT_ID = 'eiei-e1a76';
+        const body = {
+          fields: {
+            name: { stringValue: data.name },
+            email: { stringValue: data.email },
+            phone: { stringValue: data.phone },
+            subject: { stringValue: data.subject },
+            message: { stringValue: data.message },
+            createdAt: { timestampValue: data.createdAt },
+            source: { stringValue: data.source }
+          }
+        };
+        const res = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/contacts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) {
+          const txt = await res.text();
+          console.error('Contact REST write failed:', res.status, txt);
+          throw new Error('REST write failed');
+        }
+      } catch (err) {
+        console.error('Contact submit error:', err);
+      }
+    }
+  </script>
+
+</Layout>

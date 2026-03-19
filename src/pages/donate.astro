@@ -1,0 +1,929 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Donate - EIEI">
+<style is:global>
+
+    .page-shell {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .page-breadcrumb {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+
+    .page-breadcrumb a {
+      color: #2a4175;
+      text-decoration: none;
+    }
+
+    .page-breadcrumb a:hover {
+      color: #fca311;
+    }
+
+    .donate-hero-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2.5rem 2.25rem;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+
+    .donate-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #2a4175;
+      background: rgba(37, 99, 235, 0.08);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 0.9rem;
+    }
+
+    .donate-title {
+      color: #2a4175;
+      font-size: 2.1rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+
+    .donate-subtitle {
+      font-size: 1.02rem;
+      color: #4b5563;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .donate-hero-highlight {
+      font-size: 0.95rem;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .donate-section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 2rem 2rem 2.2rem;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      margin-bottom: 2rem;
+    }
+
+    .donate-section-title {
+      color: #2a4175;
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      border-bottom: 3px solid #fca311;
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .donate-section p {
+      font-size: 0.97rem;
+      color: #111827;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .donate-list {
+      list-style: none;
+      margin: 0 0 1.2rem 0;
+      padding: 0;
+    }
+
+    .donate-list li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.95rem;
+      color: #111827;
+      line-height: 1.6;
+    }
+
+    .donate-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #fca311;
+      font-weight: 700;
+    }
+
+    .donate-amount-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .donate-amount-card {
+      border-radius: 999px;
+      padding: 0.85rem 1rem;
+      text-align: center;
+      border: 1px solid rgba(209, 213, 219, 0.95);
+      cursor: default;
+      background: #f9fafb;
+      font-size: 0.95rem;
+      color: #111827;
+      font-weight: 500;
+    }
+
+    .donate-amount-card span {
+      display: block;
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-weight: 400;
+    }
+
+    .donate-cta-inline {
+      margin-top: 1.2rem;
+    }
+
+    .donate-button {
+      display: inline-block;
+      background: #fca311;
+      color: #2a4175;
+      padding: 0.8rem 2rem;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .donate-button:hover {
+      background: #ff9500;
+      transform: translateY(-2px);
+    }
+
+    .donate-quote {
+      background: #f8fafc;
+      border-radius: 10px;
+      border-left: 4px solid #fca311;
+      padding: 1.3rem 1.4rem;
+      margin: 1.5rem 0 0.5rem;
+      font-size: 0.96rem;
+      color: #374151;
+      font-style: italic;
+    }
+
+    .donate-quote-author {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #2a4175;
+      text-align: right;
+    }
+
+    .marketplace-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+
+    .marketplace-card {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 1.2rem 1.1rem;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+    }
+
+    .marketplace-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.3rem;
+    }
+
+    .marketplace-card-desc {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.4rem;
+    }
+
+    .marketplace-card-tag {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #2a4175;
+    }
+
+    .donor-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.3rem;
+      margin-top: 1rem;
+    }
+
+    .donor-box {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 1.1rem 1.1rem;
+      border: 1px dashed rgba(209, 213, 219, 0.9);
+      font-size: 0.9rem;
+      color: #111827;
+    }
+
+    .donor-box strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: #2a4175;
+      font-size: 0.9rem;
+    }
+
+    .donate-final-cta {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 2.3rem 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .donate-final-cta h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+
+    .donate-final-cta p {
+      font-size: 0.98rem;
+      opacity: 0.96;
+      max-width: 520px;
+      margin: 0 auto 1.4rem;
+    }
+
+    @media (max-width: 640px) {
+      .donate-hero-card,
+      .donate-section,
+      .donate-final-cta {
+        padding: 1.6rem 1.4rem 1.7rem;
+      }
+
+      .donate-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* Reuse services hero carousel styles if not already global */
+    .services-carousel {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      height: 50vh;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      padding: 2rem;
+    }
+
+    .slide-content h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .slide-content p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
+    .marketplace-filters {
+  max-width: 1200px;
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.marketplace-filters input {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--card-bg);
+  color: var(--text);
+  flex: 1;
+  min-width: 250px;
+}
+
+.marketplace-filters input::placeholder {
+  color: var(--text-muted);
+}
+
+.marketplace-items {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.marketplace-item {
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.marketplace-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.marketplace-item-image {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 3rem;
+  overflow: hidden;
+}
+
+.marketplace-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.marketplace-item-content {
+  padding: 1.5rem;
+}
+
+.marketplace-item-category {
+  color: var(--brand-orange);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.marketplace-item-title {
+  color: var(--brand-blue);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.marketplace-item-description {
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.marketplace-item-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.price-tag {
+  color: var(--brand-orange);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.marketplace-item-footer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.marketplace-item-footer button {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.btn-view {
+  background: var(--brand-blue);
+  color: white;
+}
+
+.btn-view:hover {
+  opacity: 0.9;
+}
+
+.btn-contact {
+  background: var(--brand-orange);
+  color: white;
+}
+
+.btn-contact:hover {
+  opacity: 0.9;
+}
+
+/* Modal styles reused */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.modal-header h2 {
+  color: var(--brand-blue);
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.close-btn:hover {
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .marketplace-items {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .marketplace-filters {
+    flex-direction: column;
+  }
+
+  .marketplace-filters input {
+    min-width: auto;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 1.5rem;
+  }
+}
+
+  
+</style>
+
+  <!-- HEADER -->
+  
+
+  <!-- HERO CAROUSEL (optional – matches services look) -->
+  <section class="services-carousel">
+    <div class="carousel" id="servicesCarousel">
+      <div class="slide active" style="background-image: url('images/slide1.jpg')">
+        <div class="slide-content">
+          <h1>Donate to EIEI</h1>
+          <p>Your support fuels inclusive classrooms, family empowerment, and early intervention.</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide2.jpg')">
+        <div class="slide-content">
+          <h1>Transform a Child’s Story</h1>
+          <p>Help us create safe, sensory-rich spaces for children with diverse abilities.</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide3.jpg')">
+        <div class="slide-content">
+          <h1>Support Communities</h1>
+          <p>Invest in training, coaching, and programs that uplift children, families, and providers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls" id="carouselControls"></div>
+  </section>
+
+  <main class="page-shell">
+    <div class="page-breadcrumb">
+      <a href="/">Home</a> / Donate
+    </div>
+
+    <!-- HERO CARD -->
+    <section class="donate-hero-card">
+      <div class="donate-tag">Give • Support • Sponsor</div>
+      <h1 class="donate-title">Donate to The Education Institute for Early Intervention</h1>
+      <p class="donate-subtitle">
+        Your generosity helps us create inclusive classrooms, provide specialized resources, and deliver early intervention
+        services so every child with diverse abilities can learn, grow, and thrive.
+      </p>
+      <p class="donate-hero-highlight">
+        Together, we are raising funds to expand specialized classrooms, support the CACFP Initiative, and provide training
+        for educators and families.
+      </p>
+    </section>
+
+    <!-- SECTION: FUNDRAISING / SUPPORT -->
+    <section class="donate-section">
+      <h2 class="donate-section-title">Make a Gift</h2>
+      <p>
+        Every contribution—big or small—directly supports children with diverse abilities through adaptive classrooms, sensory
+        spaces, communication devices, and access to highly trained professionals.
+      </p>
+      <p>
+        Your donation helps us reduce expulsions and suspensions, create inclusive early childhood environments, and provide
+        the specialized tools children need to communicate, self-regulate, and succeed.
+      </p>
+
+      <div class="donate-amount-grid">
+        <div class="donate-amount-card">
+          $25
+          <span>Classroom supplies and learning materials</span>
+        </div>
+        <div class="donate-amount-card">
+          $50
+          <span>Therapeutic toys and sensory tools</span>
+        </div>
+        <div class="donate-amount-card">
+          $100
+          <span>Training session for educators or caregivers</span>
+        </div>
+        <div class="donate-amount-card">
+          $250+
+          <span>Supports specialized equipment and technology</span>
+        </div>
+      </div>
+
+      <div class="donate-cta-inline">
+        <!-- Replace href with your actual donation platform link -->
+        <a href="https://eieiservices.com/support/" target="_blank" class="donate-button">Donate Online</a>
+      </div>
+
+      <div class="donate-quote">
+        “Your support, whether big or small, directly impacts the lives of children with diverse abilities and helps us build
+        classrooms where every child feels seen, supported, and celebrated.”
+      </div>
+      <div class="donate-quote-author">— The EIEI Team</div>
+    </section>
+
+    <!-- SECTION: SPONSORSHIPS / MARKETPLACE MERGE -->
+    <section class="donate-section">
+        <h2 class="donate-section-title">Marketplace: Discover Items That Support EIEI</h2>
+        <p>
+          Browse resources, materials, and services that directly support EIEI. Each item in our Marketplace helps fund our
+          programs for children, families, and providers.
+        </p>
+      
+        <div class="marketplace-header" style="text-align:left; border-bottom:none; padding:0; margin:1rem 0 1.5rem 0;">
+          <p style="color:var(--text-muted); font-size:0.95rem; margin:0;">
+            Use the search bar below to find specific items, categories, or opportunities.
+          </p>
+        </div>
+      
+        <div class="marketplace-filters" style="padding:0; margin:1rem 0 1.5rem 0; max-width:none;">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search marketplace items..." 
+            onkeyup="filterItems()"
+          >
+        </div>
+      
+        <div class="marketplace-items" id="itemsContainer">
+          <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">
+            Loading marketplace items...
+          </div>
+        </div>
+      </section>
+      
+      <!-- Item details modal (place once near bottom of donate.html, outside sections but inside <main>) -->
+      <div id="itemModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="modalTitle">Item Details</h2>
+            <button class="close-btn" onclick="closeItemModal()">&times;</button>
+          </div>
+          <div id="modalBody">
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+      
+
+    <!-- SECTION: OTHER WAYS TO GIVE -->
+    <section class="donate-section">
+      <h2 class="donate-section-title">Other Ways to Give</h2>
+      <p>You can also support EIEI through in-kind donations, monthly giving, and community fundraisers.</p>
+
+      <ul class="donate-list">
+        <li>Host a fundraiser with your school, workplace, faith community, or neighborhood group.</li>
+        <li>Donate new sensory toys, classroom materials, or technology that supports communication and learning.</li>
+        <li>Become a monthly donor to sustain ongoing classroom, training, and family support initiatives.</li>
+      </ul>
+
+      <div class="donor-info-grid">
+        <div class="donor-box">
+          <strong>Mail a Check</strong>
+          Make checks payable to:<br />
+          The Education Institute for Early Intervention (EIEI)<br />
+          4704 Leiper Street<br />
+          Philadelphia, PA 19124
+        </div>
+        <div class="donor-box">
+          <strong>Questions About Giving?</strong>
+          Email: admin@eiforei.org<br />
+          Phone: 484-566-7311<br />
+          Our team is happy to help you explore the best way to support our mission.
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="donate-final-cta">
+      <h2>Thank You for Supporting EIEI</h2>
+      <p>
+        Your generosity helps us create inclusive, joyful learning environments where children with diverse abilities are
+        nurtured, supported, and empowered to succeed.
+      </p>
+      <a href="https://eieiservices.com/support/" target="_blank" class="donate-button">Make Your Donation Today</a>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  
+
+  
+  
+
+  <script is:inline>
+    // Hero carousel logic (same as services)
+    let currentSlide = 0;
+    const pageSlides = document.querySelectorAll('#servicesCarousel .slide');
+    const totalSlides = pageSlides.length;
+
+    function initCarouselControls() {
+      const controlsContainer = document.getElementById('carouselControls');
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        controlsContainer.appendChild(dot);
+      }
+    }
+
+    function goToSlide(n) {
+      currentSlide = (n + totalSlides) % totalSlides;
+      pageSlides.forEach(slide => slide.classList.remove('active'));
+      pageSlides[currentSlide].classList.add('active');
+
+      const dots = document.querySelectorAll('.carousel-dot');
+      dots.forEach(dot => dot.classList.remove('active'));
+      dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+      goToSlide(currentSlide + 1);
+    }
+
+    setInterval(nextSlide, 5000);
+
+    window.addEventListener('DOMContentLoaded', function() {
+      initCarouselControls();
+    });
+
+    // Inject header & footer
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerContainer = document.getElementById('header-container');
+      if (headerContainer) headerContainer.innerHTML = "";
+
+      const footerContainer = document.getElementById('footer-container');
+      if (footerContainer) footerContainer.innerHTML = "";
+    });
+    
+  let allItems = [];
+
+  async function loadMarketplaceItems() {
+    try {
+      const snapshot = await window.firebaseDB
+        .collection('marketplace')
+        .orderBy('createdAt', 'desc')
+        .get();
+
+      allItems = [];
+      snapshot.forEach(doc => {
+        allItems.push({ id: doc.id, ...doc.data() });
+      });
+
+      displayItems(allItems);
+    } catch (error) {
+      console.error('Error loading items:', error);
+      document.getElementById('itemsContainer').innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+          <p style="color: var(--text-muted);">Unable to load marketplace items. Please try again later.</p>
+        </div>
+      `;
+    }
+  }
+
+  function displayItems(items) {
+    const container = document.getElementById('itemsContainer');
+
+    if (!container) return;
+
+    if (items.length === 0) {
+      container.innerHTML = `
+        <div class="marketplace-empty" style="grid-column: 1/-1; text-align:center; padding:4rem 2rem; color:var(--text-muted);">
+          <h3 style="color:var(--text); margin-bottom:1rem;">No items found</h3>
+          <p>Check back soon for new items!</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = items.map(item => `
+      <div class="marketplace-item">
+        <div class="marketplace-item-image">
+          ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title}">` : '📦'}
+        </div>
+        <div class="marketplace-item-content">
+          <div class="marketplace-item-category">${item.category || 'General'}</div>
+          <div class="marketplace-item-title">${item.title}</div>
+          <div class="marketplace-item-description">${item.description}</div>
+          <div class="marketplace-item-price">
+            <span class="price-tag">$${parseFloat(item.price).toFixed(2)}</span>
+          </div>
+          <div class="marketplace-item-footer">
+            <button class="btn-view" onclick="viewItemDetails('${item.id}')">View Details</button>
+            <button class="btn-contact" onclick="contactSeller('${item.id}')">Contact</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterItems() {
+    const input = document.getElementById('searchInput');
+    if (!input) return;
+
+    const searchTerm = input.value.toLowerCase();
+    const filtered = allItems.filter(item =>
+      item.title.toLowerCase().includes(searchTerm) ||
+      item.description.toLowerCase().includes(searchTerm) ||
+      (item.category || '').toLowerCase().includes(searchTerm)
+    );
+    displayItems(filtered);
+  }
+
+  function viewItemDetails(itemId) {
+    const item = allItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    const modalBody = document.getElementById('modalBody');
+    if (!modalBody) return;
+
+    modalBody.innerHTML = `
+      <div style="text-align: center;">
+        <div style="width: 100%; height: 300px; background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; margin-bottom: 1.5rem; overflow: hidden;">
+          ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">` : '📦'}
+        </div>
+      </div>
+      <div style="margin-bottom: 1.5rem;">
+        <p style="color: var(--brand-orange); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 0.5rem;">${item.category || 'General'}</p>
+        <h3 style="color: var(--brand-blue); margin: 0 0 0.5rem 0;">${item.title}</h3>
+        <p style="color: var(--text); margin: 0; line-height: 1.6;">${item.description}</p>
+      </div>
+      <div style="background: var(--bg-alt); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 0.5rem 0;">Price</p>
+        <p style="color: var(--brand-orange); font-size: 1.8rem; font-weight: 700; margin: 0;">$${parseFloat(item.price).toFixed(2)}</p>
+      </div>
+      ${item.contactEmail ? `<div style="color: var(--text-muted); font-size: 0.9rem;">Contact: ${item.contactEmail}</div>` : ''}
+      ${item.availability ? `<div style="color: var(--text); margin-top: 1rem;"><strong>Availability:</strong> ${item.availability}</div>` : ''}
+    `;
+
+    const modal = document.getElementById('itemModal');
+    if (modal) modal.classList.add('active');
+  }
+
+  function closeItemModal() {
+    const modal = document.getElementById('itemModal');
+    if (modal) modal.classList.remove('active');
+  }
+
+  function contactSeller(itemId) {
+    const item = allItems.find(i => i.id === itemId);
+    if (!item || !item.contactEmail) {
+      alert('Contact information not available');
+      return;
+    }
+    window.location.href = `mailto:${item.contactEmail}?subject=Interested in: ${item.title}`;
+  }
+
+  document.getElementById('itemModal')?.addEventListener('click', function(event) {
+    if (event.target === this) {
+      closeItemModal();
+    }
+  });
+
+  window.addEventListener('load', loadMarketplaceItems);
+</script>
+
+  
+
+</Layout>

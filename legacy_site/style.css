@@ -3228,3 +3228,73 @@ input:focus, textarea:focus, select:focus {
     margin-left: auto;
   }
 }
+.card {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Image wrapper with gradient and overlay title */
+.card-image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Image */
+.card-image {
+  display: block;
+  width: 100%;
+  height: 240px;       /* adjust as needed */
+  object-fit: cover;
+}
+
+/* Gradient on image only */
+.card-image-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0)
+  );
+  z-index: 1;
+}
+
+/* h3 over image */
+.card-title-overlay {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  margin: 0;
+  z-index: 2;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+/* Paragraph stays as normal card body */
+.card > p {
+  margin: 1rem 1.25rem 1.25rem;
+  color: var(--muted-text, #555);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Optional hover polish */
+.card:hover .card-image {
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-image-wrap::after {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.05)
+  );
+  transition: background 0.3s ease;
+}

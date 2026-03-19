@@ -1,0 +1,633 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Career Opportunities - EIEI">
+<style is:global>
+
+    /* Application Modal Styles */
+    .app-modal-content {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 88%;
+      max-width: 1400px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: row;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+      z-index: 2000;
+      box-sizing: border-box;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1999;
+    }
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    
+
+    .app-modal-left {
+      flex: 0 0 auto;
+      min-width: 380px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+      padding: 2.5rem 2rem;
+      border-right: 1px solid #e0e0e0;
+      overflow-y: auto;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    .job-details-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-label {
+      font-size: 0.85rem;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.4rem;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      color: var(--brand-blue);
+      font-weight: 600;
+    }
+
+    .job-description-section {
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+    }
+
+    .app-modal-right {
+      flex: 1 1 auto;
+      padding: 2.5rem 2.5rem;
+      overflow-y: auto;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    .app-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .app-modal-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: #999;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+      color: var(--brand-blue);
+    }
+
+    @media (max-width: 1024px) {
+      .app-modal-content {
+        flex-direction: column;
+      }
+
+      .app-modal-left {
+        flex: 0 0 auto;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        max-height: 300px;
+      }
+
+      .app-modal-right {
+        flex: 0 0 auto;
+        overflow-y: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-modal-content {
+        width: 95%;
+        max-height: 90vh;
+      }
+
+      .app-modal-left,
+      .app-modal-right {
+        padding: 1.5rem;
+      }
+
+      .app-modal-header {
+        margin-bottom: 1rem;
+      }
+    }
+  
+</style>
+
+
+  
+  
+
+  <!-- CAREER HEADER -->
+  <div class="career-header">
+    <img src="/images/team.svg" alt="Join Our Team" class="career-header-image" loading="lazy">
+    <div class="career-header-content">
+      <h1>Join Our Dream Team</h1>
+      <p>Are you ready to wake up every day knowing you're making a real difference in young children's lives? Join EIEI and be part of a mission that truly matters.</p>
+    </div>
+  </div>
+
+  <!-- MISSION SECTION -->
+  <section class="mission-section">
+    <div class="mission-image">
+      <img src="/images/workplace.svg" alt="Workplace Culture at EIEI" loading="lazy">
+    </div>
+    <div class="mission-content">
+      <h2>Why Work at EIEI?</h2>
+      <div class="mission-boxes">
+        <div class="mission-box">
+          <h3>Embrace a Heartfelt Mission</h3>
+          <p>Joining EIEI is not just about a job – it's about embracing a mission close to your heart. Help shape young children's lives and give them a fighting chance to succeed.</p>
+        </div>
+        <div class="mission-box">
+          <h3>Nurturing Young Minds</h3>
+          <p>We see future artists, scientists, teachers, and leaders. The laughter, breakthrough moments, and small victories are all part of a beautiful journey, and you're never on it alone.</p>
+        </div>
+        <div class="mission-box">
+          <h3>Together We Thrive</h3>
+          <p>Our EIEI family thrives on teamwork, mutual respect, and shared passion. We constantly learn from one another, update our methods, and innovate together.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK-LIFE BALANCE -->
+  <section class="perks">
+    <div class="perks-image">
+      <img src="/images/training.svg" alt="Professional Training" loading="lazy">
+    </div>
+    <div class="perks-content">
+      <h2>Exceptional Work-Life Balance</h2>
+      <div class="perks-list">
+        <div class="perk">
+          <h4>33 Days Off Annually</h4>
+          <p>9 deep clean days, 3 weeks of vacation, and regular professional development time</p>
+        </div>
+        <div class="perk">
+          <h4>Flexible Scheduling</h4>
+          <p>Morning, afternoon, evening, and weekend shifts available. Full-time and part-time options</p>
+        </div>
+        <div class="perk">
+          <h4>$500 Signing Bonus</h4>
+          <p>New employees receive a $500 bonus after 100 school days of employment</p>
+        </div>
+        <div class="perk">
+          <h4>Professional Growth</h4>
+          <p>Continuous training, supervision, and development opportunities</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSITIONS AVAILABLE -->
+  <section class="positions-section">
+    <h2>Current Openings</h2>
+    <div id="jobs-container"></div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="benefits-section">
+    <div class="benefits-content">
+      <h2>Comprehensive Benefits Package</h2>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <strong>Medical Benefits</strong>
+          <p>Comprehensive health coverage</p>
+        </div>
+        <div class="benefit-item">
+          <strong>Dental Insurance</strong>
+          <p>Full dental coverage for you and family</p>
+        </div>
+        <div class="benefit-item">
+          <strong>403(b) Retirement Plan</strong>
+          <p>3% company contribution</p>
+        </div>
+        <div class="benefit-item">
+          <strong>Federal Student Loan Forgiveness</strong>
+          <p>Public Service Loan Forgiveness Program</p>
+        </div>
+        <div class="benefit-item">
+          <strong>529 Plans for Children</strong>
+          <p>Education savings plans</p>
+        </div>
+        <div class="benefit-item">
+          <strong>Employee Assistance Program</strong>
+          <p>Mental health and wellness support</p>
+        </div>
+        <div class="benefit-item">
+          <strong>Life Insurance</strong>
+          <p>Protection for your family</p>
+        </div>
+        <div class="benefit-item">
+          <strong>Productivity Awards</strong>
+          <p>Earn up to $300 per quarter</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT FOR QUESTIONS -->
+  <section class="section">
+    <div style="text-align: center; background: var(--card-bg); padding: 2rem; border-radius: 12px;">
+      <h3 style="color: var(--brand-blue); margin-bottom: 1rem;">Have Questions?</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Contact us directly - we'd love to hear from you!</p>
+      <a href="tel:4845667311" style="display: inline-block; margin-right: 2rem; color: var(--brand-blue); text-decoration: none; font-weight: 600;">📞 Call Now</a>
+      <a href="mailto:admin@eiforei.org" style="display: inline-block; color: var(--brand-blue); text-decoration: none; font-weight: 600;">📧 Email Us</a>
+    </div>
+  </section>
+
+  <!-- APPLICATION MODAL -->
+  <div id="applicationModal" class="modal" style="display: none;">
+    <div class="app-modal-content">
+      <div class="app-modal-left">
+        <h3 id="modalJobTitle" style="color: var(--brand-blue); font-size: 1.3rem; margin-bottom: 1.5rem;"></h3>
+        <div class="job-details-section">
+          <div class="detail-item">
+            <span class="detail-label">Position Type</span>
+            <span class="detail-value" id="modalJobType">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Location</span>
+            <span class="detail-value" id="modalJobLocation">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Salary</span>
+            <span class="detail-value" id="modalJobSalary">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Employment Type</span>
+            <span class="detail-value" id="modalJobEmploymentType">-</span>
+          </div>
+        </div>
+        <div class="job-description-section">
+          <h4 style="margin-bottom: 1rem; color: var(--brand-blue);">Job Description</h4>
+          <p id="modalJobDescription" style="line-height: 1.6; color: #666;"></p>
+        </div>
+      </div>
+      <div class="app-modal-right">
+        <div class="app-modal-header">
+          <h3 style="color: var(--brand-blue);">Application Form</h3>
+          <span class="close-modal" onclick="closeApplicationModal()">&times;</span>
+        </div>
+        <form id="applicationForm" onsubmit="submitJobApplication(event)">
+          <div class="form-group">
+            <label for="appName">Full Name *</label>
+            <input type="text" id="appName" required>
+          </div>
+          <div class="form-group">
+            <label for="appEmail">Email Address *</label>
+            <input type="email" id="appEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="appPhone">Phone Number *</label>
+            <input type="tel" id="appPhone" required>
+          </div>
+          <div class="form-group">
+            <label for="appExperience">Years of Experience *</label>
+            <input type="number" id="appExperience" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="appResume">Resume/CV (URL) *</label>
+            <input type="text" id="appResume" placeholder="https://example.com/resume.pdf">
+          </div>
+          <div class="form-group">
+            <label for="appResumeFile">Or Upload Resume File</label>
+            <input type="file" id="appResumeFile" accept=".pdf,.doc,.docx" />
+            <small style="color: #999; display: block; margin-top: 0.5rem;">PDF or Word document (max 10MB)</small>
+          </div>
+          <div class="form-group">
+            <label for="appCoverLetter">Cover Letter</label>
+            <textarea id="appCoverLetter" rows="3" placeholder="Tell us why you're interested in this position..."></textarea>
+          </div>
+          <button type="submit" class="primary-btn" style="width: 100%; margin-top: 1rem;">Submit Application</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  
+  
+
+  
+  
+  
+  
+  
+  <script is:inline>
+    // Load components when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      loadJobOpenings();
+    });
+
+    async function loadJobOpenings() {
+      try {
+        const db = firebase.firestore();
+        const jobsSnapshot = await db.collection('jobs')
+          .orderBy('postedAt', 'desc')
+          .get();
+
+        const jobsContainer = document.getElementById('jobs-container');
+        
+        if (jobsSnapshot.empty) {
+          jobsContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No job openings available at this time. Please check back soon!</p>';
+          return;
+        }
+
+        jobsContainer.innerHTML = '';
+        jobsSnapshot.forEach(doc => {
+          const job = doc.data();
+          const jobId = doc.id;
+          const requirementsList = Array.isArray(job.requirements) 
+            ? job.requirements.join('\n') 
+            : job.requirements || '';
+          
+          const requirementsHTML = requirementsList
+            .split('\n')
+            .filter(item => item.trim())
+            .map(item => `<li>${item.trim()}</li>`)
+            .join('');
+
+          const jobCard = document.createElement('div');
+          jobCard.className = 'position-card';
+          jobCard.innerHTML = `
+            <h3>${job.title}</h3>
+            <div class="position-meta">
+              <span class="job-type">${job.type}</span>
+              <span class="job-location">${job.location}</span>
+            </div>
+            ${job.salary ? `<div class="position-salary">${job.salary}</div>` : ''}
+            <p>${job.description}</p>
+            ${requirementsHTML ? `<ul>${requirementsHTML}</ul>` : ''}
+            <button class="primary-btn apply-now-btn" data-job-id="${jobId}" style="margin-top: 1.5rem;">Apply Now</button>
+          `;
+          
+          // Store full job data on the card
+          const applyBtn = jobCard.querySelector('.apply-now-btn');
+          applyBtn.dataset.jobData = JSON.stringify(job);
+          applyBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const jId = this.dataset.jobId;
+            const jData = JSON.parse(this.dataset.jobData);
+            const jTitle = jData.title;
+            openApplicationModal(jId, jTitle, jData);
+          });
+          
+          jobsContainer.appendChild(jobCard);
+        });
+      } catch (error) {
+        console.error('Error loading jobs:', error);
+        const jobsContainer = document.getElementById('jobs-container');
+        jobsContainer.innerHTML = '<p style="color: red;">Error loading job openings. Please try again later.</p>';
+      }
+    }
+
+    let currentJobId = null;
+
+    function openApplicationModal(jobId, jobTitle, jobData) {
+      currentJobId = jobId;
+      document.getElementById('modalJobTitle').textContent = jobTitle;
+      document.getElementById('modalJobType').textContent = jobData.type || '-';
+      document.getElementById('modalJobLocation').textContent = jobData.location || '-';
+      document.getElementById('modalJobSalary').textContent = jobData.salary || '-';
+      document.getElementById('modalJobEmploymentType').textContent = jobData.employmentType || 'Full-time';
+      document.getElementById('modalJobDescription').textContent = jobData.description || 'No description available';
+      document.getElementById('applicationModal').style.display = 'flex';
+    }
+
+    function closeApplicationModal() {
+      document.getElementById('applicationModal').style.display = 'none';
+      document.getElementById('applicationForm').reset();
+      currentJobId = null;
+    }
+
+    async function submitJobApplication(event) {
+      event.preventDefault();
+      
+      if (!currentJobId) {
+        alert('Error: Job ID not found. Please try again.');
+        return;
+      }
+
+      const name = document.getElementById('appName').value.trim();
+      const email = document.getElementById('appEmail').value.trim();
+      const phone = document.getElementById('appPhone').value.trim();
+      const experience = document.getElementById('appExperience').value;
+      const resumeUrl = document.getElementById('appResume').value.trim();
+      const resumeFile = document.getElementById('appResumeFile').files[0];
+      const coverLetter = document.getElementById('appCoverLetter').value.trim();
+
+      // Require either URL or file
+      if (!name || !email || !phone || !experience || (!resumeUrl && !resumeFile)) {
+        alert('Please fill in all required fields and provide either a resume URL or upload a resume file.');
+        return;
+      }
+
+      try {
+        let applicationData = {
+          jobId: currentJobId,
+          name: name,
+          email: email,
+          phone: phone,
+          experience: parseInt(experience),
+          coverLetter: coverLetter,
+          appliedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          status: 'pending'
+        };
+
+        // If file is provided, convert to base64 and store
+        if (resumeFile) {
+          // Validate file size (10MB)
+          const maxSize = 10 * 1024 * 1024;
+          if (resumeFile.size > maxSize) {
+            alert("Resume file is too large. Maximum size is 10MB.");
+            return;
+          }
+
+          // Validate file type
+          const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+          if (!allowedTypes.includes(resumeFile.type)) {
+            alert("Please upload a PDF or Word document (.pdf, .doc, .docx)");
+            return;
+          }
+
+          // Convert file to base64
+          const reader = new FileReader();
+          const resumeBase64 = await new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(resumeFile);
+          });
+
+          applicationData.resumeFileName = resumeFile.name;
+          applicationData.resumeSize = resumeFile.size;
+          applicationData.resumeMimeType = resumeFile.type;
+          applicationData.resumeData = resumeBase64;
+        } else if (resumeUrl) {
+          // If URL provided instead
+          applicationData.resumeUrl = resumeUrl;
+        }
+
+        const db = firebase.firestore();
+        const docRef = await db.collection('job_applications').add(applicationData);
+
+        alert('Application submitted successfully! We will review it and contact you soon.');
+        closeApplicationModal();
+      } catch (error) {
+        console.error('Error submitting application:', error);
+        alert(`Error submitting application: ${error.message}`);
+      }
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('applicationModal');
+      if (event.target === modal) {
+        closeApplicationModal();
+      }
+    }
+
+    function handleCareerApplication(event) {
+      event.preventDefault();
+      const form = event.target;
+      const name = form.querySelector('#name').value.trim();
+      const email = form.querySelector('#email').value.trim();
+      const phone = form.querySelector('#phone').value.trim();
+      const position = form.querySelector('#position').value;
+      const location = form.querySelector('#location').value;
+      const message = form.querySelector('#message').value.trim();
+      const resumeFile = form.querySelector('#resume').files[0];
+      
+      if (!name || !email || !phone || !position || !location || !message || !resumeFile) {
+        alert("Please fill in all required fields including resume upload.");
+        return;
+      }
+
+      // Validate file size (5MB for Firestore storage)
+      const maxSize = 5 * 1024 * 1024;
+      if (resumeFile.size > maxSize) {
+        alert("Resume file is too large. Maximum size is 5MB.");
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (!allowedTypes.includes(resumeFile.type)) {
+        alert("Please upload a PDF or Word document (.pdf, .doc, .docx)");
+        return;
+      }
+
+      // Show progress
+      const progressDiv = document.getElementById('uploadProgress');
+      const progressText = document.getElementById('progressText');
+      const progressBar = document.getElementById('progressBar');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      progressDiv.style.display = 'block';
+      submitBtn.disabled = true;
+      progressText.textContent = 'Processing your application...';
+      progressBar.style.width = '30%';
+
+      // Convert file to base64
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        progressBar.style.width = '60%';
+        progressText.textContent = 'Saving to database...';
+        
+        const resumeBase64 = e.target.result;
+        
+        if (window.firebaseDB) {
+          window.firebaseDB.collection('careerApplications').add({
+            name,
+            email,
+            phone,
+            position,
+            location,
+            coverLetter: message,
+            resumeFileName: resumeFile.name,
+            resumeSize: resumeFile.size,
+            resumeMimeType: resumeFile.type,
+            resumeData: resumeBase64,
+            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'pending'
+          })
+          .then(docRef => {
+            progressBar.style.width = '100%';
+            progressText.textContent = 'Application submitted successfully!';
+            
+            setTimeout(() => {
+              form.reset();
+              progressDiv.style.display = 'none';
+              submitBtn.disabled = false;
+              progressBar.style.width = '0%';
+              alert("Thank you for applying! We'll review your application and contact you soon.");
+            }, 1000);
+          })
+          .catch(error => {
+            progressDiv.style.display = 'none';
+            submitBtn.disabled = false;
+            progressBar.style.width = '0%';
+            console.error('Error submitting application:', error);
+            alert(`Error submitting application: ${error.message}`);
+          });
+        } else {
+          progressDiv.style.display = 'none';
+          submitBtn.disabled = false;
+          alert('Error: Firebase not initialized. Please try again.');
+        }
+      };
+      
+      reader.onerror = function(error) {
+        progressDiv.style.display = 'none';
+        submitBtn.disabled = false;
+        alert('Error reading file: ' + error.message);
+      };
+      
+      reader.readAsDataURL(resumeFile);
+    }
+  </script>
+  
+
+</Layout>

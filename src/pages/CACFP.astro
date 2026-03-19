@@ -1,0 +1,662 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="The CACFP Initiative - EIEI">
+<style is:global>
+
+    /* Page wrapper uses global body tokens; no body override */
+
+    .program-shell {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .program-breadcrumb {
+      font-size: 0.85rem;
+      color: var(--muted, #6b7280);
+      margin-bottom: 1rem;
+    }
+
+    .program-breadcrumb a {
+      color: var(--brand-blue);
+      text-decoration: none;
+    }
+
+    .program-breadcrumb a:hover {
+      color: var(--brand-orange);
+    }
+
+    .program-hero-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2.5rem 2.25rem;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      margin-bottom: 2.5rem;
+    }
+
+    .program-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--brand-blue);
+      background: rgba(37, 99, 235, 0.08);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 0.9rem;
+    }
+
+    .program-title {
+      color: var(--brand-blue);
+      font-size: 2.1rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+
+    .program-subtitle {
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+    }
+
+    .program-subnote {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .program-section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 2rem 2rem 2.2rem;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      margin-bottom: 2rem;
+    }
+
+    .program-section-title {
+      color: var(--brand-blue);
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      border-bottom: 3px solid var(--brand-orange);
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .program-section p {
+      font-size: 0.98rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .quote-box {
+      background: #f8fafc;
+      border-radius: 10px;
+      border-left: 4px solid var(--brand-orange);
+      padding: 1.3rem 1.4rem;
+      margin: 1.5rem 0;
+    }
+
+    .quote-text {
+      font-style: italic;
+      font-size: 1rem;
+      color: #374151;
+      margin-bottom: 0.7rem;
+    }
+
+    .quote-author {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--brand-blue);
+      text-align: right;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.25rem;
+    }
+
+    .benefit-card {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 1.2rem 1.15rem;
+      border-left: 4px solid var(--brand-orange);
+    }
+
+    .benefit-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: var(--brand-blue);
+      margin-bottom: 0.35rem;
+    }
+
+    .benefit-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .program-list {
+      list-style: none;
+      margin: 0 0 1.2rem 0;
+      padding: 0;
+    }
+
+    .program-list li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .program-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      top: 0.1rem;
+      color: var(--brand-orange);
+      font-weight: 700;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin: 1.8rem 0 0.2rem;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 1.5rem 1.2rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    }
+
+    .stat-number {
+      font-size: 2.1rem;
+      color: var(--brand-orange);
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--brand-blue);
+      font-weight: 600;
+    }
+
+    .image-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .image-card img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .image-caption {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 0.4rem;
+    }
+
+    .updates-list {
+      list-style: none;
+      margin: 0 0 1.4rem;
+      padding: 0;
+    }
+
+    .updates-list li {
+      padding-left: 1.3rem;
+      position: relative;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .updates-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--brand-orange);
+      font-weight: 700;
+    }
+
+    .program-cta {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 2.3rem 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .program-cta h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+
+    .program-cta p {
+      font-size: 0.98rem;
+      opacity: 0.96;
+      max-width: 520px;
+      margin: 0 auto 1.4rem;
+    }
+
+    .program-cta a {
+      display: inline-block;
+      background: #fca311;
+      color: #2a4175;
+      padding: 0.8rem 2rem;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .program-cta a:hover {
+      background: #ff9500;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 640px) {
+      .program-hero-card,
+      .program-section,
+      .program-cta {
+        padding: 1.6rem 1.4rem 1.7rem;
+      }
+
+      .program-title {
+        font-size: 1.8rem;
+      }
+    }
+    .services-carousel {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  height: 70vh;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide-content {
+  text-align: center;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  max-width: 600px;
+  padding: 2rem;
+}
+
+.slide-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.slide-content p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+}
+
+.carousel-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+  
+</style>
+
+  
+  
+  <!-- SERVICES CAROUSEL (same as services.html) -->
+<section class="services-carousel">
+  <div class="carousel" id="servicesCarousel">
+    <div class="slide active" style="background-image: url('images/slide1.jpg')">
+      <div class="slide-content">
+        <h1>The CACFP Initiative</h1>
+        <p>Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.</p>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('images/slide2.jpg')">
+      <div class="slide-content">
+        <h1>The CACFP Initiative</h1>
+        <p>Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.</p>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('images/slide3.jpg')">
+      <div class="slide-content">
+        <h1>The CACFP Initiative</h1>
+        <p>Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.</p>
+      </div>
+    </div>
+  </div>
+  <div class="carousel-controls" id="carouselControls"></div>
+</section>
+
+
+  <main class="program-shell">
+    <div class="program-breadcrumb">
+      <a href="/">Home</a> / <a href="/services">Services &amp; Programs</a> / The CACFP Initiative
+    </div>
+
+    <!-- HERO / INTRO -->
+    <section class="program-hero-card">
+      <div class="program-tag">Program • Nutrition &amp; Food Security</div>
+      <h1 class="program-title">The CACFP Initiative</h1>
+      <p class="program-subtitle">
+        The Child and Adult Care Food Program (CACFP) is a federal program that provides reimbursements for nutritious meals
+        and snacks to eligible children and adults. Through the CACFP Initiative, EIEI partners with childcare providers to
+        strengthen healthy eating, food security, and quality in early childhood settings.
+      </p>
+      <p class="program-subnote">
+        We focus especially on family and group childcare programs serving young children in under‑resourced communities.
+      </p>
+    </section>
+
+    <!-- WHAT IS CACFP -->
+    <section class="program-section">
+      <h2 class="program-section-title">What is CACFP?</h2>
+      <p>
+        The Child and Adult Care Food Program (CACFP) is a federally funded program that provides reimbursement for nutritious
+        meals and snacks to eligible children and adults enrolled in participating child care centers, family child care homes,
+        adult day care centers, and emergency shelters.
+      </p>
+      <div class="quote-box">
+        <div class="quote-text">
+          "CACFP plays a vital role in ensuring that children in our care receive the nutrition they need to grow, learn, and thrive."
+        </div>
+        <div class="quote-author">— EIEI Nutrition Specialist</div>
+      </div>
+      <p>
+        CACFP helps ensure that children and adults in participating facilities receive nutritious meals and snacks every day.
+        The program also promotes healthy eating and physical activity through education, menu planning support, and ongoing
+        training for providers.
+      </p>
+    </section>
+
+    <!-- BENEFITS -->
+    <section class="program-section">
+      <h2 class="program-section-title">Benefits of CACFP Participation</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Financial Support</div>
+          <div class="benefit-desc">Receive reimbursements for serving nutritious meals and snacks that meet federal nutrition standards.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Improved Nutrition</div>
+          <div class="benefit-desc">Access resources and training to serve balanced, age‑appropriate meals every day.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Professional Development</div>
+          <div class="benefit-desc">Gain ongoing training for staff on nutrition, food safety, and healthy practices.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Enhanced Quality</div>
+          <div class="benefit-desc">Strengthen your program’s quality rating and appeal to families seeking healthy options.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Support for All Children</div>
+          <div class="benefit-desc">Better serve children with special dietary needs and honor diverse cultural food traditions.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Community Impact</div>
+          <div class="benefit-desc">Help reduce food insecurity and promote healthier communities across your region.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHO CAN PARTICIPATE -->
+    <section class="program-section">
+      <h2 class="program-section-title">Who Can Participate?</h2>
+      <p>The CACFP is available to a range of facilities that provide care for children and adults, including:</p>
+      <ul class="program-list">
+        <li>Child care centers (public and private)</li>
+        <li>Family child care homes</li>
+        <li>After‑school and out‑of‑school time programs</li>
+        <li>Emergency and homeless shelters serving children</li>
+        <li>Adult day care centers</li>
+        <li>At‑risk afterschool programs</li>
+      </ul>
+      <p>
+        Eligibility requirements vary by facility type, but all participating programs must meet federal nutrition standards
+        and maintain proper documentation for meal service and attendance.
+      </p>
+    </section>
+
+    <!-- HOW CACFP WORKS -->
+    <section class="program-section">
+      <h2 class="program-section-title">How CACFP Works</h2>
+      <p>
+        Participating facilities receive reimbursements for each eligible meal and snack they serve. Reimbursement rates vary
+        based on the type of meal (breakfast, lunch, dinner, or snack) and the economic needs of the children being served.
+      </p>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Meals per Day</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Snacks per Day</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">6</div>
+          <div class="stat-label">Total Reimbursable</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Free for Eligible</div>
+        </div>
+      </div>
+      <p>
+        Programs must maintain accurate records of meals served, attendance, and compliance with nutrition standards.
+        Regular monitoring and training help ensure program integrity and high‑quality implementation.
+      </p>
+    </section>
+
+    <!-- EIEI ROLE -->
+    <section class="program-section">
+      <h2 class="program-section-title">EIEI’s Role in CACFP</h2>
+      <p>
+        The Education Institute for Early Intervention (EIEI) partners with childcare providers to understand and implement
+        CACFP requirements with confidence. Our support includes:
+      </p>
+      <ul class="program-list">
+        <li>CACFP training and technical assistance</li>
+        <li>Menu planning and nutrition education</li>
+        <li>Documentation and record‑keeping support</li>
+        <li>Staff training on food safety and nutrition</li>
+        <li>Assistance with the CACFP application and renewal process</li>
+        <li>Ongoing consultation and problem‑solving support</li>
+      </ul>
+      <p>
+        Our goal is to help providers successfully participate in CACFP while improving the nutritional quality of meals
+        served to children in their care.
+      </p>
+    </section>
+
+    <!-- IMAGES + SUCCESS STORIES -->
+    <section class="program-section">
+      <h2 class="program-section-title">In Action: Training & Success Stories</h2>
+      <div class="image-row">
+        <div class="image-card">
+          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/EIEI-X-Rapid-Response-Flyers.png?resize=1080%2C1528&ssl=1" alt="CACFP Training Session">
+        </div>
+        <div class="image-card">
+          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2024/04/Rapid-Response.png?resize=1080%2C699&ssl=1" alt="Healthy Meal Preparation">
+        </div>
+      </div>
+
+      <div class="image-row" style="margin-top: 1.6rem;">
+        <div class="image-card">
+          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/10/IMG_20251010_133625-1.jpg?resize=400%2C284&ssl=1" alt="CACFP Training Workshop">
+          <div class="image-caption">CACFP training workshop for providers</div>
+        </div>
+        <div class="image-card">
+          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/10/IMG_20251010_133631-1.jpg?resize=400%2C284&ssl=1" alt="Menu Planning Session">
+          <div class="image-caption">Collaborative menu planning session</div>
+        </div>
+        <div class="image-card">
+          <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/10/IMG_20251010_133637.jpg?resize=400%2C284&ssl=1" alt="Nutrition Education">
+          <div class="image-caption">Hands‑on nutrition education</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPDATES -->
+    <section class="program-section">
+      <h2 class="program-section-title">CACFP Initiative Updates</h2>
+      <p>
+        EIEI is actively working with local childcare providers to increase CACFP participation across the region. Through our
+        training programs and technical assistance, we help centers strengthen both their meal service and documentation practices.
+      </p>
+
+      <p><strong>Recent achievements include:</strong></p>
+      <ul class="updates-list">
+        <li>Training 50+ childcare providers on CACFP requirements</li>
+        <li>Assisting 15 centers with the CACFP application process</li>
+        <li>Providing ongoing technical assistance to 25 participating centers</li>
+        <li>Delivering nutrition education workshops for 200+ staff members</li>
+      </ul>
+
+      <p><strong>Upcoming events:</strong> We regularly host CACFP training sessions and workshops for childcare providers.
+      Contact us to learn about our next training opportunity or to schedule a consultation for your program.</p>
+
+      <div class="quote-box">
+        <div class="quote-text">
+          "Thanks to EIEI's CACFP training, we've improved our meal service and provide better nutrition for the children in our care.
+          The support has been invaluable."
+        </div>
+        <div class="quote-author">— Childcare Center Director</div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="program-cta">
+      <h2>Get Started with the CACFP Initiative</h2>
+      <p>
+        If your childcare center or program is interested in CACFP participation and would like support from EIEI, we’re ready
+        to help you take the next step.
+      </p>
+      <a href="/contact-us">Contact Us Today</a>
+    </section>
+  </main>
+
+  
+  
+
+  
+  
+  
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerContainer = document.getElementById('header-container');
+      if (headerContainer) headerContainer.innerHTML = "";
+
+      const footerContainer = document.getElementById('footer-container');
+      if (footerContainer) footerContainer.innerHTML = "";
+    });
+    
+  let currentSlide = 0;
+  const pageSlides = document.querySelectorAll('#servicesCarousel .slide');
+  const totalSlides = pageSlides.length;
+
+  function initCarouselControls() {
+    const controlsContainer = document.getElementById('carouselControls');
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      controlsContainer.appendChild(dot);
+    }
+  }
+
+  function goToSlide(n) {
+    currentSlide = (n + totalSlides) % totalSlides;
+    pageSlides.forEach(slide => slide.classList.remove('active'));
+    pageSlides[currentSlide].classList.add('active');
+
+    const dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[currentSlide].classList.add('active');
+  }
+
+  function nextSlide() {
+    goToSlide(currentSlide + 1);
+  }
+
+  // Auto-rotate
+  setInterval(nextSlide, 5000);
+
+  window.addEventListener('DOMContentLoaded', function() {
+    initCarouselControls();
+  });
+
+
+  </script>
+
+</Layout>

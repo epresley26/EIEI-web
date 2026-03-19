@@ -1,0 +1,728 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Family Empowerment - EIEI">
+<style is:global>
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background-color: #f3f4f6;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .breadcrumb {
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .breadcrumb a {
+      color: #2a4175;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: #fca311;
+    }
+
+    .program-header {
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .program-title {
+      color: #2a4175;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .program-subtitle {
+      font-size: 1.2rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .content-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      color: #2a4175;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #fca311;
+      padding-bottom: 0.5rem;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .benefit-card {
+      padding: 1.5rem;
+      background-color: #f3f4f6;
+      border-left: 4px solid #fca311;
+      border-radius: 4px;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .benefit-title {
+      color: #2a4175;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit-desc {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .testimonial {
+      background-color: #f3f4f6;
+      border-left: 4px solid #fca311;
+      padding: 1.5rem;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #6b7280;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: #fca311;
+      color: #2a4175;
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .cta-button:hover {
+      background-color: #ff9500;
+    }
+
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .accordion-item {
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      background-color: #f9fafb;
+    }
+
+    .accordion-header {
+      width: 100%;
+      text-align: left;
+      background-color: #ffffff;
+      border: none;
+      padding: 0.9rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+      color: #2a4175;
+    }
+
+    .accordion-header span {
+      flex: 1;
+      text-align: left;
+    }
+
+    .accordion-header-icon {
+      margin-left: 0.75rem;
+      font-size: 1rem;
+      color: #6b7280;
+    }
+
+    .accordion-content {
+      padding: 0 1rem 1rem 1rem;
+      font-size: 0.95rem;
+      color: #4b5563;
+      line-height: 1.7;
+      display: none;
+    }
+
+    .accordion-item.active .accordion-content {
+      display: block;
+    }
+
+    .accordion-item.active .accordion-header {
+      border-bottom: 1px solid #e5e7eb;
+      background-color: #f3f4f6;
+    }
+
+    .accordion-link {
+      color: #2a4175;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .accordion-link:hover {
+      color: #fca311;
+    }
+
+    .services-header {
+      width: 100%;
+      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+      margin: 0;
+      max-width: none;
+      border-radius: 0;
+    }
+
+    .services-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .services-header p {
+      width: 100%;
+      font-size: 1.1rem;
+      opacity: 0.95;
+      max-width: none;
+      margin: 0 auto;
+    }
+
+    /* Carousel styles (service-specific) */
+    .services-carousel {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      padding: 2rem;
+    }
+
+    .slide-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .slide-content p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
+  
+</style>
+
+  
+  
+
+  <!-- SERVICE CAROUSEL -->
+  <section class="services-carousel">
+    <div class="carousel" id="pageCarousel">
+      <div class="slide active" style="background-image: url('images/slide1.jpg')">
+        <div class="slide-content">
+          <h1>Family Empowerment</h1>
+          <p>Supporting families on their journey</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide2.jpg')">
+        <div class="slide-content">
+          <h1>Family Empowerment</h1>
+          <p>Building strong, informed advocates</p>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('images/slide3.jpg')">
+        <div class="slide-content">
+          <h1>Family Empowerment</h1>
+          <p>Connecting families to vital resources</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls" id="pageCarouselControls"></div>
+  </section>
+
+  <div class="services-header">
+    <h1>Family Empowerment</h1>
+    <p>Supporting families on their journey through early intervention, special education, and advocacy.</p>
+  </div>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Home</a> / <a href="/services">Services</a> / Family Empowerment
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Parent Power/Family Empowerment</h2>
+      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+            Families are essential partners in the educational journey; EIEI strengthens the support system around
+            the child, fostering trust and cooperation among all stakeholders. EIEI’s journey in special education is
+            one of dedication and compassion. By humanizing the approach to teaching and learning, we are
+            shaping a future where every child can succeed and thrive. EIEI has become a beacon of hope for
+            children with varying abilities and disabilities, empowering families to work hand in hand toward a
+            brighter and more inclusive tomorrow.
+      <p style="line-height: 1.8;">
+            EIEI helps parents and caregivers of children and young people with disabilities, and special healthcare needs to develop an understanding of healthcare, education, and disability policies. We empower families to increase their impact and voice to promote change beneficial to children, young people, and families.      </p>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">What We Offer</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-title">Virtual Support Groups</div>
+          <div class="benefit-desc">Connect with other families, share experiences, and learn from one another in a safe, supportive environment.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Parenting Workshops</div>
+          <div class="benefit-desc">Expert-led sessions on topics like behavior management, communication, and advocacy for your child.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Self-Care & Wellness</div>
+          <div class="benefit-desc">Resources and guidance on managing stress, caring for yourself, and building resilience.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Special Ed Navigation</div>
+          <div class="benefit-desc">Learn how to navigate IEPs, assessments, services, and your rights in special education.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Resource Library</div>
+          <div class="benefit-desc">Access curated resources, guides, and tools for supporting your child's development.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-title">Expert Guidance</div>
+          <div class="benefit-desc">Connect with specialists, educators, and advocates who support families like yours.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Resource Bank</h2>
+      <div class="accordion" id="resource-bank">
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>SWIFT Support Program</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              In 2020, KenCrest launched the SWIFT Support Program, an innovative early childhood behavioral intervention
+              designed to help children with challenging behaviors remain successfully enrolled in preschools and early
+              learning centers. This program delivers behavioral support for children at risk of preschool expulsion,
+              ensuring they thrive in inclusive classrooms.
+            </p>
+            <p>
+              Learn more at
+              <a href="https://www.kencrest.org/community-support-programs/early-intervention/swift-support-services/" class="accordion-link" target="_blank" rel="noopener">
+                KenCrest SWIFT Support Services
+              </a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>Disability Advice – Parenting a Child with a Disability</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              Disability Advice empowers individuals throughout every step of the Social Security Disability Insurance (SSDI)
+              claims process. Their team offers free case evaluations and guidance for families navigating an often
+              overwhelming system.
+            </p>
+            <p>
+              Explore their guide, including <em>Parenting a Child with a Disability</em>, and other tools to support your family.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>Autism Resources – Autism Levels</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              Access valuable autism resources, including
+              <em>Autism Levels: Why They Matter and Why the Criticism Misses the Point</em>, to deepen your understanding
+              of autism spectrum differences and support your child’s unique strengths.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>Elwyn’s Early Learning Services (ELS)</span>
+          <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              Elwyn’s Early Learning Services offers Preschool Early Intervention programs for children aged three to school
+              entry with developmental delays and disabilities in Philadelphia County and the city of Chester. Each year,
+              ELS supports approximately 10,000 children, promoting development and enhancing family and community capacity.
+            </p>
+            <p>
+              Families can contact the Access to Care line at 215-222-8054 or visit
+              <a href="https://www.elwyn.org" class="accordion-link" target="_blank" rel="noopener">Elwyn’s Early Learning Services</a>
+              for more information and regional contact details.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>Early Intervention Technical Assistance Portal (SICC)</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              The Pennsylvania State Interagency Coordinating Council (SICC) advises state departments to ensure a
+              comprehensive, coordinated Early Intervention system for infants, toddlers, young children, and their families.
+              The portal includes information about vision, meeting schedules, membership, and resources.
+            </p>
+            <p>
+              Visit the Early Intervention Technical Assistance Portal at
+              <a href="https://www.eita-pa.org" class="accordion-link" target="_blank" rel="noopener">eita-pa.org</a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>List of Local Interagency Coordinating Councils (LICCs)</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              Access a downloadable list of Local Interagency Coordinating Councils (LICCs) to find collaborative teams
+              supporting Early Intervention efforts within communities across Pennsylvania.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>Montessori Resources for Families</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              Learn how Montessori principles can make parenting more fulfilling by fostering independence, focus, and
+              self-regulation. Resources include guides on setting up the home environment, supporting independent play,
+              and building your child’s confidence and patience.
+            </p>
+            <p>
+              Explore articles and guides from trusted Montessori organizations to bring these strategies into your home.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>McAndrews, Mehalick, Connolly, Hulse and Ryan P.C.</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              McAndrews Law Offices provide families in Pennsylvania with legal representation in special education,
+              estate planning, and disability law. Their team supports families in understanding and securing their legal
+              rights and protections.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>M-CHAT-R Autism Screening & World Autism Month</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              Access instructions for taking and scoring the Modified Checklist for Autism in Toddlers, Revised (M-CHAT-R),
+              along with resources connected to World Autism Month to support early identification and intervention.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>As You Are – Virtual Autism Diagnostic Evaluations</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              As You Are is a virtual clinic with physicians specializing in autism evaluations for children 16 months to
+              10 years (and re-evaluations for ages 11–17). No referral is required, and most insurance plans are accepted.
+            </p>
+            <p>
+              Families can discuss developmental concerns, explore whether a diagnostic assessment is needed, and receive
+              guidance and resources for next steps.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>Family Engagement Toolkit</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              A toolkit designed to strengthen collaboration between families, schools, and communities. When adults come
+              together to support children, profound changes can happen. This resource offers practical strategies and tools
+              to deepen engagement.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>Pennsylvania Training and Technical Assistance Network (PaTTAN)</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              PaTTAN provides training and technical assistance to support educators, families, and agencies in improving
+              outcomes for children with disabilities across Pennsylvania.
+            </p>
+            <p>
+              Visit the PaTTAN website to explore webinars, publications, and family resources.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>National Center on Deafblindness</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              The National Center on Deafblindness supports an estimated 10,000 children and youth in the U.S. who are
+              deafblind, many of whom have additional disabilities. Families can access information, technical assistance,
+              and resources tailored to deafblindness.
+            </p>
+            <p>
+              Learn more at
+              <a href="https://www.nationaldb.org/" class="accordion-link" target="_blank" rel="noopener">nationaldb.org</a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>The National Autism Center</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              The National Autism Center, part of the May Institute, promotes evidence-based practice in the treatment of
+              autism spectrum disorder. The center offers reliable resources for families, practitioners, and communities
+              on effective autism interventions.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span>ASERT – Autism Services, Education, Resources and Training</span>
+            <span class="accordion-header-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>
+              ASERT is a statewide initiative that brings together medical centers, autism service providers, universities,
+              and other partners to coordinate autism resources across Pennsylvania. Families can find information on
+              services, education, and support at every age.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2>Ready to Join Our Community?</h2>
+      <p style="margin: 1rem 0;">Connect with us to learn about upcoming sessions, workshops, and how to join our supportive community.</p>
+      <a href="/contact-us" class="cta-button">Get Started Today</a>
+    </div>
+  </div>
+
+  
+  
+
+  <!-- Header Component -->
+  
+  
+  <!-- Footer Component -->
+  
+
+  <!-- Chat Widget -->
+  
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerContainer = document.getElementById('header-container');
+      const resourceAccordion = document.getElementById('resource-bank');
+
+      if (headerContainer) {
+        headerContainer.innerHTML = "";
+      }
+      
+      const footerContainer = document.getElementById('footer-container');
+      if (footerContainer) {
+        footerContainer.innerHTML = "";
+      }
+
+      // Carousel setup
+      const pageSlides = document.querySelectorAll('#pageCarousel .slide');
+      const totalSlides = pageSlides.length;
+      let currentSlide = 0;
+
+      const controlsContainer = document.getElementById('pageCarouselControls');
+      if (controlsContainer) {
+        for (let i = 0; i < totalSlides; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          dot.onclick = () => goToSlide(i);
+          controlsContainer.appendChild(dot);
+        }
+      }
+
+      function goToSlide(n) {
+        currentSlide = (n + totalSlides) % totalSlides;
+        pageSlides.forEach(slide => slide.classList.remove('active'));
+        pageSlides[currentSlide].classList.add('active');
+
+        const dots = document.querySelectorAll('#pageCarouselControls .carousel-dot');
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[currentSlide]) {
+          dots[currentSlide].classList.add('active');
+        }
+      }
+
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+
+      setInterval(nextSlide, 5000);
+
+      if (resourceAccordion) {
+        const items = resourceAccordion.querySelectorAll('.accordion-item');
+
+        items.forEach((item) => {
+          const header = item.querySelector('.accordion-header');
+          const icon = item.querySelector('.accordion-header-icon');
+
+          header.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+
+            // Close all items
+            items.forEach((i) => {
+              i.classList.remove('active');
+              const iIcon = i.querySelector('.accordion-header-icon');
+              if (iIcon) {
+                iIcon.textContent = '+';
+              }
+            });
+
+            // Toggle current item
+            if (!isActive) {
+              item.classList.add('active');
+              if (icon) {
+                icon.textContent = '−';
+              }
+            }
+          });
+        });
+      }
+    });
+  </script>
+
+</Layout>

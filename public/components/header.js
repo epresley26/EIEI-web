@@ -1,0 +1,36 @@
+// Header component - creates and injects header HTML
+function createHeader() {
+  const headerHTML = `
+    <!-- NAV -->
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="nav-logo-section">
+          <a href="index.html" class="logo-link">
+            <img src="images/logo.png" alt="EIEI Logo" class="logo">
+          </a>
+        </div>
+        
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        
+        <nav class="nav-menu">
+          <a href="about.html" class="nav-item">About</a>
+          <a href="services.html" class="nav-item">Services</a>
+          
+          <a href="blog.html" class="nav-item">Blog</a>
+          
+          <a href="career-opportunities.html" class="nav-item">Careers</a>
+          <a href="nafei.html" class="nav-item">NAFEI</a>
+          
+          <a href="contact-us.html" class="nav-item">Contact</a>
+          <div class="header-actions">
+          <a href="donate.html" class="donate-pill">Donate</a>
+        </div>
+        </nav>
+
+        <div class="nav-actions">
+        </div>
+      </div>
+    </header>
+  `;
+  return headerHTML;
+}

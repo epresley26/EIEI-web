@@ -1,0 +1,227 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Program Details - EIEI">
+
+
+
+  
+  
+
+  <!-- PROGRAM HEADER -->
+  <div class="program-hero">
+    <img id="programImage" src="/images/service1.svg" alt="Program" class="program-hero-image" loading="lazy">
+    <div class="program-hero-overlay"></div>
+    <div class="program-hero-content">
+      <div class="program-header-details">
+        <span id="ageRange" class="age-range"></span>
+        <h1 id="programTitle">Program Title</h1>
+        <p id="programDescription"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRAM CONTENT -->
+  <div class="program-container">
+    <main class="program-main">
+      <!-- WHAT WE PROVIDE -->
+      <section class="program-section">
+        <h2>What We Provide</h2>
+        <ul id="providesList" class="program-list">
+          <!-- Dynamically loaded -->
+        </ul>
+      </section>
+
+      <!-- WHO BENEFITS -->
+      <section class="program-section">
+        <h2>Who Benefits From This Program?</h2>
+        <div id="benefitsList" class="benefits-grid">
+          <!-- Dynamically loaded -->
+        </div>
+      </section>
+
+      <!-- LOCATION -->
+      <section class="program-section" id="locationSection">
+        <h2>📍 Location & Contact</h2>
+        <p id="locationText"></p>
+        <a href="/contact-us" class="primary-btn" style="max-width: 300px; display: inline-block; margin-top: 1.5rem;">Get Started Today</a>
+      </section>
+
+      <!-- PROGRAM GALLERY -->
+      <section class="program-section" id="programGallerySection" style="display: none;">
+        <h2>Photo Gallery</h2>
+        <div id="programGalleryContainer" class="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+          <!-- Gallery images loaded here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="program-sidebar">
+      <div class="sidebar-card">
+        <h3>Quick Info</h3>
+        <div class="info-item">
+          <strong>Program:</strong>
+          <span id="sidebarName"></span>
+        </div>
+        <div class="info-item" id="sidebarAgeRange" style="display: none;">
+          <strong>Age Range:</strong>
+          <span id="sidebarAge"></span>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Ready to Learn More?</h3>
+        <a href="/contact-us" class="primary-btn" style="width: 100%; text-align: center;">Contact Us</a>
+      </div>
+    </aside>
+  </div>
+
+  
+  
+
+  
+  
+  
+  
+  <script is:inline>
+    // Load components when DOM is ready
+    
+
+    // Load program data from URL parameter
+    function loadProgram() {
+      const params = new URLSearchParams(window.location.search);
+      const programId = params.get('id') || 'early-intervention';
+
+      // Try to load from localStorage first
+      let programs = JSON.parse(localStorage.getItem('eieiPrograms') || '[]');
+
+      if (programs.length === 0) {
+        // Load default programs if none found
+        programs = [
+          {
+            id: 'early-intervention',
+            name: 'Early Intervention Services & Behavioral Health',
+            ageRange: 'Ages 3-5',
+            description: 'EIEI offers free to low-cost on-site special education social playgroups and classrooms tailored for children ages 3-5.',
+            provides: [
+              'Free to low-cost specialized classrooms',
+              'Social playgroups with structured learning activities',
+              'Individual and small group behavioral support',
+              'Speech and language therapy',
+              'Occupational therapy services',
+              'In-home and in-school support',
+              'Family engagement and parent coaching'
+            ],
+            benefits: [
+              'Children with developmental delays',
+              'Children with autism spectrum disorder',
+              'Children with behavioral challenges',
+              'Children needing speech/language support',
+              'Children with special healthcare needs',
+              'Families seeking early support'
+            ],
+            location: '4704 Leiper Street, Philadelphia, PA 19124',
+            imageUrl: 'images/service1.svg'
+          }
+        ];
+      }
+
+      const program = programs.find(p => p.id === programId);
+
+      if (!program) {
+        document.body.innerHTML = '<h1 style="text-align: center; padding-top: 100px; color: var(--brand-blue);">Program not found</h1>';
+        return;
+      }
+
+      // Set page title
+      document.title = program.name + ' - EIEI';
+
+      // Fill in header
+      document.getElementById('programImage').src = program.imageUrl || 'images/service1.svg';
+      document.getElementById('programTitle').textContent = program.name;
+      document.getElementById('programDescription').textContent = program.description;
+      if (program.ageRange) {
+        document.getElementById('ageRange').textContent = program.ageRange;
+      } else {
+        document.getElementById('ageRange').style.display = 'none';
+      }
+
+      // Fill in provides list
+      const providesList = document.getElementById('providesList');
+      providesList.innerHTML = '';
+      (program.provides || []).forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        providesList.appendChild(li);
+      });
+
+      // Fill in benefits
+      const benefitsList = document.getElementById('benefitsList');
+      benefitsList.innerHTML = '';
+      (program.benefits || []).forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'benefit-item';
+        div.textContent = item;
+        benefitsList.appendChild(div);
+      });
+
+      // Fill in location
+      if (program.location) {
+        document.getElementById('locationText').textContent = program.location;
+      } else {
+        document.getElementById('locationSection').style.display = 'none';
+      }
+
+      // Fill in sidebar
+      document.getElementById('sidebarName').textContent = program.name;
+      if (program.ageRange) {
+        document.getElementById('sidebarAgeRange').style.display = 'block';
+        document.getElementById('sidebarAge').textContent = program.ageRange;
+      }
+
+      // Load program gallery
+      loadProgramGalleryImages(programId);
+    }
+
+    // Load program gallery images from Firestore
+    async function loadProgramGalleryImages(programId) {
+      try {
+        const db = firebase.firestore();
+        const doc = await db.collection('programGalleries').doc(programId).get();
+        
+        if (doc.exists && doc.data().images && doc.data().images.length > 0) {
+          const images = doc.data().images;
+          const container = document.getElementById('programGalleryContainer');
+          container.innerHTML = '';
+          
+          images.forEach((img, idx) => {
+            setTimeout(() => {
+              const imgElement = document.createElement('div');
+              imgElement.style.cssText = 'border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;';
+              imgElement.innerHTML = `<img src="${img.url}" alt="Program Gallery Image" style="width: 100%; height: 200px; object-fit: cover;" loading="lazy">`;
+              imgElement.onmouseover = () => {
+                imgElement.style.transform = 'translateY(-8px)';
+                imgElement.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+              };
+              imgElement.onmouseout = () => {
+                imgElement.style.transform = 'translateY(0)';
+                imgElement.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+              };
+              container.appendChild(imgElement);
+            }, idx * 50);
+          });
+          
+          document.getElementById('programGallerySection').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error loading program gallery:', error);
+      }
+
+    window.addEventListener('load', loadProgram);
+  </script>
+  
+
+
+</Layout>
