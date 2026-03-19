@@ -1,11 +1,11 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="About Us - EIEI">
   <style is:global>
     /* --- Premium Modern Styling for About --- */
-    
+
     /* HERO SLIDESHOW */
     .about-hero {
       position: relative;
@@ -37,13 +37,27 @@ import Layout from '../layouts/Layout.astro';
       position: absolute;
       inset: 0;
       z-index: -1;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(37, 99, 235, 0.6) 50%, rgba(15, 23, 42, 0.95) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.9) 0%,
+        rgba(37, 99, 235, 0.6) 50%,
+        rgba(15, 23, 42, 0.95) 100%
+      );
     }
 
     @keyframes aboutHeroSlide {
-      0%, 33.333% { background-image: url('/images/slide1.jpg'); }
-      33.334%, 66.666% { background-image: url('/images/slide2.jpg'); }
-      66.667%, 100% { background-image: url('/images/slide3.jpg'); }
+      0%,
+      33.333% {
+        background-image: url("/images/slide1.jpg");
+      }
+      33.334%,
+      66.666% {
+        background-image: url("/images/slide2.jpg");
+      }
+      66.667%,
+      100% {
+        background-image: url("/images/slide3.jpg");
+      }
     }
 
     .hero-content {
@@ -61,7 +75,7 @@ import Layout from '../layouts/Layout.astro';
       margin-bottom: 1.5rem;
       background: linear-gradient(to right, #ffffff, #93c5fd);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-text-fill-color: white;
     }
 
     .hero-content p {
@@ -123,7 +137,7 @@ import Layout from '../layouts/Layout.astro';
       padding: 4rem;
       color: white;
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
       position: relative;
       overflow: hidden;
     }
@@ -134,7 +148,7 @@ import Layout from '../layouts/Layout.astro';
       top: -20px;
       left: 30px;
       font-size: 12rem;
-      color: rgba(255,255,255,0.05);
+      color: rgba(255, 255, 255, 0.05);
       font-family: serif;
       line-height: 1;
     }
@@ -160,7 +174,7 @@ import Layout from '../layouts/Layout.astro';
       border-radius: 20px;
       padding: 2.5rem;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
@@ -173,7 +187,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .value-box::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -204,7 +218,7 @@ import Layout from '../layouts/Layout.astro';
     /* WHY EIEI SECTION */
     .why-bg {
       background: #f8fafc;
-      padding: 6rem 0;
+      padding: 0rem 0;
     }
 
     .why-grid {
@@ -237,7 +251,7 @@ import Layout from '../layouts/Layout.astro';
       border-left: 5px solid var(--brand-orange);
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
       margin-bottom: 2rem;
     }
 
@@ -263,7 +277,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .impact-card li::before {
-      content: '→';
+      content: "→";
       position: absolute;
       left: 0;
       color: var(--brand-orange);
@@ -282,7 +296,7 @@ import Layout from '../layouts/Layout.astro';
       padding: 3rem 2rem;
       background: #ffffff;
       border-radius: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
       border: 1px solid #e2e8f0;
       transition: all 0.3s ease;
     }
@@ -347,10 +361,10 @@ import Layout from '../layouts/Layout.astro';
       position: relative;
       border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
-      height: 480px;
+      height: 350px;
       background: #f1f5f9;
     }
 
@@ -360,10 +374,15 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .team-card::after {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.5) 40%, transparent 100%);
+      background: linear-gradient(
+        to top,
+        rgba(15, 23, 42, 0.95) 0%,
+        rgba(15, 23, 42, 0.5) 40%,
+        transparent 100%
+      );
       z-index: 2;
     }
 
@@ -374,7 +393,6 @@ import Layout from '../layouts/Layout.astro';
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: top;
       z-index: 1;
       transition: transform 0.5s ease;
     }
@@ -446,7 +464,7 @@ import Layout from '../layouts/Layout.astro';
       max-height: 85vh;
       display: grid;
       grid-template-columns: 1fr 1.5fr;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
       position: relative;
       animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -466,7 +484,6 @@ import Layout from '../layouts/Layout.astro';
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: top;
       min-height: 350px;
     }
 
@@ -523,8 +540,14 @@ import Layout from '../layouts/Layout.astro';
     }
 
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 
@@ -532,17 +555,27 @@ import Layout from '../layouts/Layout.astro';
   <section class="about-hero">
     <div class="hero-content">
       <h1>The Education Institute for Early Intervention</h1>
-      <p>We partner with childcare programs, families, and communities to build inclusive environments where every child with diverse abilities can learn, play, and thrive from the very beginning.</p>
-      
+      <p>
+        We partner with childcare programs, families, and communities to build
+        inclusive environments where every child with diverse abilities can
+        learn, play, and thrive from the very beginning.
+      </p>
+
       <div class="hero-badges">
         <span class="badge">Inclusive Early Intervention</span>
         <span class="badge">Family &amp; Educator Support</span>
         <span class="badge">Research‑informed Practice</span>
       </div>
 
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <div
+        style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;"
+      >
         <a href="/services" class="primary-btn">Explore Our Services</a>
-        <a href="/contact-us" class="primary-btn" style="background: white; color: #0f172a;">Talk with Our Team</a>
+        <a
+          href="/contact-us"
+          class="primary-btn"
+          style="background: white; color: #0f172a;">Talk with Our Team</a
+        >
       </div>
     </div>
   </section>
@@ -550,9 +583,23 @@ import Layout from '../layouts/Layout.astro';
   <!-- OUR MISSION -->
   <section class="section-wrap">
     <div class="mission-box">
-      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; font-weight: 800;">Our Mission</h2>
-      <p>At The Education Institute for Early Intervention (EIEI), we address a critical issue in childcare—suspensions and expulsions of young children, often due to behavioral challenges linked to inadequate support for children with Individual Family Service Plans (IFSPs) or Individual Education Plans (IEPs).</p>
-      <p>EIEI educates and empowers childcare professionals to create inclusive environments that foster children's development and well-being. We collaborate with families, educators, and community partners to drive meaningful change, ensuring all children receive the support they need to thrive.</p>
+      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; font-weight: 800;">
+        Our Mission
+      </h2>
+      <p>
+        At The Education Institute for Early Intervention (EIEI), we address a
+        critical issue in childcare—suspensions and expulsions of young
+        children, often due to behavioral challenges linked to inadequate
+        support for children with Individual Family Service Plans (IFSPs) or
+        Individual Education Plans (IEPs).
+      </p>
+      <p>
+        EIEI educates and empowers childcare professionals to create inclusive
+        environments that foster children's development and well-being. We
+        collaborate with families, educators, and community partners to drive
+        meaningful change, ensuring all children receive the support they need
+        to thrive.
+      </p>
     </div>
   </section>
 
@@ -560,40 +607,67 @@ import Layout from '../layouts/Layout.astro';
   <section class="why-bg">
     <div class="section-wrap" style="padding: 0 2rem;">
       <h2 class="section-title">EIEI Core Values</h2>
-      <p class="section-subtitle">These values guide every classroom observation, coaching session, training, and family conversation.</p>
-      
+      <p class="section-subtitle">
+        These values guide every classroom observation, coaching session,
+        training, and family conversation.
+      </p>
+
       <div class="values-grid">
         <div class="value-box">
           <h3>Empathy</h3>
-          <p>We understand and share the feelings of children and families, providing compassionate and respectful support.</p>
+          <p>
+            We understand and share the feelings of children and families,
+            providing compassionate and respectful support.
+          </p>
         </div>
         <div class="value-box">
           <h3>Equity</h3>
-          <p>We ensure every child, regardless of background or ability, receives equal opportunities to succeed and thrive.</p>
+          <p>
+            We ensure every child, regardless of background or ability, receives
+            equal opportunities to succeed and thrive.
+          </p>
         </div>
         <div class="value-box">
           <h3>Integrity</h3>
-          <p>We maintain the highest ethical standards, ensuring trust and transparency in all our interactions and relationships.</p>
+          <p>
+            We maintain the highest ethical standards, ensuring trust and
+            transparency in all our interactions and relationships.
+          </p>
         </div>
         <div class="value-box">
           <h3>Inclusivity</h3>
-          <p>We create an environment where every child, regardless of ability or background, feels welcomed and supported.</p>
+          <p>
+            We create an environment where every child, regardless of ability or
+            background, feels welcomed and supported.
+          </p>
         </div>
         <div class="value-box">
           <h3>Empowerment</h3>
-          <p>We encourage children and families to become confident, independent advocates for their needs and rights.</p>
+          <p>
+            We encourage children and families to become confident, independent
+            advocates for their needs and rights.
+          </p>
         </div>
         <div class="value-box">
           <h3>Engagement</h3>
-          <p>We actively involve children, families, and educators in the learning process, fostering strong, meaningful connections.</p>
+          <p>
+            We actively involve children, families, and educators in the
+            learning process, fostering strong, meaningful connections.
+          </p>
         </div>
         <div class="value-box">
           <h3>Involvement</h3>
-          <p>We actively engage with families, educators, and the community to build strong partnerships and lasting change.</p>
+          <p>
+            We actively engage with families, educators, and the community to
+            build strong partnerships and lasting change.
+          </p>
         </div>
         <div class="value-box">
           <h3>Impact</h3>
-          <p>We dedicate ourselves to making a positive and lasting difference in the lives of children and their families.</p>
+          <p>
+            We dedicate ourselves to making a positive and lasting difference in
+            the lives of children and their families.
+          </p>
         </div>
       </div>
     </div>
@@ -604,40 +678,70 @@ import Layout from '../layouts/Layout.astro';
     <div class="why-grid">
       <div class="why-sidebar">
         <h3>Why EIEI?</h3>
-        <p style="font-size: 1.2rem; color: #475569; line-height: 1.7; margin-bottom: 2rem;">Addressing systemic gaps in early childhood education and support to stop the cycle of expulsions and suspensions.</p>
-        <a href="/contact-us" class="primary-btn" style="width: auto;">Partner With Us</a>
+        <p
+          style="font-size: 1.2rem; color: #475569; line-height: 1.7; margin-bottom: 2rem;"
+        >
+          Addressing systemic gaps in early childhood education and support to
+          stop the cycle of expulsions and suspensions.
+        </p>
+        <a href="/contact-us" class="primary-btn" style="width: auto;"
+          >Partner With Us</a
+        >
       </div>
 
       <div class="impact-content">
         <div class="impact-card">
           <h4>The Current Reality</h4>
           <ul>
-            <li>Young children ages 1-5 are suspended and expelled from programs due to behavioral challenges.</li>
-            <li>Many childcare professionals lack training to support children with IFSPs and IEPs.</li>
-            <li>Children are never able to return to programs after expulsion.</li>
+            <li>
+              Young children ages 1-5 are suspended and expelled from programs
+              due to behavioral challenges.
+            </li>
+            <li>
+              Many childcare professionals lack training to support children
+              with IFSPs and IEPs.
+            </li>
+            <li>
+              Children are never able to return to programs after expulsion.
+            </li>
           </ul>
         </div>
         <div class="impact-card">
           <h4>Impact on Expelled Children</h4>
           <ul>
             <li>Miss opportunities to grow, develop, and practice skills.</li>
-            <li>Continue developing behavior problems affecting kindergarten adjustments.</li>
-            <li>Develop negative views towards school, teachers, and the world.</li>
+            <li>
+              Continue developing behavior problems affecting kindergarten
+              adjustments.
+            </li>
+            <li>
+              Develop negative views towards school, teachers, and the world.
+            </li>
           </ul>
         </div>
         <div class="impact-card">
           <h4>Impact on Families</h4>
           <ul>
-            <li>Frustration with programs lacking Special Education Services training.</li>
-            <li>Difficulty parenting, creating increased stress and financial challenges.</li>
+            <li>
+              Frustration with programs lacking Special Education Services
+              training.
+            </li>
+            <li>
+              Difficulty parenting, creating increased stress and financial
+              challenges.
+            </li>
             <li>Employment instability due to seeking alternative care.</li>
           </ul>
         </div>
         <div class="impact-card">
           <h4>Impact on Childcare Staff</h4>
           <ul>
-            <li>Required to manage challenging behaviors without proper skills.</li>
-            <li>Implicit bias leading to stress, burn-out, and low retention.</li>
+            <li>
+              Required to manage challenging behaviors without proper skills.
+            </li>
+            <li>
+              Implicit bias leading to stress, burn-out, and low retention.
+            </li>
           </ul>
         </div>
       </div>
@@ -654,22 +758,34 @@ import Layout from '../layouts/Layout.astro';
         <div class="promise-card">
           <div class="promise-icon">📚</div>
           <h3>Educate</h3>
-          <p>Educate the workforce to provide appropriate teaching and learning environments to children entitled to IDEA services.</p>
+          <p>
+            Educate the workforce to provide appropriate teaching and learning
+            environments to children entitled to IDEA services.
+          </p>
         </div>
         <div class="promise-card">
           <div class="promise-icon">💼</div>
           <h3>Invest</h3>
-          <p>Invest in the workforce with a commitment to impartiality and integrity for children.</p>
+          <p>
+            Invest in the workforce with a commitment to impartiality and
+            integrity for children.
+          </p>
         </div>
         <div class="promise-card">
           <div class="promise-icon">🤝</div>
           <h3>Embrace</h3>
-          <p>Embrace the individuality of children and celebrate their unique strengths and abilities.</p>
+          <p>
+            Embrace the individuality of children and celebrate their unique
+            strengths and abilities.
+          </p>
         </div>
         <div class="promise-card">
           <div class="promise-icon">🚀</div>
           <h3>Initiate</h3>
-          <p>Initiate change, growth, and innovation with parents, business owners, stakeholders, and community partners.</p>
+          <p>
+            Initiate change, growth, and innovation with parents, business
+            owners, stakeholders, and community partners.
+          </p>
         </div>
       </div>
     </div>
@@ -679,8 +795,11 @@ import Layout from '../layouts/Layout.astro';
   <section class="why-bg">
     <div class="section-wrap">
       <h2 class="section-title">Meet the Team</h2>
-      <p class="section-subtitle">Dedicated professionals committed to transforming childcare curriculum and creating inclusive spaces.</p>
-      
+      <p class="section-subtitle">
+        Dedicated professionals committed to transforming childcare curriculum
+        and creating inclusive spaces.
+      </p>
+
       <div id="team-grid" class="team-grid">
         <div class="team-loading">Loading team members...</div>
       </div>
@@ -690,7 +809,10 @@ import Layout from '../layouts/Layout.astro';
   <!-- CTA -->
   <section class="section-wrap" style="text-align: center; padding-top: 4rem;">
     <h2 class="section-title">Ready to Join Us?</h2>
-    <p class="section-subtitle" style="margin-bottom: 2rem;">Whether you're an educator, family, or organization partner, we're here to support you on the journey to inclusive excellence.</p>
+    <p class="section-subtitle" style="margin-bottom: 2rem;">
+      Whether you're an educator, family, or organization partner, we're here to
+      support you on the journey to inclusive excellence.
+    </p>
     <a href="/services" class="primary-btn">Explore Our Services</a>
   </section>
 
@@ -699,7 +821,12 @@ import Layout from '../layouts/Layout.astro';
     <div class="team-modal-content">
       <button class="team-modal-close" id="closeTeamModal">&times;</button>
       <div class="team-modal-left">
-        <img class="team-modal-image" id="modalImage" src="" alt="Team Member">
+        <img
+          class="team-modal-image"
+          id="modalImage"
+          src=""
+          alt="Team Member"
+        />
       </div>
       <div class="team-modal-right">
         <h2 class="team-modal-name" id="modalName"></h2>
@@ -713,85 +840,91 @@ import Layout from '../layouts/Layout.astro';
     // Load team members dynamically from Firestore
     async function loadTeamMembers() {
       try {
-        console.log('Attempting to load team members from Firestore...');
-        const snapshot = await window.firebaseDB.collection('team').get();
-        console.log('Firestore query completed, found ' + snapshot.size + ' documents');
-        const teamMembers = snapshot.docs.map(doc => {
+        console.log("Attempting to load team members from Firestore...");
+        const snapshot = await window.firebaseDB.collection("team").get();
+        console.log(
+          "Firestore query completed, found " + snapshot.size + " documents"
+        );
+        const teamMembers = snapshot.docs.map((doc) => {
           return { id: doc.id, ...doc.data() };
         });
-        
+
         renderTeamGrid(teamMembers);
       } catch (error) {
-        console.error('Error loading team members:', error);
-        const teamGrid = document.getElementById('team-grid');
+        console.error("Error loading team members:", error);
+        const teamGrid = document.getElementById("team-grid");
         if (teamGrid) {
-          teamGrid.innerHTML = '<div class="team-loading">Error loading team members: ' + error.message + '</div>';
+          teamGrid.innerHTML =
+            '<div class="team-loading">Error loading team members: ' +
+            error.message +
+            "</div>";
         }
       }
     }
 
     function renderTeamGrid(members) {
-      const container = document.getElementById('team-grid');
+      const container = document.getElementById("team-grid");
       if (!container) return;
-      
+
       if (members.length === 0) {
-        container.innerHTML = '<div class="team-loading">No team members added yet</div>';
+        container.innerHTML =
+          '<div class="team-loading">No team members added yet</div>';
         return;
       }
-      
+
       const groupedMembers = {
         founder: [],
         executive: [],
-        staff: []
+        staff: [],
       };
-      
-      members.forEach(member => {
-        const section = (member.section || 'staff').toLowerCase();
+
+      members.forEach((member) => {
+        const section = (member.section || "staff").toLowerCase();
         if (groupedMembers.hasOwnProperty(section)) {
           groupedMembers[section].push(member);
         } else {
           groupedMembers.staff.push(member);
         }
       });
-      
-      container.innerHTML = '';
-      const sectionOrder = ['founder', 'executive', 'staff'];
+
+      container.innerHTML = "";
+      const sectionOrder = ["founder", "executive", "staff"];
       const sectionLabels = {
-        founder: 'Founder',
-        executive: 'Executive Team',
-        staff: 'Staff'
+        founder: "Founder",
+        executive: "Executive Team",
+        staff: "Staff",
       };
-      
+
       let cardIndex = 0;
-      
-      sectionOrder.forEach(sectionKey => {
+
+      sectionOrder.forEach((sectionKey) => {
         const sectionMembers = groupedMembers[sectionKey];
         if (sectionMembers.length === 0) return;
-        
-        const sectionDiv = document.createElement('div');
-        sectionDiv.className = 'team-section';
-        
-        const sectionTitle = document.createElement('h3');
-        sectionTitle.className = 'team-section-title';
+
+        const sectionDiv = document.createElement("div");
+        sectionDiv.className = "team-section";
+
+        const sectionTitle = document.createElement("h3");
+        sectionTitle.className = "team-section-title";
         sectionTitle.textContent = sectionLabels[sectionKey];
         sectionDiv.appendChild(sectionTitle);
-        
-        const gridDiv = document.createElement('div');
-        gridDiv.className = 'team-section-grid';
-        
-        sectionMembers.forEach(member => {
+
+        const gridDiv = document.createElement("div");
+        gridDiv.className = "team-section-grid";
+
+        sectionMembers.forEach((member) => {
           const currentCardIndex = cardIndex;
           cardIndex++;
-          
+
           setTimeout(() => {
-            const card = document.createElement('div');
-            card.className = 'team-card';
-            
-            let imageUrl = member.imageUrl || 'images/team/default.jpg';
-            if (imageUrl.includes('imgbb.com')) {
-              imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/400x500'); // Higher res version for bigger cards
+            const card = document.createElement("div");
+            card.className = "team-card";
+
+            let imageUrl = member.imageUrl || "images/team/default.jpg";
+            if (imageUrl.includes("imgbb.com")) {
+              imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, "/c/400x500"); // Higher res version for bigger cards
             }
-            
+
             card.innerHTML = `
               <img src="${imageUrl}" alt="${member.name}" class="team-image" loading="lazy" onerror="this.src='/images/team/default.jpg'">
               <div class="team-info">
@@ -799,68 +932,69 @@ import Layout from '../layouts/Layout.astro';
                 <div class="team-role">${member.role}</div>
               </div>
             `;
-            card.addEventListener('click', () => openTeamModal(member));
+            card.addEventListener("click", () => openTeamModal(member));
             gridDiv.appendChild(card);
           }, currentCardIndex * 40);
         });
-        
+
         sectionDiv.appendChild(gridDiv);
         container.appendChild(sectionDiv);
       });
     }
 
     function openTeamModal(member) {
-      const modal = document.getElementById('teamModal');
+      const modal = document.getElementById("teamModal");
       if (!modal) return;
-      
-      let imageUrl = member.imageUrl || 'images/team/default.jpg';
-      document.getElementById('modalImage').src = imageUrl;
-      document.getElementById('modalImage').alt = member.name;
-      document.getElementById('modalName').textContent = member.name;
-      document.getElementById('modalRole').textContent = member.role;
-      document.getElementById('modalBio').textContent = member.bio || 'No bio available.';
-      
-      modal.classList.add('active');
+
+      let imageUrl = member.imageUrl || "images/team/default.jpg";
+      document.getElementById("modalImage").src = imageUrl;
+      document.getElementById("modalImage").alt = member.name;
+      document.getElementById("modalName").textContent = member.name;
+      document.getElementById("modalRole").textContent = member.role;
+      document.getElementById("modalBio").textContent =
+        member.bio || "No bio available.";
+
+      modal.classList.add("active");
     }
 
     function closeTeamModal() {
-      const modal = document.getElementById('teamModal');
+      const modal = document.getElementById("teamModal");
       if (modal) {
-        modal.classList.remove('active');
+        modal.classList.remove("active");
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const modal = document.getElementById('teamModal');
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("teamModal");
       if (modal) {
-        const closeBtn = modal.querySelector('.team-modal-close');
+        const closeBtn = modal.querySelector(".team-modal-close");
         if (closeBtn) {
-          closeBtn.addEventListener('click', closeTeamModal);
+          closeBtn.addEventListener("click", closeTeamModal);
         }
-        
-        modal.addEventListener('click', (e) => {
+
+        modal.addEventListener("click", (e) => {
           if (e.target === modal) {
             closeTeamModal();
           }
         });
       }
-      
+
       setTimeout(initTeamLoading, 500);
     });
 
     let attemptCount = 0;
     const maxAttempts = 15;
-    
+
     function initTeamLoading() {
-      if (typeof window.firebaseDB !== 'undefined' && window.firebaseDB) {
-        console.log('Firebase DB ready, loading team members');
+      if (typeof window.firebaseDB !== "undefined" && window.firebaseDB) {
+        console.log("Firebase DB ready, loading team members");
         loadTeamMembers();
       } else {
         attemptCount++;
         if (attemptCount < maxAttempts) {
           setTimeout(initTeamLoading, 1000);
         } else {
-          console.error('Firebase DB initialization timeout');
+          console.error("Firebase DB initialization timeout");
         }
       }
     }

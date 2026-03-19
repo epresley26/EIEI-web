@@ -1,425 +1,401 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+const programsData = [
+  {
+    id: "career-development",
+    name: "Career Development Program",
+    description:
+      "Join our Early Intervention Dream Team! We are NOW HIRING full-time positions with comprehensive benefits.",
+    link: "/career-opportunities",
+    icon: "👥",
+    image: "/images/car.jpg",
+    benefits: [
+      "Full-time positions",
+      "Benefits package",
+      "Professional team",
+      "Impact work",
+    ],
+  },
+  {
+    id: "training-development",
+    name: "Training & Professional Development",
+    description:
+      "Empowering educators to expand their knowledge of special education and inclusive practices.",
+    link: "/training-development",
+    icon: "🎓",
+    image: "/images/training.jpg",
+    benefits: [
+      "Expert training",
+      "Custom workshops",
+      "Ongoing coaching",
+      "Certification",
+    ],
+  },
+  {
+    id: "community-programs",
+    name: "Community Programs & Partnerships",
+    description:
+      "Supporting 20+ Early Childhood Education programs through our Pre-K Counts partnership.",
+    link: "/community-programs",
+    icon: "🤝",
+    image: "/images/gen_community.png",
+    benefits: [
+      "20+ partner programs",
+      "Training support",
+      "Quality improvement",
+      "Grant funded",
+    ],
+  },
+  {
+    id: "family-empowerment",
+    name: "Family Empowerment",
+    description:
+      "Join our vibrant online community where families and educators come together for support.",
+    link: "/family-empowerment",
+    icon: "❤️",
+    image: "/images/gen_family.png",
+    benefits: [
+      "Support groups",
+      "Workshops",
+      "Valuable resources",
+      "Community connection",
+    ],
+  },
+  {
+    id: "early-intervention",
+    name: "Early Intervention & Behavioral Health",
+    description:
+      "Free to low-cost services for children ages 3-5 with comprehensive classroom and in-home support.",
+    link: "/early-intervention",
+    icon: "🧩",
+    image: "/images/early.jpg",
+    benefits: [
+      "Ages 3-5 inclusive",
+      "Certified staff",
+      "In-home & school",
+      "Therapy support",
+    ],
+  },
+  {
+    id: "supporting-inclusions",
+    name: "Supporting Inclusions Through Affiliates",
+    description:
+      "Strategic partnerships with organizations committed to inclusive education and community support.",
+    link: "/supporting-inclusions",
+    icon: "🌟",
+    image: "/images/gen_supporting.png",
+    benefits: [
+      "Strategic partnerships",
+      "Resource sharing",
+      "Capacity building",
+      "Collaboration framework",
+    ],
+  },
+  {
+    id: "cacfp-initiative",
+    name: "The CACFP Initiative",
+    description:
+      "Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious meals.",
+    link: "/CACFP",
+    icon: "🥗",
+    image: "/images/gen_cacfp.png",
+    benefits: [
+      "Administrative sponsorship",
+      "Nutrition education",
+      "Food health security",
+      "Support for marginalized",
+    ],
+  },
+];
 ---
 
 <Layout title="Services & Programs - EIEI">
-<style is:global>
+  <style is:global>
+    /* Premium Modern Styling for Services */
 
-    body {
-      width: 100% !important;
-      max-width: 100% !important;
-    }
-
-    .programs-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(280px, 1fr));
-      gap: 2rem;
-      margin: 3rem auto 3rem;
-      padding: 0 2rem;
-      max-width: 1400px;
-      width: calc(100% - 4rem);
-      box-sizing: border-box;
-    }
-
-    @media (max-width: 1024px) {
-      .programs-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .programs-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .program-card {
-      background: white;
-      border-radius: 8px;
+    /* HERO SECTION */
+    .services-hero {
+      position: relative;
+      width: 100%;
+      min-height: 45vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10rem 2rem 5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      text-align: center;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
     }
 
-    .program-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    .services-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
     }
 
-    .program-card-header {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      padding: 1.5rem;
-      min-height: 100px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .program-card-header h3 {
-      font-size: 1.3rem;
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .program-card-body {
-      padding: 1.5rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .program-description {
-      color: #6b7280;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-      flex: 1;
-    }
-
-    .program-benefits {
-      background: #f3f4f6;
-      padding: 1rem;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-    }
-
-    .program-benefits h4 {
-      color: #2a4175;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .program-benefits ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .program-benefits li {
-      color: #6b7280;
-      font-size: 0.85rem;
-      padding: 0.25rem 0;
-    }
-
-    .program-benefits li:before {
-      content: "✓ ";
-      color: #fca311;
-      font-weight: bold;
-      margin-right: 0.5rem;
-    }
-
-    .program-link-btn {
-      display: inline-block;
-      background-color: #fca311;
-      color: #2a4175;
-      padding: 0.75rem 1.5rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-      text-align: center;
-      margin-top: auto;
-    }
-
-    .program-link-btn:hover {
-      background-color: #ff9500;
-    }
-
-    .services-header {
-      width: 100%;
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: white;
-      text-align: center;
-      padding: 3rem 2rem;
-      margin: 0;
-      max-width: none;
-      border-radius: 0px;
-    }
-
-    .services-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .services-header p {
-      width: 100%;
-      font-size: 1.1rem;
-      opacity: 0.95;
-      max-width: none;
+    .services-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
       margin: 0 auto;
     }
 
-    .services-container {
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      
+    .services-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
     }
 
-    /* CAROUSEL STYLES */
-    .services-carousel {
+    .services-hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    /* SERVICES LAYOUT BASE */
+    .services-layout {
+      padding: 6rem 2rem;
+      background: #f8fafc;
+      min-height: 50vh;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* PROGRAM CARDS */
+    .program-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .program-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: none;
-      margin: 0;
-      height: 70vh;
+      height: 6px;
+      background: linear-gradient(90deg, #f97316, #dc2626);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+      z-index: 5;
+    }
+
+    .program-image-wrap {
+      width: 100%;
+      height: 220px;
       position: relative;
       overflow: hidden;
-      border-radius: 0;
+      flex-shrink: 0;
     }
 
-    .carousel {
+    .program-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .program-card:hover .program-image {
+      transform: scale(1.05);
+    }
+
+    .program-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+      border-color: #cbd5e1;
+    }
+
+    .program-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .program-header {
+      padding: 3rem 2.5rem 1.5rem;
+      border-bottom: 1px dashed #e2e8f0;
       position: relative;
-      width: 100%;
-      height: 100%;
     }
 
-    .slide {
+    .program-icon {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-      background-size: cover;
-      background-position: center;
+      top: -30px;
+      left: 2.5rem;
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .slide-content {
-      text-align: center;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      padding: 2rem;
-    }
-
-    .slide-content h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .slide-content p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-    }
-
-    .carousel-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
+      font-size: 1.8rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       z-index: 10;
     }
 
-    .carousel-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .program-header h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
     }
 
-    .carousel-dot.active {
+    .program-desc {
+      color: #475569;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .program-body {
+      padding: 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      background: #f8fafc;
+    }
+
+    .benefits-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .benefits-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      flex-grow: 1;
+    }
+
+    .benefits-list li {
+      position: relative;
+      padding-left: 1.8rem;
+      color: #334155;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .benefits-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #f97316;
+      font-weight: 900;
+    }
+
+    .learn-more-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
       background: white;
-      transform: scale(1.2);
+      color: #0f172a;
+      padding: 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 2px solid #e2e8f0;
+      transition: all 0.3s ease;
+      margin-top: auto;
     }
-  
-</style>
 
+    .learn-more-btn:hover {
+      background: #0f172a;
+      color: white;
+      border-color: #0f172a;
+    }
 
-  
-  
+    @media (max-width: 768px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+      .services-hero {
+        padding-top: 8rem;
+        min-height: 40vh;
+      }
+      .program-header {
+        padding: 2rem 1.5rem 1rem;
+      }
+      .program-body {
+        padding: 1.5rem;
+      }
+    }
+  </style>
 
-  <!-- SERVICES CAROUSEL -->
-  <section class="services-carousel">
-    <div class="carousel" id="servicesCarousel">
-      <div class="slide active" style="background-image: url('images/slide1.jpg')">
-        <div class="slide-content">
-          <h1>Our Services & Programs</h1>
-          <p>Comprehensive early intervention and special education services</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide2.jpg')">
-        <div class="slide-content">
-          <h1>Empowering Communities</h1>
-          <p>Professional development and support for educators</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide3.jpg')">
-        <div class="slide-content">
-          <h1>Supporting Families</h1>
-          <p>Building inclusive, supportive environments for all</p>
-        </div>
-      </div>
+  <!-- HERO SECTION -->
+  <section class="services-hero">
+    <div class="services-hero-content">
+      <h1>Our Services & Programs</h1>
+      <p>
+        Comprehensive early intervention and special education services designed
+        to empower children, families, and communities.
+      </p>
     </div>
-    <div class="carousel-controls" id="carouselControls"></div>
   </section>
-  <div class="services-header">
-    <h1>Our Services & Programs</h1>
-    <p>Comprehensive early intervention and special education services designed to empower children, families, and communities.</p>
-  </div>
 
-  <!-- SERVICES CONTENT -->
-  <div class="programs-grid" id="programsGrid"></div>
-
-  
-  
-
-  <!-- Header Component -->
-  
-  
-  <!-- Footer Component -->
-  
-
-  <!-- Firebase Init -->
-  
-
-  <script is:inline>
-    let currentSlide = 0;
-    const pageSlides = document.querySelectorAll('#servicesCarousel .slide');
-    const totalSlides = pageSlides.length;
-
-    // Create carousel controls/dots
-    function initCarouselControls() {
-      const controlsContainer = document.getElementById('carouselControls');
-      for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => goToSlide(i);
-        controlsContainer.appendChild(dot);
-      }
-    }
-
-    function goToSlide(n) {
-      currentSlide = (n + totalSlides) % totalSlides;
-      pageSlides.forEach(slide => slide.classList.remove('active'));
-      pageSlides[currentSlide].classList.add('active');
-      
-      const dots = document.querySelectorAll('.carousel-dot');
-      dots.forEach(dot => dot.classList.remove('active'));
-      dots[currentSlide].classList.add('active');
-    }
-
-    function nextSlide() {
-      goToSlide(currentSlide + 1);
-    }
-
-    // Auto-rotate carousel every 5 seconds
-    setInterval(nextSlide, 5000);
-
-    // Initialize carousel when page loads
-    window.addEventListener('DOMContentLoaded', function() {
-      initCarouselControls();
-    });
-
-    // Inject header and footer
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerContainer = document.getElementById('header-container');
-      if (headerContainer) {
-        headerContainer.innerHTML = "";
-      }
-
-      const footerContainer = document.getElementById('footer-container');
-      if (footerContainer) {
-        footerContainer.innerHTML = "";
-      }
-
-      // Load and display programs
-      loadAndDisplayPrograms();
-    });
-
-    // Programs data
-    const programsData = [
+  <!-- SERVICES GRID -->
+  <div class="services-layout">
+    <div class="services-grid">
       {
-        id: 'career-development',
-        name: 'Career Development Program',
-        description: 'Join our Early Intervention Dream Team! We are NOW HIRING full-time positions with comprehensive benefits.',
-        link: 'career-development.html',
-        benefits: ['Full-time positions', 'Benefits package', 'Professional team', 'Impact work']
-      },
-      {
-        id: 'training-development',
-        name: 'Training, Coaching & Professional Development',
-        description: 'Empowering educators to expand their knowledge of special education and inclusive practices.',
-        link: 'training-development.html',
-        benefits: ['Expert training', 'Custom workshops', 'Ongoing coaching', 'Certification']
-      },
-      {
-        id: 'community-programs',
-        name: 'Community Programs & Partnerships',
-        description: 'Supporting 20+ Early Childhood Education programs through our Pre-K Counts partnership.',
-        link: 'community-programs.html',
-        benefits: ['20+ programs', 'Training support', 'Quality improvement', 'Grant funded']
-      },
-      {
-        id: 'family-empowerment',
-        name: 'Family Empowerment',
-        description: 'Join our vibrant online community where families and educators come together for support.',
-        link: 'family-empowerment.html',
-        benefits: ['Support groups', 'Workshops', 'Resources', 'Community']
-      },
-      {
-        id: 'early-intervention',
-        name: 'Early Intervention Services & Behavioral Health',
-        description: 'Free to low-cost services for children ages 3-5 with comprehensive classroom and in-home support.',
-        link: 'early-intervention.html',
-        benefits: ['Ages 3-5', 'Certified staff', 'In-home & school', 'Therapy support']
-      },
-      {
-        id: 'supporting-inclusions',
-        name: 'Supporting Inclusions Through Programs & Affiliates',
-        description: 'Strategic partnerships with organizations committed to inclusive education and community support.',
-        link: 'supporting-inclusions.html',
-        benefits: ['Partnerships', 'Resources', 'Capacity building', 'Collaboration']
-      },
-      {
-        id: 'cacfp-initiative',
-        name: 'The CACFP Initiative',
-        description: 'Transforming lives one meal at a time by helping family and group childcare providers deliver nutritious, reimbursable meals through the Child and Adult Care Food Program.',
-        link: 'CACFP.html',
-        benefits: [
-          'Administrative sponsorship & CACFP compliance support',
-          'Nutrition education and menu planning for home‑based programs',
-          'Focus on food and health security for children',
-          'Support for providers serving marginalized communities' ]
-      }
-
-    ];
-
-    function loadAndDisplayPrograms() {
-      const grid = document.getElementById('programsGrid');
-      if (!grid) return;
-
-      grid.innerHTML = programsData.map(program => `
-        <div class="program-card">
-          <div class="program-card-header">
-            <h3>${program.name}</h3>
-          </div>
-          <div class="program-card-body">
-            <p class="program-description">${program.description}</p>
-            <div class="program-benefits">
-              <h4>Key Benefits:</h4>
-              <ul>
-                ${program.benefits.map(benefit => `<li>${benefit}</li>`).join('')}
-              </ul>
+        programsData.map((program) => (
+          <div class="program-card">
+            <div class="program-image-wrap">
+              <img
+                src={program.image}
+                alt={program.name}
+                class="program-image"
+                loading="lazy"
+              />
             </div>
-            <a href="${program.link}" class="program-link-btn">Learn More →</a>
+            <div class="program-header">
+              <div class="program-icon">{program.icon}</div>
+              <h3>{program.name}</h3>
+              <div class="program-desc">{program.description}</div>
+            </div>
+            <div class="program-body">
+              <div class="benefits-title">Key Advantages</div>
+              <ul class="benefits-list">
+                {program.benefits.map((benefit) => (
+                  <li>{benefit}</li>
+                ))}
+              </ul>
+              <a href={program.link} class="learn-more-btn">
+                Explore Program &rarr;
+              </a>
+            </div>
           </div>
-        </div>
-      `).join('');
-    }
-  </script>
-
+        ))
+      }
+    </div>
+  </div>
 </Layout>

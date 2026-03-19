@@ -45,11 +45,6 @@ import Layout from "../layouts/Layout.astro";
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(
-        135deg,
-        rgba(15, 23, 42, 0.85) 0%,
-        rgba(37, 99, 235, 0.4) 100%
-      );
     }
 
     .slide.active {
@@ -230,8 +225,8 @@ import Layout from "../layouts/Layout.astro";
 
     .about-image img {
       width: 100%;
-      height: auto;
-      border-radius: 24px;
+      height: auto%;
+      border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       animation: float 6s ease-in-out infinite;
     }
@@ -527,11 +522,10 @@ import Layout from "../layouts/Layout.astro";
     }
     .partner-item {
       flex: 0 1 200px;
-      filter: grayscale(100%) opacity(0.6);
+
       transition: all 0.3s ease;
     }
     .partner-item:hover {
-      filter: grayscale(0%) opacity(1);
       transform: scale(1.05);
     }
     .partner-item img {
@@ -715,7 +709,7 @@ import Layout from "../layouts/Layout.astro";
       </div>
       <div class="about-image">
         <img
-          src="/images/logo.png"
+          src="/images/logo_full.png"
           alt="EIEI Team"
           loading="lazy"
           style="background: white; border-radius: 50%; padding: 2rem;"
@@ -858,7 +852,9 @@ import Layout from "../layouts/Layout.astro";
       <div class="classroom-box">
         <h2>Special Education Classrooms</h2>
         <p class="loc">
-          📍 4704 Leiper Street, Philadelphia, PA 19124 • Ages 3 to 5
+          📍 4704 Leiper Street, Philadelphia, PA 19124 <br />
+          📍 5024 Penn St., Philadelphia, PA 19124 <br />
+          Ages 3 to 5
         </p>
 
         <div class="features-flex">
@@ -1019,7 +1015,7 @@ import Layout from "../layouts/Layout.astro";
       <div class="faq-container">
         <div class="faq-item">
           <button class="faq-question"
-            >How do I get in contact with EIEI? <span>+</span>
+            >How do I get in contact with EIEI?
           </button>
           <div class="faq-answer">
             You can reach us by Phone: 484-501-9101 or Email: admin@eiforei.org.
@@ -1029,7 +1025,7 @@ import Layout from "../layouts/Layout.astro";
         </div>
         <div class="faq-item">
           <button class="faq-question"
-            >What areas do you offer services? <span>+</span>
+            >What areas do you offer services?
           </button>
           <div class="faq-answer">
             We provide services throughout Pennsylvania, with our main Special
@@ -1039,9 +1035,7 @@ import Layout from "../layouts/Layout.astro";
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question"
-            >What age groups do you serve? <span>+</span>
-          </button>
+          <button class="faq-question">What age groups do you serve?</button>
           <div class="faq-answer">
             Our primary services focus on children ages 3-5 years old. We offer
             specialized early intervention services, social playgroups, and
@@ -1051,7 +1045,7 @@ import Layout from "../layouts/Layout.astro";
         </div>
         <div class="faq-item">
           <button class="faq-question"
-            >Do you offer online sessions or training? <span>+</span>
+            >Do you offer online sessions or training?
           </button>
           <div class="faq-answer">
             Yes, we provide both in-person and virtual sessions. Our Family
@@ -1062,7 +1056,7 @@ import Layout from "../layouts/Layout.astro";
         </div>
         <div class="faq-item">
           <button class="faq-question"
-            >How do I apply for a job at EIEI? <span>+</span>
+            >How do I apply for a job at EIEI?
           </button>
           <div class="faq-answer">
             We're currently hiring! We seek Early Childhood and Special Needs
