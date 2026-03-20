@@ -43,6 +43,21 @@ import '../styles/global.css';
       flex-direction: column;
       overflow-y: auto;
       z-index: 100;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    .admin-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .admin-sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .admin-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
     }
 
     .logo { text-align: center; margin-bottom: 2rem; }
