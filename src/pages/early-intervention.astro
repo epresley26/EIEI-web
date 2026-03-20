@@ -1,568 +1,620 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import TestimonialSection from "../components/TestimonialSection.astro";
+import GallerySection from "../components/GallerySection.astro";
 ---
 
-<Layout title="Early Intervention & Behavioral Health - EIEI">
-  <style is:global>
-    /* PREMIUM MODERN STYLES */
-    .service-hero {
-      position: relative;
-      width: 100%;
-      min-height: 45vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10rem 2rem 5rem;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      color: white;
-      text-align: center;
-      overflow: hidden;
-    }
+<style>
+  /* PREMIUM MODERN STYLES */
+  .service-hero {
+    position: relative;
+    width: 100%;
+    min-height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10rem 2rem 5rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: white !important;
+    text-align: center;
+    overflow: hidden;
+  }
 
-    .service-hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.5;
-      z-index: 1;
-    }
+  .service-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: 1;
+  }
 
-    .service-hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+  .service-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    .service-hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      letter-spacing: -1px;
-    }
+  .service-hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+    color: white !important;
+  }
 
-    .service-hero p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
+  .service-hero p {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.9;
+    line-height: 1.6;
+    color: white !important;
+  }
 
-    .main-content {
-      background: #f8fafc;
-      padding: 5rem 2rem;
-      min-height: 50vh;
-    }
+  .main-content {
+    background: #f8fafc;
+    padding: 5rem 2rem;
+    min-height: 50vh;
+  }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  /* GALLERY SECTION */
+  .gallery-section {
+    padding: 80px 0;
+    margin-top: 4rem;
+  }
 
-    .breadcrumb {
-      margin-bottom: 3rem;
-      font-size: 0.95rem;
-      color: #64748b;
-      font-weight: 500;
-    }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
 
-    .breadcrumb a {
-      color: #2563eb;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
+  .gallery :global(.gallery-item) {
+    border-radius: 20px;
+    overflow: hidden;
+    height: 250px;
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
+  }
 
-    .breadcrumb a:hover {
-      color: #f97316;
-    }
+  .gallery :global(.gallery-item:hover) {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
 
+  .gallery :global(.gallery-item img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    margin-bottom: 3rem;
+    font-size: 0.95rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .breadcrumb a:hover {
+    color: #f97316;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 5rem;
+  }
+
+  .intro-text h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .intro-text p {
+    font-size: 1.1rem;
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .intro-highlights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .highlight-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  }
+
+  .highlight-item h4 {
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .highlight-item p {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .intro-cards {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .glass-card h3 {
+    font-size: 1.4rem;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 800;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    margin-top: 4rem;
+  }
+
+  .section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1rem;
+  }
+
+  .yearbooks-container {
+    background: #eff6ff;
+    border: 2px dashed #bfdbfe;
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    margin: 4rem 0;
+  }
+
+  .yearbooks-container h3 {
+    font-size: 2rem;
+    color: #1e3a8a;
+    margin-bottom: 1rem;
+    font-weight: 800;
+  }
+
+  .yearbooks-container p {
+    color: #475569;
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+
+  .yearbook-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .yearbook-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #2563eb;
+    color: white !important;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .yearbook-btn:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+  }
+
+  /* TIER GRID STYLES (EXPANDED) */
+  .tier-system {
+    background: white;
+    border-radius: 30px;
+    padding: 5rem;
+    margin: 5rem 0;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+  }
+
+  .tier-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .tier-header h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+  }
+
+  .tier-header p {
+    font-size: 1.2rem;
+    color: #64748b;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .tier-block {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 3rem;
+    margin-bottom: 2rem;
+    border-left: 6px solid #2563eb;
+  }
+
+  .tier-block.t2 {
+    border-color: #f97316;
+  }
+  .tier-block.t3 {
+    border-color: #dc2626;
+  }
+
+  .tier-block h3 {
+    font-size: 2rem;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    font-weight: 800;
+  }
+
+  .tier-block p {
+    color: #475569;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .tier-items {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .program-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  }
+
+  .program-card h4 {
+    color: #1e293b;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .program-card p {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .tier-bullet-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .tier-bullet-list li {
+    position: relative;
+    padding-left: 2rem;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  .tier-bullet-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #dc2626;
+    font-weight: 900;
+  }
+
+  .delegate-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 20px;
+    padding: 3rem;
+    color: white !important;
+    text-align: center;
+    margin: 4rem 0;
+  }
+
+  .delegate-banner h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #f97316;
+    font-weight: 800;
+  }
+
+  .delegate-banner p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    color: white !important;
+  }
+
+  .delegate-phone {
+    display: inline-block;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: white !important;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem 3rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .policy-block {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 5rem;
+  }
+
+  .policy-block h4 {
+    color: #0f172a;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-banner {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    border-radius: 20px;
+    padding: 4rem;
+    text-align: center;
+    color: white !important;
+    margin-top: 5rem;
+  }
+
+  .cta-banner h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: white !important;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: white;
+    color: #ea580c !important;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-decoration: none;
+    margin-top: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 900px) {
     .intro-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      margin-bottom: 5rem;
-    }
-
-    .intro-text h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 1.5rem;
-      line-height: 1.2;
-    }
-
-    .intro-text p {
-      font-size: 1.1rem;
-      color: #475569;
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-    }
-
-    .intro-highlights {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .highlight-item {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-    }
-
-    .highlight-item h4 {
-      color: #0f172a;
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin: 0;
-    }
-
-    .highlight-item p {
-      color: #64748b;
-      font-size: 0.95rem;
-      margin: 0;
-      line-height: 1.5;
-    }
-
-    .intro-cards {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 2.5rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: transform 0.3s ease;
-    }
-
-    .glass-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .glass-card h3 {
-      font-size: 1.4rem;
-      color: #0f172a;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-weight: 800;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
-      margin-top: 4rem;
-    }
-
-    .section-header h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 1rem;
-    }
-
-    .yearbooks-container {
-      background: #eff6ff;
-      border: 2px dashed #bfdbfe;
-      border-radius: 20px;
-      padding: 3rem;
-      text-align: center;
-      margin: 4rem 0;
-    }
-
-    .yearbooks-container h3 {
-      font-size: 2rem;
-      color: #1e3a8a;
-      margin-bottom: 1rem;
-      font-weight: 800;
-    }
-
-    .yearbooks-container p {
-      color: #475569;
-      font-size: 1.1rem;
-      max-width: 800px;
-      margin: 0 auto 2rem;
-      line-height: 1.7;
-    }
-
-    .yearbook-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-    }
-
-    .yearbook-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #2563eb;
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .yearbook-btn:hover {
-      background: #1e40af;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
-    }
-
-    /* TIER GRID STYLES (EXPANDED) */
-    .tier-system {
-      background: white;
-      border-radius: 30px;
-      padding: 5rem;
-      margin: 5rem 0;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
-    }
-
-    .tier-header {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-
-    .tier-header h2 {
-      font-size: 3rem;
-      font-weight: 900;
-      color: #0f172a;
-      margin-bottom: 1rem;
-      letter-spacing: -1px;
-    }
-
-    .tier-header p {
-      font-size: 1.2rem;
-      color: #64748b;
-      max-width: 800px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-
-    .tier-block {
-      background: #f8fafc;
-      border-radius: 20px;
-      padding: 3rem;
-      margin-bottom: 2rem;
-      border-left: 6px solid #2563eb;
-    }
-
-    .tier-block.t2 {
-      border-color: #f97316;
-    }
-    .tier-block.t3 {
-      border-color: #dc2626;
-    }
-
-    .tier-block h3 {
-      font-size: 2rem;
-      color: #0f172a;
-      margin-bottom: 1rem;
-      font-weight: 800;
-    }
-
-    .tier-block p {
-      color: #475569;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-    }
-
-    .tier-items {
-      display: grid;
       grid-template-columns: 1fr;
-      gap: 1.5rem;
-      margin-top: 2rem;
     }
-
-    .program-card {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    .intro-highlights {
+      grid-template-columns: 1fr;
     }
-
-    .program-card h4 {
-      color: #1e293b;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
+    .service-hero {
+      padding-top: 8rem;
+      min-height: 40vh;
     }
-
-    .program-card p {
-      font-size: 1rem;
-      color: #64748b;
-      margin: 0;
-      line-height: 1.6;
-    }
-
-    .tier-bullet-list {
-      list-style: none;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .tier-bullet-list li {
-      position: relative;
-      padding-left: 2rem;
-      color: #475569;
-      font-weight: 500;
-    }
-
-    .tier-bullet-list li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      color: #dc2626;
-      font-weight: 900;
-    }
-
-    .delegate-banner {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      border-radius: 20px;
-      padding: 3rem;
-      color: white;
-      text-align: center;
-      margin: 4rem 0;
-    }
-
-    .delegate-banner h3 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #f97316;
-      font-weight: 800;
-    }
-
-    .delegate-banner p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      margin-bottom: 1.5rem;
-    }
-
-    .delegate-phone {
-      display: inline-block;
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: white;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 1rem 3rem;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .policy-block {
-      background: white;
-      border-radius: 12px;
+    .tier-system {
       padding: 2rem;
-      border: 1px solid #e2e8f0;
-      font-size: 0.9rem;
-      color: #64748b;
-      line-height: 1.6;
-      margin-bottom: 5rem;
     }
-
-    .policy-block h4 {
-      color: #0f172a;
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
+    .tier-block {
+      padding: 2rem;
     }
-
     .cta-banner {
-      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-      border-radius: 20px;
-      padding: 4rem;
-      text-align: center;
-      color: white;
-      margin-top: 5rem;
+      padding: 3rem 1.5rem;
     }
-
-    .cta-banner h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
+    .delegate-phone {
+      font-size: 1.8rem;
+      padding: 1rem 1.5rem;
     }
-
-    .cta-button {
-      display: inline-block;
-      background: white;
-      color: #ea580c;
-      padding: 1.2rem 3rem;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      text-decoration: none;
-      margin-top: 2rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    @media (max-width: 900px) {
-      .intro-grid {
-        grid-template-columns: 1fr;
-      }
-      .intro-highlights {
-        grid-template-columns: 1fr;
-      }
-      .service-hero {
-        padding-top: 8rem;
-        min-height: 40vh;
-      }
-      .tier-system {
-        padding: 2rem;
-      }
-      .tier-block {
-        padding: 2rem;
-      }
-      .cta-banner {
-        padding: 3rem 1.5rem;
-      }
-      .delegate-phone {
-        font-size: 1.8rem;
-        padding: 1rem 1.5rem;
-      }
-      .yearbook-links {
-        flex-direction: column;
-      }
-    }
-
-    /* TOUR MODAL CSS */
-    #tourRequestModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(10px);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    .tour-modal-content {
-      background: white;
-      border-radius: 24px;
-      width: 100%;
-      max-width: 900px;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 3rem;
-      position: relative;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-
-    .tour-modal-close {
-      position: absolute;
-      top: 1.5rem;
-      right: 2rem;
-      font-size: 2.5rem;
-      background: none;
-      border: none;
-      color: #64748b;
-      cursor: pointer;
-      line-height: 1;
-      padding: 0;
-    }
-
-    .tour-modal-close:hover {
-      color: #ef4444;
-    }
-
-    .tour-form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .tour-form-group {
-      display: flex;
+    .yearbook-links {
       flex-direction: column;
-      gap: 0.5rem;
     }
+  }
 
-    .tour-form-group.full {
-      grid-column: 1 / -1;
+  /* TOUR MODAL CSS */
+  #tourRequestModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .tour-modal-content {
+    background: white;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 3rem;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  .tour-modal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: 2.5rem;
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .tour-modal-close:hover {
+    color: #ef4444;
+  }
+
+  .tour-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .tour-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tour-form-group.full {
+    grid-column: 1 / -1;
+  }
+
+  .tour-form-group label {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.95rem;
+  }
+
+  .tour-form-group input[type="text"],
+  .tour-form-group input[type="email"],
+  .tour-form-group input[type="tel"],
+  .tour-form-group input[type="date"],
+  .tour-form-group input[type="number"],
+  .tour-form-group select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    color: #0f172a;
+    transition: all 0.3s;
+  }
+
+  .tour-form-group input:focus,
+  .tour-form-group select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .radio-group,
+  .checkbox-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .radio-group label,
+  .checkbox-group label {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .tour-form-grid {
+      grid-template-columns: 1fr;
     }
-
-    .tour-form-group label {
-      font-weight: 600;
-      color: #1e293b;
-      font-size: 0.95rem;
+    .tour-modal-content {
+      padding: 2rem 1.5rem;
     }
+  }
+</style>
 
-    .tour-form-group input[type="text"],
-    .tour-form-group input[type="email"],
-    .tour-form-group input[type="tel"],
-    .tour-form-group input[type="date"],
-    .tour-form-group input[type="number"],
-    .tour-form-group select {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-family: inherit;
-      color: #0f172a;
-      transition: all 0.3s;
-    }
-
-    .tour-form-group input:focus,
-    .tour-form-group select:focus {
-      outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .radio-group,
-    .checkbox-group {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .radio-group label,
-    .checkbox-group label {
-      font-weight: 400;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      .tour-form-grid {
-        grid-template-columns: 1fr;
-      }
-      .tour-modal-content {
-        padding: 2rem 1.5rem;
-      }
-    }
-  </style>
-
+<Layout title="Early Intervention & Behavioral Health - EIEI">
   <section class="service-hero">
     <div class="service-hero-content">
       <h1>Early Intervention & Behavioral Health</h1>
@@ -643,7 +695,7 @@ import Layout from "../layouts/Layout.astro";
               href="#"
               onclick="openTourRequestModal(); return false;"
               class="cta-button"
-              style="margin-top: 1rem; display: inline-block; padding: 0.8rem 1.5rem; font-size: 0.95rem; background: #2563eb; color: white;"
+              style="margin-top: 1rem; display: inline-block; padding: 0.8rem 1.5rem; font-size: 0.95rem; background: #2563eb; color: white !important;"
               >🗓️ Schedule a Tour</a
             >
           </div>
@@ -681,6 +733,11 @@ import Layout from "../layouts/Layout.astro";
             target="_blank"
             class="yearbook-btn"
             style="background: #f97316;">📖 Ver Anuario 2024 (Español)</a
+          >
+          <a
+            href="https://drive.google.com/file/d/1t5vnTdpQj1iVUN2eYqEnIAQr7FjUTZLN/view?usp=sharing"
+            target="_blank"
+            class="yearbook-btn">📖 View Yearbook 2025 (English)</a
           >
         </div>
       </div>
@@ -811,6 +868,11 @@ import Layout from "../layouts/Layout.astro";
         </div>
       </div>
 
+      <GallerySection program="early-intervention" />
+
+      <!-- TESTIMONIALS SECTION -->
+      <TestimonialSection program="early-intervention" />
+
       <div class="delegate-banner">
         <h3>Additional Mental Health Resources</h3>
         <p>
@@ -818,14 +880,14 @@ import Layout from "../layouts/Layout.astro";
           constant support line may be utilized at any hour:
         </p>
         <div class="delegate-phone">
-          24-Hour Mental Health Delegate Line: 215-685-6440
+          24-Hour Mental Health Delegate Line <br /> 215-685-6440
         </div>
       </div>
 
       <div class="cta-banner">
         <h2>Join Our ECSE Waitlist Today</h2>
         <p
-          style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto;"
+          style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; color: white !important;"
         >
           Secure a spot in our world-class specialized classrooms. We are deeply
           committed to nurturing your child's brilliance.

@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TestimonialSection from '../components/TestimonialSection.astro';
+import GallerySection from '../components/GallerySection.astro';
 ---
 
 <Layout title="Community Programs - EIEI">
@@ -55,6 +57,52 @@ import Layout from '../layouts/Layout.astro';
       background: #f8fafc;
       padding: 5rem 2rem;
       min-height: 50vh;
+    }
+
+    /* GALLERY SECTION */
+    .gallery-section {
+      padding: 80px 0;
+      margin-top: 4rem;
+    }
+    
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    
+    .gallery :global(.gallery-item) {
+      border-radius: 20px;
+      overflow: hidden;
+      height: 250px;
+      cursor: pointer;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+      transition: all 0.4s ease;
+    }
+    
+    .gallery :global(.gallery-item:hover) {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .gallery :global(.gallery-item img) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      background: #eff6ff;
+      color: #2563eb;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
     }
 
     .container {
@@ -383,6 +431,10 @@ import Layout from '../layouts/Layout.astro';
         <p style="font-size: 1.2rem; opacity: 0.9; max-width: 650px; margin: 0 auto;">Does your structural grid require massive oversight, funding channels, and behavioral interventions? Request immediate integration.</p>
         <a href="/contact-us" class="cta-button">Initiate Grant Proposal</a>
       </div>
+
+      <GallerySection program="community-programs" />
+
+      <TestimonialSection program="community-programs" />
 
     </div>
   </main>

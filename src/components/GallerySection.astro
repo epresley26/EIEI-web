@@ -1,0 +1,553 @@
+---
+interface Props {
+  program?: string;
+  showFilters?: boolean;
+}
+
+const { program = "general", showFilters = false } = Astro.props;
+---
+
+<section
+  class="gallery-section reveal"
+  data-program={program}
+  data-show-filters={showFilters.toString()}
+>
+  <div class="gallery-container">
+    <div class="gallery-header">
+      <div class="badge">Visual Diary</div>
+      <h2 id="galleryTitle">Our Impact Gallery</h2>
+      <p id="gallerySubtitle">
+        Witness the journey of our children, families, and impact across the
+        community.
+      </p>
+    </div>
+
+    {
+      showFilters && (
+        <div class="gallery-filters" id="galleryFilters">
+          <button class="filter-btn active" data-filter="general">
+            All
+          </button>
+          <button class="filter-btn" data-filter="early-intervention">
+            Early Intervention
+          </button>
+          <button class="filter-btn" data-filter="cacfp-initiative">
+            CACFP
+          </button>
+          <button class="filter-btn" data-filter="training-development">
+            Training
+          </button>
+          <button class="filter-btn" data-filter="career-development">
+            Career
+          </button>
+          <button class="filter-btn" data-filter="family-empowerment">
+            Family
+          </button>
+          <button class="filter-btn" data-filter="community-programs">
+            Community
+          </button>
+          <button class="filter-btn" data-filter="supporting-inclusions">
+            Affiliates
+          </button>
+        </div>
+      )
+    }
+
+    <div class="gallery-carousel-wrapper">
+      <div class="gallery-carousel" id="galleryCarousel">
+        <div class="gallery-loading">
+          <div class="spinner"></div>
+          <p>Loading gallery...</p>
+        </div>
+      </div>
+
+      <div class="gallery-nav">
+        <button
+          class="nav-btn prev"
+          id="prevGallery"
+          aria-label="Previous image"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            ><path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+        <button class="nav-btn next" id="nextGallery" aria-label="Next image">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            ><path d="M9 18l6-6-6-6"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="gallery-dots" id="galleryDots"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery-section {
+    padding: 8rem 2rem;
+    background: #ffffff;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .gallery-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .gallery-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+
+  .gallery-header h2 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+  }
+
+  .gallery-header p {
+    color: #64748b;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* FILTERS */
+  .gallery-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 4rem;
+  }
+
+  .filter-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .filter-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+    transform: translateY(-2px);
+  }
+
+  .filter-btn.active {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+  }
+
+  /* CAROUSEL */
+  .gallery-carousel-wrapper {
+    position: relative;
+    padding: 2rem 0;
+  }
+
+  .gallery-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    position: relative;
+    perspective: 1000px;
+    gap: 2rem;
+  }
+
+  .gallery-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #64748b;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  :global(.gallery-card) {
+    position: absolute;
+    width: 600px;
+    height: 300px;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #f1f5f9;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8) translateZ(-200px);
+    z-index: 1;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    :global(.gallery-card) {
+      width: 90%;
+      height: 200px;
+    }
+    .gallery-carousel {
+      min-height: 150px;
+    }
+  }
+
+  :global(.gallery-card img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.6s ease;
+  }
+
+  :global(.gallery-card:hover img) {
+    transform: scale(1.05);
+  }
+
+  /* CAROUSEL STATES */
+  :global(.gallery-card.active) {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+    z-index: 10;
+    box-shadow: 0 35px 70px -15px rgba(37, 99, 235, 0.3);
+    border: 8px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+  }
+
+  :global(.gallery-card.prev-card) {
+    opacity: 0.6;
+    transform: translateX(-60%) scale(0.8) translateZ(-100px) rotateY(15deg);
+    z-index: 5;
+    filter: blur(2px);
+  }
+
+  :global(.gallery-card.next-card) {
+    opacity: 0.6;
+    transform: translateX(60%) scale(0.8) translateZ(-100px) rotateY(-15deg);
+    z-index: 5;
+    filter: blur(2px);
+  }
+
+  :global(.gallery-card.far-prev) {
+    opacity: 0;
+    transform: translateX(-120%) scale(0.6) translateZ(-200px);
+  }
+
+  :global(.gallery-card.far-next) {
+    opacity: 0;
+    transform: translateX(120%) scale(0.6) translateZ(-200px);
+  }
+
+  /* NAV BUTTONS */
+  .gallery-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .nav-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .nav-btn:hover {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+    transform: scale(1.1);
+    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2);
+  }
+
+  .nav-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* DOTS */
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  :global(.gallery-dot) {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  :global(.gallery-dot.active) {
+    width: 24px;
+    background: #2563eb;
+    border-radius: 10px;
+  }
+</style>
+
+<script>
+  function initializeGallery(section: HTMLElement) {
+    const container = section.querySelector("#galleryCarousel") as HTMLElement;
+    const dotsContainer = section.querySelector("#galleryDots") as HTMLElement;
+    const programIdAttr = section.getAttribute("data-program") || "general";
+    const showFilters = section.getAttribute("data-show-filters") === "true";
+    let images: any[] = [];
+    let currentIndex = 0;
+    let autoRotateInterval: any = null;
+
+    async function loadImages(id: string) {
+      if (!container) return;
+
+      container.innerHTML = `
+          <div class="gallery-loading">
+            <div class="spinner"></div>
+            <p>Loading gallery...</p>
+          </div>
+        `;
+
+      try {
+        // Wait for Firebase
+        let attempts = 0;
+        while (!(window as any).firebaseDB && attempts < 20) {
+          await new Promise((r) => setTimeout(r, 250));
+          attempts++;
+        }
+
+        if (!(window as any).firebaseDB)
+          throw new Error("Firebase not initialized");
+
+        let query = (window as any).firebaseDB.collection("gallery");
+        if (id !== "general") {
+          query = query.where("programId", "==", id);
+        }
+
+        const snapshot = await query.limit(50).get();
+        images = snapshot.docs.map((doc: any) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // Sort locally by uploadedAt descending to avoid composite index requirement
+        images.sort((a: any, b: any) => {
+          const dateA = a.uploadedAt?.toDate?.() || new Date(a.uploadedAt || 0);
+          const dateB = b.uploadedAt?.toDate?.() || new Date(b.uploadedAt || 0);
+          return dateB - dateA;
+        });
+
+        // Limit to 10 for carousel performance
+        images = images.slice(0, 10);
+
+        if (images.length === 0) {
+          container.innerHTML =
+            '<p style="text-align: center; color: #64748b;">No images found for this category.</p>';
+          if (dotsContainer) dotsContainer.innerHTML = "";
+          return;
+        }
+
+        renderCarousel();
+      } catch (err) {
+        console.error("Gallery load error:", err);
+        container.innerHTML =
+          '<p style="text-align: center; color: #ef4444;">Unable to load gallery. Please try again later.</p>';
+      }
+    }
+
+    function renderCarousel() {
+      if (!container || !dotsContainer) return;
+      container.innerHTML = "";
+      dotsContainer.innerHTML = "";
+      currentIndex = 0;
+
+      images.forEach((img, idx) => {
+        const card = document.createElement("div");
+        card.className = `gallery-card ${idx === 0 ? "active" : ""}`;
+        card.innerHTML = `<img src="${img.imageUrl}" alt="${
+          img.fileName || "Gallery Image"
+        }" loading="lazy">`;
+
+        card.onclick = () => {
+          if (idx === currentIndex) {
+            // Open fullscreen logic
+            const imgEl = card.querySelector("img");
+            if (imgEl && (window as any).openFullscreen) {
+              (window as any).openFullscreen(card);
+            }
+          } else {
+            stopAutoRotate();
+            goToIndex(idx);
+            startAutoRotate();
+          }
+        };
+
+        container.appendChild(card);
+
+        const dot = document.createElement("div");
+        dot.className = `gallery-dot ${idx === 0 ? "active" : ""}`;
+        dot.onclick = () => {
+          stopAutoRotate();
+          goToIndex(idx);
+          startAutoRotate();
+        };
+        dotsContainer.appendChild(dot);
+      });
+
+      updateCarousel();
+    }
+
+    function navigate(direction: number) {
+      if (images.length === 0) return;
+      currentIndex = (currentIndex + direction + images.length) % images.length;
+      updateCarousel();
+    }
+
+    function goToIndex(index: number) {
+      currentIndex = index;
+      updateCarousel();
+    }
+
+    function updateCarousel() {
+      if (!container || !dotsContainer) return;
+      const cards = container.querySelectorAll(".gallery-card");
+      const dots = dotsContainer.querySelectorAll(".gallery-dot");
+
+      cards.forEach((card, idx) => {
+        card.className = "gallery-card";
+        if (idx === currentIndex) {
+          card.classList.add("active");
+        } else if (idx === (currentIndex - 1 + images.length) % images.length) {
+          card.classList.add("prev-card");
+        } else if (idx === (currentIndex + 1) % images.length) {
+          card.classList.add("next-card");
+        } else if (idx < currentIndex) {
+          card.classList.add("far-prev");
+        } else {
+          card.classList.add("far-next");
+        }
+      });
+
+      dots.forEach((dot, idx) => {
+        dot.className = `gallery-dot ${idx === currentIndex ? "active" : ""}`;
+      });
+    }
+
+    function startAutoRotate() {
+      if (images.length > 1) {
+        autoRotateInterval = setInterval(() => navigate(1), 5000);
+      }
+    }
+
+    function stopAutoRotate() {
+      if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = null;
+      }
+    }
+
+    // Initial setup
+    if (showFilters) {
+      const filters = section.querySelectorAll(".filter-btn");
+      filters.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          filters.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const filter = btn.getAttribute("data-filter");
+          if (filter) {
+            stopAutoRotate();
+            await loadImages(filter);
+            startAutoRotate();
+          }
+        });
+      });
+    }
+
+    const prevBtn = section.querySelector("#prevGallery");
+    const nextBtn = section.querySelector("#nextGallery");
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        stopAutoRotate();
+        navigate(-1);
+        startAutoRotate();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        stopAutoRotate();
+        navigate(1);
+        startAutoRotate();
+      });
+    }
+
+    loadImages(programIdAttr).then(() => {
+      startAutoRotate();
+    });
+  }
+
+  // Initialize all galleries on the page
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".gallery-section").forEach((section) => {
+      initializeGallery(section as HTMLElement);
+    });
+  });
+</script>

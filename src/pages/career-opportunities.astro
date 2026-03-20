@@ -1,5 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import TestimonialSection from "../components/TestimonialSection.astro";
 ---
 
 <Layout title="Career Opportunities - EIEI">
@@ -23,7 +24,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .career-hero::before {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -97,7 +98,7 @@ import Layout from '../layouts/Layout.astro';
       background: white;
       border-radius: 20px;
       padding: 2.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
       border: 1px solid #e2e8f0;
       transition: all 0.4s ease;
       position: relative;
@@ -105,7 +106,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .mission-card::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -200,7 +201,7 @@ import Layout from '../layouts/Layout.astro';
       background: white;
       border-radius: 20px;
       padding: 2.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       border: 1px solid #e2e8f0;
       transition: all 0.3s ease;
       display: flex;
@@ -248,7 +249,7 @@ import Layout from '../layouts/Layout.astro';
       background: #f1f5f9;
       color: #475569;
     }
-    
+
     .job-badge.salary {
       background: #ecfdf5;
       color: #059669;
@@ -267,7 +268,7 @@ import Layout from '../layouts/Layout.astro';
       border-top: 1px dashed #e2e8f0;
       padding-top: 1.5rem;
     }
-    
+
     .job-reqs li {
       margin-bottom: 0.5rem;
     }
@@ -317,7 +318,7 @@ import Layout from '../layouts/Layout.astro';
       max-height: 85vh;
       display: grid;
       grid-template-columns: 4fr 6fr;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
       transform: translateY(20px) scale(0.98);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
@@ -375,7 +376,8 @@ import Layout from '../layouts/Layout.astro';
       color: #334155;
       font-size: 0.95rem;
     }
-    .form-group input, .form-group textarea {
+    .form-group input,
+    .form-group textarea {
       width: 100%;
       padding: 0.8rem 1.2rem;
       border: 1px solid #cbd5e1;
@@ -385,7 +387,8 @@ import Layout from '../layouts/Layout.astro';
       transition: all 0.3s;
       background: #f8fafc;
     }
-    .form-group input:focus, .form-group textarea:focus {
+    .form-group input:focus,
+    .form-group textarea:focus {
       outline: none;
       border-color: #2563eb;
       background: white;
@@ -396,7 +399,7 @@ import Layout from '../layouts/Layout.astro';
       background: white;
       border: 1px dashed #cbd5e1;
     }
-    
+
     @media (max-width: 900px) {
       .job-header {
         flex-direction: column;
@@ -423,7 +426,9 @@ import Layout from '../layouts/Layout.astro';
       .app-modal-right {
         padding: 2rem;
       }
-      .app-modal { padding: 1rem; }
+      .app-modal {
+        padding: 1rem;
+      }
     }
   </style>
 
@@ -431,7 +436,11 @@ import Layout from '../layouts/Layout.astro';
   <section class="career-hero">
     <div class="career-hero-content">
       <h1>Join Our Dream Team</h1>
-      <p>Are you ready to wake up every day knowing you're making a real difference in young children's lives? Join EIEI and be part of a mission that truly matters.</p>
+      <p>
+        Are you ready to wake up every day knowing you're making a real
+        difference in young children's lives? Join EIEI and be part of a mission
+        that truly matters.
+      </p>
     </div>
   </section>
 
@@ -439,23 +448,38 @@ import Layout from '../layouts/Layout.astro';
   <section class="mission-container">
     <div class="section-wrap" style="padding: 0;">
       <h2 class="section-title">Why Work at EIEI?</h2>
-      <p class="section-subtitle">We believe that happy, supported educators and professionals are the cornerstone of a thriving early intervention environment.</p>
-      
+      <p class="section-subtitle">
+        We believe that happy, supported educators and professionals are the
+        cornerstone of a thriving early intervention environment.
+      </p>
+
       <div class="mission-grid">
         <div class="mission-card">
           <div class="icon-wrap">❤️</div>
           <h3>Heartfelt Mission</h3>
-          <p>Joining EIEI is not just about a job – it's about embracing a mission close to your heart. Help shape young children's lives and give them a fighting chance to succeed.</p>
+          <p>
+            Joining EIEI is not just about a job – it's about embracing a
+            mission close to your heart. Help shape young children's lives and
+            give them a fighting chance to succeed.
+          </p>
         </div>
         <div class="mission-card">
           <div class="icon-wrap">🌱</div>
           <h3>Nurturing Minds</h3>
-          <p>We see future artists, scientists, teachers, and leaders. The laughter, breakthrough moments, and small victories are all part of a beautiful journey, and you're never on it alone.</p>
+          <p>
+            We see future artists, scientists, teachers, and leaders. The
+            laughter, breakthrough moments, and small victories are all part of
+            a beautiful journey, and you're never on it alone.
+          </p>
         </div>
         <div class="mission-card">
           <div class="icon-wrap">🤝</div>
           <h3>Together We Thrive</h3>
-          <p>Our EIEI family thrives on teamwork, mutual respect, and shared passion. We constantly learn from one another, update our methods, and innovate together.</p>
+          <p>
+            Our EIEI family thrives on teamwork, mutual respect, and shared
+            passion. We constantly learn from one another, update our methods,
+            and innovate together.
+          </p>
         </div>
       </div>
     </div>
@@ -464,24 +488,39 @@ import Layout from '../layouts/Layout.astro';
   <!-- WORK LIFE BALANCE / PERKS -->
   <section class="section-wrap">
     <h2 class="section-title">Exceptional Work-Life Balance</h2>
-    <p class="section-subtitle">We provide the flexibility, downtime, and rewards you need to bring your best self to work.</p>
-    
+    <p class="section-subtitle">
+      We provide the flexibility, downtime, and rewards you need to bring your
+      best self to work.
+    </p>
+
     <div class="benefits-grid">
       <div class="benefit-item">
         <strong>🌴 33 Days Off Annually</strong>
-        <p>9 deep clean days, 3 weeks of vacation, and fully paid professional development time.</p>
+        <p>
+          9 deep clean days, 3 weeks of vacation, and fully paid professional
+          development time.
+        </p>
       </div>
       <div class="benefit-item">
         <strong>⏰ Flexible Scheduling</strong>
-        <p>Morning, afternoon, evening, and weekend shifts available. Full-time and part-time structural options.</p>
+        <p>
+          Morning, afternoon, evening, and weekend shifts available. Full-time
+          and part-time structural options.
+        </p>
       </div>
       <div class="benefit-item">
         <strong>💵 $500 Signing Bonus</strong>
-        <p>New employees receive a guaranteed $500 bonus upon completing their first 100 school days of employment.</p>
+        <p>
+          New employees receive a guaranteed $500 bonus upon completing their
+          first 100 school days of employment.
+        </p>
       </div>
       <div class="benefit-item">
         <strong>📈 Professional Growth</strong>
-        <p>Continuous training, structured supervision, and clearly defined upward career development pathways.</p>
+        <p>
+          Continuous training, structured supervision, and clearly defined
+          upward career development pathways.
+        </p>
       </div>
     </div>
   </section>
@@ -490,7 +529,10 @@ import Layout from '../layouts/Layout.astro';
   <section class="mission-container">
     <div class="section-wrap" style="padding: 0;">
       <h2 class="section-title">Current Openings</h2>
-      <p class="section-subtitle">Find the perfect role to showcase your skills and start making an impact.</p>
+      <p class="section-subtitle">
+        Find the perfect role to showcase your skills and start making an
+        impact.
+      </p>
       <div id="jobs-container" class="jobs-container">
         <div class="empty-jobs">Loading available positions...</div>
       </div>
@@ -499,12 +541,17 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- COMPREHENSIVE BENEFITS -->
   <section class="section-wrap">
-    <div style="background: white; border-radius: 24px; padding: 4rem; box-shadow: 0 15px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+    <div
+      style="background: white; border-radius: 24px; padding: 4rem; box-shadow: 0 15px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;"
+    >
       <h2 class="section-title">Comprehensive Benefits Package</h2>
       <div class="benefits-grid" style="margin-top: 3rem;">
         <div class="benefit-item" style="border: none; background: #f8fafc;">
           <strong>Medical & Dental</strong>
-          <p>Comprehensive health coverage and full dental for you and your family.</p>
+          <p>
+            Comprehensive health coverage and full dental for you and your
+            family.
+          </p>
         </div>
         <div class="benefit-item" style="border: none; background: #f8fafc;">
           <strong>403(b) Retirement Plan</strong>
@@ -512,11 +559,16 @@ import Layout from '../layouts/Layout.astro';
         </div>
         <div class="benefit-item" style="border: none; background: #f8fafc;">
           <strong>Loan Forgiveness</strong>
-          <p>Assistance qualifying for the Public Service Loan Forgiveness Program.</p>
+          <p>
+            Assistance qualifying for the Public Service Loan Forgiveness
+            Program.
+          </p>
         </div>
         <div class="benefit-item" style="border: none; background: #f8fafc;">
           <strong>529 Education Plans</strong>
-          <p>Tax-advantaged savings plans for your children's future education.</p>
+          <p>
+            Tax-advantaged savings plans for your children's future education.
+          </p>
         </div>
         <div class="benefit-item" style="border: none; background: #f8fafc;">
           <strong>Assistance Program (EAP)</strong>
@@ -534,57 +586,114 @@ import Layout from '../layouts/Layout.astro';
   <div id="applicationModal" class="app-modal">
     <div class="app-modal-content">
       <div class="app-modal-left">
-        <h3 id="modalJobTitle" style="color: #0f172a; font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; line-height: 1.2;"></h3>
-        
-        <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+        <h3
+          id="modalJobTitle"
+          style="color: #0f172a; font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; line-height: 1.2;"
+        >
+        </h3>
+
+        <div
+          style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;"
+        >
           <div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Type</div>
-            <div id="modalJobType" style="font-size: 1.1rem; color: #2563eb; font-weight: 600;">-</div>
+            <div
+              style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;"
+            >
+              Type
+            </div>
+            <div
+              id="modalJobType"
+              style="font-size: 1.1rem; color: #2563eb; font-weight: 600;"
+            >
+              -
+            </div>
           </div>
           <div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Location</div>
-            <div id="modalJobLocation" style="font-size: 1.1rem; font-weight: 500;">-</div>
+            <div
+              style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;"
+            >
+              Location
+            </div>
+            <div
+              id="modalJobLocation"
+              style="font-size: 1.1rem; font-weight: 500;"
+            >
+              -
+            </div>
           </div>
           <div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Salary</div>
-            <div id="modalJobSalary" style="font-size: 1.1rem; color: #059669; font-weight: 500;">-</div>
+            <div
+              style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;"
+            >
+              Salary
+            </div>
+            <div
+              id="modalJobSalary"
+              style="font-size: 1.1rem; color: #059669; font-weight: 500;"
+            >
+              -
+            </div>
           </div>
           <div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Schedule</div>
-            <div id="modalJobEmploymentType" style="font-size: 1.1rem; font-weight: 500;">-</div>
+            <div
+              style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;"
+            >
+              Schedule
+            </div>
+            <div
+              id="modalJobEmploymentType"
+              style="font-size: 1.1rem; font-weight: 500;"
+            >
+              -
+            </div>
           </div>
         </div>
 
-        <h4 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">Description</h4>
-        <p id="modalJobDescription" style="line-height: 1.7; color: #475569;"></p>
+        <h4
+          style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;"
+        >
+          Description
+        </h4>
+        <p id="modalJobDescription" style="line-height: 1.7; color: #475569;">
+        </p>
       </div>
-      
+
       <div class="app-modal-right">
         <button class="close-modal" onclick="closeApplicationModal()">✕</button>
-        <h3 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 2rem; color: #0f172a;">Submit Application</h3>
-        
+        <h3
+          style="font-size: 1.8rem; font-weight: 800; margin-bottom: 2rem; color: #0f172a;"
+        >
+          Submit Application
+        </h3>
+
         <form id="applicationForm" onsubmit="submitJobApplication(event)">
           <div class="form-group">
             <label for="appName">Full Name *</label>
-            <input type="text" id="appName" required>
+            <input type="text" id="appName" required />
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;"
+          >
             <div class="form-group">
               <label for="appEmail">Email Address *</label>
-              <input type="email" id="appEmail" required>
+              <input type="email" id="appEmail" required />
             </div>
             <div class="form-group">
               <label for="appPhone">Phone Number *</label>
-              <input type="tel" id="appPhone" required>
+              <input type="tel" id="appPhone" required />
             </div>
           </div>
           <div class="form-group">
             <label for="appExperience">Years of Experience *</label>
-            <input type="number" id="appExperience" min="0" required>
+            <input type="number" id="appExperience" min="0" required />
           </div>
           <div class="form-group">
             <label for="appResume">Resume/CV (URL)</label>
-            <input type="text" id="appResume" placeholder="e.g. LinkedIn profile or portfolio link">
+            <input
+              type="text"
+              id="appResume"
+              placeholder="e.g. LinkedIn profile or portfolio link"
+            />
           </div>
           <div class="form-group">
             <label for="appResumeFile">Or Upload Resume File (PDF/DOC)</label>
@@ -592,9 +701,14 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div class="form-group">
             <label for="appCoverLetter">Cover Letter / Note</label>
-            <textarea id="appCoverLetter" rows="4" placeholder="Tell us why you are a great fit..."></textarea>
+            <textarea
+              id="appCoverLetter"
+              rows="4"
+              placeholder="Tell us why you are a great fit..."></textarea>
           </div>
-          <button type="submit" class="primary-btn" style="width: 100%;">Submit Application</button>
+          <button type="submit" class="primary-btn" style="width: 100%;"
+            >Submit Application</button
+          >
         </form>
       </div>
     </div>
@@ -602,52 +716,72 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- JAVASCRIPT LOGIC -->
   <script is:inline>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener("DOMContentLoaded", () => {
       waitForFirebaseJobs();
     });
 
     function waitForFirebaseJobs() {
-      if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
+      if (
+        window.firebaseDB &&
+        typeof window.firebaseDB.collection === "function"
+      ) {
         loadJobOpenings();
-      } else { 
-        setTimeout(waitForFirebaseJobs, 100); 
+      } else {
+        setTimeout(waitForFirebaseJobs, 100);
       }
     }
 
     async function loadJobOpenings() {
       try {
-        const jobsSnapshot = await window.firebaseDB.collection('jobs').orderBy('postedAt', 'desc').get();
-        const jobsContainer = document.getElementById('jobs-container');
-        
+        const jobsSnapshot = await window.firebaseDB
+          .collection("jobs")
+          .orderBy("postedAt", "desc")
+          .get();
+        const jobsContainer = document.getElementById("jobs-container");
+
         if (!jobsSnapshot || jobsSnapshot.empty) {
-          jobsContainer.innerHTML = '<div class="empty-jobs">No job openings available at this time. Please check back soon!</div>';
+          jobsContainer.innerHTML =
+            '<div class="empty-jobs">No job openings available at this time. Please check back soon!</div>';
           return;
         }
 
-        jobsContainer.innerHTML = '';
-        jobsSnapshot.forEach(doc => {
+        jobsContainer.innerHTML = "";
+        jobsSnapshot.forEach((doc) => {
           const job = doc.data();
           const jobId = doc.id;
-          
-          let requirementsHTML = '';
+
+          let requirementsHTML = "";
           if (job.requirements) {
-            const requirementsList = Array.isArray(job.requirements) ? job.requirements.join('\n') : job.requirements;
-            requirementsHTML = requirementsList.split('\n')
-              .filter(item => item.trim())
-              .map(item => `<li>${item.trim()}</li>`)
-              .join('');
+            const requirementsList = Array.isArray(job.requirements)
+              ? job.requirements.join("\n")
+              : job.requirements;
+            requirementsHTML = requirementsList
+              .split("\n")
+              .filter((item) => item.trim())
+              .map((item) => `<li>${item.trim()}</li>`)
+              .join("");
           }
 
-          const jobCard = document.createElement('div');
-          jobCard.className = 'job-card';
+          const jobCard = document.createElement("div");
+          jobCard.className = "job-card";
           jobCard.innerHTML = `
             <div class="job-header">
               <div class="job-title-area">
-                <h3>${job.title || 'Untitled Position'}</h3>
+                <h3>${job.title || "Untitled Position"}</h3>
                 <div class="job-meta">
-                  ${job.type ? `<span class="job-badge">${job.type}</span>` : ''}
-                  ${job.location ? `<span class="job-badge location">${job.location}</span>` : ''}
-                  ${job.salary ? `<span class="job-badge salary">${job.salary}</span>` : ''}
+                  ${
+                    job.type ? `<span class="job-badge">${job.type}</span>` : ""
+                  }
+                  ${
+                    job.location
+                      ? `<span class="job-badge location">${job.location}</span>`
+                      : ""
+                  }
+                  ${
+                    job.salary
+                      ? `<span class="job-badge salary">${job.salary}</span>`
+                      : ""
+                  }
                 </div>
               </div>
               <div class="apply-btn-wrapper">
@@ -655,23 +789,32 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
             
-            <div class="job-desc">${job.description || ''}</div>
-            ${requirementsHTML ? `<ul class="job-reqs">${requirementsHTML}</ul>` : ''}
+            <div class="job-desc">${job.description || ""}</div>
+            ${
+              requirementsHTML
+                ? `<ul class="job-reqs">${requirementsHTML}</ul>`
+                : ""
+            }
           `;
-          
+
           // Wire up Apply logic preserving JSON object
-          const applyBtn = jobCard.querySelector('.apply-now-btn');
+          const applyBtn = jobCard.querySelector(".apply-now-btn");
           applyBtn.dataset.jobData = JSON.stringify(job);
-          applyBtn.addEventListener('click', function(e) {
+          applyBtn.addEventListener("click", function (e) {
             e.preventDefault();
-            openApplicationModal(jobId, job.title, JSON.parse(this.dataset.jobData));
+            openApplicationModal(
+              jobId,
+              job.title,
+              JSON.parse(this.dataset.jobData)
+            );
           });
-          
+
           jobsContainer.appendChild(jobCard);
         });
       } catch (error) {
-        console.error('Error loading jobs:', error);
-        document.getElementById('jobs-container').innerHTML = '<div class="empty-jobs" style="color:#ef4444;">Error loading job openings. Please try again later.</div>';
+        console.error("Error loading jobs:", error);
+        document.getElementById("jobs-container").innerHTML =
+          '<div class="empty-jobs" style="color:#ef4444;">Error loading job openings. Please try again later.</div>';
       }
     }
 
@@ -679,50 +822,65 @@ import Layout from '../layouts/Layout.astro';
 
     function openApplicationModal(jobId, jobTitle, jobData) {
       currentJobId = jobId;
-      document.getElementById('modalJobTitle').textContent = jobTitle || 'Application';
-      document.getElementById('modalJobType').textContent = jobData.type || '-';
-      document.getElementById('modalJobLocation').textContent = jobData.location || '-';
-      document.getElementById('modalJobSalary').textContent = jobData.salary || '-';
-      document.getElementById('modalJobEmploymentType').textContent = jobData.employmentType || 'Full-time';
-      document.getElementById('modalJobDescription').textContent = jobData.description || 'No description available';
-      
-      const modal = document.getElementById('applicationModal');
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      document.getElementById("modalJobTitle").textContent =
+        jobTitle || "Application";
+      document.getElementById("modalJobType").textContent = jobData.type || "-";
+      document.getElementById("modalJobLocation").textContent =
+        jobData.location || "-";
+      document.getElementById("modalJobSalary").textContent =
+        jobData.salary || "-";
+      document.getElementById("modalJobEmploymentType").textContent =
+        jobData.employmentType || "Full-time";
+      document.getElementById("modalJobDescription").textContent =
+        jobData.description || "No description available";
+
+      const modal = document.getElementById("applicationModal");
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
     }
 
     function closeApplicationModal() {
-      const modal = document.getElementById('applicationModal');
-      modal.classList.remove('active');
-      document.getElementById('applicationForm').reset();
+      const modal = document.getElementById("applicationModal");
+      modal.classList.remove("active");
+      document.getElementById("applicationForm").reset();
       currentJobId = null;
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
 
     async function submitJobApplication(event) {
       event.preventDefault();
-      
+
       if (!currentJobId) {
-        alert('Error: Job ID not found.');
+        alert("Error: Job ID not found.");
         return;
       }
 
-      const name = document.getElementById('appName').value.trim();
-      const email = document.getElementById('appEmail').value.trim();
-      const phone = document.getElementById('appPhone').value.trim();
-      const experience = document.getElementById('appExperience').value;
-      const resumeUrl = document.getElementById('appResume').value.trim();
-      const resumeFile = document.getElementById('appResumeFile').files[0];
-      const coverLetter = document.getElementById('appCoverLetter').value.trim();
+      const name = document.getElementById("appName").value.trim();
+      const email = document.getElementById("appEmail").value.trim();
+      const phone = document.getElementById("appPhone").value.trim();
+      const experience = document.getElementById("appExperience").value;
+      const resumeUrl = document.getElementById("appResume").value.trim();
+      const resumeFile = document.getElementById("appResumeFile").files[0];
+      const coverLetter = document
+        .getElementById("appCoverLetter")
+        .value.trim();
 
-      if (!name || !email || !phone || !experience || (!resumeUrl && !resumeFile)) {
-        alert('Please fill in all required fields and provide either a resume URL or upload a resume file.');
+      if (
+        !name ||
+        !email ||
+        !phone ||
+        !experience ||
+        (!resumeUrl && !resumeFile)
+      ) {
+        alert(
+          "Please fill in all required fields and provide either a resume URL or upload a resume file."
+        );
         return;
       }
 
       const submitBtn = event.target.querySelector('button[type="submit"]');
       const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Submitting...';
+      submitBtn.textContent = "Submitting...";
       submitBtn.disabled = true;
 
       try {
@@ -734,7 +892,7 @@ import Layout from '../layouts/Layout.astro';
           experience: parseInt(experience),
           coverLetter: coverLetter,
           appliedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          status: 'pending'
+          status: "pending",
         };
 
         if (resumeFile) {
@@ -746,7 +904,11 @@ import Layout from '../layouts/Layout.astro';
             return;
           }
 
-          const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+          const allowedTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          ];
           if (!allowedTypes.includes(resumeFile.type)) {
             alert("Please upload a PDF or Word document (.pdf, .doc, .docx)");
             submitBtn.textContent = originalText;
@@ -769,14 +931,18 @@ import Layout from '../layouts/Layout.astro';
           applicationData.resumeUrl = resumeUrl;
         }
 
-        await window.firebaseDB.collection('job_applications').add(applicationData);
+        await window.firebaseDB
+          .collection("job_applications")
+          .add(applicationData);
 
-        alert('Application submitted successfully! We will review it and contact you soon.');
+        alert(
+          "Application submitted successfully! We will review it and contact you soon."
+        );
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
         closeApplicationModal();
       } catch (error) {
-        console.error('Error submitting application:', error);
+        console.error("Error submitting application:", error);
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
         alert(`Error submitting application: ${error.message}`);
@@ -784,11 +950,16 @@ import Layout from '../layouts/Layout.astro';
     }
 
     // Modal background click and Escape key support
-    document.getElementById('applicationModal').addEventListener('click', function(e) {
-      if (e.target === this) closeApplicationModal();
-    });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && document.getElementById('applicationModal').classList.contains('active')) {
+    document
+      .getElementById("applicationModal")
+      .addEventListener("click", function (e) {
+        if (e.target === this) closeApplicationModal();
+      });
+    document.addEventListener("keydown", function (e) {
+      if (
+        e.key === "Escape" &&
+        document.getElementById("applicationModal").classList.contains("active")
+      ) {
         closeApplicationModal();
       }
     });

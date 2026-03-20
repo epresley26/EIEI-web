@@ -1,375 +1,556 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import TestimonialSection from "../components/TestimonialSection.astro";
+import GallerySection from "../components/GallerySection.astro";
 ---
 
+<style is:global>
+  /* PREMIUM MODERN STYLING */
+  .training-page {
+    width: 100%;
+    background: #f8fafc;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+
+  /* UNIFIED SERVICE HERO */
+  .service-hero {
+    position: relative;
+    width: 100%;
+    min-height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10rem 2rem 5rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: white !important;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .service-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: 1;
+  }
+
+  .service-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .service-hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+    color: white !important;
+  }
+
+  .service-hero p {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.9;
+    line-height: 1.6;
+    color: white !important;
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    color: white;
+  }
+
+  /* SECTION WRAPPER */
+  .section-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 2rem;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-header .sub-badge {
+    color: #2563eb;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    color: #0f172a;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header p {
+    color: #64748b;
+    font-size: 1.15rem;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* PILLARS GRID */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+
+  .pillar-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+    border-color: #2563eb;
+  }
+
+  .pillar-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  }
+
+  .pillar-card h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #eff6ff;
+    padding-bottom: 1rem;
+  }
+
+  .pillar-detail {
+    margin-bottom: 1.2rem;
+  }
+
+  .pillar-detail strong {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #3b82f6;
+    margin-bottom: 0.3rem;
+  }
+
+  .pillar-detail p {
+    color: #475569;
+    line-height: 1.5;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  /* SYLLABUS SECTION */
+  .syllabus-section {
+    background: #fff;
+    padding: 100px 2rem;
+  }
+
+  .syllabus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .syllabus-item {
+    padding: 2.5rem;
+    background: #f8fafc;
+    border-radius: 24px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s;
+  }
+
+  .syllabus-item:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    transform: scale(1.02);
+  }
+
+  .syllabus-item h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .syllabus-item p {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* GALLERY SECTION */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* GALLERY ITEM STYLES (MATCH HOME) */
+  .gallery :global(.gallery-item) {
+    border-radius: 16px;
+    overflow: hidden;
+    height: 220px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+  }
+  
+  .gallery :global(.gallery-item:hover) {
+    transform: scale(1.03);
+  }
+  
+  .gallery :global(.gallery-item img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ACCREDITATION */
+  .accreditation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .main-content {
+    background: #f8fafc;
+    padding: 5rem 2rem;
+    min-height: 50vh;
+  }
+
+  .accred-badge {
+    background: #fff;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    border: 1px solid #e5e7eb;
+    border-left: 5px solid #2563eb;
+  }
+
+  /* TESTIMONIALS SECTION */
+  .testimonials-section {
+    padding: 100px 2rem;
+    background: #f8fafc;
+  }
+
+  .testimonials-wrapper {
+    max-width: 900px;
+    margin: 4rem auto 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .testimonials {
+    flex: 1;
+    background: #fff;
+    padding: 4rem 3rem;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .testimonials :global(.card) {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.6s ease forwards;
+    width: 100%;
+  }
+
+  .testimonials :global(.card.active) {
+    display: block;
+  }
+
+  .testimonials :global(.card p) {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #334155;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .testimonials :global(.card h3) {
+    font-size: 1.1rem;
+    color: #2563eb;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .testimonial-nav {
+    background: #fff;
+    border: none;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.3s;
+    color: #1e3a8a;
+    z-index: 5;
+  }
+
+  .testimonial-nav:hover {
+    background: #2563eb;
+    color: #fff;
+    transform: scale(1.1);
+  }
+
+  /* CTA BOX */
+  .cta-section {
+    padding: 80px 2rem;
+    text-align: center;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    padding: 5rem 3rem;
+    border-radius: 40px;
+    color: white;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .cta-box h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 1.2rem 3rem;
+    background: white;
+    color: #2563eb;
+    border-radius: 50px;
+    font-weight: 800;
+    text-decoration: none;
+    margin-top: 2rem;
+    transition: all 0.3s;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 1100px) {
+    .pillars-grid, .syllabus-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .gallery { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .service-hero { padding: 8rem 1.5rem 4rem; min-height: 40vh; }
+    .accreditation { gap: 1rem; }
+    .accred-badge { padding: 0.8rem 1.2rem; font-size: 0.9rem; }
+    .testimonials { padding: 3rem 1.5rem; }
+    .testimonial-nav { display: none; }
+    .pillars-grid, .syllabus-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
 <Layout title="Training & Professional Development - EIEI">
-  <style is:global>
-    /* PREMIUM MODERN STYLES */
-    .service-hero {
-      position: relative;
-      width: 100%;
-      min-height: 45vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10rem 2rem 5rem;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      color: white;
-      text-align: center;
-      overflow: hidden;
-    }
+  <div class="training-page">
+    <section class="service-hero">
+      <div class="service-hero-content">
+        <div class="badge">Professional Growth</div>
+        <h1>Training, Coaching & Professional Development</h1>
+        <p>
+          Empowering educators and leaders with foundational skills, 
+          enhanced performance strategies, and long-term career growth.
+        </p>
+      </div>
+    </section>
 
-    .service-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.5;
-      z-index: 1;
-    }
+    <div class="section-wrap">
+      <div class="accreditation">
+        <div class="accred-badge">✓ PQAS Approved</div>
+        <div class="accred-badge">✓ ACT 48 Approved</div>
+        <div class="accred-badge">✓ Specialist Certified</div>
+      </div>
 
-    .service-hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+      <div class="section-header">
+        <span class="sub-badge">Empowerment Framework</span>
+        <h2>The 3 Pillars of EIEI Success</h2>
+        <p>A comprehensive strategy ensuring immediate and long-term excellence for educators and organizations.</p>
+      </div>
 
-    .service-hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      letter-spacing: -1px;
-    }
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <img src="/images/about-1.jpg" alt="Training" class="pillar-image" />
+          <h3>1. Training</h3>
+          <div class="pillar-detail">
+            <strong>Purpose</strong>
+            <p>Building foundational skills needed to perform tasks efficiently and safely, preventing core responsibility gaps.</p>
+          </div>
+          <div class="pillar-detail">
+            <strong>Scope</strong>
+            <p>Short-term, task-oriented workshops aimed at new hires or employees learning new systems.</p>
+          </div>
+          <div class="pillar-detail">
+            <strong>Outcome</strong>
+            <p>Operational efficiency and industry standard compliance.</p>
+          </div>
+        </div>
 
-    .service-hero p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
+        <div class="pillar-card">
+          <img src="/images/about-2.jpg" alt="Coaching" class="pillar-image" />
+          <h3>2. Coaching</h3>
+          <div class="pillar-detail">
+            <strong>Purpose</strong>
+            <p>Enhancing performance through tailored one-on-one guidance, support, and behavior refinement.</p>
+          </div>
+          <div class="pillar-detail">
+            <strong>Scope</strong>
+            <p>Long-term personal growth sessions focused on leadership and mindset development.</p>
+          </div>
+          <div class="pillar-detail">
+            <strong>Outcome</strong>
+            <p>Increased confidence and highly engaged workforce.</p>
+          </div>
+        </div>
 
-    .main-content {
-      background: #f8fafc;
-      padding: 5rem 2rem;
-      min-height: 50vh;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .breadcrumb {
-      margin-bottom: 3rem;
-      font-size: 0.95rem;
-      color: #64748b;
-      font-weight: 500;
-    }
-
-    .breadcrumb a {
-      color: #2563eb;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .breadcrumb a:hover {
-      color: #f97316;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
-      margin-top: 4rem;
-    }
-
-    .section-header h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 1rem;
-    }
-
-    .certification-banner {
-      background: linear-gradient(90deg, #f97316, #dc2626);
-      border-radius: 12px;
-      padding: 1.5rem 2rem;
-      color: white;
-      text-align: center;
-      font-weight: 800;
-      font-size: 1.2rem;
-      box-shadow: 0 10px 30px rgba(249, 115, 22, 0.2);
-      margin-bottom: 4rem;
-    }
-
-    .knowledge-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin: 4rem 0;
-    }
-
-    .knowledge-card {
-      background: white;
-      border-radius: 20px;
-      padding: 3rem 2.5rem;
-      border: 1px solid #e2e8f0;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .knowledge-card:hover {
-      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-      transform: translateY(-8px);
-      border-color: #cbd5e1;
-    }
-
-    .knowledge-card h3 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid #f97316;
-      padding-bottom: 1rem;
-      display: inline-block;
-    }
-
-    .knowledge-prop {
-      margin-bottom: 1.2rem;
-      font-size: 0.95rem;
-      color: #334155;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .knowledge-prop strong {
-      color: #1e293b;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.2rem;
-      color: #2563eb;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 2rem;
-      margin-bottom: 5rem;
-    }
-
-    .service-box {
-      background: white;
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-      border: 1px solid #e2e8f0;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-box::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 4px; height: 100%;
-      background: #2563eb;
-      transform: scaleY(0);
-      transition: transform 0.3s ease;
-      transform-origin: bottom;
-    }
-
-    .service-box:hover {
-      box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-      transform: translateX(5px);
-    }
-
-    .service-box:hover::before {
-      transform: scaleY(1);
-    }
-
-    .service-box h4 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 1rem;
-    }
-
-    .service-box p {
-      color: #64748b;
-      line-height: 1.6;
-      font-size: 0.95rem;
-      margin: 0;
-    }
-
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin: 4rem 0;
-    }
-
-    .photo-grid img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .photo-grid img:hover {
-      transform: scale(1.05);
-      z-index: 5;
-    }
-
-    .cta-banner {
-      background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
-      border-radius: 20px;
-      padding: 4rem;
-      text-align: center;
-      color: white;
-      margin-top: 5rem;
-    }
-
-    .cta-banner h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-    }
-
-    .cta-button {
-      display: inline-block;
-      background: #f97316;
-      color: white;
-      padding: 1.2rem 3rem;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      text-decoration: none;
-      margin-top: 2rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
-      background: #ea580c;
-    }
-
-    @media (max-width: 1100px) {
-      .knowledge-grid { grid-template-columns: 1fr; }
-      .photo-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 768px) {
-      .service-hero { padding-top: 8rem; min-height: 40vh; }
-      .cta-banner { padding: 3rem 1.5rem; }
-      .photo-grid { grid-template-columns: 1fr; }
-      .services-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-
-  <section class="service-hero">
-    <div class="service-hero-content">
-      <h1>Training & Professional Development</h1>
-      <p>Aggressively empowering brilliant educators and leaders to expand their specialized knowledge pipelines.</p>
+        <div class="pillar-card">
+          <div class="pillar-card-content">
+            <img src="/images/about-3.jpg" alt="Development" class="pillar-image" />
+            <h3>3. Development</h3>
+            <div class="pillar-detail">
+              <strong>Purpose</strong>
+              <p>Fostering long-term growth by acquiring new competencies for future challenges and career progression.</p>
+            </div>
+            <div class="pillar-detail">
+              <strong>Scope</strong>
+              <p>Broad, ongoing learning through seminars, certifications, and mentorship.</p>
+            </div>
+            <div class="pillar-detail">
+              <strong>Outcome</strong>
+              <p>Expertise advancement and institutional innovation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <main class="main-content">
-    <div class="container">
-      <div class="breadcrumb">
-        <a href="/">Home</a> / <a href="/services">Services</a> / Professional Development
-      </div>
-
-      <div class="certification-banner">
-        ✓ Officially PQAS and ACT 48 Approved for Professional Development Certification
-      </div>
-
+    <section class="syllabus-section">
       <div class="section-header">
-        <h2>The 3 Pillars of EIEI Empowerment</h2>
-        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Establishing comprehensive frameworks to ensure no operational gaps remain unaddressed.</p>
-      </div>
-
-      <div class="knowledge-grid">
-        <div class="knowledge-card">
-          <h3>1. Training Base</h3>
-          <div class="knowledge-prop"><strong>Purpose</strong> Structured fundamentals teaching explicit, required skills instantly.</div>
-          <div class="knowledge-prop"><strong>Scope</strong> Accelerated, short-term task-orientation for boarding personnel.</div>
-          <div class="knowledge-prop"><strong>Method</strong> Dynamic workshop drills, interactive classes, precise online modules.</div>
-          <div class="knowledge-prop"><strong>Why It Matters</strong> Eradicates struggle with core responsibilities permanently and secures zero-failure compliance standards.</div>
-        </div>
-
-        <div class="knowledge-card">
-          <h3>2. VIP Coaching</h3>
-          <div class="knowledge-prop"><strong>Purpose</strong> Intense one-on-one personal advancement through direct, surgical feedback.</div>
-          <div class="knowledge-prop"><strong>Scope</strong> Customized behavioral trajectory tracking applied directly to your specific mentality.</div>
-          <div class="knowledge-prop"><strong>Method</strong> Live situational guidance and meticulous goal-setting interrogations.</div>
-          <div class="knowledge-prop"><strong>Why It Matters</strong> Obliterates cognitive barriers, forcing confidence, extreme communication, and classroom culture modifications rapidly.</div>
-        </div>
-
-        <div class="knowledge-card">
-          <h3>3. Deep Professional</h3>
-          <div class="knowledge-prop"><strong>Purpose</strong> Broad-spectrum, future-proofed institutional advancement strategies.</div>
-          <div class="knowledge-prop"><strong>Scope</strong> Massive long-term visionary upscaling for organizational continuity logic.</div>
-          <div class="knowledge-prop"><strong>Method</strong> Huge seminars, regional summits, and prolonged high-tier mentorship.</div>
-          <div class="knowledge-prop"><strong>Why It Matters</strong> Transforms organizations into elite bastions of forward-thinking early learning innovation ecosystems effortlessly.</div>
-        </div>
-      </div>
-
-      <div class="section-header">
+        <span class="sub-badge">Syllabus Overview</span>
         <h2>Active Specialized Syllabus</h2>
-        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Select from our elite portfolio of advanced tactical learning engagements.</p>
+        <p>Advanced tactical learning engagements designed for early learning excellence.</p>
       </div>
-
-      <div class="services-grid">
-        <div class="service-box">
-          <h4>Problem-Solving Early Intervention Needs</h4>
-          <p>Scientific evidence-based strategic deployment matrices designed precisely for dismantling extreme challenges rapidly in special education settings.</p>
+      <div class="syllabus-grid">
+        <div class="syllabus-item">
+          <h4>Generational Health & Estate Planning</h4>
+          <p>Vital frameworks protecting special-need family asset security across lifetimes.</p>
         </div>
-        <div class="service-box">
+        <div class="syllabus-item">
+          <h4>Problem-Solving Early Intervention</h4>
+          <p>Strategic deployment matrices for dismantling extreme challenges in special education.</p>
+        </div>
+        <div class="syllabus-item">
           <h4>Early Ed Curriculum Design</h4>
-          <p>Holistic structural blueprinting that ensures chronological developmental milestones are seamlessly achieved through play geometry.</p>
+          <p>Blueprint ensuring developmental milestones are achieved through play geometry.</p>
         </div>
-        <div class="service-box">
-          <h4>Definitive K-12 Transmutation</h4>
-          <p>Advanced navigational techniques ensuring special-needs toddlers transition with unshakeable confidence smoothly into kindergarten parameters.</p>
+        <div class="syllabus-item">
+          <h4>Kindergarten Transition</h4>
+          <p>Navigational techniques for smooth student progression into K-12 parameters.</p>
         </div>
-        <div class="service-box">
-          <h4>Aggressive De-escalation Protocol</h4>
-          <p>Hard tactical psychological anchoring techniques formulated strictly to calmly isolate and manage heavily volatile early childhood behaviors.</p>
+        <div class="syllabus-item">
+          <h4>De-escalation Protocols</h4>
+          <p>Psychological anchoring formulated strictly for managing volatile behaviors.</p>
         </div>
-        <div class="service-box">
-          <h4>Generational Health & Trust Planning</h4>
-          <p>A crucial financial intelligence breakdown explaining the vital frameworks protecting special-need family asset security across lifetimes.</p>
-        </div>
-        <div class="service-box">
+        <div class="syllabus-item">
           <h4>Inclusive Action Best Practices</h4>
-          <p>A high-velocity masterclass summarizing the absolute most optimal modern interventions deployed successfully within neurodivergent environments.</p>
+          <p>Optimal modern interventions deployed within neurodivergent environments.</p>
         </div>
       </div>
+    </section>
 
-      <div class="section-header" style="margin-top: 8rem;">
-        <h2>The Laboratory of Innovation</h2>
-        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Our elite educator squads engaging heavily in continuous action-learning combat.</p>
-      </div>
+    <GallerySection program="training-development" />
 
-      <div class="photo-grid">
-        <img src="/images/training-gallery-1.jpg" alt="Educators analyzing structural intervention tactics" />
-        <img src="/images/training-gallery-2.jpg" alt="Team mapping holistic child outcomes" />
-        <img src="/images/training-gallery-3.jpg" alt="Live instructional behavioral modifications" />
-        <img src="/images/training-gallery-4.jpg" alt="Active professional development graduation" />
-      </div>
+    <TestimonialSection program="training-development" />
 
-      <div class="cta-banner">
+    <section class="cta-section">
+      <div class="cta-box">
         <h2>Arm Your Teachers Today</h2>
-        <p style="font-size: 1.2rem; opacity: 0.9; max-width: 650px; margin: 0 auto;">Do not let your workforce decay. Demand the ultimate professional development structural training deployed immediately inside your organization.</p>
-        <a href="tel:484-501-9101" class="cta-button">Engage Logistics: 484-501-9101</a>
+        <p>Demand the ultimate professional development structural training deployed inside your organization.</p>
+        <a href="tel:484-501-9101" class="cta-btn">Call: 484-501-9101</a>
       </div>
-
-    </div>
-  </main>
+    </section>
+  </div>
 </Layout>

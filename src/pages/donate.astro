@@ -1,929 +1,837 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Donate - EIEI">
-<style is:global>
-
-    .page-shell {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 4rem;
-    }
-
-    .page-breadcrumb {
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-bottom: 1rem;
-    }
-
-    .page-breadcrumb a {
-      color: #2a4175;
-      text-decoration: none;
-    }
-
-    .page-breadcrumb a:hover {
-      color: #fca311;
-    }
-
-    .donate-hero-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 2.5rem 2.25rem;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-      margin-bottom: 2.5rem;
-      text-align: left;
-    }
-
-    .donate-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #2a4175;
-      background: rgba(37, 99, 235, 0.08);
-      padding: 0.35rem 0.7rem;
-      border-radius: 999px;
-      margin-bottom: 0.9rem;
-    }
-
-    .donate-title {
-      color: #2a4175;
-      font-size: 2.1rem;
-      letter-spacing: -0.04em;
-      margin-bottom: 0.8rem;
-      font-weight: 700;
-    }
-
-    .donate-subtitle {
-      font-size: 1.02rem;
-      color: #4b5563;
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-
-    .donate-hero-highlight {
-      font-size: 0.95rem;
-      color: #111827;
-      font-weight: 600;
-    }
-
-    .donate-section {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 2rem 2rem 2.2rem;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-      border: 1px solid rgba(226, 232, 240, 0.85);
-      margin-bottom: 2rem;
-    }
-
-    .donate-section-title {
-      color: #2a4175;
-      font-size: 1.4rem;
-      margin-bottom: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      border-bottom: 3px solid #fca311;
-      padding-bottom: 0.5rem;
-      display: inline-block;
-    }
-
-    .donate-section p {
-      font-size: 0.97rem;
-      color: #111827;
-      line-height: 1.7;
-      margin-bottom: 1rem;
-    }
-
-    .donate-list {
-      list-style: none;
-      margin: 0 0 1.2rem 0;
-      padding: 0;
-    }
-
-    .donate-list li {
-      position: relative;
-      padding-left: 1.4rem;
-      margin-bottom: 0.45rem;
-      font-size: 0.95rem;
-      color: #111827;
-      line-height: 1.6;
-    }
-
-    .donate-list li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: #fca311;
-      font-weight: 700;
-    }
-
-    .donate-amount-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .donate-amount-card {
-      border-radius: 999px;
-      padding: 0.85rem 1rem;
-      text-align: center;
-      border: 1px solid rgba(209, 213, 219, 0.95);
-      cursor: default;
-      background: #f9fafb;
-      font-size: 0.95rem;
-      color: #111827;
-      font-weight: 500;
-    }
-
-    .donate-amount-card span {
-      display: block;
-      font-size: 0.8rem;
-      color: #6b7280;
-      font-weight: 400;
-    }
-
-    .donate-cta-inline {
-      margin-top: 1.2rem;
-    }
-
-    .donate-button {
-      display: inline-block;
-      background: #fca311;
-      color: #2a4175;
-      padding: 0.8rem 2rem;
-      border-radius: 999px;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .donate-button:hover {
-      background: #ff9500;
-      transform: translateY(-2px);
-    }
-
-    .donate-quote {
-      background: #f8fafc;
-      border-radius: 10px;
-      border-left: 4px solid #fca311;
-      padding: 1.3rem 1.4rem;
-      margin: 1.5rem 0 0.5rem;
-      font-size: 0.96rem;
-      color: #374151;
-      font-style: italic;
-    }
-
-    .donate-quote-author {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #2a4175;
-      text-align: right;
-    }
-
-    .marketplace-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.2rem;
-      margin-top: 1.2rem;
-    }
-
-    .marketplace-card {
-      background: #f9fafb;
-      border-radius: 12px;
-      padding: 1.2rem 1.1rem;
-      border: 1px solid rgba(209, 213, 219, 0.9);
-    }
-
-    .marketplace-card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #111827;
-      margin-bottom: 0.3rem;
-    }
-
-    .marketplace-card-desc {
-      font-size: 0.9rem;
-      color: #6b7280;
-      margin-bottom: 0.4rem;
-    }
-
-    .marketplace-card-tag {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #2a4175;
-    }
-
-    .donor-info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.3rem;
-      margin-top: 1rem;
-    }
-
-    .donor-box {
-      background: #f9fafb;
-      border-radius: 10px;
-      padding: 1.1rem 1.1rem;
-      border: 1px dashed rgba(209, 213, 219, 0.9);
-      font-size: 0.9rem;
-      color: #111827;
-    }
-
-    .donor-box strong {
-      display: block;
-      margin-bottom: 0.35rem;
-      color: #2a4175;
-      font-size: 0.9rem;
-    }
-
-    .donate-final-cta {
-      background: linear-gradient(135deg, #2a4175 0%, #4a6fa5 100%);
-      color: #ffffff;
-      border-radius: 16px;
-      padding: 2.3rem 2rem;
-      text-align: center;
-      margin-top: 2rem;
-    }
-
-    .donate-final-cta h2 {
-      font-size: 1.6rem;
-      margin-bottom: 0.8rem;
-      letter-spacing: -0.02em;
-    }
-
-    .donate-final-cta p {
-      font-size: 0.98rem;
-      opacity: 0.96;
-      max-width: 520px;
-      margin: 0 auto 1.4rem;
-    }
-
-    @media (max-width: 640px) {
-      .donate-hero-card,
-      .donate-section,
-      .donate-final-cta {
-        padding: 1.6rem 1.4rem 1.7rem;
-      }
-
-      .donate-title {
-        font-size: 1.8rem;
-      }
-    }
-
-    /* Reuse services hero carousel styles if not already global */
-    .services-carousel {
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      height: 50vh;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .slide-content {
-      text-align: center;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      padding: 2rem;
-    }
-
-    .slide-content h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .slide-content p {
-      font-size: 1.1rem;
-      opacity: 0.95;
-    }
-
-    .carousel-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .carousel-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .carousel-dot.active {
-      background: white;
-      transform: scale(1.2);
-    }
-    .marketplace-filters {
-  max-width: 1200px;
-  margin: 1.5rem 0;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.marketplace-filters input {
-  padding: 0.7rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 1rem;
-  background: var(--card-bg);
-  color: var(--text);
-  flex: 1;
-  min-width: 250px;
-}
-
-.marketplace-filters input::placeholder {
-  color: var(--text-muted);
-}
-
-.marketplace-items {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.marketplace-item {
-  background: var(--card-bg);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-  border: 1px solid var(--border);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.marketplace-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
-}
-
-.marketplace-item-image {
-  width: 100%;
-  height: 220px;
-  background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 3rem;
-  overflow: hidden;
-}
-
-.marketplace-item-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.marketplace-item-content {
-  padding: 1.5rem;
-}
-
-.marketplace-item-category {
-  color: var(--brand-orange);
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-
-.marketplace-item-title {
-  color: var(--brand-blue);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.marketplace-item-description {
-  color: var(--text);
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.marketplace-item-price {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.price-tag {
-  color: var(--brand-orange);
-  font-size: 1.3rem;
-  font-weight: 700;
-}
-
-.marketplace-item-footer {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.marketplace-item-footer button {
-  flex: 1;
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
-}
-
-.btn-view {
-  background: var(--brand-blue);
-  color: white;
-}
-
-.btn-view:hover {
-  opacity: 0.9;
-}
-
-.btn-contact {
-  background: var(--brand-orange);
-  color: white;
-}
-
-.btn-contact:hover {
-  opacity: 0.9;
-}
-
-/* Modal styles reused */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  animation: fadeIn 0.3s ease;
-}
-
-.modal.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
-  background: var(--card-bg);
-  padding: 2rem;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.modal-header h2 {
-  color: var(--brand-blue);
-  margin: 0;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--text-muted);
-}
-
-.close-btn:hover {
-  color: var(--text);
-}
-
-@media (max-width: 768px) {
-  .marketplace-items {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-
-  .marketplace-filters {
-    flex-direction: column;
-  }
-
-  .marketplace-filters input {
-    min-width: auto;
-  }
-
-  .modal-content {
-    width: 95%;
-    padding: 1.5rem;
-  }
-}
-
-  
-</style>
-
-  <!-- HEADER -->
-  
-
-  <!-- HERO CAROUSEL (optional – matches services look) -->
-  <section class="services-carousel">
-    <div class="carousel" id="servicesCarousel">
-      <div class="slide active" style="background-image: url('images/slide1.jpg')">
-        <div class="slide-content">
-          <h1>Donate to EIEI</h1>
-          <p>Your support fuels inclusive classrooms, family empowerment, and early intervention.</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide2.jpg')">
-        <div class="slide-content">
-          <h1>Transform a Child’s Story</h1>
-          <p>Help us create safe, sensory-rich spaces for children with diverse abilities.</p>
-        </div>
-      </div>
-      <div class="slide" style="background-image: url('images/slide3.jpg')">
-        <div class="slide-content">
-          <h1>Support Communities</h1>
-          <p>Invest in training, coaching, and programs that uplift children, families, and providers.</p>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-controls" id="carouselControls"></div>
-  </section>
-
-  <main class="page-shell">
-    <div class="page-breadcrumb">
-      <a href="/">Home</a> / Donate
-    </div>
-
-    <!-- HERO CARD -->
-    <section class="donate-hero-card">
-      <div class="donate-tag">Give • Support • Sponsor</div>
-      <h1 class="donate-title">Donate to The Education Institute for Early Intervention</h1>
-      <p class="donate-subtitle">
-        Your generosity helps us create inclusive classrooms, provide specialized resources, and deliver early intervention
-        services so every child with diverse abilities can learn, grow, and thrive.
-      </p>
-      <p class="donate-hero-highlight">
-        Together, we are raising funds to expand specialized classrooms, support the CACFP Initiative, and provide training
-        for educators and families.
-      </p>
-    </section>
-
-    <!-- SECTION: FUNDRAISING / SUPPORT -->
-    <section class="donate-section">
-      <h2 class="donate-section-title">Make a Gift</h2>
-      <p>
-        Every contribution—big or small—directly supports children with diverse abilities through adaptive classrooms, sensory
-        spaces, communication devices, and access to highly trained professionals.
-      </p>
-      <p>
-        Your donation helps us reduce expulsions and suspensions, create inclusive early childhood environments, and provide
-        the specialized tools children need to communicate, self-regulate, and succeed.
-      </p>
-
-      <div class="donate-amount-grid">
-        <div class="donate-amount-card">
-          $25
-          <span>Classroom supplies and learning materials</span>
-        </div>
-        <div class="donate-amount-card">
-          $50
-          <span>Therapeutic toys and sensory tools</span>
-        </div>
-        <div class="donate-amount-card">
-          $100
-          <span>Training session for educators or caregivers</span>
-        </div>
-        <div class="donate-amount-card">
-          $250+
-          <span>Supports specialized equipment and technology</span>
-        </div>
-      </div>
-
-      <div class="donate-cta-inline">
-        <!-- Replace href with your actual donation platform link -->
-        <a href="https://eieiservices.com/support/" target="_blank" class="donate-button">Donate Online</a>
-      </div>
-
-      <div class="donate-quote">
-        “Your support, whether big or small, directly impacts the lives of children with diverse abilities and helps us build
-        classrooms where every child feels seen, supported, and celebrated.”
-      </div>
-      <div class="donate-quote-author">— The EIEI Team</div>
-    </section>
-
-    <!-- SECTION: SPONSORSHIPS / MARKETPLACE MERGE -->
-    <section class="donate-section">
-        <h2 class="donate-section-title">Marketplace: Discover Items That Support EIEI</h2>
-        <p>
-          Browse resources, materials, and services that directly support EIEI. Each item in our Marketplace helps fund our
-          programs for children, families, and providers.
-        </p>
-      
-        <div class="marketplace-header" style="text-align:left; border-bottom:none; padding:0; margin:1rem 0 1.5rem 0;">
-          <p style="color:var(--text-muted); font-size:0.95rem; margin:0;">
-            Use the search bar below to find specific items, categories, or opportunities.
+  <main class="donate-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-glow"></div>
+      <div class="container">
+        <div class="hero-content">
+          <span class="badge">Make an Impact</span>
+          <h1>
+            Support Inclusive <span class="text-gradient">Education</span>
+          </h1>
+          <p>
+            Your generosity fuels specialized classrooms, family empowerment,
+            and early intervention services that help every child learn, grow,
+            and thrive.
           </p>
+          <div class="hero-actions">
+            <a
+              href="https://eieiservices.com/support/"
+              target="_blank"
+              class="cta-primary"
+            >
+              Donate Now
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            <a href="#marketplace" class="cta-secondary">Browse Marketplace</a>
+          </div>
         </div>
-      
-        <div class="marketplace-filters" style="padding:0; margin:1rem 0 1.5rem 0; max-width:none;">
-          <input 
-            type="text" 
-            id="searchInput" 
-            placeholder="Search marketplace items..." 
-            onkeyup="filterItems()"
+      </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="impact-section">
+      <div class="container">
+        <div class="impact-grid">
+          <div class="impact-card">
+            <div class="amount">$25</div>
+            <p>
+              Provides essential classroom supplies and learning materials for
+              one child.
+            </p>
+          </div>
+          <div class="impact-card">
+            <div class="amount">$50</div>
+            <p>
+              Funds therapeutic toys and specialized sensory tools for
+              self-regulation.
+            </p>
+          </div>
+          <div class="impact-card">
+            <div class="amount">$100</div>
+            <p>
+              Sponsors a professional training session for educators and
+              caregivers.
+            </p>
+          </div>
+          <div class="impact-card">
+            <div class="amount">$250+</div>
+            <p>
+              Invests in specialized communication technology and adaptive
+              equipment.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+      <div class="content-grid">
+        <!-- Ways to Give -->
+        <div class="give-column">
+          <section class="donate-section glass-box">
+            <h2>Other Ways to Give</h2>
+            <p>
+              Support our mission through community-driven giving and in-kind
+              contributions.
+            </p>
+            <ul class="give-list">
+              <li>
+                <div class="list-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                    ></path><circle cx="9" cy="7" r="4"></circle><path
+                      d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path
+                      d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <span>Host a fundraiser with your school or workplace.</span>
+              </li>
+              <li>
+                <div class="list-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    ><path
+                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    ></path>
+                  </svg>
+                </div>
+                <span>Donate sensory tools or classroom equipment.</span>
+              </li>
+              <li>
+                <div class="list-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    ><circle cx="12" cy="12" r="10"></circle><polyline
+                      points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <span>Become a monthly partner for sustained impact.</span>
+              </li>
+            </ul>
+
+            <div class="donor-info">
+              <div class="info-card">
+                <h5>Mail a Check</h5>
+                <p>
+                  Payable to: EIEI<br />
+                  4704 Leiper Street<br />
+                  Philadelphia, PA 19124
+                </p>
+              </div>
+              <div class="info-card">
+                <h5>Questions?</h5>
+                <p>
+                  admin@eiforei.org<br />
+                  484-566-7311
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Marketplace Selection -->
+        <div class="marketplace-column" id="marketplace">
+          <section class="donate-section">
+            <div class="section-header">
+              <h2>EIEI Marketplace</h2>
+              <div class="search-wrap">
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Search resources..."
+                  onkeyup="filterItems()"
+                />
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  ><circle cx="11" cy="11" r="8"></circle><line
+                    x1="21"
+                    y1="21"
+                    x2="16.65"
+                    y2="16.65"></line>
+                </svg>
+              </div>
+            </div>
+
+            <div class="marketplace-items" id="itemsContainer">
+              <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Discovering community items...</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+      <div class="container">
+        <div class="cta-box">
+          <h2>Transform a Child's Story Today</h2>
+          <p>
+            Every gift helps build a world where diverse abilities are
+            celebrated and supported.
+          </p>
+          <a
+            href="https://eieiservices.com/support/"
+            target="_blank"
+            class="cta-glass">Support Our Mission</a
           >
         </div>
-      
-        <div class="marketplace-items" id="itemsContainer">
-          <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">
-            Loading marketplace items...
-          </div>
-        </div>
-      </section>
-      
-      <!-- Item details modal (place once near bottom of donate.html, outside sections but inside <main>) -->
-      <div id="itemModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 id="modalTitle">Item Details</h2>
-            <button class="close-btn" onclick="closeItemModal()">&times;</button>
-          </div>
-          <div id="modalBody">
-            <p>Loading...</p>
-          </div>
-        </div>
       </div>
-      
-
-    <!-- SECTION: OTHER WAYS TO GIVE -->
-    <section class="donate-section">
-      <h2 class="donate-section-title">Other Ways to Give</h2>
-      <p>You can also support EIEI through in-kind donations, monthly giving, and community fundraisers.</p>
-
-      <ul class="donate-list">
-        <li>Host a fundraiser with your school, workplace, faith community, or neighborhood group.</li>
-        <li>Donate new sensory toys, classroom materials, or technology that supports communication and learning.</li>
-        <li>Become a monthly donor to sustain ongoing classroom, training, and family support initiatives.</li>
-      </ul>
-
-      <div class="donor-info-grid">
-        <div class="donor-box">
-          <strong>Mail a Check</strong>
-          Make checks payable to:<br />
-          The Education Institute for Early Intervention (EIEI)<br />
-          4704 Leiper Street<br />
-          Philadelphia, PA 19124
-        </div>
-        <div class="donor-box">
-          <strong>Questions About Giving?</strong>
-          Email: admin@eiforei.org<br />
-          Phone: 484-566-7311<br />
-          Our team is happy to help you explore the best way to support our mission.
-        </div>
-      </div>
-    </section>
-
-    <!-- FINAL CTA -->
-    <section class="donate-final-cta">
-      <h2>Thank You for Supporting EIEI</h2>
-      <p>
-        Your generosity helps us create inclusive, joyful learning environments where children with diverse abilities are
-        nurtured, supported, and empowered to succeed.
-      </p>
-      <a href="https://eieiservices.com/support/" target="_blank" class="donate-button">Make Your Donation Today</a>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  
+  <!-- Modal for items -->
+  <div id="itemModal" class="modal">
+    <div class="modal-content glass-box">
+      <button class="close-btn" onclick="closeItemModal()">&times;</button>
+      <div id="modalBody">
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+  </div>
+</Layout>
 
-  
-  
+<style is:global>
+  .donate-page {
+    background: var(--bg-light);
+    color: var(--text);
+    overflow-x: hidden;
+    padding-top: 0 !important;
+  }
 
-  <script is:inline>
-    // Hero carousel logic (same as services)
-    let currentSlide = 0;
-    const pageSlides = document.querySelectorAll('#servicesCarousel .slide');
-    const totalSlides = pageSlides.length;
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
 
-    function initCarouselControls() {
-      const controlsContainer = document.getElementById('carouselControls');
-      for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => goToSlide(i);
-        controlsContainer.appendChild(dot);
-      }
-    }
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10rem 2rem 5rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: white;
+    text-align: center;
+    overflow: hidden;
+  }
 
-    function goToSlide(n) {
-      currentSlide = (n + totalSlides) % totalSlides;
-      pageSlides.forEach(slide => slide.classList.remove('active'));
-      pageSlides[currentSlide].classList.add('active');
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: 1;
+  }
 
-      const dots = document.querySelectorAll('.carousel-dot');
-      dots.forEach(dot => dot.classList.remove('active'));
-      dots[currentSlide].classList.add('active');
-    }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    function nextSlide() {
-      goToSlide(currentSlide + 1);
-    }
+  .hero-content h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: white;
+    letter-spacing: -1px;
+  }
 
-    setInterval(nextSlide, 5000);
+  .hero-content p {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.9;
+    line-height: 1.6;
+    color: white;
+  }
 
-    window.addEventListener('DOMContentLoaded', function() {
-      initCarouselControls();
-    });
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 
-    // Inject header & footer
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerContainer = document.getElementById('header-container');
-      if (headerContainer) headerContainer.innerHTML = "";
+  .cta-primary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 2.5rem;
+    background: var(--brand-blue);
+    color: white;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 25px rgba(42, 65, 117, 0.2);
+  }
 
-      const footerContainer = document.getElementById('footer-container');
-      if (footerContainer) footerContainer.innerHTML = "";
-    });
-    
-  let allItems = [];
+  .cta-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(42, 65, 117, 0.3);
+  }
 
-  async function loadMarketplaceItems() {
-    try {
-      const snapshot = await window.firebaseDB
-        .collection('marketplace')
-        .orderBy('createdAt', 'desc')
-        .get();
+  .cta-secondary {
+    padding: 1.1rem 2.5rem;
+    background: white;
+    color: var(--brand-blue);
+    border: 2px solid #e5e7eb;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
 
-      allItems = [];
-      snapshot.forEach(doc => {
-        allItems.push({ id: doc.id, ...doc.data() });
-      });
+  .cta-secondary:hover {
+    border-color: var(--brand-blue);
+    background: #f9faff;
+  }
 
-      displayItems(allItems);
-    } catch (error) {
-      console.error('Error loading items:', error);
-      document.getElementById('itemsContainer').innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
-          <p style="color: var(--text-muted);">Unable to load marketplace items. Please try again later.</p>
-        </div>
-      `;
+  /* Impact Cards */
+  .impact-section {
+    margin-top: -4rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+  }
+
+  .impact-card {
+    background: white;
+    padding: 2.5rem 2rem;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    text-align: center;
+  }
+
+  .impact-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .impact-card .amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--brand-blue);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .impact-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Content Grid */
+  .main-content {
+    padding: 6rem 2rem;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .content-grid {
+      grid-template-columns: 1fr;
     }
   }
 
-  function displayItems(items) {
-    const container = document.getElementById('itemsContainer');
+  .glass-box {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 3rem;
+    border-radius: 32px;
+  }
 
-    if (!container) return;
+  .donate-section h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--brand-blue);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
 
+  .give-list {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0;
+  }
+
+  .give-list li {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+    color: #374151;
+  }
+
+  .list-icon {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-blue);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .list-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .donor-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .info-card {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 1.5rem;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .info-card h5 {
+    font-weight: 700;
+    color: var(--brand-blue);
+    margin-bottom: 0.5rem;
+  }
+
+  .info-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Marketplace Styling */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 300px;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.8rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-wrap input:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 4px rgba(42, 65, 117, 0.06);
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9333ea;
+    opacity: 0.5;
+  }
+
+  .marketplace-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+
+  .item-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+  }
+
+  .item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  .item-img {
+    height: 180px;
+    background: #f8fafc;
+    overflow: hidden;
+  }
+
+  .item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .item-body {
+    padding: 1.5rem;
+  }
+
+  .item-cat {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--brand-orange);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--brand-blue);
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .item-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .item-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .btn-details {
+    padding: 0.6rem 1.25rem;
+    background: #f8fafc;
+    color: var(--brand-blue);
+    border: 1px solid #e2e8f0;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-details:hover {
+    background: var(--brand-blue);
+    color: white;
+    border-color: var(--brand-blue);
+  }
+
+  /* Final CTA Box */
+  .final-cta {
+    padding-bottom: 8rem;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, var(--brand-blue) 0%, #1e3a8a 100%);
+    padding: 5rem 3rem;
+    border-radius: 40px;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+
+    color: white !important;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .cta-box p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+  }
+
+  .cta-glass {
+    display: inline-block;
+    padding: 1.25rem 3.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .cta-glass:hover {
+    background: white;
+    color: var(--brand-blue);
+    transform: scale(1.05);
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal.active {
+    display: flex;
+  }
+
+  .modal-content {
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: #f1f5f9;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .loading-state {
+    grid-column: 1/-1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem;
+    color: var(--text-muted);
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--accent-purple);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script is:inline>
+  let allItems = [];
+
+  async function fetchMarketplaceItems() {
+    try {
+      const db = window.firebaseDB;
+      if (!db) {
+        console.error("Firebase not initialized");
+        return;
+      }
+
+      const snapshot = await db.collection("marketplace").get();
+      allItems = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      renderItems(allItems);
+    } catch (err) {
+      console.error("Error fetching items:", err);
+      document.getElementById("itemsContainer").innerHTML =
+        "<p>Unable to load marketplace items. Please check your connection.</p>";
+    }
+  }
+
+  function renderItems(items) {
+    const container = document.getElementById("itemsContainer");
     if (items.length === 0) {
-      container.innerHTML = `
-        <div class="marketplace-empty" style="grid-column: 1/-1; text-align:center; padding:4rem 2rem; color:var(--text-muted);">
-          <h3 style="color:var(--text); margin-bottom:1rem;">No items found</h3>
-          <p>Check back soon for new items!</p>
-        </div>
-      `;
+      container.innerHTML =
+        "<p class='loading-state'>No items found matches your search.</p>";
       return;
     }
 
-    container.innerHTML = items.map(item => `
-      <div class="marketplace-item">
-        <div class="marketplace-item-image">
-          ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title}">` : '📦'}
+    container.innerHTML = items
+      .map(
+        (item) => `
+      <div class="item-card" data-category="${
+        item.category || ""
+      }" onclick="viewItemDetails('${item.id}')">
+        <div class="item-img">
+          <img src="${
+            item.image ||
+            "https://dummyimage.com/400x300/2563eb/ffffff&text=EIEI+Market"
+          }" alt="${
+          item.title
+        }" onerror="this.src='https://dummyimage.com/400x300/e2e8f0/64748b&text=No+Image'">
         </div>
-        <div class="marketplace-item-content">
-          <div class="marketplace-item-category">${item.category || 'General'}</div>
-          <div class="marketplace-item-title">${item.title}</div>
-          <div class="marketplace-item-description">${item.description}</div>
-          <div class="marketplace-item-price">
-            <span class="price-tag">$${parseFloat(item.price).toFixed(2)}</span>
-          </div>
-          <div class="marketplace-item-footer">
-            <button class="btn-view" onclick="viewItemDetails('${item.id}')">View Details</button>
-            <button class="btn-contact" onclick="contactSeller('${item.id}')">Contact</button>
+        <div class="item-body">
+          <div class="item-cat">${item.category || "Support"}</div>
+          <h3 class="item-title">${item.title}</h3>
+          <div class="item-meta">
+            <span class="item-price">$${item.price || "0.00"}</span>
+            <button class="btn-details">Details</button>
           </div>
         </div>
       </div>
-    `).join('');
+    `
+      )
+      .join("");
   }
 
   function filterItems() {
-    const input = document.getElementById('searchInput');
-    if (!input) return;
-
-    const searchTerm = input.value.toLowerCase();
-    const filtered = allItems.filter(item =>
-      item.title.toLowerCase().includes(searchTerm) ||
-      item.description.toLowerCase().includes(searchTerm) ||
-      (item.category || '').toLowerCase().includes(searchTerm)
+    const query = document.getElementById("searchInput").value.toLowerCase();
+    const filtered = allItems.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) ||
+        (item.description && item.description.toLowerCase().includes(query)) ||
+        (item.category && item.category.toLowerCase().includes(query))
     );
-    displayItems(filtered);
+    renderItems(filtered);
   }
 
-  function viewItemDetails(itemId) {
-    const item = allItems.find(i => i.id === itemId);
+  function viewItemDetails(id) {
+    const item = allItems.find((i) => i.id === id);
     if (!item) return;
 
-    const modalBody = document.getElementById('modalBody');
-    if (!modalBody) return;
+    const modal = document.getElementById("itemModal");
+    const body = document.getElementById("modalBody");
 
-    modalBody.innerHTML = `
-      <div style="text-align: center;">
-        <div style="width: 100%; height: 300px; background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; margin-bottom: 1.5rem; overflow: hidden;">
-          ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">` : '📦'}
+    body.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; padding: 1rem;">
+        <div style="border-radius: 20px; overflow: hidden; height: 350px;">
+          <img src="${
+            item.image || "https://via.placeholder.com/400x400"
+          }" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div>
+          <span style="color: var(--brand-orange); font-weight: 700; text-transform: uppercase; font-size: 0.8rem;">${
+            item.category || "Resource"
+          }</span>
+          <h2 style="color: var(--brand-blue); margin: 0.5rem 0 1rem; font-size: 2rem;">${
+            item.title
+          }</h2>
+          <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem;">$${
+            item.price
+          }</div>
+          <p style="color: #4b5563; line-height: 1.7; margin-bottom: 2.5rem;">${
+            item.description || "No description available for this item."
+          }</p>
+          <a href="mailto:admin@eiforei.org?subject=Interest in ${
+            item.title
+          }" class="cta-primary" style="text-align: center; justify-content: center;">Inquire Now</a>
         </div>
       </div>
-      <div style="margin-bottom: 1.5rem;">
-        <p style="color: var(--brand-orange); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 0.5rem;">${item.category || 'General'}</p>
-        <h3 style="color: var(--brand-blue); margin: 0 0 0.5rem 0;">${item.title}</h3>
-        <p style="color: var(--text); margin: 0; line-height: 1.6;">${item.description}</p>
-      </div>
-      <div style="background: var(--bg-alt); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 0.5rem 0;">Price</p>
-        <p style="color: var(--brand-orange); font-size: 1.8rem; font-weight: 700; margin: 0;">$${parseFloat(item.price).toFixed(2)}</p>
-      </div>
-      ${item.contactEmail ? `<div style="color: var(--text-muted); font-size: 0.9rem;">Contact: ${item.contactEmail}</div>` : ''}
-      ${item.availability ? `<div style="color: var(--text); margin-top: 1rem;"><strong>Availability:</strong> ${item.availability}</div>` : ''}
     `;
 
-    const modal = document.getElementById('itemModal');
-    if (modal) modal.classList.add('active');
+    modal.classList.add("active");
   }
 
   function closeItemModal() {
-    const modal = document.getElementById('itemModal');
-    if (modal) modal.classList.remove('active');
+    document.getElementById("itemModal").classList.remove("active");
   }
 
-  function contactSeller(itemId) {
-    const item = allItems.find(i => i.id === itemId);
-    if (!item || !item.contactEmail) {
-      alert('Contact information not available');
-      return;
-    }
-    window.location.href = `mailto:${item.contactEmail}?subject=Interested in: ${item.title}`;
-  }
-
-  document.getElementById('itemModal')?.addEventListener('click', function(event) {
-    if (event.target === this) {
-      closeItemModal();
-    }
+  // Close modal on escape
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeItemModal();
   });
 
-  window.addEventListener('load', loadMarketplaceItems);
+  // Init
+  document.addEventListener("DOMContentLoaded", fetchMarketplaceItems);
 </script>
-
-  
-
-</Layout>

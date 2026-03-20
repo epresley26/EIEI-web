@@ -1,516 +1,567 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import TestimonialSection from "../components/TestimonialSection.astro";
+import GallerySection from "../components/GallerySection.astro";
 ---
 
-<Layout title="The CACFP Initiative - EIEI">
-  <style is:global>
-    /* PREMIUM MODERN STYLES */
-    .service-hero {
-      position: relative;
-      width: 100%;
-      min-height: 45vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10rem 2rem 5rem;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      color: white;
-      text-align: center;
-      overflow: hidden;
-    }
+<style>
+  /* PREMIUM MODERN STYLES */
+  .service-hero {
+    position: relative;
+    width: 100%;
+    min-height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10rem 2rem 5rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: white !important;
+    text-align: center;
+    overflow: hidden;
+  }
 
-    .service-hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.5;
-      z-index: 1;
-    }
+  .service-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: 1;
+  }
 
-    .service-hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+  .service-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    .service-hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      letter-spacing: -1px;
-    }
+  .service-hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+    color: white !important;
+  }
 
-    .service-hero p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
+  .service-hero p {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.9;
+    line-height: 1.6;
+    color: white !important;
+  }
 
-    .main-content {
-      background: #f8fafc;
-      padding: 5rem 2rem;
-      min-height: 50vh;
-    }
+  .main-content {
+    background: #f8fafc;
+    padding: 5rem 2rem;
+    min-height: 50vh;
+  }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  /* GALLERY SECTION */
+  .gallery-section {
+    padding: 80px 0;
+    margin-top: 4rem;
+  }
+  
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  
+  .gallery :global(.gallery-item) {
+    border-radius: 20px;
+    overflow: hidden;
+    height: 250px;
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    transition: all 0.4s ease;
+  }
+  
+  .gallery :global(.gallery-item:hover) {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  
+  .gallery :global(.gallery-item img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-    .breadcrumb {
-      margin-bottom: 3rem;
-      font-size: 0.95rem;
-      color: #64748b;
-      font-weight: 500;
-    }
+  .badge {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
 
-    .breadcrumb a {
-      color: #2563eb;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
-    .breadcrumb a:hover {
-      color: #f97316;
-    }
+  .breadcrumb {
+    margin-bottom: 3rem;
+    font-size: 0.95rem;
+    color: #64748b;
+    font-weight: 500;
+  }
 
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .breadcrumb a:hover {
+    color: #f97316;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: flex-start;
+    margin-bottom: 5rem;
+  }
+
+  .intro-text h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .intro-text p {
+    font-size: 1.1rem;
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-card h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .quote-block {
+    border-left: 4px solid #f97316;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .quote-block p {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+
+  .quote-block span {
+    font-weight: 700;
+    color: #f97316;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    margin-top: 5rem;
+  }
+
+  .section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin: 4rem 0;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+  }
+
+  .stats-grid .stat-number {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+
+  .stats-grid .stat-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 5rem;
+  }
+
+  .service-box {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .service-box:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-5px);
+    border-color: #93c5fd;
+  }
+
+  .icon-wrapper {
+    width: 50px;
+    height: 50px;
+    background: #eff6ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #2563eb;
+  }
+
+  .service-box h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+  }
+
+  .service-box p {
+    color: #64748b;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  .image-block {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin: 4rem 0;
+  }
+
+  .image-block img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Document/Flyer Gallery Styles */
+  .flyer-gallery-wrapper {
+    margin: 6rem 0 4rem;
+  }
+  
+  .flyer-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  
+  .flyer-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .flyer-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    border-color: #93c5fd;
+  }
+  
+  .flyer-img-wrapper {
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .flyer-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.5s ease;
+  }
+
+  .flyer-card:hover img {
+    transform: scale(1.05);
+  }
+  
+  .flyer-card-info {
+    padding: 1.5rem;
+    text-align: center;
+    background: white;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .flyer-card-info h5 {
+    color: #0f172a;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .flyer-card-info a {
+    color: #2563eb;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .flyer-card-info a:hover {
+    text-decoration: underline;
+  }
+  
+  /* FAQ Accordions for Guidelines */
+  .faq-container {
+    max-width: 900px;
+    margin: 0 auto 5rem;
+  }
+  
+  .faq-item {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  }
+  
+  .faq-question {
+    width: 100%;
+    text-align: left;
+    padding: 1.5rem 2rem;
+    background: white;
+    border: none;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s;
+  }
+  
+  .faq-question:hover {
+    background: #f8fafc;
+    color: #2563eb;
+  }
+  
+  .faq-question::after {
+    content: '+';
+    font-size: 1.5rem;
+    color: #94a3b8;
+    transition: transform 0.3s;
+  }
+  
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .faq-answer.open {
+    max-height: 1000px; /* arbitrary large value */
+    transition: max-height 0.5s ease-in;
+  }
+  
+  .faq-answer-inner {
+    padding: 2rem;
+    color: #475569;
+    line-height: 1.8;
+  }
+  
+  .faq-answer h4 {
+    color: #0f172a;
+    margin: 1.5rem 0 0.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .faq-answer h4:first-child {
+    margin-top: 0;
+  }
+  
+  .faq-answer ul {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  
+  .faq-answer li {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Steps Timeline */
+  .timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 1.5rem;
+    height: 100%;
+    width: 2px;
+    background: #e2e8f0;
+  }
+  
+  .timeline-step {
+    position: relative;
+    padding-left: 4.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .step-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3rem;
+    height: 3rem;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    z-index: 2;
+  }
+  
+  .timeline-step h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  
+  .timeline-step p {
+    color: #64748b;
+    line-height: 1.6;
+  }
+
+  .cta-banner {
+    background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+    border-radius: 20px;
+    padding: 4rem;
+    text-align: center;
+    color: white !important;
+    margin-top: 5rem;
+  }
+
+  .cta-banner h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: white !important;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: #f97316;
+    color: white !important;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-decoration: none;
+    margin-top: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+    background: #ea580c;
+  }
+
+  @media (max-width: 900px) {
     .intro-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 4rem;
-      align-items: flex-start;
-      margin-bottom: 5rem;
+      grid-template-columns: 1fr;
     }
-
-    .intro-text h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 1.5rem;
-      line-height: 1.2;
-    }
-
-    .intro-text p {
-      font-size: 1.1rem;
-      color: #475569;
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 2.5rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .glass-card h4 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin: 1.5rem 0 0.5rem;
-    }
-
-    .quote-block {
-      border-left: 4px solid #f97316;
-      padding-left: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .quote-block p {
-      font-size: 1.2rem;
-      font-style: italic;
-      color: #1e293b;
-      margin-bottom: 0.5rem;
-    }
-
-    .quote-block span {
-      font-weight: 700;
-      color: #f97316;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
-      margin-top: 5rem;
-    }
-
-    .section-header h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 1rem;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin: 4rem 0;
-    }
-
-    .stat-card {
-      background: white;
-      border-radius: 20px;
-      padding: 3rem 2rem;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      border: 1px solid #e2e8f0;
-    }
-
-    .stats-grid .stat-number {
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: #2563eb;
-      margin-bottom: 0.5rem;
-      line-height: 1;
-    }
-
-    .stats-grid .stat-label {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #475569;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-bottom: 5rem;
-    }
-
-    .service-box {
-      background: white;
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      border: 1px solid #e2e8f0;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .service-box:hover {
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-      transform: translateY(-5px);
-      border-color: #93c5fd;
-    }
-
-    .icon-wrapper {
-      width: 50px;
-      height: 50px;
-      background: #eff6ff;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      color: #2563eb;
-    }
-
-    .service-box h4 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 1rem;
-    }
-
-    .service-box p {
-      color: #64748b;
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
     .image-block {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-      margin: 4rem 0;
+      grid-template-columns: 1fr;
     }
-
-    .image-block img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    .service-hero {
+      padding-top: 8rem;
+      min-height: 40vh;
     }
-    
-    /* Document/Flyer Gallery Styles */
-    .flyer-gallery-wrapper {
-      margin: 6rem 0 4rem;
-    }
-    
-    .flyer-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-    
-    .flyer-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .flyer-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-      border-color: #93c5fd;
-    }
-    
-    .flyer-img-wrapper {
-      width: 100%;
-      height: 280px;
-      overflow: hidden;
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .flyer-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top;
-      transition: transform 0.5s ease;
-    }
-
-    .flyer-card:hover img {
-      transform: scale(1.05);
-    }
-    
-    .flyer-card-info {
-      padding: 1.5rem;
-      text-align: center;
-      background: white;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    
-    .flyer-card-info h5 {
-      color: #0f172a;
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    
-    .flyer-card-info a {
-      color: #2563eb;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    
-    .flyer-card-info a:hover {
-      text-decoration: underline;
-    }
-    
-    /* FAQ Accordions for Guidelines */
-    .faq-container {
-      max-width: 900px;
-      margin: 0 auto 5rem;
-    }
-    
-    .faq-item {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-    }
-    
-    .faq-question {
-      width: 100%;
-      text-align: left;
-      padding: 1.5rem 2rem;
-      background: white;
-      border: none;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #0f172a;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.3s;
-    }
-    
-    .faq-question:hover {
-      background: #f8fafc;
-      color: #2563eb;
-    }
-    
-    .faq-question::after {
-      content: '+';
-      font-size: 1.5rem;
-      color: #94a3b8;
-      transition: transform 0.3s;
-    }
-    
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-    }
-    
-    .faq-answer.open {
-      max-height: 1000px; /* arbitrary large value */
-      transition: max-height 0.5s ease-in;
-    }
-    
-    .faq-answer-inner {
-      padding: 2rem;
-      color: #475569;
-      line-height: 1.8;
-    }
-    
-    .faq-answer h4 {
-      color: #0f172a;
-      margin: 1.5rem 0 0.5rem;
-      font-size: 1.1rem;
-    }
-    
-    .faq-answer h4:first-child {
-      margin-top: 0;
-    }
-    
-    .faq-answer ul {
-      margin-bottom: 1.5rem;
-      padding-left: 1.5rem;
-    }
-    
-    .faq-answer li {
-      margin-bottom: 0.5rem;
-    }
-
-    /* Steps Timeline */
-    .timeline {
-      position: relative;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem 0 4rem;
-    }
-    
-    .timeline::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 1.5rem;
-      height: 100%;
-      width: 2px;
-      background: #e2e8f0;
-    }
-    
-    .timeline-step {
-      position: relative;
-      padding-left: 4.5rem;
-      margin-bottom: 2.5rem;
-    }
-    
-    .step-number {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 3rem;
-      height: 3rem;
-      background: #2563eb;
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.2rem;
-      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-      z-index: 2;
-    }
-    
-    .timeline-step h4 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 0.5rem;
-      padding-top: 0.5rem;
-    }
-    
-    .timeline-step p {
-      color: #64748b;
-      line-height: 1.6;
-    }
-
     .cta-banner {
-      background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
-      border-radius: 20px;
-      padding: 4rem;
-      text-align: center;
-      color: white;
-      margin-top: 5rem;
+      padding: 3rem 1.5rem;
     }
-
-    .cta-banner h2 {
+    .stats-grid .stat-number {
       font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
     }
+  }
+</style>
 
-    .cta-button {
-      display: inline-block;
-      background: #f97316;
-      color: white;
-      padding: 1.2rem 3rem;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      text-decoration: none;
-      margin-top: 2rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
-      background: #ea580c;
-    }
-
-    @media (max-width: 900px) {
-      .intro-grid {
-        grid-template-columns: 1fr;
-      }
-      .image-block {
-        grid-template-columns: 1fr;
-      }
-      .service-hero {
-        padding-top: 8rem;
-        min-height: 40vh;
-      }
-      .cta-banner {
-        padding: 3rem 1.5rem;
-      }
-      .stats-grid .stat-number {
-        font-size: 2.5rem;
-      }
-    }
-  </style>
-
+<Layout title="The CACFP Initiative - EIEI">
   <section class="service-hero">
     <div class="service-hero-content">
       <h1>The CACFP Initiative</h1>
@@ -799,124 +850,80 @@ import Layout from "../layouts/Layout.astro";
         />
       </div>
 
+      <!-- Flyer Gallery Section -->
       <div class="flyer-gallery-wrapper">
-        <div class="section-header" style="margin-top: 0; margin-bottom: 2rem;">
-          <h2>Initiative Flyers & Official Resources</h2>
-          <p style="color: #64748b; font-size: 1.1rem;">Browse our library of beautifully designed outreach marketing materials and programmatic fact sheets.</p>
+        <div class="section-header">
+          <h2>CACFP Resource Gallery</h2>
+          <p>Explore our flyers and documentation for the CACFP Initiative.</p>
         </div>
-        
-        <h3 style="font-size: 1.5rem; font-weight: 800; color: #1e3a8a; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">Awareness & Marketing Campaigns</h3>
-        <div class="flyer-gallery" style="margin-top: 0; margin-bottom: 4rem;">
+        <div class="flyer-gallery">
           <div class="flyer-card">
             <div class="flyer-img-wrapper">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/cacfp.png?resize=1080%2C1393&ssl=1" alt="CACFP Impact Flyer" />
+              <img src="/images/cacfp-flyer-1.jpg" alt="CACFP Initiative Flyer 1" />
             </div>
             <div class="flyer-card-info">
-              <h5>CACFP Global Impact</h5>
-              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/cacfp.png" target="_blank">View Full Screen 🔍</a>
+              <h5>The CACFP Initiative</h5>
+              <a href="/images/cacfp-flyer-1.jpg" target="_blank">View Full Flyer</a>
             </div>
           </div>
-          
           <div class="flyer-card">
             <div class="flyer-img-wrapper">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/eiei-cacfp.png?resize=1080%2C1402&ssl=1" alt="EIEI CACFP Partnership Flyer" />
+              <img src="/images/cacfp-flyer-2.jpg" alt="CACFP Initiative Flyer 2" />
             </div>
             <div class="flyer-card-info">
-              <h5>Partnership Breakdown</h5>
-              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/eiei-cacfp.png" target="_blank">View Full Screen 🔍</a>
+              <h5>Nutritional Excellence</h5>
+              <a href="/images/cacfp-flyer-2.jpg" target="_blank">View Full Flyer</a>
             </div>
           </div>
-          
           <div class="flyer-card">
             <div class="flyer-img-wrapper">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/03/Heart-Month-Social-Media-6-1024x1024-1.jpg?resize=1024%2C1024&ssl=1" alt="Healthy Heart Month CACFP Menu" />
+              <img src="/images/cacfp-flyer-3.jpg" alt="CACFP Initiative Flyer 3" />
             </div>
             <div class="flyer-card-info">
-              <h5>Healthy Heart Month Notice</h5>
-              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/03/Heart-Month-Social-Media-6-1024x1024-1.jpg" target="_blank">View Full Screen 🔍</a>
+              <h5>Provider Benefits</h5>
+              <a href="/images/cacfp-flyer-3.jpg" target="_blank">View Full Flyer</a>
             </div>
           </div>
-        </div>
-
-        <h3 style="font-size: 1.5rem; font-weight: 800; color: #1e3a8a; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">Operational Fact Sheets & Snapshots</h3>
-        <div class="flyer-gallery" style="margin-top: 0;">
           <div class="flyer-card">
             <div class="flyer-img-wrapper">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.41-AM-e1758898053575-1.png?resize=612%2C485&ssl=1" alt="CACFP Eligibility Matrix" />
+              <img src="/images/cacfp-flyer-4.jpg" alt="CACFP Initiative Flyer 4" />
             </div>
             <div class="flyer-card-info">
-              <h5>Eligibility Standards (Visual)</h5>
-              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.41-AM-e1758898053575-1.png" target="_blank">View Full Screen 🔍</a>
-            </div>
-          </div>
-
-          <div class="flyer-card">
-            <div class="flyer-img-wrapper">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.34-AM-e1758897891411-1.png?resize=602%2C655&ssl=1" alt="Daily Menu Nutrition Sheet" />
-            </div>
-            <div class="flyer-card-info">
-              <h5>Nutrition Breakdown Matrix</h5>
-              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/09/Screenshot-2025-09-26-at-10.40.34-AM-e1758897891411-1.png" target="_blank">View Full Screen 🔍</a>
-            </div>
-          </div>
-
-          <div class="flyer-card">
-            <div class="flyer-img-wrapper">
-              <img src="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/07/Screenshot-2025-07-30-at-9.51.58-AM.png?resize=608%2C548&ssl=1" alt="Enrollment Steps Notice" />
-            </div>
-            <div class="flyer-card-info">
-              <h5>Reimbursement Core Rules</h5>
-              <a href="https://i0.wp.com/eieiservices.com/wp-content/uploads/2025/07/Screenshot-2025-07-30-at-9.51.58-AM.png" target="_blank">View Full Screen 🔍</a>
+              <h5>Community Impact</h5>
+              <a href="/images/cacfp-flyer-4.jpg" target="_blank">View Full Flyer</a>
             </div>
           </div>
         </div>
       </div>
+      <GallerySection program="cacfp-initiative" />
+
+      <TestimonialSection program="cacfp-initiative" />
 
       <div class="cta-banner">
-        <h2>Deploy CACFP In Your Organization</h2>
-        <p
-          style="font-size: 1.2rem; opacity: 0.9; max-width: 650px; margin: 0 auto; line-height: 1.6;"
-        >
-          If your childcare center is aggressively interested in joining CACFP
-          with full backend support from EIEI, we are entirely ready to launch
-          your application.
+        <h2>Start Your CACFP Journey Today</h2>
+        <p>
+          Join hundreds of providers in delivering better nutrition to our
+          communities.
         </p>
-        <a href="/contact-us" class="cta-button">Begin Initiative Application</a>
-        <p style="margin-top: 2rem; font-size: 0.95rem; opacity: 0.8;">
-          Have questions? Email <strong style="color: #ffedd5;">cacfp@eiforei.com</strong> or call our Help Desk at <strong style="color: #ffedd5;">267-415-6724</strong> (Answers within one business day).
-        </p>
-        <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; font-style: italic;">
-          Prepared 07/7/2025 – All rates and citations current through the Federal Register notice dated July 10, 2024. EIEI manually updates this portal each July when USDA issues new rates.
-        </p>
+        <a href="/contact-us" class="cta-button">Partner With Us</a>
       </div>
-      
     </div>
   </main>
-  
+
   <script is:inline>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Priority Accordion Logic for dynamic height
-      document.querySelectorAll(".faq-question").forEach(btn => {
-        // Clone and replace to blow away any existing listeners from public/script.js 
-        // to prevent double-firing that instantly closes the accordion
-        const newBtn = btn.cloneNode(true);
-        btn.parentNode.replaceChild(newBtn, btn);
-        
-        newBtn.addEventListener("click", () => {
-          const answer = newBtn.nextElementSibling;
-          const isOpen = answer.classList.contains("open");
-          
-          // Close all others
-          document.querySelectorAll(".faq-answer").forEach(a => {
-            a.classList.remove("open");
-            a.style.maxHeight = null;
-          });
-          
-          if (!isOpen) {
-            answer.classList.add("open");
-            answer.style.maxHeight = answer.scrollHeight + 50 + "px";
-          }
+    document.querySelectorAll(".faq-question").forEach((button) => {
+      button.addEventListener("click", () => {
+        const answer = button.nextElementSibling;
+        const isOpen = answer.classList.contains("open");
+
+        // Close all other answers
+        document.querySelectorAll(".faq-answer").forEach((el) => {
+          el.classList.remove("open");
         });
+
+        if (!isOpen) {
+          answer.classList.add("open");
+        }
       });
     });
   </script>

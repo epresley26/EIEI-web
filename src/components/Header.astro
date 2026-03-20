@@ -1,32 +1,276 @@
 ---
-// src/components/Header.astro
+const currentPath = Astro.url.pathname.endsWith('/') && Astro.url.pathname.length > 1 ? Astro.url.pathname.slice(0, -1) : Astro.url.pathname;
+
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/services", label: "Services" },
+  { href: "/blog", label: "Blog" },
+  { href: "/career-opportunities", label: "Careers" },
+  { href: "/nafei", label: "NAFEI" },
+  { href: "/contact-us", label: "Contact" },
+];
+
+// Determine which links to show based on user request "page we are on is not visible"
+const visibleLinks = navLinks.filter(link => {
+  if (link.href === "/" && currentPath === "/") return false;
+  if (link.href === currentPath) return false;
+  return true;
+});
 ---
-<header class="nav">
-  <div class="nav-inner">
-    <div class="nav-logo-section">
-      <a href="/" class="logo-link">
-        <img src="/images/logo.png" alt="EIEI Logo" class="logo" />
+
+<header class="header-glass">
+  <div class="header-container">
+    <div class="logo-area">
+      <a href="/" class="logo-wrapper">
+        <img src="/images/logo.png" alt="EIEI Logo" class="header-logo" />
+        <span class="logo-text-premium">EIEI</span>
       </a>
     </div>
-    
-    <button class="menu-toggle" id="menuToggle">☰</button>
-    
-    <nav class="nav-menu">
-      <a href="/about" class="nav-item">About</a>
-      <a href="/services" class="nav-item">Services</a>
-      
-      <a href="/blog" class="nav-item">Blog</a>
-      
-      <a href="/career-opportunities" class="nav-item">Careers</a>
-      <a href="/nafei" class="nav-item">NAFEI</a>
-      
-      <a href="/contact-us" class="nav-item">Contact</a>
-      <div class="header-actions">
-        <a href="/donate" class="donate-pill">Donate</a>
-      </div>
+
+    <nav class="nav-links-wrap" id="navMenu">
+      {visibleLinks.map((link) => (
+        <a href={link.href} class="nav-link-premium">
+          {link.label}
+          <span class="link-underline"></span>
+        </a>
+      ))}
+      <a href="/donate" class="donate-button-premium mobile-donate">Donate</a>
     </nav>
 
-    <div class="nav-actions">
+    <div class="actions-area">
+      <a href="/donate" class="donate-button-premium">Donate</a>
     </div>
+
+    <button class="menu-burger" id="mobileMenuToggle" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </header>
+
+<style>
+  .header-glass {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1300px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    z-index: 2000;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 1.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fadeInDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+  }
+
+  .logo-area, .actions-area {
+    flex: 1; /* Both sides take equal space to force center to center */
+    display: flex;
+  }
+
+  .actions-area {
+    justify-content: flex-end;
+  }
+
+  .logo-area .logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .header-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-text-premium {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .nav-links-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-link-premium {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-link-premium:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .link-underline {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #f97316;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  .nav-link-premium:hover .link-underline {
+    width: 30%;
+  }
+
+  .donate-button-premium {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .donate-button-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(234, 88, 12, 0.4);
+    filter: brightness(1.1);
+  }
+
+  .mobile-donate {
+    display: none;
+  }
+
+  /* BURGER MENU */
+  .menu-burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 2001;
+  }
+
+  .menu-burger span {
+    width: 25px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 991px) {
+    .header-glass {
+      width: 95%;
+      padding: 0.3rem 1.2rem;
+    }
+
+    .menu-burger {
+      display: flex;
+    }
+
+    .nav-links-wrap {
+      position: absolute;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      padding: 2rem;
+      border-radius: 30px;
+      gap: 1.5rem;
+      transform: translateY(-20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-links-wrap.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .actions-area {
+      display: none;
+    }
+
+    .mobile-donate {
+      display: block;
+      margin-top: 1rem;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  /* ACTIVE STATE FOR BURGER */
+  .menu-burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-burger.active span:nth-child(2) { opacity: 0; }
+  .menu-burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+</style>
+
+<script>
+  function setupMobileMenu() {
+    const burger = document.querySelector('.menu-burger') || document.querySelector('.burger-menu');
+    const menu = document.querySelector('.nav-links-wrap') || document.querySelector('.mobile-menu');
+
+    if (burger && menu) {
+      burger.addEventListener('click', () => {
+        burger.classList.toggle('active');
+        menu.classList.toggle('active');
+      });
+
+      // Close menu when clicking links
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          burger.classList.remove('active');
+          menu.classList.remove('active');
+        });
+      });
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupMobileMenu);
+</script>
