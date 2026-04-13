@@ -511,7 +511,9 @@ import GallerySection from "../components/GallerySection.astro";
     padding: 0 2rem;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
+    transition:
+      max-height 0.3s ease,
+      padding 0.3s ease;
     background: white;
     color: #475569;
     line-height: 1.7;
@@ -526,41 +528,77 @@ import GallerySection from "../components/GallerySection.astro";
   }
 
   /* PARTNERS */
-  .partners-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 3rem;
-    align-items: center;
+  /* PARTNERS MARQUEE */
+  .partners-marquee-wrapper {
+    position: relative;
     width: 100%;
+    overflow: hidden;
+    padding: 3rem 0;
+    /* Edge fades */
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 15%,
+      black 85%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 15%,
+      black 85%,
+      transparent
+    );
+  }
+
+  .partners-marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 6rem;
+    animation: scroll 40s linear infinite;
+    padding: 2rem 0;
+  }
+
+  .partners-marquee-track:hover {
+    animation-play-state: paused;
   }
 
   .partner-item {
-    transition: all 0.3s ease;
+    flex-shrink: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .partner-item img {
+    height: 60px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .partner-item:hover {
-    transform: scale(1.05);
+    transform: scale(1.15);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
   }
 
   @media (max-width: 900px) {
-    .partners-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+    .partner-item img {
+      height: 40px;
     }
-  }
-
-  @media (max-width: 500px) {
-    .partners-grid {
-      grid-template-columns: 1fr;
+    .partners-marquee-track {
+      gap: 3rem;
     }
-  }
-  .partner-item img {
-    width: 100%;
-    height: auto;
-    display: block;
   }
 
   /* GALLERY OVERRIDES */
@@ -914,22 +952,26 @@ import GallerySection from "../components/GallerySection.astro";
 
       <div class="acc-grid">
         <div class="acc-card">
-          <div class="acc-num" style="color: #2563eb;">2019</div>
+          <div class="acc-num" style="color: #2563eb;">2017</div>
           <div class="acc-title">Onwards</div>
           <div class="acc-desc">Growing steadily since our foundation</div>
         </div>
         <div class="acc-card">
-          <div class="acc-num" style="color: var(--brand-orange);">$800K</div>
+          <div class="acc-num" style="color: var(--brand-orange);">
+            $11,000K
+          </div>
           <div class="acc-title">Grants Awarded</div>
           <div class="acc-desc">Federal and state agency support</div>
         </div>
         <div class="acc-card">
-          <div class="acc-num" style="color: #10b981;">3+</div>
+          <div class="acc-num" style="color: #10b981;">4+</div>
           <div class="acc-title">Certifications</div>
-          <div class="acc-desc">PA ACT 48, PQAS &amp; CDA Providers</div>
+          <div class="acc-desc">
+            PA ACT 48, PQAS, PA Apprenticeship &amp; CDA Providers
+          </div>
         </div>
         <div class="acc-card">
-          <div class="acc-num" style="color: #8b5cf6;">34+</div>
+          <div class="acc-num" style="color: #8b5cf6;">180+</div>
           <div class="acc-title">Workshops</div>
           <div class="acc-desc">Special education trainings hosted</div>
         </div>
@@ -1008,8 +1050,8 @@ import GallerySection from "../components/GallerySection.astro";
 
       <div class="faq-container">
         <div class="faq-item">
-          <button class="faq-question"
-            >How do I get in contact with EIEI?
+          <button class="faq-question">
+            How do I get in contact with EIEI?
           </button>
           <div class="faq-answer">
             You can reach us by Phone: 484-501-9101 or Email: admin@eiforei.org.
@@ -1018,8 +1060,8 @@ import GallerySection from "../components/GallerySection.astro";
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question"
-            >What areas do you offer services?
+          <button class="faq-question">
+            What areas do you offer services?
           </button>
           <div class="faq-answer">
             We provide services throughout Pennsylvania, with our main Special
@@ -1029,17 +1071,8 @@ import GallerySection from "../components/GallerySection.astro";
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question">What age groups do you serve?</button>
-          <div class="faq-answer">
-            Our primary services focus on children ages 3-5 years old. We offer
-            specialized early intervention services, social playgroups, and
-            classroom-based support for this age group through certified
-            educators and therapy professionals.
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question"
-            >Do you offer online sessions or training?
+          <button class="faq-question">
+            Do you offer online sessions or training?
           </button>
           <div class="faq-answer">
             Yes, we provide both in-person and virtual sessions. Our Family
@@ -1049,8 +1082,8 @@ import GallerySection from "../components/GallerySection.astro";
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question"
-            >How do I apply for a job at EIEI?
+          <button class="faq-question">
+            How do I apply for a job at EIEI?
           </button>
           <div class="faq-answer">
             We're currently hiring! We seek Early Childhood and Special Needs
@@ -1068,18 +1101,143 @@ import GallerySection from "../components/GallerySection.astro";
   <section class="bg-light">
     <div class="section-wrap">
       <h2 class="section-title">Our Partners</h2>
-      <div class="partners-grid">
-        <div class="partner-item">
-          <img src="/images/p1.webp" alt="Partner 1" loading="lazy" />
-        </div>
-        <div class="partner-item">
-          <img src="/images/p2.webp" alt="Partner 2" loading="lazy" />
-        </div>
-        <div class="partner-item">
-          <img src="/images/p3.webp" alt="Partner 3" loading="lazy" />
-        </div>
-        <div class="partner-item">
-          <img src="/images/p4.webp" alt="Partner 4" loading="lazy" />
+      <div class="partners-marquee-wrapper">
+        <div class="partners-marquee-track">
+          <!-- First Set -->
+          <div class="partner-item">
+            <img
+              src="/images/Partners/bright-little-scholars.png"
+              alt="Bright Little Scholars"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/changing-lanes.png"
+              alt="Changing Lanes Learning Center"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/stevens-group.png" alt="Stevens Group" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/malaika-felts.jpeg"
+              alt="Malaika Felts"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/arnita-mcclarin.jpeg"
+              alt="Arnita Mcclarin"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/natrice-johnson.jpeg"
+              alt="Natrice Johnson"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/whiz-kidz.png" alt="Whiz Kidz" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/we-care-ldc.png"
+              alt="We Care Learning and Development Center"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/ashley-brown.jpeg" alt="Ashley Brown" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/tiffaney-hobbs.png"
+              alt="Tiffaney Hobbs"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/felicia-taylor-powell.jpg"
+              alt="Felicia Taylor-Powell"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/boobopstwins.jpeg" alt="Boobopstwins" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/hellen-thiongo.png"
+              alt="Hellen Thiongo"
+            />
+          </div>
+
+          <!-- Duplicate Set for Infinite Loop -->
+          <div class="partner-item">
+            <img
+              src="/images/Partners/bright-little-scholars.png"
+              alt="Bright Little Scholars"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/changing-lanes.png"
+              alt="Changing Lanes Learning Center"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/stevens-group.png" alt="Stevens Group" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/malaika-felts.jpeg"
+              alt="Malaika Felts"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/arnita-mcclarin.jpeg"
+              alt="Arnita Mcclarin"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/natrice-johnson.jpeg"
+              alt="Natrice Johnson"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/whiz-kidz.png" alt="Whiz Kidz" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/we-care-ldc.png"
+              alt="We Care Learning and Development Center"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/ashley-brown.jpeg" alt="Ashley Brown" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/tiffaney-hobbs.png"
+              alt="Tiffaney Hobbs"
+            />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/felicia-taylor-powell.jpg"
+              alt="Felicia Taylor-Powell"
+            />
+          </div>
+          <div class="partner-item">
+            <img src="/images/Partners/boobopstwins.jpeg" alt="Boobopstwins" />
+          </div>
+          <div class="partner-item">
+            <img
+              src="/images/Partners/hellen-thiongo.png"
+              alt="Hellen Thiongo"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -1095,12 +1253,10 @@ import GallerySection from "../components/GallerySection.astro";
         // close all
         document.querySelectorAll(".faq-item").forEach((el) => {
           el.classList.remove("active");
-          el.querySelector("span").textContent = "+";
         });
         // toggle clicked
         if (!isActive) {
           item.classList.add("active");
-          btn.querySelector("span").textContent = "−";
         }
       });
     });
@@ -1158,7 +1314,7 @@ import GallerySection from "../components/GallerySection.astro";
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
-          }
+          },
         );
         if (!res.ok) throw new Error("REST write failed");
         form.reset();
