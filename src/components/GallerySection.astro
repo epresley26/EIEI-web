@@ -14,44 +14,14 @@ const { program = "general", showFilters = false } = Astro.props;
 >
   <div class="gallery-container">
     <div class="gallery-header">
-      <div class="badge">Visual Diary</div>
-      <h2 id="galleryTitle">Our Impact Gallery</h2>
+      <div class="badge">EIEI Community</div>
+      <h2 id="galleryTitle">Our World in Photos</h2>
       <p id="gallerySubtitle">
-        Witness the journey of our children, families, and impact across the
-        community.
+        Exploring our shared journey of growth, learning, and impact across the community.
       </p>
     </div>
 
-    {
-      showFilters && (
-        <div class="gallery-filters" id="galleryFilters">
-          <button class="filter-btn active" data-filter="general">
-            All
-          </button>
-          <button class="filter-btn" data-filter="early-intervention">
-            Early Intervention
-          </button>
-          <button class="filter-btn" data-filter="cacfp-initiative">
-            CACFP
-          </button>
-          <button class="filter-btn" data-filter="training-development">
-            Training
-          </button>
-          <button class="filter-btn" data-filter="career-development">
-            Career
-          </button>
-          <button class="filter-btn" data-filter="family-empowerment">
-            Family
-          </button>
-          <button class="filter-btn" data-filter="community-programs">
-            Community
-          </button>
-          <button class="filter-btn" data-filter="supporting-inclusions">
-            Affiliates
-          </button>
-        </div>
-      )
-    }
+    <!-- Filters removed for unified gallery -->
 
     <div class="gallery-carousel-wrapper">
       <div class="gallery-carousel" id="galleryCarousel">
@@ -377,9 +347,7 @@ const { program = "general", showFilters = false } = Astro.props;
           throw new Error("Firebase not initialized");
 
         let query = (window as any).firebaseDB.collection("gallery");
-        if (id !== "general") {
-          query = query.where("programId", "==", id);
-        }
+        // Program-specific filtering removed to pull all images from general pool
 
         const snapshot = await query.limit(50).get();
         images = snapshot.docs.map((doc: any) => ({
@@ -504,21 +472,7 @@ const { program = "general", showFilters = false } = Astro.props;
     }
 
     // Initial setup
-    if (showFilters) {
-      const filters = section.querySelectorAll(".filter-btn");
-      filters.forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          filters.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          const filter = btn.getAttribute("data-filter");
-          if (filter) {
-            stopAutoRotate();
-            await loadImages(filter);
-            startAutoRotate();
-          }
-        });
-      });
-    }
+    // Filter event listeners removed
 
     const prevBtn = section.querySelector("#prevGallery");
     const nextBtn = section.querySelector("#nextGallery");

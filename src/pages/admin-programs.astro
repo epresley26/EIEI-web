@@ -1780,50 +1780,7 @@ import "../styles/global.css";
                 </div>
 
                 <!-- Gallery Filter Tabs -->
-                <div class="gallery-tabs-nav" id="galleryTabsNav">
-                  <button
-                    class="gallery-tab-btn active"
-                    onclick="switchGalleryTab('all')">All Images</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('general')">General</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('early-intervention')"
-                    >Early Intervention</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('career-development')"
-                    >Career Development</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('training-development')"
-                    >Training & Dev</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('cacfp')">CACFP</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('family-empowerment')"
-                    >Family Empowerment</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('community-programs')"
-                    >Community</button
-                  >
-                  <button
-                    class="gallery-tab-btn"
-                    onclick="switchGalleryTab('supporting-inclusions')"
-                    >Inclusions</button
-                  >
-                </div>
+                <!-- Gallery Filter Tabs Removed for Unified Gallery -->
 
                 <div
                   id="uploadFormWrapper"
@@ -1852,31 +1809,7 @@ import "../styles/global.css";
                         multiple
                       />
                     </div>
-                    <div class="form-group">
-                      <label for="galleryProgramSelect">Target Program</label>
-                      <select id="galleryProgramSelect">
-                        <option value="general">Home Page / General</option>
-                        <option value="early-intervention"
-                          >Early Intervention</option
-                        >
-                        <option value="career-development"
-                          >Career Development</option
-                        >
-                        <option value="training-development"
-                          >Training & Development</option
-                        >
-                        <option value="cacfp">CACFP</option>
-                        <option value="family-empowerment"
-                          >Family Empowerment</option
-                        >
-                        <option value="community-programs"
-                          >Community Programs</option
-                        >
-                        <option value="supporting-inclusions"
-                          >Supporting Inclusions</option
-                        >
-                      </select>
-                    </div>
+                    <input type="hidden" id="galleryProgramSelect" value="general">
                     <button type="submit" class="primary-btn" id="uploadBtn"
                       >Start Upload</button
                     >
@@ -3757,16 +3690,6 @@ import "../styles/global.css";
                 ).value;
                 if (files.length === 0) return;
 
-                // Restrict to maximum 5 files per upload
-                if (files.length > 5) {
-                  alert(
-                    "Maximum 5 images can be uploaded at once. You selected " +
-                      files.length +
-                      " images."
-                  );
-                  uploadBtn.disabled = false;
-                  return;
-                }
 
                 console.log(
                   "Starting upload of",
@@ -3895,32 +3818,7 @@ import "../styles/global.css";
                 // Update Filter Label
                 const label = document.getElementById("galleryFilterLabel");
                 if (label) {
-                  label.textContent =
-                    filter === "all"
-                      ? "All Programs"
-                      : filter
-                          .split("-")
-                          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                          .join(" ");
-                }
-
-                // Update Upload Dropdown default for convenience
-                const select = document.getElementById("galleryProgramSelect");
-                if (select && filter !== "all") {
-                  select.value = filter;
-                }
-
-                const targetLabel = document.getElementById(
-                  "currentUploadTarget"
-                );
-                if (targetLabel) {
-                  targetLabel.textContent =
-                    filter === "all"
-                      ? "All Gallery"
-                      : filter
-                          .split("-")
-                          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                          .join(" ");
+                  label.textContent = "All Programs";
                 }
 
                 loadGalleryImages();
@@ -3951,14 +3849,7 @@ import "../styles/global.css";
                     }
 
                     let docs = snapshot.docs;
-
-                    // Filter if not 'all'
-                    if (galleryFilter !== "all") {
-                      docs = docs.filter(
-                        (doc) =>
-                          (doc.data().programId || "general") === galleryFilter
-                      );
-                    }
+                    // Filter logic removed: showing all gallery images
 
                     // Sort
                     docs.sort((a, b) => {
