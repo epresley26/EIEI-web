@@ -27,26 +27,26 @@ function createFooter() {
           <div class="footer-column">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="index.html">Home</a></li>
-              <li><a href="index.html#about">About Us</a></li>
-              <li><a href="services.html">Services</a></li>
-              <li><a href="support.html">Support</a></li>
-              <li><a href="blog.html">Blog</a></li>
-              <li><a href="nafei.html">NAFEI</a></li>
-              <li><a href="career-opportunities.html">Careers</a></li>
-              <li><a href="contact-us.html">Contact</a></li>
+              <li><a href="index">Home</a></li>
+              <li><a href="index#about">About Us</a></li>
+              <li><a href="services">Services</a></li>
+              <li><a href="support">Support</a></li>
+              <li><a href="blog">Blog</a></li>
+              <li><a href="nafei">NAFEI</a></li>
+              <li><a href="career-opportunities">Careers</a></li>
+              <li><a href="contact-us">Contact</a></li>
             </ul>
           </div>
 
           <div class="footer-column">
             <h3>Programs</h3>
             <ul>
-              <li><a href="early-intervention.html">Early Intervention</a></li>
-              <li><a href="special-education.html">Special Education</a></li>
-              <li><a href="parent-training.html">Parent Training</a></li>
-              <li><a href="classroom-support.html">Classroom Support</a></li>
-              <li><a href="professional-development.html">Professional Development</a></li>
-              <li><a href="community-outreach.html">Community Outreach</a></li>
+              <li><a href="early-intervention">Early Intervention</a></li>
+              <li><a href="special-education">Special Education</a></li>
+              <li><a href="parent-training">Parent Training</a></li>
+              <li><a href="classroom-support">Classroom Support</a></li>
+              <li><a href="professional-development">Professional Development</a></li>
+              <li><a href="community-outreach">Community Outreach</a></li>
             </ul>
           </div>
 
@@ -71,7 +71,7 @@ function createFooter() {
             <div class="footer-links">
               <a href="#" title="Privacy Policy">Privacy Policy</a> | 
               <a href="#" title="Terms of Service">Terms of Service</a> | 
-              <a href="admin-programs.html" title="Admin Portal" class="admin-link">Admin Portal</a>
+              <a href="admin-programs" title="Admin Portal" class="admin-link">Admin Portal</a>
             </div>
           </div>
           <div class="footer-social">

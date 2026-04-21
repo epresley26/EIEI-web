@@ -82,9 +82,9 @@ function toggleHomeLink() {
 
   const currentPath = window.location.pathname;
   const isHomepage =
-    currentPath.endsWith("index.html") ||
-    currentPath.endsWith("/") ||
-    currentPath === "";
+    currentPath === "/" ||
+    currentPath === "" ||
+    currentPath.endsWith("/index");
 
   if (isHomepage) {
     homeLink.classList.remove("show");

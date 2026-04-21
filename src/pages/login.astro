@@ -339,7 +339,7 @@ import '../styles/global.css';
         }
         
         // Redirect to admin panel on successful login
-        window.location.href = 'admin-programs.html';
+        window.location.href = '/admin-programs';
       } catch (e) {
         console.error('Sign-in failed:', e);
         const msg = mapAuthError(e);
@@ -371,7 +371,7 @@ import '../styles/global.css';
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // User is already logged in, redirect to admin panel
-        window.location.href = 'admin-programs.html';
+        window.location.href = '/admin-programs';
       }
     });
   </script>
