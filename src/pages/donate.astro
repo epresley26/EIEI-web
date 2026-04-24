@@ -20,7 +20,7 @@ import Layout from "../layouts/Layout.astro";
           </p>
           <div class="hero-actions">
             <a
-              href="https://eieiservices.com/support/"
+              href="https://givebutter.com/PzVfCI"
               target="_blank"
               class="cta-primary"
             >
@@ -758,8 +758,8 @@ import Layout from "../layouts/Layout.astro";
             item.image ||
             "https://dummyimage.com/400x300/2563eb/ffffff&text=EIEI+Market"
           }" alt="${
-          item.title
-        }" onerror="this.src='https://dummyimage.com/400x300/e2e8f0/64748b&text=No+Image'">
+            item.title
+          }" onerror="this.src='https://dummyimage.com/400x300/e2e8f0/64748b&text=No+Image'">
         </div>
         <div class="item-body">
           <div class="item-cat">${item.category || "Support"}</div>
@@ -770,7 +770,7 @@ import Layout from "../layouts/Layout.astro";
           </div>
         </div>
       </div>
-    `
+    `,
       )
       .join("");
   }
@@ -781,7 +781,7 @@ import Layout from "../layouts/Layout.astro";
       (item) =>
         item.title.toLowerCase().includes(query) ||
         (item.description && item.description.toLowerCase().includes(query)) ||
-        (item.category && item.category.toLowerCase().includes(query))
+        (item.category && item.category.toLowerCase().includes(query)),
     );
     renderItems(filtered);
   }
