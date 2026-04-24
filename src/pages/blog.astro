@@ -97,42 +97,52 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      max-width: 900px; /* Slimmer for editorial feel */
       margin: 0 auto;
     }
 
     .blog-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-      border: 1px solid #e2e8f0;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: transparent;
+      border-radius: 0;
+      overflow: visible;
+      box-shadow: none;
+      border: none;
+      border-bottom: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
       display: flex;
-      flex-direction: column;
-      height: 100%;
+      flex-direction: row-reverse; /* Image on right */
+      align-items: center;
+      gap: 3rem;
+      padding: 4rem 0;
+      width: 100%;
+    }
+
+    .blog-card:last-child {
+      border-bottom: none;
     }
 
     .blog-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+      transform: none;
+      box-shadow: none;
     }
 
     .blog-image-wrap {
-      width: 100%;
-      height: 200px;
+      width: 220px;
+      height: 220px;
+      flex-shrink: 0;
       position: relative;
       overflow: hidden;
+      border-radius: 24px; /* Soft rounding */
+      background: #f1f5f9;
     }
 
     .blog-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease;
+      object-fit: contain;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .blog-card:hover .blog-image {
@@ -156,10 +166,11 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .blog-content {
-      padding: 1.5rem;
+      padding: 0;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      justify-content: center;
     }
 
     .blog-date {
@@ -170,11 +181,12 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .blog-title {
-      font-size: 1.25rem;
-      font-weight: 800;
+      font-size: 1.75rem;
+      font-weight: 700;
       color: #0f172a;
-      line-height: 1.4;
+      line-height: 1.2;
       margin-bottom: 1rem;
+      letter-spacing: -0.02em;
     }
 
     .blog-excerpt {
@@ -187,26 +199,24 @@ import Layout from '../layouts/Layout.astro';
 
     .read-more-btn {
       align-self: flex-start;
-      background: transparent;
-      color: #2563eb;
-      font-weight: 700;
-      font-size: 1rem;
+      background: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.9rem;
       border: none;
-      padding: 0;
+      padding: 0.6rem 1.4rem;
+      border-radius: 100px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: gap 0.3s ease;
-    }
-
-    .read-more-btn::after {
-      content: '→';
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     .read-more-btn:hover {
-      gap: 0.8rem;
+      background: #e2e8f0;
+      color: #0f172a;
+      transform: translateY(-1px);
     }
 
     .loading-text {
@@ -353,6 +363,21 @@ import Layout from '../layouts/Layout.astro';
       .post-modal-body { padding: 2rem; }
       .post-modal-title { font-size: 1.8rem; }
     }
+
+    @media (max-width: 991px) {
+      .blog-card {
+        flex-direction: column-reverse; /* Stack image on top for mobile */
+        gap: 2rem;
+        padding: 3rem 0;
+      }
+      .blog-image-wrap {
+        width: 100%;
+        height: 250px;
+      }
+      .blog-title {
+        font-size: 1.5rem;
+      }
+    }
   </style>
 
   <!-- HERO SECTION -->
@@ -456,18 +481,17 @@ import Layout from '../layouts/Layout.astro';
             imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/600x400');
           }
 
-          const excerpt = post.excerpt || (post.content ? post.content.slice(0, 130) + '...' : 'Read more about this post...');
+          const excerpt = post.excerpt || (post.content ? post.content.slice(0, 180) + '...' : 'Read more about this post...');
 
           const card = document.createElement('div');
           card.className = 'blog-card';
           card.setAttribute('data-type', type);
           card.innerHTML = `
             <div class="blog-image-wrap">
-              <span class="blog-tag">${type}</span>
               <img src="${imageUrl}" class="blog-image" loading="lazy" onerror="this.src='/images/slide1.jpg'">
             </div>
             <div class="blog-content">
-              <div class="blog-date">${date}</div>
+              <div class="blog-date">${date} • ${type}</div>
               <h3 class="blog-title">${post.title || 'Untitled Post'}</h3>
               <p class="blog-excerpt">${escapeHtml(excerpt)}</p>
               <button class="read-more-btn" onclick="openBlogPostModal('${post.id}')">Read Article</button>
