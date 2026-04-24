@@ -1,0 +1,453 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="EIEI | Full Photo Gallery">
+  <main class="gallery-page">
+    <section class="services-hero">
+      <div class="services-hero-content">
+        <h1>Our Full Gallery</h1>
+        <p>Capturing the moments of joy, discovery, and growth in our community.</p>
+      </div>
+    </section>
+
+    <section class="gallery-grid-section">
+      <div class="container">
+        <div id="galleryGrid" class="gallery-grid">
+          <!-- Images will be loaded here -->
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+        </div>
+
+        <div id="noImages" class="no-images" style="display: none;">
+          <p>No images found in the gallery.</p>
+        </div>
+
+        <div id="pagination" class="pagination-container" style="display: none;">
+          <div class="pagination-pill">
+            <button id="prevPage" class="pag-btn prev" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M15 18l-6-6 6-6"></path>
+              </svg>
+              <span>Previous</span>
+            </button>
+            
+            <div id="pageNumbers" class="page-numbers">
+              <!-- Page numbers will be injected here -->
+            </div>
+
+            <button id="nextPage" class="pag-btn next">
+              <span>Next</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </button>
+          </div>
+          <div id="resultsCount" class="results-count">
+            Showing 1 - 25 of 100 results
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    /* HERO SECTION - SCOPED */
+    .services-hero {
+      position: relative;
+      width: 100%;
+      min-height: 45vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12rem 2rem 8rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%) !important;
+      color: white !important;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .services-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .services-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .services-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+      color: white !important;
+    }
+
+    .services-hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.9;
+      line-height: 1.6;
+      color: white !important;
+    }
+
+    .gallery-grid-section {
+      padding: 4rem 0 8rem;
+    }
+  </style>
+
+  <style is:global>
+    .gallery-page {
+      background: #f8fafc;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: #e2e8f0;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .skeleton-loader {
+      aspect-ratio: 1;
+      border-radius: 24px;
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .no-images {
+      text-align: center;
+      padding: 4rem;
+      background: white;
+      border-radius: 24px;
+      color: #64748b;
+      font-size: 1.2rem;
+    }
+
+    /* PAGINATION REDESIGN */
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 6rem;
+      flex-wrap: wrap;
+    }
+
+    .pagination-pill {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 0.5rem;
+      border-radius: 100px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+    }
+
+    .pag-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: none;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 50px;
+    }
+
+    .pag-btn:hover:not(:disabled) {
+      color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .pag-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .pag-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .page-numbers {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0 1rem;
+      border-left: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      margin: 0 0.5rem;
+    }
+
+    .num-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .num-btn:hover:not(.active) {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .num-btn.active {
+      background: #2563eb;
+      color: white !important;
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .num-dots {
+      color: #94a3b8;
+      padding: 0 0.5rem;
+    }
+
+    .results-count {
+      color: #64748b;
+      font-size: 0.95rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .pag-btn span {
+        display: none;
+      }
+      .pag-btn {
+        padding: 0.75rem;
+      }
+      .pagination-pill {
+        padding: 0.25rem;
+      }
+      .page-numbers {
+        padding: 0 0.5rem;
+        gap: 0;
+      }
+      .num-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    let currentPage = 1;
+    const pageSize = 25;
+    let pageHistory = [null]; // Stores the start document for each page
+    let isLastPage = false;
+
+    async function loadGalleryPage(pageNumber) {
+      const grid = document.getElementById('galleryGrid');
+      const noImages = document.getElementById('noImages');
+      const pagination = document.getElementById('pagination');
+      const prevBtn = document.getElementById('prevPage');
+      const nextBtn = document.getElementById('nextPage');
+
+      // Show skeletons
+      grid.innerHTML = Array(6).fill('<div class="skeleton-loader"></div>').join('');
+      noImages.style.display = 'none';
+      pagination.style.display = 'none';
+
+      try {
+        // Wait for Firebase
+        let attempts = 0;
+        while (!window.firebaseDB && attempts < 20) {
+          await new Promise(r => setTimeout(r, 250));
+          attempts++;
+        }
+
+        if (!window.firebaseDB) throw new Error("Firebase not initialized");
+
+        let query = window.firebaseDB.collection('gallery')
+          .limit(100); // Fetch more and sort locally to avoid index requirement
+
+        console.log("Fetching gallery images...");
+        const snapshot = await query.get();
+        const docs = snapshot.docs;
+        console.log(`Found ${docs.length} documents`);
+        if (docs.length > 0) {
+          console.log("Sample document data:", docs[0].data());
+        }
+
+        if (docs.length === 0) {
+          grid.innerHTML = '';
+          noImages.style.display = 'block';
+          return;
+        }
+
+        // Sort locally
+        const allImages = docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        allImages.sort((a, b) => {
+          const dateA = a.uploadedAt?.toDate?.() || new Date(a.uploadedAt || 0);
+          const dateB = b.uploadedAt?.toDate?.() || new Date(b.uploadedAt || 0);
+          return dateB - dateA;
+        });
+
+        // Simple client-side pagination for now since Firestore pagination needs specific setup
+        const start = (pageNumber - 1) * pageSize;
+        const end = start + pageSize;
+        const displayDocs = allImages.slice(start, end);
+        isLastPage = end >= allImages.length;
+        
+        // Render images
+        grid.innerHTML = '';
+        displayDocs.forEach(data => {
+          const item = document.createElement('div');
+          item.className = 'gallery-item'; // Removed 'reveal' to ensure immediate visibility
+          item.innerHTML = `<img src="${data.imageUrl}" alt="${data.fileName || 'Gallery Image'}" loading="lazy">`;
+          
+          item.onclick = () => {
+            if (window.openFullscreen) {
+              window.openFullscreen(item.querySelector('img'));
+            }
+          };
+          
+          grid.appendChild(item);
+        });
+
+        // Update UI
+        renderPageNumbers(allImages.length, pageNumber);
+        
+        const startIdx = start + 1;
+        const endIdx = Math.min(start + pageSize, allImages.length);
+        document.getElementById('resultsCount').textContent = `Showing ${startIdx} - ${endIdx} of ${allImages.length} results`;
+
+        prevBtn.disabled = pageNumber === 1;
+        nextBtn.disabled = isLastPage;
+        pagination.style.display = 'flex';
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+      } catch (err) {
+        console.error("Gallery load error:", err);
+        grid.innerHTML = `<p style="color: red; text-align: center; grid-column: 1/-1;">Error loading gallery: ${err.message}</p>`;
+      }
+    }
+
+    function renderPageNumbers(totalItems, currentPageNum) {
+      const container = document.getElementById('pageNumbers');
+      container.innerHTML = '';
+      
+      const totalPages = Math.ceil(totalItems / pageSize);
+      if (totalPages <= 1) return;
+
+      const range = 2; // How many numbers to show around current page
+      
+      for (let i = 1; i <= totalPages; i++) {
+        if (
+          i === 1 || 
+          i === totalPages || 
+          (i >= currentPageNum - range && i <= currentPageNum + range)
+        ) {
+          const btn = document.createElement('button');
+          btn.className = `num-btn ${i === currentPageNum ? 'active' : ''}`;
+          btn.textContent = i;
+          btn.onclick = () => {
+            if (i !== currentPageNum) {
+              currentPage = i;
+              loadGalleryPage(i);
+            }
+          };
+          container.appendChild(btn);
+        } else if (
+          i === currentPageNum - range - 1 || 
+          i === currentPageNum + range + 1
+        ) {
+          const dots = document.createElement('span');
+          dots.className = 'num-dots';
+          dots.textContent = '...';
+          container.appendChild(dots);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadGalleryPage(1);
+
+      document.getElementById('prevPage').addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          loadGalleryPage(currentPage);
+        }
+      });
+
+      document.getElementById('nextPage').addEventListener('click', () => {
+        if (!isLastPage) {
+          currentPage++;
+          loadGalleryPage(currentPage);
+        }
+      });
+    });
+  </script>
+</Layout>

@@ -66,6 +66,26 @@ function initializeFirebase() {
           add: async (data) => {
             return window.addDoc(window.collection(dbModular, collectionName), data);
           },
+          limit: (n) => ({
+            get: async () => {
+              const q = window.query(
+                window.collection(dbModular, collectionName),
+                window.limit(n)
+              );
+              const querySnapshot = await window.getDocs(q);
+              const docs = [];
+              querySnapshot.forEach(doc => {
+                docs.push({
+                  id: doc.id,
+                  data: () => doc.data()
+                });
+              });
+              return {
+                docs,
+                size: docs.length
+              };
+            }
+          }),
           orderBy: (field, direction) => ({
             get: async () => {
               const q = window.query(

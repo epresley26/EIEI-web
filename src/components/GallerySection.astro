@@ -57,6 +57,15 @@ const { program = "general", showFilters = false } = Astro.props;
       </div>
 
       <div class="gallery-dots" id="galleryDots"></div>
+
+      <div class="gallery-footer">
+        <a href="/gallery" class="view-full-btn">
+          View Full Gallery
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -312,6 +321,43 @@ const { program = "general", showFilters = false } = Astro.props;
     width: 24px;
     background: #2563eb;
     border-radius: 10px;
+  }
+
+  .gallery-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+  }
+
+  .view-full-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: #0f172a;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+  }
+
+  .view-full-btn:hover {
+    transform: translateY(-3px);
+    background: #2563eb;
+    box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
+  }
+
+  .view-full-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .view-full-btn:hover svg {
+    transform: translateX(5px);
   }
 </style>
 
