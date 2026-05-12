@@ -694,6 +694,77 @@ import GallerySection from "../components/GallerySection.astro";
     color: white;
     border-color: #2563eb;
   }
+
+  /* AWARDS SECTION */
+  .awards-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+  @media (max-width: 900px) {
+    .awards-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  .awards-column {
+    background: #fafafa;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  }
+  .awards-col-title {
+    font-size: 1.8rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin: 0;
+  }
+  .awards-col-subtitle {
+    font-size: 1rem;
+    color: var(--brand-blue);
+    font-weight: 600;
+    margin: 0.5rem 0 2rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .awards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .award-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .award-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .award-icon {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    flex-shrink: 0;
+    background: white;
+    border-radius: 50%;
+    padding: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  .award-content h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: #1e293b;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .award-content span {
+    font-size: 0.95rem;
+    color: #64748b;
+  }
 </style>
 
 <Layout title="EIEI Services">
@@ -1005,23 +1076,163 @@ import GallerySection from "../components/GallerySection.astro";
         </div>
       </div>
 
-      <div
-        class="card"
-        style="text-align: center; max-width: 600px; margin: 0 auto; padding: 3rem;"
-      >
-        <h3
-          style="font-size: 1.5rem; color: #2563eb; margin-bottom: 2rem; font-weight: 800;"
-        >
-          🏆 Major Awards
-        </h3>
-        <img
-          src="/images/eiei-cert.png"
-          alt="EIEI CCPN Certificate"
-          style="width: 100%; border-radius: 12px; margin-bottom: 1.5rem;"
-        />
-        <p style="font-weight: 600;">
-          Child Care Professionals Network (CCPN) Membership Certificate
-        </p>
+    </div>
+  </section>
+
+  <!-- RECOGNIZED EXCELLENCE (AWARDS) -->
+  <section id="awards" class="bg-white">
+    <div class="section-wrap">
+      <h2 class="section-title">Recognized Excellence</h2>
+      <p class="section-subtitle">
+        A legacy of leadership, impactful grants, and community-driven honors.
+      </p>
+
+      <div class="awards-layout">
+        <!-- Column 1: Dr. Essence Awards -->
+        <div class="awards-column">
+          <h3 class="awards-col-title">Dr. Essence Allen-Presley</h3>
+          <p class="awards-col-subtitle">Awards & Honors</p>
+          <div class="awards-list">
+            
+            <div class="award-item">
+              <img src="/images/awards/award-icon.png" alt="Award" class="award-icon" />
+              <div class="award-content">
+                <h4>Featured Speaker</h4>
+                <span>TEDxThirdWard Salon, June 2026</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/award-icon.png" alt="Award" class="award-icon" />
+              <div class="award-content">
+                <h4>Woman of Achievement Award</h4>
+                <span>DELCO Women’s Commission, 2025</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/award-icon.png" alt="Award" class="award-icon" />
+              <div class="award-content">
+                <h4>Foundations to Grow Early Intervention Impact Award</h4>
+                <span>2025</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/award-icon.png" alt="Award" class="award-icon" />
+              <div class="award-content">
+                <h4>Early Childhood Pioneer Award</h4>
+                <span>2023</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/award-icon.png" alt="Award" class="award-icon" />
+              <div class="award-content">
+                <h4>Voice of Children Award</h4>
+                <span>PennAEYC, 2019</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/award-icon.png" alt="Award" class="award-icon" />
+              <div class="award-content">
+                <h4>Essence of Woman Award</h4>
+                <span>Continental Societies, Inc., 2019</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/award-icon.png" alt="Award" class="award-icon" />
+              <div class="award-content">
+                <h4>Ball State University Excellence Award</h4>
+                <span>2019</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Column 2: EIEI Grants -->
+        <div class="awards-column">
+          <h3 class="awards-col-title">EIEI Impact</h3>
+          <p class="awards-col-subtitle">Grants & Recognitions</p>
+          <div class="awards-list">
+            
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>Pennsylvania PreK Counts</h4>
+                <span>Lead Agency</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>Elwyn Early Intervention</h4>
+                <span>Provider</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>ELRC 15 Rapid Response</h4>
+                <span>Provider</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>Professional Development/Coaching</h4>
+                <span>Partner</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>PHMC Career Development</h4>
+                <span>Grant Recipient</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>Good For You</h4>
+                <span>Grant Recipient</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>Lois B. Cohan’s Museums-to-Go Program</h4>
+                <span>First Up! (Participant)</span>
+              </div>
+            </div>
+
+            <div class="award-item">
+              <img src="/images/awards/grant-icon.png" alt="Grant" class="award-icon" />
+              <div class="award-content">
+                <h4>Eagles Autism Foundation</h4>
+                <span>Collaboration with Salus Drexel University</span>
+              </div>
+            </div>
+            
+            <div class="award-item">
+              <img src="/images/eiei-cert.png" alt="Certificate" class="award-icon" style="border-radius: 4px; border: 1px solid #e2e8f0; width: 60px; height: 60px;" />
+              <div class="award-content">
+                <h4>Child Care Professionals Network (CCPN)</h4>
+                <span>Membership Certificate</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
   </section>

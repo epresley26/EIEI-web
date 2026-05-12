@@ -529,7 +529,7 @@ import Layout from '../layouts/Layout.astro';
         if (!post) return;
 
         document.getElementById('postModalTitle').textContent = post.title || 'Post';
-        document.getElementById('postModalText').textContent = post.content || '';
+        document.getElementById('postModalText').innerHTML = post.content || '';
         document.getElementById('postModalTypeLabel').textContent = post.type || post.postType || 'Blog';
         
         const imgEl = document.getElementById('postModalImage');
