@@ -1979,17 +1979,26 @@ import "../styles/global.css";
             <div id="blog" class="tab-content">
               <div class="upload-section">
                 <h2>Blog & News Management</h2>
-                <button
-                  class="primary-btn"
-                  onclick="openAddBlogModal()"
-                  style="margin-bottom: 2rem;">+ Write New Post</button
-                >
+                <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;align-items:center;">
+                  <button class="primary-btn" onclick="openAddBlogModal()" style="margin:0;">+ Write New Post</button>
+                  <label for="wpXmlImportFile" class="primary-btn" style="margin:0;cursor:pointer;background:linear-gradient(135deg,#059669,#047857);">
+                    📥 Import WordPress XML
+                  </label>
+                  <input type="file" id="wpXmlImportFile" accept=".xml" style="display:none" onchange="importWordPressXML(this)">
+                </div>
+                <div id="wpImportProgress" style="display:none;margin-bottom:1rem;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:1rem;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                    <span id="wpImportStatus" style="color:#065f46;font-weight:600;">Importing...</span>
+                    <span id="wpImportCount" style="color:#059669;">0 / 0</span>
+                  </div>
+                  <div style="width:100%;height:8px;background:#d1fae5;border-radius:4px;overflow:hidden;">
+                    <div id="wpImportBar" style="height:100%;width:0%;background:linear-gradient(90deg,#059669,#10b981);transition:width 0.3s ease;border-radius:4px;"></div>
+                  </div>
+                </div>
                 <div class="success-message" id="blogSuccessMessage"></div>
                 <div class="error-message" id="blogErrorMessage"></div>
                 <div id="blogList" class="programs-list">
-                  <p style="grid-column: 1/-1; color: var(--text-muted);">
-                    Loading posts...
-                  </p>
+                  <p style="grid-column: 1/-1; color: var(--text-muted);">Loading posts...</p>
                 </div>
               </div>
             </div>
@@ -2508,21 +2517,31 @@ import "../styles/global.css";
                       <label for="postTitle">Title *</label>
                       <input type="text" id="postTitle" required />
                     </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                      <div class="form-group" style="margin-bottom:0;">
+                        <label for="postType">Type *</label>
+                        <select id="postType" required>
+                          <option value="">Select type...</option>
+                          <option value="Blog">Blog</option>
+                          <option value="News">News</option>
+                          <option value="Event">Event</option>
+                        </select>
+                      </div>
+                      <div class="form-group" style="margin-bottom:0;">
+                        <label for="postAuthor">Author</label>
+                        <input type="text" id="postAuthor" placeholder="e.g. EIEI Staff" />
+                      </div>
+                    </div>
                     <div class="form-group">
-                      <label for="postType">Type *</label>
-                      <select id="postType" required>
-                        <option value="">Select type...</option>
-                        <option value="Blog">Blog</option>
-                        <option value="News">News</option>
-                        <option value="Event">Event</option>
-                      </select>
+                      <label for="postPublishDate">Publish Date</label>
+                      <input type="datetime-local" id="postPublishDate" />
                     </div>
                     <div class="form-group">
                       <label for="postExcerpt">Excerpt *</label>
                       <textarea
                         id="postExcerpt"
                         required
-                        style="height: 100px;"
+                        style="height: 90px;"
                         placeholder="Short summary shown on cards"></textarea>
                     </div>
                     <div class="form-group">
@@ -4321,9 +4340,10 @@ import "../styles/global.css";
 
               function openAddBlogModal() {
                 editingPostId = null;
-                document.getElementById("blogModalTitle").textContent =
-                  "Write New Post";
+                document.getElementById("blogModalTitle").textContent = "Write New Post";
                 document.getElementById("blogForm").reset();
+                document.getElementById("postAuthor").value = "";
+                document.getElementById("postPublishDate").value = "";
                 if(quillEditor) {
                   quillEditor.root.innerHTML = "";
                 }
@@ -4334,16 +4354,25 @@ import "../styles/global.css";
                 const p = blogPosts.find((x) => x.id === id);
                 if (!p) return;
                 editingPostId = id;
-                document.getElementById("blogModalTitle").textContent =
-                  "Edit Post";
+                document.getElementById("blogModalTitle").textContent = "Edit Post";
                 document.getElementById("postTitle").value = p.title || "";
                 document.getElementById("postType").value = p.type || "Blog";
+                document.getElementById("postAuthor").value = p.author || "";
                 document.getElementById("postExcerpt").value = p.excerpt || "";
                 if(quillEditor) {
                   quillEditor.root.innerHTML = p.content || "";
                 }
-                document.getElementById("postImageUrl").value =
-                  p.imageUrl || "";
+                document.getElementById("postImageUrl").value = p.imageUrl || "";
+                // Populate publish date
+                if (p.publishDate) {
+                  try {
+                    const d = p.publishDate.toDate ? p.publishDate.toDate() : new Date(p.publishDate);
+                    const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+                    document.getElementById("postPublishDate").value = local.toISOString().slice(0, 16);
+                  } catch(e) { document.getElementById("postPublishDate").value = ""; }
+                } else {
+                  document.getElementById("postPublishDate").value = "";
+                }
                 document.getElementById("blogModal").classList.add("active");
               }
 
@@ -4366,19 +4395,22 @@ import "../styles/global.css";
                     "blogProgressPercent"
                   );
 
-                  const title = document
-                    .getElementById("postTitle")
-                    .value.trim();
+                  const title = document.getElementById("postTitle").value.trim();
                   const type = document.getElementById("postType").value.trim();
-                  const excerpt = document
-                    .getElementById("postExcerpt")
-                    .value.trim();
+                  const author = document.getElementById("postAuthor").value.trim() || "EIEI Staff";
+                  const publishDateRaw = document.getElementById("postPublishDate").value;
+                  const excerpt = document.getElementById("postExcerpt").value.trim();
                   const content = quillEditor ? quillEditor.root.innerHTML.trim() : "";
-                  let imageUrl =
-                    document.getElementById("postImageUrl").value.trim() ||
-                    null;
-                  const imageFile =
-                    document.getElementById("postImageFile").files[0];
+                  let imageUrl = document.getElementById("postImageUrl").value.trim() || null;
+                  const imageFile = document.getElementById("postImageFile").files[0];
+
+                  // Build publish date (use selected or now)
+                  let publishDate;
+                  if (publishDateRaw) {
+                    publishDate = new Date(publishDateRaw);
+                  } else {
+                    publishDate = new Date();
+                  }
 
                   if (!title || !type || !excerpt || !content) {
                     showBlogError("Please fill in all required fields.");
@@ -4430,17 +4462,18 @@ import "../styles/global.css";
                       await window.firebaseDB
                         .collection("posts")
                         .doc(editingPostId)
-                        .update({ title, type, excerpt, content, imageUrl });
+                        .update({ title, type, author, excerpt, content, imageUrl, publishDate: publishDate.toISOString() });
                       showBlogSuccess("Post updated!");
                     } else {
                       await window.firebaseDB.collection("posts").add({
                         title,
                         type,
+                        author,
                         excerpt,
                         content,
                         imageUrl,
-                        createdAt:
-                          firebase.firestore.FieldValue.serverTimestamp(),
+                        publishDate: publishDate.toISOString(),
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                       });
                       showBlogSuccess("Post published!");
                     }
@@ -4474,6 +4507,117 @@ import "../styles/global.css";
                   loadBlogPosts();
                 } catch (e) {
                   showBlogError("Error deleting post.");
+                }
+              }
+
+              // --- WORDPRESS XML IMPORTER ---
+              async function importWordPressXML(input) {
+                const file = input.files[0];
+                if (!file) return;
+                input.value = ''; // reset
+                const progressDiv = document.getElementById('wpImportProgress');
+                const statusEl = document.getElementById('wpImportStatus');
+                const countEl = document.getElementById('wpImportCount');
+                const barEl = document.getElementById('wpImportBar');
+                progressDiv.style.display = 'block';
+                statusEl.textContent = 'Parsing XML...';
+                barEl.style.width = '5%';
+
+                const authorMap = {
+                  'shirquillesande': 'Shirquille Sande',
+                  'eallen72321c9d0ed': 'Essence Allen-Presley',
+                  'Nikita': 'Kumari Nikita',
+                  'Basab': 'Basab Ghosh',
+                  'ohanateam1': 'EIEI Staff'
+                };
+
+                try {
+                  const xmlText = await file.text();
+                  const parser = new DOMParser();
+                  const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+                  const items = Array.from(xmlDoc.querySelectorAll('item'));
+                  const posts = [];
+
+                  for (const item of items) {
+                    const postType = item.querySelector('post_type')?.textContent;
+                    const status = item.querySelector('status')?.textContent;
+                    if (postType !== 'post') continue;
+                    if (!['publish', 'published'].includes(status)) continue;
+
+                    const titleRaw = item.querySelector('title')?.textContent || '';
+                    const title = titleRaw.replace(/<[^>]+>/g, '').trim();
+                    if (!title) continue;
+
+                    const contentRaw = item.querySelector('encoded:last-of-type,encoded')?.textContent ||
+                      item.getElementsByTagNameNS('http://purl.org/rss/1.0/modules/content/', 'encoded')[0]?.textContent || '';
+
+                    // Convert WP YouTube embed blocks to iframes
+                    let content = contentRaw
+                      .replace(/<!-- wp:embed\{[^}]*\"youtube\"[^}]*\} -->[\s\S]*?<div[^>]*>\s*(https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+))[\s\S]*?<!-- \/wp:embed -->/g,
+                        '<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/$2" frameborder="0" allowfullscreen></iframe></div>')
+                      .replace(/<!-- \/?wp:[^>]* -->/g, '')
+                      .trim();
+
+                    // Also handle plain YouTube URLs in content
+                    content = content.replace(
+                      /<div class="wp-block-embed__wrapper">\s*(https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+))\s*<\/div>/g,
+                      '<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/$2" frameborder="0" allowfullscreen></iframe></div>'
+                    );
+
+                    let excerpt = item.getElementsByTagNameNS('http://wordpress.org/export/1.2/excerpt/', 'encoded')[0]?.textContent || '';
+                    excerpt = excerpt.replace(/<[^>]+>/g, '').trim();
+                    if (!excerpt || excerpt.includes('function(')) {
+                      const plain = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+                      excerpt = plain.substring(0, 300) + (plain.length > 300 ? '...' : '');
+                    }
+
+                    const categories = Array.from(item.querySelectorAll('category[domain="category"]'))
+                      .map(c => c.textContent.trim());
+                    const typeMap = { 'Events': 'Event', 'News': 'News', 'Blogs': 'Blog' };
+                    let type = 'Blog';
+                    for (const cat of categories) {
+                      if (typeMap[cat]) { type = typeMap[cat]; break; }
+                    }
+
+                    const dateStr = item.querySelector('post_date_gmt')?.textContent || '';
+                    let publishDate = dateStr ? new Date(dateStr.replace(' ', 'T') + 'Z').toISOString() : new Date().toISOString();
+
+                    const authorLogin = item.getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', 'creator')[0]?.textContent || '';
+                    const author = authorMap[authorLogin] || authorLogin || 'EIEI Staff';
+
+                    posts.push({ title, content, excerpt, type, author, publishDate, imageUrl: null });
+                  }
+
+                  statusEl.textContent = `Uploading ${posts.length} posts to Firestore...`;
+                  barEl.style.width = '10%';
+
+                  let done = 0;
+                  const BATCH_SIZE = 10;
+                  for (let i = 0; i < posts.length; i += BATCH_SIZE) {
+                    const batch = posts.slice(i, i + BATCH_SIZE);
+                    await Promise.all(batch.map(p =>
+                      window.firebaseDB.collection('posts').add({
+                        ...p,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                      })
+                    ));
+                    done += batch.length;
+                    const pct = Math.round(10 + (done / posts.length) * 88);
+                    barEl.style.width = pct + '%';
+                    countEl.textContent = `${done} / ${posts.length}`;
+                    await new Promise(r => setTimeout(r, 200));
+                  }
+
+                  barEl.style.width = '100%';
+                  statusEl.textContent = `✓ Successfully imported ${done} posts!`;
+                  showBlogSuccess(`Imported ${done} posts from WordPress!`);
+                  setTimeout(() => { progressDiv.style.display = 'none'; }, 5000);
+                  loadBlogPosts();
+                } catch (err) {
+                  console.error('Import error:', err);
+                  statusEl.textContent = '✗ Import failed: ' + err.message;
+                  showBlogError('Import failed: ' + err.message);
                 }
               }
 

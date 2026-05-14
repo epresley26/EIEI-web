@@ -4,649 +4,645 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="EIEI Blog & News">
   <style is:global>
-    /* --- Premium Modern Styling for Blog --- */
-    
+    @import url('https://cdn.quilljs.com/1.3.7/quill.snow.css');
+
+    :root {
+      --blog-navy: #0f172a;
+      --blog-blue: #2563eb;
+      --blog-orange: #ea580c;
+      --blog-muted: #64748b;
+      --blog-border: #e2e8f0;
+      --blog-bg: #f8fafc;
+    }
+
+    /* ── HERO ─────────────────────────── */
     .blog-hero {
       position: relative;
-      width: 100%;
-      min-height: 40vh;
+      min-height: 38vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10rem 2rem 5rem;
+      padding: 9rem 2rem 4rem;
       background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      color: white;
+      color: #fff;
       text-align: center;
       overflow: hidden;
     }
-
     .blog-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.5;
-      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
-
-    .blog-hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
+    .blog-hero-content { position: relative; z-index: 2; max-width: 700px; }
     .blog-hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
       font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: 1rem;
       line-height: 1.1;
-      margin-bottom: 1.5rem;
-      letter-spacing: -1px;
+    }
+    .blog-hero p { font-size: 1.1rem; opacity: .85; line-height: 1.6; }
+    .blog-hero-rule {
+      width: 48px; height: 4px;
+      background: var(--blog-orange);
+      border-radius: 2px;
+      margin: 1.5rem auto 1.2rem;
     }
 
-    .blog-hero p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      opacity: 0.9;
-      line-height: 1.6;
+    /* ── FILTERS ──────────────────────── */
+    .filter-bar {
+      display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap;
+      padding: 2rem 2rem 0;
+      background: var(--blog-bg);
     }
-
-    /* FILTERS */
-    .filter-container {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      padding: 3rem 2rem;
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .type-filter-btn {
-      padding: 0.75rem 2rem;
-      border: 2px solid transparent;
+    .filter-btn {
+      padding: .55rem 1.4rem;
       border-radius: 50px;
-      background: white;
-      color: #475569;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border: 2px solid var(--blog-border);
+      background: #fff;
+      color: var(--blog-muted);
+      font-weight: 700; font-size: .88rem;
+      cursor: pointer; transition: all .25s ease;
+    }
+    .filter-btn:hover { border-color: var(--blog-blue); color: var(--blog-blue); }
+    .filter-btn.active {
+      background: var(--blog-blue); color: #fff;
+      border-color: var(--blog-blue);
+      box-shadow: 0 6px 20px rgba(37,99,235,.25);
     }
 
-    .type-filter-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
-      color: #2563eb;
-    }
-
-    .type-filter-btn.active {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
-      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-    }
-
-    /* BLOG GRID */
+    /* ── LAYOUT ───────────────────────── */
     .blog-layout {
-      padding: 5rem 2rem;
-      background: #f8fafc;
+      padding: 3rem 2rem 5rem;
+      background: var(--blog-bg);
       min-height: 50vh;
     }
+    .blog-inner { max-width: 1140px; margin: 0 auto; }
 
-    .blog-grid {
-      display: flex;
-      flex-direction: column;
-      max-width: 900px; /* Slimmer for editorial feel */
-      margin: 0 auto;
+    /* Empty / loading */
+    .blog-empty {
+      text-align: center; padding: 5rem 2rem;
+      color: var(--blog-muted); font-size: 1.1rem; font-weight: 600;
     }
 
-    .blog-card {
-      background: transparent;
-      border-radius: 0;
-      overflow: visible;
-      box-shadow: none;
-      border: none;
-      border-bottom: 1px solid #e2e8f0;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: row-reverse; /* Image on right */
-      align-items: center;
-      gap: 3rem;
-      padding: 4rem 0;
-      width: 100%;
-    }
-
-    .blog-card:last-child {
-      border-bottom: none;
-    }
-
-    .blog-card:hover {
-      transform: none;
-      box-shadow: none;
-    }
-
-    .blog-image-wrap {
-      width: 220px;
-      height: 220px;
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden;
-      border-radius: 24px; /* Soft rounding */
-      background: #f1f5f9;
-    }
-
-    .blog-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .blog-card:hover .blog-image {
-      transform: scale(1.05);
-    }
-
-    .blog-tag {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: rgba(255,255,255,0.95);
-      color: #2563eb;
-      padding: 0.3rem 0.8rem;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .blog-content {
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      justify-content: center;
-    }
-
-    .blog-date {
-      font-size: 0.85rem;
-      color: #64748b;
-      margin-bottom: 0.8rem;
-      font-weight: 500;
-    }
-
-    .blog-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: #0f172a;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .blog-excerpt {
-      color: #475569;
-      line-height: 1.6;
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-      flex-grow: 1;
-    }
-
-    .read-more-btn {
-      align-self: flex-start;
-      background: #f1f5f9;
-      color: #475569;
-      font-weight: 600;
-      font-size: 0.9rem;
-      border: none;
-      padding: 0.6rem 1.4rem;
-      border-radius: 100px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .read-more-btn:hover {
-      background: #e2e8f0;
-      color: #0f172a;
-      transform: translateY(-1px);
-    }
-
-    .loading-text {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 4rem;
-      font-size: 1.2rem;
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    /* FULL POST MODAL */
-    .post-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s ease;
-      padding: 2rem;
-    }
-
-    .post-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .post-modal-container {
-      background: white;
-      width: 100%;
-      max-width: 1100px;
-      height: 80vh;
-      border-radius: 24px;
-      overflow: hidden;
+    /* ── FEATURED POST ────────────────── */
+    .featured-post {
       display: grid;
-      grid-template-columns: 4fr 6fr;
-      transform: translateY(20px) scale(0.98);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-    }
-
-    .post-modal-overlay.active .post-modal-container {
-      transform: translateY(0) scale(1);
-    }
-
-    .post-modal-header {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background: #f1f5f9;
-      border-right: 1px solid #e2e8f0;
-    }
-
-    .post-modal-hero-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #f8fafc;
-    }
-
-    .post-modal-close {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: #f1f5f9;
-      color: #0f172a;
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      font-size: 1.5rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 8px 40px rgba(15,23,42,.08);
+      border: 1px solid var(--blog-border);
+      margin-bottom: 3rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      z-index: 10;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .featured-post:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(15,23,42,.13); }
+
+    .featured-img-wrap {
+      position: relative; overflow: hidden;
+      min-height: 360px; background: #e2e8f0;
+    }
+    .featured-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .6s ease;
+    }
+    .featured-post:hover .featured-img-wrap img { transform: scale(1.04); }
+    .featured-placeholder {
+      width: 100%; height: 100%; min-height: 360px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
     }
 
-    .post-modal-close:hover {
-      background: #e2e8f0;
-      transform: scale(1.05);
+    .featured-body {
+      padding: 3rem;
+      display: flex; flex-direction: column; justify-content: center;
     }
-
-    .post-modal-body {
-      padding: 3rem 4rem;
-      overflow-y: auto;
-      background: white;
-      height: 100%;
-      position: relative;
+    .post-type-badge {
+      display: inline-block;
+      padding: .3rem .85rem;
+      border-radius: 50px;
+      font-size: .72rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 1.2rem;
     }
+    .badge-blog { background: #dbeafe; color: #1d4ed8; }
+    .badge-news { background: #dcfce7; color: #166534; }
+    .badge-event { background: #fef3c7; color: #92400e; }
 
-    .post-modal-title {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: #0f172a;
-      line-height: 1.2;
-      margin-bottom: 1rem;
+    .featured-body h2 {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 800; color: var(--blog-navy);
+      line-height: 1.25; margin-bottom: 1rem; letter-spacing: -.02em;
     }
-
-    .post-modal-meta {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      margin-bottom: 2.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 1rem;
+    .featured-body p {
+      color: var(--blog-muted); line-height: 1.7; font-size: .97rem;
+      margin-bottom: 1.5rem; flex-grow: 1;
     }
-
-    .post-modal-type {
-      color: #2563eb;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .post-meta-row {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: .82rem; color: var(--blog-muted);
+      border-top: 1px solid var(--blog-border);
+      padding-top: 1rem; margin-top: auto;
+      flex-wrap: wrap;
     }
-
-    .post-modal-date {
-      color: #64748b;
-    }
-
-    .post-modal-share-btn {
+    .post-meta-row .author { font-weight: 700; color: var(--blog-navy); }
+    .read-link {
       margin-left: auto;
-      background: #f1f5f9;
-      color: #0f172a;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
+      color: var(--blog-blue); font-weight: 700; font-size: .88rem;
+      display: flex; align-items: center; gap: .3rem;
+      white-space: nowrap;
+    }
+
+    /* ── POST GRID ────────────────────── */
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.75rem;
+    }
+    .post-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--blog-border);
+      overflow: hidden;
       cursor: pointer;
+      transition: transform .3s ease, box-shadow .3s ease;
+      display: flex; flex-direction: column;
+    }
+    .post-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(15,23,42,.1);
+    }
+    .card-img-wrap {
+      height: 200px; overflow: hidden;
+      background: #e2e8f0; position: relative;
+    }
+    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+    .post-card:hover .card-img-wrap img { transform: scale(1.05); }
+    .card-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+    }
+    .card-body { padding: 1.4rem; display: flex; flex-direction: column; flex-grow: 1; }
+    .card-body h3 {
+      font-size: 1.1rem; font-weight: 700; color: var(--blog-navy);
+      line-height: 1.3; margin-bottom: .6rem; letter-spacing: -.01em;
+    }
+    .card-body p {
+      color: var(--blog-muted); font-size: .88rem; line-height: 1.6;
+      flex-grow: 1; margin-bottom: 1rem;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .card-footer {
+      border-top: 1px solid var(--blog-border);
+      padding-top: .85rem; margin-top: auto;
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .78rem; color: var(--blog-muted); flex-wrap: wrap;
+    }
+    .card-footer .author { font-weight: 700; color: var(--blog-navy); }
+
+    /* ── MODAL ────────────────────────── */
+    .post-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,.82);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      opacity: 0; visibility: hidden;
+      transition: all .35s ease;
+    }
+    .post-modal-overlay.active { opacity: 1; visibility: visible; }
+
+    .post-modal {
+      background: #fff;
+      width: 100%; max-width: 1080px;
+      max-height: 90vh;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex; flex-direction: row;
+      position: relative; /* for close button */
+      transform: translateY(24px) scale(.97);
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 40px 80px rgba(0,0,0,.3);
+    }
+    .post-modal-overlay.active .post-modal { transform: translateY(0) scale(1); }
+
+    /* LEFT — image panel */
+    .modal-image-panel {
+      flex: 0 0 38%;
+      position: relative;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      overflow: hidden;
+    }
+    .modal-image-panel img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      opacity: .9;
+    }
+    .modal-image-panel-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(15,23,42,.25) 0%, rgba(15,23,42,.6) 100%);
+    }
+    .modal-image-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem; min-height: 300px;
+    }
+    /* Close button — sits in content panel header row */
+    .modal-close-btn {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      width: 34px; height: 34px; border-radius: 50%;
+      font-size: .95rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .15s;
+      flex-shrink: 0;
+    }
+    .modal-close-btn:hover { background: #e2e8f0; transform: scale(1.1); }
+
+    .modal-top-row {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
+      justify-content: flex-end;
+      margin-bottom: .75rem;
     }
 
-    .post-modal-share-btn:hover {
-      background: #e2e8f0;
+    /* RIGHT — content panel */
+    .modal-body {
+      flex: 1;
+      padding: 2.5rem 2.5rem;
+      overflow-y: auto;
+      display: flex; flex-direction: column;
     }
 
-    .post-modal-content {
-      font-size: 1.15rem;
-      line-height: 1.8;
+    .modal-badge-row { display: flex; gap: .75rem; align-items: center; margin-bottom: .9rem; flex-wrap: wrap; }
+    .modal-title {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 900; color: var(--blog-navy);
+      line-height: 1.2; letter-spacing: -.03em;
+      margin-bottom: .9rem;
+    }
+    .modal-meta {
+      display: flex; gap: 1rem; align-items: center;
+      padding-bottom: 1.1rem; margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--blog-border);
+      font-size: .85rem; color: var(--blog-muted); flex-wrap: wrap;
+    }
+    .modal-meta .author { font-weight: 700; color: var(--blog-navy); }
+    .modal-share-btn {
+      margin-left: auto; background: var(--blog-bg);
+      border: 1px solid var(--blog-border);
+      padding: .4rem .9rem; border-radius: 8px;
+      font-size: .8rem; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: .4rem;
+      color: var(--blog-navy); transition: background .2s;
+    }
+    .modal-share-btn:hover { background: #e2e8f0; }
+
+    /* Quill content rendering — match editor formatting exactly */
+    .ql-editor-display {
+      /* Reset ql-editor chrome styles */
+      padding: 0 !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      font-size: .97rem;
+      line-height: 1.85;
       color: #334155;
-      white-space: pre-wrap;
       word-break: break-word;
+      flex: 1;
+      /* Quill uses these, so let them inherit */
+      font-family: inherit;
     }
-    
-    @media (max-width: 768px) {
-      .post-modal-overlay { padding: 1rem; }
-      .post-modal-container { 
-        display: flex; 
-        flex-direction: column; 
-        height: 90vh;
-      }
-      .post-modal-header { height: 250px; border-right: none; border-bottom: 1px solid #e2e8f0; }
-      .post-modal-body { padding: 2rem; }
-      .post-modal-title { font-size: 1.8rem; }
+    /* Quill alignment helpers */
+    .ql-editor-display .ql-align-center { text-align: center; }
+    .ql-editor-display .ql-align-right  { text-align: right; }
+    .ql-editor-display .ql-align-justify{ text-align: justify; }
+    /* Quill size helpers */
+    .ql-editor-display .ql-size-small { font-size: .75em; }
+    .ql-editor-display .ql-size-large { font-size: 1.5em; }
+    .ql-editor-display .ql-size-huge  { font-size: 2em; }
+    /* Indent levels */
+    .ql-editor-display .ql-indent-1 { padding-left: 3em; }
+    .ql-editor-display .ql-indent-2 { padding-left: 6em; }
+    .ql-editor-display .ql-indent-3 { padding-left: 9em; }
+    /* Code block */
+    .ql-editor-display pre.ql-syntax {
+      background: #1e293b; color: #e2e8f0;
+      border-radius: 8px; padding: 1rem 1.25rem;
+      font-family: 'Fira Mono', monospace;
+      font-size: .88rem; overflow-x: auto;
+      margin: 1rem 0;
+    }
+    /* Blockquote */
+    .ql-editor-display blockquote {
+      border-left: 4px solid var(--blog-blue);
+      padding-left: 1.2em; margin: 1.5em 0;
+      color: var(--blog-muted); font-style: italic;
+    }
+    /* Lists */
+    .ql-editor-display ol, .ql-editor-display ul {
+      padding-left: 1.5em; margin-bottom: 1.2em;
+    }
+    .ql-editor-display li { margin-bottom: .3em; }
+    /* Links */
+    .ql-editor-display a { color: var(--blog-blue); text-decoration: underline; }
+    /* Headings */
+    .ql-editor-display h1, .ql-editor-display h2 {
+      color: var(--blog-navy); font-weight: 800;
+      margin: 1.6em 0 .7em; letter-spacing: -.02em;
+    }
+    .ql-editor-display h3 {
+      color: var(--blog-navy); font-weight: 700;
+      margin: 1.4em 0 .6em;
+    }
+    /* Paragraphs */
+    .ql-editor-display p { margin-bottom: 1.2em; }
+    /* Images */
+    .ql-editor-display img { max-width: 100%; border-radius: 10px; margin: 1rem 0; }
+    /* Video embeds from WP migration */
+    .ql-editor-display .video-embed {
+      position: relative; padding-bottom: 56.25%;
+      height: 0; overflow: hidden; border-radius: 10px; margin: 1.5rem 0;
+    }
+    .ql-editor-display .video-embed iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
     }
 
-    @media (max-width: 991px) {
-      .blog-card {
-        flex-direction: column-reverse; /* Stack image on top for mobile */
-        gap: 2rem;
-        padding: 3rem 0;
-      }
-      .blog-image-wrap {
-        width: 100%;
-        height: 250px;
-      }
-      .blog-title {
-        font-size: 1.5rem;
-      }
+    /* ── RESPONSIVE ───────────────────── */
+    @media (max-width: 768px) {
+      .featured-post { grid-template-columns: 1fr; }
+      .featured-img-wrap { min-height: 220px; }
+      .featured-body { padding: 1.75rem; }
+      /* Stack modal on mobile */
+      .post-modal { flex-direction: column; max-height: 92vh; }
+      .modal-image-panel { flex: 0 0 200px; min-height: 200px; }
+      .modal-body { padding: 1.5rem; }
     }
   </style>
 
-  <!-- HERO SECTION -->
+  <!-- HERO -->
   <section class="blog-hero">
     <div class="blog-hero-content">
-      <h1>Helpful Articles & Stories</h1>
-      <p>Discover educational resources, inspiring stories, and guidance to support you on your early intervention journey. Stay updated with our latest insights.</p>
+      <h1>Stories, News & Events</h1>
+      <div class="blog-hero-rule"></div>
+      <p>Insights from EIEI — early intervention updates, community events, and expert guidance for families and educators.</p>
     </div>
   </section>
 
-  <!-- FILTER BAR -->
-  <div class="filter-container">
-    <button class="type-filter-btn active" onclick="filterByType('All')" data-type="All">All Posts</button>
-    <button class="type-filter-btn" onclick="filterByType('Blog')" data-type="Blog">Blog</button>
-    <button class="type-filter-btn" onclick="filterByType('News')" data-type="News">News</button>
-    <button class="type-filter-btn" onclick="filterByType('Event')" data-type="Event">Events</button>
+  <!-- FILTERS -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" onclick="filterPosts('All')" data-type="All">All Posts</button>
+    <button class="filter-btn" onclick="filterPosts('Blog')" data-type="Blog">Blog</button>
+    <button class="filter-btn" onclick="filterPosts('News')" data-type="News">News</button>
+    <button class="filter-btn" onclick="filterPosts('Event')" data-type="Event">Events</button>
   </div>
 
-  <!-- BLOG GRID -->
+  <!-- BLOG LAYOUT -->
   <div class="blog-layout">
-    <div class="blog-grid" id="blogCards">
-      <div class="loading-text">Loading the latest updates...</div>
+    <div class="blog-inner">
+      <div id="featuredWrap"></div>
+      <div class="post-grid" id="postGrid">
+        <div class="blog-empty">Loading the latest updates…</div>
+      </div>
     </div>
   </div>
 
-  <!-- POST MODAL TEMPLATE (Rendered via JS logic) -->
+  <!-- MODAL -->
   <div class="post-modal-overlay" id="postModalOverlay">
-    <div class="post-modal-container">
-      <div class="post-modal-header">
-        <img id="postModalImage" src="" alt="Post Header" class="post-modal-hero-image">
+    <div class="post-modal" id="postModal">
+
+      <!-- LEFT: image panel -->
+      <div class="modal-image-panel" id="modalImagePanel">
+        <img id="modalImg" src="" alt="" style="display:none">
+        <div class="modal-image-panel-overlay"></div>
+        <div class="modal-image-placeholder" id="modalImgPlaceholder">✏️</div>
       </div>
-      <div class="post-modal-body">
-        <button class="post-modal-close" onclick="closePostModal()">✕</button>
-        <h2 id="postModalTitle" class="post-modal-title"></h2>
-        <div class="post-modal-meta">
-          <span id="postModalTypeLabel" class="post-modal-type"></span>
-          <span id="postModalDateLabel" class="postModalDate"></span>
-          <button id="postModalShareBtn" class="post-modal-share-btn" onclick="sharePost()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-              <polyline points="16 6 12 2 8 6"></polyline>
-              <line x1="12" y1="2" x2="12" y2="15"></line>
-            </svg>
+
+      <!-- RIGHT: content panel -->
+      <div class="modal-body">
+        <!-- Close button always visible at top of content panel -->
+        <div class="modal-top-row">
+          <button class="modal-close-btn" onclick="closeModal()" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-badge-row">
+          <span id="modalBadge" class="post-type-badge"></span>
+        </div>
+        <h2 id="modalTitle" class="modal-title"></h2>
+        <div class="modal-meta">
+          <span class="author" id="modalAuthor"></span>
+          <span id="modalDate"></span>
+          <button class="modal-share-btn" id="shareBtn" onclick="sharePost()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             Share
           </button>
         </div>
-        <div id="postModalText" class="post-modal-content"></div>
+        <div class="modal-content-body ql-editor ql-editor-display" id="modalContent"></div>
       </div>
+
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
   <script is:inline>
-    document.addEventListener('DOMContentLoaded', () => {
-      waitForFirebase();
-    });
-
     let allPosts = [];
 
-    async function loadPosts() {
-      const container = document.getElementById('blogCards');
-      if (!window.firebaseDB || typeof window.firebaseDB.collection !== 'function') {
-        container.innerHTML = '<div class="loading-text">Firebase is not initialized. Check your connection.</div>';
-        return;
-      }
-
-      container.innerHTML = '<div class="loading-text">Loading posts...</div>';
-
+    // ── helpers ──
+    function badgeClass(type) {
+      return type === 'News' ? 'badge-news' : type === 'Event' ? 'badge-event' : 'badge-blog';
+    }
+    function formatDate(val) {
+      if (!val) return '';
       try {
-        let snap;
-        try {
-          snap = await window.firebaseDB.collection('posts').orderBy('createdAt', 'desc').get();
-        } catch (orderErr) {
-          snap = await window.firebaseDB.collection('posts').get();
-        }
-
-        let posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        posts = posts.sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
-        allPosts = posts;
-        renderPosts(posts);
-      } catch (e) {
-        container.innerHTML = '<div class="loading-text">Unable to load posts. Please try again later.</div>';
-      }
+        const d = val.toDate ? val.toDate() : new Date(val);
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch { return ''; }
+    }
+    function getDate(post) {
+      return post.publishDate || post.createdAt || null;
+    }
+    function toMillis(val) {
+      if (!val) return 0;
+      try {
+        if (typeof val.toMillis === 'function') return val.toMillis();
+        if (typeof val.toDate === 'function') return val.toDate().getTime();
+        return new Date(val).getTime() || 0;
+      } catch { return 0; }
+    }
+    function escHtml(s) {
+      return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    }
+    function placeholderEmoji(type) {
+      return type === 'Event' ? '🎉' : type === 'News' ? '📰' : '✏️';
     }
 
+    // ── render ──
     function renderPosts(posts) {
-      const container = document.getElementById('blogCards');
-      container.innerHTML = '';
+      const featWrap = document.getElementById('featuredWrap');
+      const grid = document.getElementById('postGrid');
+      featWrap.innerHTML = '';
+      grid.innerHTML = '';
 
       if (!posts.length) {
-        container.innerHTML = '<div class="loading-text">No posts available for this category yet. Check back soon!</div>';
+        grid.innerHTML = '<div class="blog-empty">No posts found for this category.</div>';
         return;
       }
 
-      posts.forEach((post, index) => {
-        setTimeout(() => {
-          const type = post.type || post.postType || 'Blog';
+      const [featured, ...rest] = posts;
 
-          let date = 'No date';
-          if (post.createdAt) {
-            try {
-              let dateObj = (typeof post.createdAt.toDate === 'function') ? post.createdAt.toDate() : new Date(post.createdAt);
-              date = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            } catch { date = ''; }
-          }
-
-          let imageUrl = post.imageUrl || '/images/slide1.jpg'; // Fallback to aesthetic image
-          if (imageUrl.includes('imgbb.com')) {
-            imageUrl = imageUrl.replace(/\/c\/\d+x\d+/, '/c/600x400');
-          }
-
-          const excerpt = post.excerpt || (post.content ? post.content.slice(0, 180) + '...' : 'Read more about this post...');
-
-          const card = document.createElement('div');
-          card.className = 'blog-card';
-          card.setAttribute('data-type', type);
-          card.innerHTML = `
-            <div class="blog-image-wrap">
-              <img src="${imageUrl}" class="blog-image" loading="lazy" onerror="this.src='/images/slide1.jpg'">
+      // featured
+      const ft = featured;
+      const ftType = ft.type || 'Blog';
+      const ftDate = formatDate(getDate(ft));
+      const ftExcerpt = escHtml((ft.excerpt || '').substring(0, 220));
+      featWrap.innerHTML = `
+        <div class="featured-post" onclick="openModal('${ft.id}')">
+          <div class="featured-img-wrap">
+            ${ft.imageUrl
+              ? `<img src="${escHtml(ft.imageUrl)}" alt="${escHtml(ft.title)}" onerror="this.parentElement.innerHTML='<div class=\\'featured-placeholder\\'>${placeholderEmoji(ftType)}</div>'">`
+              : `<div class="featured-placeholder">${placeholderEmoji(ftType)}</div>`}
+          </div>
+          <div class="featured-body">
+            <span class="post-type-badge ${badgeClass(ftType)}">${escHtml(ftType)}</span>
+            <h2>${escHtml(ft.title || 'Untitled')}</h2>
+            <p>${ftExcerpt}${(ft.excerpt||'').length > 220 ? '…' : ''}</p>
+            <div class="post-meta-row">
+              <span class="author">${escHtml(ft.author || 'EIEI Staff')}</span>
+              <span>${ftDate}</span>
+              <span class="read-link">Read full article →</span>
             </div>
-            <div class="blog-content">
-              <div class="blog-date">${date} • ${type}</div>
-              <h3 class="blog-title">${post.title || 'Untitled Post'}</h3>
-              <p class="blog-excerpt">${escapeHtml(excerpt)}</p>
-              <button class="read-more-btn" onclick="openBlogPostModal('${post.id}')">Read Article</button>
+          </div>
+        </div>`;
+
+      // grid cards
+      rest.forEach(post => {
+        const type = post.type || 'Blog';
+        const date = formatDate(getDate(post));
+        const excerpt = (post.excerpt || '').substring(0, 160);
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.onclick = () => openModal(post.id);
+        card.innerHTML = `
+          <div class="card-img-wrap">
+            ${post.imageUrl
+              ? `<img src="${escHtml(post.imageUrl)}" alt="${escHtml(post.title)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-placeholder\\'>${placeholderEmoji(type)}</div>'">`
+              : `<div class="card-placeholder">${placeholderEmoji(type)}</div>`}
+          </div>
+          <div class="card-body">
+            <span class="post-type-badge ${badgeClass(type)}" style="margin-bottom:.6rem;">${escHtml(type)}</span>
+            <h3>${escHtml(post.title || 'Untitled')}</h3>
+            <p>${escHtml(excerpt)}${excerpt.length < (post.excerpt||'').length ? '…' : ''}</p>
+            <div class="card-footer">
+              <span class="author">${escHtml(post.author || 'EIEI Staff')}</span>
+              <span>${date}</span>
             </div>
-          `;
-          container.appendChild(card);
-        }, index * 40);
+          </div>`;
+        grid.appendChild(card);
       });
     }
 
-    function filterByType(type) {
-      const buttons = document.querySelectorAll('.type-filter-btn');
-      buttons.forEach(btn => {
-        if (btn.getAttribute('data-type') === type) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
+    function filterPosts(type) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-type') === type);
       });
+      const filtered = type === 'All' ? allPosts : allPosts.filter(p => (p.type || 'Blog') === type);
+      renderPosts(filtered);
+    }
 
-      if (type === 'All') {
-        renderPosts(allPosts);
+    // ── modal ──
+    function openModal(id) {
+      const post = allPosts.find(p => p.id === id);
+      if (!post) return;
+      const type = post.type || 'Blog';
+
+      document.getElementById('modalTitle').textContent = post.title || '';
+      document.getElementById('modalContent').innerHTML = post.content || '';
+      document.getElementById('modalAuthor').textContent = post.author || 'EIEI Staff';
+      document.getElementById('modalDate').textContent = formatDate(getDate(post));
+
+      const badge = document.getElementById('modalBadge');
+      badge.textContent = type;
+      badge.className = 'post-type-badge ' + badgeClass(type);
+
+      const img = document.getElementById('modalImg');
+      const placeholder = document.getElementById('modalImgPlaceholder');
+      if (post.imageUrl) {
+        img.src = post.imageUrl;
+        img.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
       } else {
-        renderPosts(allPosts.filter(post => (post.type || post.postType || 'Blog') === type));
+        img.style.display = 'none';
+        if (placeholder) {
+          placeholder.style.display = 'flex';
+          placeholder.textContent = type === 'Event' ? '🎉' : type === 'News' ? '📰' : '✏️';
+        }
       }
+
+      document.getElementById('postModalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      const url = new URL(window.location);
+      url.searchParams.set('post', id);
+      window.history.pushState({}, '', url);
     }
 
-    async function openBlogPostModal(id) {
-      if (!window.firebaseDB) return;
-      try {
-        const docSnap = await window.firebaseDB.collection('posts').doc(id).get();
-        if (!docSnap || (typeof docSnap.exists === 'function' && !docSnap.exists())) return;
-        
-        const post = typeof docSnap.data === 'function' ? docSnap.data() : docSnap.data;
-        if (!post) return;
-
-        document.getElementById('postModalTitle').textContent = post.title || 'Post';
-        document.getElementById('postModalText').innerHTML = post.content || '';
-        document.getElementById('postModalTypeLabel').textContent = post.type || post.postType || 'Blog';
-        
-        const imgEl = document.getElementById('postModalImage');
-        if (post.imageUrl) {
-          imgEl.src = post.imageUrl;
-          imgEl.style.display = 'block';
-        } else {
-          imgEl.style.display = 'none';
-        }
-
-        let date = 'No date';
-        if (post.createdAt) {
-          try {
-            let dateObj = (typeof post.createdAt.toDate === 'function') ? post.createdAt.toDate() : new Date(post.createdAt);
-            date = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-          } catch {}
-        }
-        document.getElementById('postModalDateLabel').textContent = date;
-
-        const overlay = document.getElementById('postModalOverlay');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        // Update URL
-        const url = new URL(window.location);
-        url.searchParams.set('post', id);
-        window.history.pushState({}, '', url);
-
-      } catch (e) {
-        console.error('Modal error:', e);
-      }
-    }
-
-    function closePostModal() {
+    function closeModal() {
       document.getElementById('postModalOverlay').classList.remove('active');
-      document.body.style.overflow = 'auto';
-      
-      // Remove post from URL
+      document.body.style.overflow = '';
       const url = new URL(window.location);
       url.searchParams.delete('post');
       window.history.pushState({}, '', url);
     }
 
     function sharePost() {
-      const url = window.location.href;
-      navigator.clipboard.writeText(url).then(() => {
-        const btn = document.getElementById('postModalShareBtn');
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
-        setTimeout(() => {
-          btn.innerHTML = originalHTML;
-        }, 2000);
-      }).catch(err => {
-        console.error('Failed to copy link: ', err);
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const btn = document.getElementById('shareBtn');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ Copied!';
+        setTimeout(() => btn.innerHTML = orig, 2000);
       });
     }
 
-    // Tools
-    function toMillis(value) {
-      if (!value) return 0;
+    // ── load ──
+    async function loadPosts() {
       try {
-        if (typeof value.toMillis === 'function') return value.toMillis();
-        if (typeof value.toDate === 'function') return value.toDate().getTime();
-        if (value instanceof Date) return value.getTime();
-        return new Date(value).getTime() || 0;
-      } catch { return 0; }
+        // Fetch all — don't orderBy on publishDate (old docs may not have it)
+        const snap = await window.firebaseDB.collection('posts').get();
+        let posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        // Sort client-side: newest first, using publishDate then createdAt
+        posts.sort((a, b) => toMillis(getDate(b)) - toMillis(getDate(a)));
+        allPosts = posts;
+        renderPosts(posts);
+
+        const postId = new URLSearchParams(window.location.search).get('post');
+        if (postId) openModal(postId);
+      } catch (e) {
+        console.error('Blog load error:', e);
+        document.getElementById('postGrid').innerHTML =
+          '<div class="blog-empty">Unable to load posts. Please try again later.</div>';
+      }
     }
-    function escapeHtml(str) {
-      return String(str).replace(/[&<>"]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[s]));
-    }
+
     function waitForFirebase() {
       if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
         loadPosts();
-        
-        // Check if there's a post to load from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get('post');
-        if (postId) {
-          openBlogPostModal(postId);
-        }
-      } else { setTimeout(waitForFirebase, 100); }
+      } else {
+        setTimeout(waitForFirebase, 100);
+      }
     }
 
-    // Modal background click close
-    document.getElementById('postModalOverlay').addEventListener('click', function(e) {
-      if (e.target === this) closePostModal();
+    document.addEventListener('DOMContentLoaded', waitForFirebase);
+
+    document.getElementById('postModalOverlay').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeModal();
     });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closePostModal();
-    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
   </script>
 </Layout>

@@ -128,7 +128,7 @@ function initializeFirebase() {
   try {
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
+    const storage = (typeof firebase.storage === 'function') ? firebase.storage() : null;
 
     window.firebaseApp = firebase.app();
     window.firebaseDB = db;
@@ -140,7 +140,7 @@ function initializeFirebase() {
     } else {
       window.firebaseApp = firebase.app();
       window.firebaseDB = firebase.firestore();
-      window.firebaseStorage = firebase.storage();
+      window.firebaseStorage = (typeof firebase.storage === 'function') ? firebase.storage() : null;
       console.log('Firebase already initialized, using existing app');
     }
   }
