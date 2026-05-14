@@ -377,6 +377,25 @@ import Layout from '../layouts/Layout.astro';
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
     }
 
+    /* ── PAGINATION ─────────────────── */
+    .pagination {
+      display: flex; align-items: center; justify-content: center;
+      gap: .5rem; flex-wrap: wrap; padding: 2.5rem 1rem 1rem;
+    }
+    .page-btn {
+      min-width: 40px; height: 40px; padding: 0 .6rem;
+      border-radius: 10px; border: 2px solid var(--blog-border);
+      background: #fff; color: var(--blog-navy);
+      font-weight: 700; font-size: .88rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s ease;
+    }
+    .page-btn:hover:not(:disabled) { border-color: var(--blog-blue); color: var(--blog-blue); transform: translateY(-1px); }
+    .page-btn.active { background: var(--blog-blue); color: #fff; border-color: var(--blog-blue); box-shadow: 0 4px 14px rgba(37,99,235,.3); }
+    .page-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .page-ellipsis { color: var(--blog-muted); font-weight: 700; padding: 0 .3rem; font-size: .88rem; }
+    .page-info { text-align: center; font-size: .82rem; color: var(--blog-muted); padding-bottom: 1rem; }
+
     /* ── RESPONSIVE ───────────────────── */
     @media (max-width: 768px) {
       .featured-post { grid-template-columns: 1fr; }
@@ -413,6 +432,8 @@ import Layout from '../layouts/Layout.astro';
       <div class="post-grid" id="postGrid">
         <div class="blog-empty">Loading the latest updates…</div>
       </div>
+      <div class="pagination" id="pagination"></div>
+      <p class="page-info" id="pageInfo"></p>
     </div>
   </div>
 
@@ -452,7 +473,10 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script is:inline>
+    const PER_PAGE = 21;
     let allPosts = [];
+    let filteredPosts = [];
+    let currentPage = 1;
 
     // ── helpers ──
     function badgeClass(type) {
@@ -484,76 +508,142 @@ import Layout from '../layouts/Layout.astro';
     }
 
     // ── render ──
-    function renderPosts(posts) {
+    function renderPage(page) {
+      currentPage = page;
       const featWrap = document.getElementById('featuredWrap');
       const grid = document.getElementById('postGrid');
       featWrap.innerHTML = '';
       grid.innerHTML = '';
 
-      if (!posts.length) {
+      if (!filteredPosts.length) {
         grid.innerHTML = '<div class="blog-empty">No posts found for this category.</div>';
+        updatePagination();
         return;
       }
 
-      const [featured, ...rest] = posts;
+      const startIndex = (page - 1) * PER_PAGE;
+      const pagePosts = filteredPosts.slice(startIndex, startIndex + PER_PAGE);
 
-      // featured
-      const ft = featured;
-      const ftType = ft.type || 'Blog';
-      const ftDate = formatDate(getDate(ft));
-      const ftExcerpt = escHtml((ft.excerpt || '').substring(0, 220));
-      featWrap.innerHTML = `
-        <div class="featured-post" onclick="openModal('${ft.id}')">
-          <div class="featured-img-wrap">
-            ${ft.imageUrl
-              ? `<img src="${escHtml(ft.imageUrl)}" alt="${escHtml(ft.title)}" onerror="this.parentElement.innerHTML='<div class=\\'featured-placeholder\\'>${placeholderEmoji(ftType)}</div>'">`
-              : `<div class="featured-placeholder">${placeholderEmoji(ftType)}</div>`}
-          </div>
-          <div class="featured-body">
-            <span class="post-type-badge ${badgeClass(ftType)}">${escHtml(ftType)}</span>
-            <h2>${escHtml(ft.title || 'Untitled')}</h2>
-            <p>${ftExcerpt}${(ft.excerpt||'').length > 220 ? '…' : ''}</p>
-            <div class="post-meta-row">
-              <span class="author">${escHtml(ft.author || 'EIEI Staff')}</span>
-              <span>${ftDate}</span>
-              <span class="read-link">Read full article →</span>
+      // On first page, we show a featured post
+      if (page === 1) {
+        const [featured, ...rest] = pagePosts;
+        
+        // Render Featured
+        const ft = featured;
+        const ftType = ft.type || 'Blog';
+        const ftDate = formatDate(getDate(ft));
+        const ftExcerpt = escHtml((ft.excerpt || '').substring(0, 220));
+        featWrap.innerHTML = `
+          <div class="featured-post" onclick="openModal('${ft.id}')">
+            <div class="featured-img-wrap">
+              ${ft.imageUrl
+                ? `<img src="${escHtml(ft.imageUrl)}" alt="${escHtml(ft.title)}" onerror="this.parentElement.innerHTML='<div class=\\'featured-placeholder\\'>${placeholderEmoji(ftType)}</div>'">`
+                : `<div class="featured-placeholder">${placeholderEmoji(ftType)}</div>`}
             </div>
-          </div>
-        </div>`;
-
-      // grid cards
-      rest.forEach(post => {
-        const type = post.type || 'Blog';
-        const date = formatDate(getDate(post));
-        const excerpt = (post.excerpt || '').substring(0, 160);
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        card.onclick = () => openModal(post.id);
-        card.innerHTML = `
-          <div class="card-img-wrap">
-            ${post.imageUrl
-              ? `<img src="${escHtml(post.imageUrl)}" alt="${escHtml(post.title)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-placeholder\\'>${placeholderEmoji(type)}</div>'">`
-              : `<div class="card-placeholder">${placeholderEmoji(type)}</div>`}
-          </div>
-          <div class="card-body">
-            <span class="post-type-badge ${badgeClass(type)}" style="margin-bottom:.6rem;">${escHtml(type)}</span>
-            <h3>${escHtml(post.title || 'Untitled')}</h3>
-            <p>${escHtml(excerpt)}${excerpt.length < (post.excerpt||'').length ? '…' : ''}</p>
-            <div class="card-footer">
-              <span class="author">${escHtml(post.author || 'EIEI Staff')}</span>
-              <span>${date}</span>
+            <div class="featured-body">
+              <span class="post-type-badge ${badgeClass(ftType)}">${escHtml(ftType)}</span>
+              <h2>${escHtml(ft.title || 'Untitled')}</h2>
+              <p>${ftExcerpt}${(ft.excerpt||'').length > 220 ? '…' : ''}</p>
+              <div class="post-meta-row">
+                <span class="author">${escHtml(ft.author || 'EIEI Staff')}</span>
+                <span>${ftDate}</span>
+                <span class="read-link">Read full article →</span>
+              </div>
             </div>
           </div>`;
-        grid.appendChild(card);
-      });
+
+        // Render remaining as grid
+        rest.forEach(post => renderCard(post, grid));
+      } else {
+        // Subsequent pages: all are grid cards
+        pagePosts.forEach(post => renderCard(post, grid));
+      }
+
+      updatePagination();
+      
+      // Scroll back up to filters when page changes
+      if (page > 1 || startIndex > 0) {
+        document.getElementById('filterBar').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function renderCard(post, container) {
+      const type = post.type || 'Blog';
+      const date = formatDate(getDate(post));
+      const excerpt = (post.excerpt || '').substring(0, 160);
+      const card = document.createElement('div');
+      card.className = 'post-card';
+      card.onclick = () => openModal(post.id);
+      card.innerHTML = `
+        <div class="card-img-wrap">
+          ${post.imageUrl
+            ? `<img src="${escHtml(post.imageUrl)}" alt="${escHtml(post.title)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-placeholder\\'>${placeholderEmoji(type)}</div>'">`
+            : `<div class="card-placeholder">${placeholderEmoji(type)}</div>`}
+        </div>
+        <div class="card-body">
+          <span class="post-type-badge ${badgeClass(type)}" style="margin-bottom:.6rem;">${escHtml(type)}</span>
+          <h3>${escHtml(post.title || 'Untitled')}</h3>
+          <p>${escHtml(excerpt)}${excerpt.length < (post.excerpt||'').length ? '…' : ''}</p>
+          <div class="card-footer">
+            <span class="author">${escHtml(post.author || 'EIEI Staff')}</span>
+            <span>${date}</span>
+          </div>
+        </div>`;
+      container.appendChild(card);
+    }
+
+    function updatePagination() {
+      const pagination = document.getElementById('pagination');
+      const pageInfo = document.getElementById('pageInfo');
+      const totalPages = Math.ceil(filteredPosts.length / PER_PAGE);
+
+      pagination.innerHTML = '';
+      
+      if (filteredPosts.length === 0) {
+        pageInfo.textContent = '';
+        return;
+      }
+
+      pageInfo.textContent = `Showing page ${currentPage} of ${totalPages} (${filteredPosts.length} total posts)`;
+
+      if (totalPages <= 1) return;
+
+      // Previous button
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'page-btn';
+      prevBtn.textContent = '←';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => renderPage(currentPage - 1);
+      pagination.appendChild(prevBtn);
+
+      // Page numbers
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 4);
+      if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
+
+      for (let i = startPage; i <= endPage; i++) {
+        const btn = document.createElement('button');
+        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        btn.textContent = i;
+        btn.onclick = () => renderPage(i);
+        pagination.appendChild(btn);
+      }
+
+      // Next button
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'page-btn';
+      nextBtn.textContent = '→';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => renderPage(currentPage + 1);
+      pagination.appendChild(nextBtn);
     }
 
     function filterPosts(type) {
       document.querySelectorAll('.filter-btn').forEach(b => {
         b.classList.toggle('active', b.getAttribute('data-type') === type);
       });
-      const filtered = type === 'All' ? allPosts : allPosts.filter(p => (p.type || 'Blog') === type);
-      renderPosts(filtered);
+      filteredPosts = type === 'All' ? allPosts : allPosts.filter(p => (p.type || 'Blog') === type);
+      renderPage(1);
     }
 
     // ── modal ──
@@ -619,7 +709,8 @@ import Layout from '../layouts/Layout.astro';
         // Sort client-side: newest first, using publishDate then createdAt
         posts.sort((a, b) => toMillis(getDate(b)) - toMillis(getDate(a)));
         allPosts = posts;
-        renderPosts(posts);
+        filteredPosts = posts;
+        renderPage(1);
 
         const postId = new URLSearchParams(window.location.search).get('post');
         if (postId) openModal(postId);
