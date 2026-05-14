@@ -344,6 +344,26 @@ import Layout from '../layouts/Layout.astro';
       color: #64748b;
     }
 
+    .post-modal-share-btn {
+      margin-left: auto;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .post-modal-share-btn:hover {
+      background: #e2e8f0;
+    }
+
     .post-modal-content {
       font-size: 1.15rem;
       line-height: 1.8;
@@ -415,6 +435,14 @@ import Layout from '../layouts/Layout.astro';
         <div class="post-modal-meta">
           <span id="postModalTypeLabel" class="post-modal-type"></span>
           <span id="postModalDateLabel" class="postModalDate"></span>
+          <button id="postModalShareBtn" class="post-modal-share-btn" onclick="sharePost()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+              <polyline points="16 6 12 2 8 6"></polyline>
+              <line x1="12" y1="2" x2="12" y2="15"></line>
+            </svg>
+            Share
+          </button>
         </div>
         <div id="postModalText" class="post-modal-content"></div>
       </div>
@@ -553,6 +581,11 @@ import Layout from '../layouts/Layout.astro';
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
 
+        // Update URL
+        const url = new URL(window.location);
+        url.searchParams.set('post', id);
+        window.history.pushState({}, '', url);
+
       } catch (e) {
         console.error('Modal error:', e);
       }
@@ -561,6 +594,25 @@ import Layout from '../layouts/Layout.astro';
     function closePostModal() {
       document.getElementById('postModalOverlay').classList.remove('active');
       document.body.style.overflow = 'auto';
+      
+      // Remove post from URL
+      const url = new URL(window.location);
+      url.searchParams.delete('post');
+      window.history.pushState({}, '', url);
+    }
+
+    function sharePost() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('postModalShareBtn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy link: ', err);
+      });
     }
 
     // Tools
@@ -579,6 +631,13 @@ import Layout from '../layouts/Layout.astro';
     function waitForFirebase() {
       if (window.firebaseDB && typeof window.firebaseDB.collection === 'function') {
         loadPosts();
+        
+        // Check if there's a post to load from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('post');
+        if (postId) {
+          openBlogPostModal(postId);
+        }
       } else { setTimeout(waitForFirebase, 100); }
     }
 
