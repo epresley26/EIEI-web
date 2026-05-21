@@ -341,13 +341,13 @@
             <input type="number" id="appExperience" min="0" required>
           </div>
           <div class="form-group">
-            <label for="appResume">Resume/CV (URL) *</label>
-            <input type="text" id="appResume" placeholder="https://example.com/resume.pdf">
+            <label for="appResumeFile">Upload Resume/CV (PDF/DOC) *</label>
+            <input type="file" id="appResumeFile" accept=".pdf,.doc,.docx" required />
+            <small style="color: #999; display: block; margin-top: 0.5rem;">PDF or Word document (max 10MB)</small>
           </div>
           <div class="form-group">
-            <label for="appResumeFile">Or Upload Resume File</label>
-            <input type="file" id="appResumeFile" accept=".pdf,.doc,.docx" />
-            <small style="color: #999; display: block; margin-top: 0.5rem;">PDF or Word document (max 10MB)</small>
+            <label for="appResume">Portfolio/LinkedIn (URL)</label>
+            <input type="text" id="appResume" placeholder="https://example.com/portfolio">
           </div>
           <div class="form-group">
             <label for="appCoverLetter">Cover Letter</label>
@@ -471,9 +471,8 @@
       const resumeFile = document.getElementById('appResumeFile').files[0];
       const coverLetter = document.getElementById('appCoverLetter').value.trim();
 
-      // Require either URL or file
-      if (!name || !email || !phone || !experience || (!resumeUrl && !resumeFile)) {
-        alert('Please fill in all required fields and provide either a resume URL or upload a resume file.');
+      if (!name || !email || !phone || !experience || !resumeFile) {
+        alert('Please fill in all required fields and upload your resume file.');
         return;
       }
 

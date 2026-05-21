@@ -688,16 +688,16 @@ import TestimonialSection from "../components/TestimonialSection.astro";
             <input type="number" id="appExperience" min="0" required />
           </div>
           <div class="form-group">
-            <label for="appResume">Resume/CV (URL)</label>
+            <label for="appResumeFile">Upload Resume/CV (PDF/DOC) *</label>
+            <input type="file" id="appResumeFile" accept=".pdf,.doc,.docx" required />
+          </div>
+          <div class="form-group">
+            <label for="appResume">Portfolio/LinkedIn (URL)</label>
             <input
               type="text"
               id="appResume"
               placeholder="e.g. LinkedIn profile or portfolio link"
             />
-          </div>
-          <div class="form-group">
-            <label for="appResumeFile">Or Upload Resume File (PDF/DOC)</label>
-            <input type="file" id="appResumeFile" accept=".pdf,.doc,.docx" />
           </div>
           <div class="form-group">
             <label for="appCoverLetter">Cover Letter / Note</label>
@@ -870,10 +870,10 @@ import TestimonialSection from "../components/TestimonialSection.astro";
         !email ||
         !phone ||
         !experience ||
-        (!resumeUrl && !resumeFile)
+        !resumeFile
       ) {
         alert(
-          "Please fill in all required fields and provide either a resume URL or upload a resume file."
+          "Please fill in all required fields and upload your resume file."
         );
         return;
       }
