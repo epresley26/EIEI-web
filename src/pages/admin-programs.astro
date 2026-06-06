@@ -4290,6 +4290,17 @@ import "../styles/global.css";
               let blogPosts = [];
               let editingPostId = null;
 
+              function generateSlug(title) {
+                return (title || "")
+                  .toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .replace(/[^a-z0-9\s-]/g, "")
+                  .trim()
+                  .replace(/\s+/g, "-")
+                  .replace(/-+/g, "-");
+              }
+
               async function loadBlogPosts() {
                 const list = document.getElementById("blogList");
                 list.innerHTML =
@@ -4329,6 +4340,10 @@ import "../styles/global.css";
           <img src="${img}" alt="${p.title}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:1rem;" onerror="this.src='images/service1.svg'">
           <h3>${p.title}</h3>
           <p>${excerpt}</p>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.35rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #0f172a; display: inline-block; vertical-align: middle;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>${p.views || 0}</span> views
+          </div>
           <div class="program-actions">
             <button class="edit-btn" onclick="openEditBlogModal('${p.id}')">Edit</button>
             <button class="delete-btn" onclick="deleteBlogPost('${p.id}')">Delete</button>
@@ -4458,15 +4473,18 @@ import "../styles/global.css";
                     progressBar.style.width = "80%";
                     progressPercent.textContent = "80%";
 
+                    const slug = generateSlug(title);
+
                     if (editingPostId) {
                       await window.firebaseDB
                         .collection("posts")
                         .doc(editingPostId)
-                        .update({ title, type, author, excerpt, content, imageUrl, publishDate: publishDate.toISOString() });
+                        .update({ title, slug, type, author, excerpt, content, imageUrl, publishDate: publishDate.toISOString() });
                       showBlogSuccess("Post updated!");
                     } else {
                       await window.firebaseDB.collection("posts").add({
                         title,
+                        slug,
                         type,
                         author,
                         excerpt,
@@ -4586,7 +4604,8 @@ import "../styles/global.css";
                     const authorLogin = item.getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', 'creator')[0]?.textContent || '';
                     const author = authorMap[authorLogin] || authorLogin || 'EIEI Staff';
 
-                    posts.push({ title, content, excerpt, type, author, publishDate, imageUrl: null });
+                    const slug = generateSlug(title);
+                    posts.push({ title, slug, content, excerpt, type, author, publishDate, imageUrl: null });
                   }
 
                   statusEl.textContent = `Uploading ${posts.length} posts to Firestore...`;
