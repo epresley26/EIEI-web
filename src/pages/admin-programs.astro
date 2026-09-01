@@ -2509,6 +2509,7 @@ import "../styles/global.css";
               <div class="modal-content wide-modal-content">
                 <div class="modal-header">
                   <h2 id="blogModalTitle">Write New Post</h2>
+                  <span id="blogStatusBadge" style="display:none;font-size:0.75rem;font-weight:700;padding:0.25rem 0.6rem;border-radius:999px;margin-left:0.75rem;"></span>
                   <button class="close-btn" onclick="closeBlogModal()">×</button>
                 </div>
                 <form id="blogForm" class="blog-form-grid">
@@ -2534,7 +2535,8 @@ import "../styles/global.css";
                     </div>
                     <div class="form-group">
                       <label for="postPublishDate">Publish Date</label>
-                      <input type="datetime-local" id="postPublishDate" />
+                      <input type="datetime-local" id="postPublishDate" onchange="updateBlogPublishBtnLabel()" />
+                      <small style="color:var(--text-muted);">Set a future date/time to schedule this post — it stays hidden from the site until then.</small>
                     </div>
                     <div class="form-group">
                       <label for="postExcerpt">Excerpt *</label>
@@ -2572,6 +2574,7 @@ import "../styles/global.css";
                       </div>
                     </div>
                     <div class="button-group" style="justify-content: flex-end; margin-top: auto;">
+                      <button type="button" id="blogDraftBtn" class="secondary-btn" onclick="saveBlogPost('draft')">Save Draft</button>
                       <button type="submit" id="blogPublishBtn" class="primary-btn">Publish</button>
                       <button type="button" class="secondary-btn" onclick="closeBlogModal()">Cancel</button>
                     </div>
@@ -4321,6 +4324,30 @@ import "../styles/global.css";
                 }
               }
 
+              function getBlogPostStatus(p) {
+                if (p.status === "draft") {
+                  return { label: "Draft", bg: "#e5e7eb", color: "#374151" };
+                }
+                const pd = p.publishDate
+                  ? p.publishDate.toDate
+                    ? p.publishDate.toDate()
+                    : new Date(p.publishDate)
+                  : null;
+                if (pd && pd.getTime() > Date.now()) {
+                  const dateLabel = pd.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  });
+                  return {
+                    label: `Scheduled · ${dateLabel}`,
+                    bg: "#fef3c7",
+                    color: "#92400e",
+                  };
+                }
+                return { label: "Published", bg: "#d1fae5", color: "#065f46" };
+              }
+
               function renderBlogList() {
                 const list = document.getElementById("blogList");
                 list.innerHTML = "";
@@ -4336,14 +4363,12 @@ import "../styles/global.css";
                   const excerpt =
                     p.excerpt ||
                     (p.content ? p.content.slice(0, 120) + "…" : "");
+                  const status = getBlogPostStatus(p);
                   card.innerHTML = `
           <img src="${img}" alt="${p.title}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:1rem;" onerror="this.src='images/service1.svg'">
+          <span style="display:inline-block;font-size:0.75rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:999px;margin-bottom:0.5rem;background:${status.bg};color:${status.color};">${status.label}</span>
           <h3>${p.title}</h3>
           <p>${excerpt}</p>
-          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.35rem;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #0f172a; display: inline-block; vertical-align: middle;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span>${p.views || 0}</span> views
-          </div>
           <div class="program-actions">
             <button class="edit-btn" onclick="openEditBlogModal('${p.id}')">Edit</button>
             <button class="delete-btn" onclick="deleteBlogPost('${p.id}')">Delete</button>
@@ -4351,6 +4376,29 @@ import "../styles/global.css";
         `;
                   list.appendChild(card);
                 });
+              }
+
+              function updateBlogPublishBtnLabel() {
+                const val = document.getElementById("postPublishDate").value;
+                const btn = document.getElementById("blogPublishBtn");
+                if (val && new Date(val).getTime() > Date.now()) {
+                  btn.textContent = "Schedule Post";
+                } else {
+                  btn.textContent = "Publish";
+                }
+              }
+
+              function setBlogStatusBadge(p) {
+                const badge = document.getElementById("blogStatusBadge");
+                if (!p) {
+                  badge.style.display = "none";
+                  return;
+                }
+                const status = getBlogPostStatus(p);
+                badge.textContent = status.label;
+                badge.style.background = status.bg;
+                badge.style.color = status.color;
+                badge.style.display = "inline-block";
               }
 
               function openAddBlogModal() {
@@ -4362,6 +4410,8 @@ import "../styles/global.css";
                 if(quillEditor) {
                   quillEditor.root.innerHTML = "";
                 }
+                setBlogStatusBadge(null);
+                updateBlogPublishBtnLabel();
                 document.getElementById("blogModal").classList.add("active");
               }
 
@@ -4388,6 +4438,8 @@ import "../styles/global.css";
                 } else {
                   document.getElementById("postPublishDate").value = "";
                 }
+                setBlogStatusBadge(p);
+                updateBlogPublishBtnLabel();
                 document.getElementById("blogModal").classList.add("active");
               }
 
@@ -4398,9 +4450,14 @@ import "../styles/global.css";
 
               document
                 .getElementById("blogForm")
-                .addEventListener("submit", async (e) => {
+                .addEventListener("submit", (e) => {
                   e.preventDefault();
+                  saveBlogPost("published");
+                });
+
+              async function saveBlogPost(status) {
                   const publishBtn = document.getElementById("blogPublishBtn");
+                  const draftBtn = document.getElementById("blogDraftBtn");
                   const progressContainer = document.getElementById(
                     "blogProgressContainer"
                   );
@@ -4427,7 +4484,12 @@ import "../styles/global.css";
                     publishDate = new Date();
                   }
 
-                  if (!title || !type || !excerpt || !content) {
+                  if (status === "draft") {
+                    if (!title) {
+                      showBlogError("Please enter a title before saving a draft.");
+                      return;
+                    }
+                  } else if (!title || !type || !excerpt || !content) {
                     showBlogError("Please fill in all required fields.");
                     return;
                   }
@@ -4452,6 +4514,7 @@ import "../styles/global.css";
                       // Show progress bar
                       progressContainer.style.display = "block";
                       publishBtn.disabled = true;
+                      draftBtn.disabled = true;
                       progressBar.style.width = "30%";
                       progressPercent.textContent = "30%";
 
@@ -4465,11 +4528,14 @@ import "../styles/global.css";
                       showBlogError("Image upload failed: " + err.message);
                       progressContainer.style.display = "none";
                       publishBtn.disabled = false;
+                      draftBtn.disabled = false;
                       return;
                     }
                   }
 
                   try {
+                    publishBtn.disabled = true;
+                    draftBtn.disabled = true;
                     progressBar.style.width = "80%";
                     progressPercent.textContent = "80%";
 
@@ -4479,8 +4545,8 @@ import "../styles/global.css";
                       await window.firebaseDB
                         .collection("posts")
                         .doc(editingPostId)
-                        .update({ title, slug, type, author, excerpt, content, imageUrl, publishDate: publishDate.toISOString() });
-                      showBlogSuccess("Post updated!");
+                        .update({ title, slug, type, author, excerpt, content, imageUrl, status, publishDate: publishDate.toISOString() });
+                      showBlogSuccess(status === "draft" ? "Draft saved!" : "Post updated!");
                     } else {
                       await window.firebaseDB.collection("posts").add({
                         title,
@@ -4490,10 +4556,17 @@ import "../styles/global.css";
                         excerpt,
                         content,
                         imageUrl,
+                        status,
                         publishDate: publishDate.toISOString(),
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                       });
-                      showBlogSuccess("Post published!");
+                      showBlogSuccess(
+                        status === "draft"
+                          ? "Draft saved!"
+                          : publishDate.getTime() > Date.now()
+                          ? "Post scheduled!"
+                          : "Post published!"
+                      );
                     }
 
                     progressBar.style.width = "100%";
@@ -4505,6 +4578,7 @@ import "../styles/global.css";
                       progressBar.style.width = "0%";
                       progressPercent.textContent = "0%";
                       publishBtn.disabled = false;
+                      draftBtn.disabled = false;
                       loadBlogPosts();
                     }, 500);
                   } catch (e) {
@@ -4514,8 +4588,9 @@ import "../styles/global.css";
                     );
                     progressContainer.style.display = "none";
                     publishBtn.disabled = false;
+                    draftBtn.disabled = false;
                   }
-                });
+              }
 
               async function deleteBlogPost(id) {
                 if (!confirm("Delete this post?")) return;

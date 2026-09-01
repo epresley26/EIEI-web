@@ -461,7 +461,6 @@ import Layout from '../layouts/Layout.astro';
         <div class="modal-meta">
           <span class="author" id="modalAuthor"></span>
           <span id="modalDate"></span>
-          <span style="display: flex; align-items: center; gap: 0.35rem;"><svg class="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--blog-blue); display: inline-block; vertical-align: middle;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> <span id="modalViewsCount">0</span> views</span>
           <button class="modal-share-btn" id="shareBtn" onclick="sharePost()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             Share
@@ -560,10 +559,6 @@ import Layout from '../layouts/Layout.astro';
               <div class="post-meta-row">
                 <span class="author">${escHtml(ft.author || 'EIEI Staff')}</span>
                 <span>${ftDate}</span>
-                <span id="feat-views-${ft.id}" style="display: flex; align-items: center; gap: 0.35rem;">
-                  <svg class="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--blog-blue); display: inline-block; vertical-align: middle;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  <span>${ft.views || 0}</span> views
-                </span>
                 <span class="read-link">Read full article →</span>
               </div>
             </div>
@@ -605,10 +600,6 @@ import Layout from '../layouts/Layout.astro';
           <div class="card-footer">
             <span class="author">${escHtml(post.author || 'EIEI Staff')}</span>
             <span>${date}</span>
-            <span id="card-views-${post.id}" style="margin-left: auto; display: flex; align-items: center; gap: 0.35rem;">
-              <svg class="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--blog-blue); display: inline-block; vertical-align: middle;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>${post.views || 0}</span>
-            </span>
           </div>
         </div>`;
       container.appendChild(card);
@@ -679,27 +670,6 @@ import Layout from '../layouts/Layout.astro';
       document.getElementById('modalAuthor').textContent = post.author || 'EIEI Staff';
       document.getElementById('modalDate').textContent = formatDate(getDate(post));
 
-      // Update views count locally and in Firestore
-      post.views = (post.views || 0) + 1;
-      document.getElementById('modalViewsCount').textContent = post.views;
-
-      // Update the views count on the card in the list immediately
-      const eyeIconSvg = `<svg class="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--blog-blue); display: inline-block; vertical-align: middle;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
-      const cardViewsEl = document.getElementById(`card-views-${post.id}`);
-      if (cardViewsEl) {
-        cardViewsEl.innerHTML = `${eyeIconSvg} <span>${post.views}</span>`;
-      }
-      const featViewsEl = document.getElementById(`feat-views-${post.id}`);
-      if (featViewsEl) {
-        featViewsEl.innerHTML = `${eyeIconSvg} <span>${post.views}</span> views`;
-      }
-
-      if (window.firebaseDB && post.id) {
-        window.firebaseDB.collection('posts').doc(post.id).update({
-          views: firebase.firestore.FieldValue.increment(1)
-        }).catch(err => console.error("Error incrementing views:", err));
-      }
-
       const badge = document.getElementById('modalBadge');
       badge.textContent = type;
       badge.className = 'post-type-badge ' + badgeClass(type);
@@ -750,6 +720,14 @@ import Layout from '../layouts/Layout.astro';
         // Fetch all — don't orderBy on publishDate (old docs may not have it)
         const snap = await window.firebaseDB.collection('posts').get();
         let posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        // Hide drafts and posts scheduled for a future publish date
+        const now = Date.now();
+        posts = posts.filter(p => {
+          if (p.status === 'draft') return false;
+          const pd = getDate(p);
+          if (!pd) return true;
+          return toMillis(pd) <= now;
+        });
         // Sort client-side: newest first, using publishDate then createdAt
         posts.sort((a, b) => toMillis(getDate(b)) - toMillis(getDate(a)));
         allPosts = posts;
