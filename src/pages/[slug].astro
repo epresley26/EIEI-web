@@ -1,0 +1,156 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { firebaseConfig, generateSlug, badgeClass, getDateMillis, formatDate, plainExcerpt } from '../lib/postUtils';
+
+export async function getStaticPaths() {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const snap = await getDocs(collection(db, 'posts'));
+
+  const now = Date.now();
+  let posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  posts = posts.filter((p: any) => {
+    if (p.status === 'draft') return false;
+    const dt = getDateMillis(p);
+    if (!dt) return true;
+    return dt <= now;
+  });
+
+  const bySlug = new Map<string, any>();
+  for (const post of posts) {
+    const slug = (post as any).slug || generateSlug((post as any).title) || (post as any).id;
+    if (!slug) continue;
+    if (!bySlug.has(slug)) bySlug.set(slug, post);
+  }
+
+  return Array.from(bySlug.entries()).map(([slug, post]) => ({
+    params: { slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: any };
+const type = post.type || 'Blog';
+const dateMillis = getDateMillis(post);
+const description = plainExcerpt(post);
+---
+
+<Layout title={`${post.title || 'Blog Post'} | EIEI Blog`} description={description} image={post.imageUrl}>
+  <style is:global>
+    :root {
+      --blog-navy: #0f172a;
+      --blog-blue: #2563eb;
+      --blog-muted: #64748b;
+      --blog-border: #e2e8f0;
+      --blog-bg: #f8fafc;
+    }
+    .post-page-hero {
+      padding: 9rem 2rem 2rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #fff;
+    }
+    .post-page-hero-inner { max-width: 900px; margin: 0 auto; }
+    .post-page-back {
+      display: inline-flex; align-items: center; gap: .4rem;
+      color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: .88rem;
+      margin-bottom: 1.5rem;
+    }
+    .post-page-back:hover { color: #fff; }
+    .post-page-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900; letter-spacing: -1px; line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .post-type-badge {
+      display: inline-block; padding: .3rem .85rem; border-radius: 50px;
+      font-size: .72rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 1rem;
+    }
+    .badge-blog { background: #dbeafe; color: #1d4ed8; }
+    .badge-news { background: #dcfce7; color: #166534; }
+    .badge-event { background: #fef3c7; color: #92400e; }
+    .post-page-meta {
+      display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+      font-size: .9rem; color: #cbd5e1;
+    }
+    .post-page-meta .author { font-weight: 700; color: #fff; }
+
+    .post-page-body-wrap { background: var(--blog-bg); padding: 3rem 2rem 5rem; }
+    .post-page-body-inner { max-width: 900px; margin: 0 auto; }
+    .post-page-img-wrap {
+      border-radius: 16px; overflow: hidden; margin-bottom: 2.5rem;
+      box-shadow: 0 20px 50px rgba(15,23,42,.12);
+    }
+    .post-page-img-wrap img { width: 100%; display: block; max-height: 480px; object-fit: cover; }
+    .post-page-content {
+      background: #fff; border-radius: 16px; border: 1px solid var(--blog-border);
+      padding: 2.5rem;
+    }
+
+    /* Quill content rendering — matches blog.astro modal */
+    .ql-editor-display {
+      font-size: 1.02rem; line-height: 1.85; color: #334155; word-break: break-word;
+    }
+    .ql-editor-display .ql-align-center { text-align: center; }
+    .ql-editor-display .ql-align-right  { text-align: right; }
+    .ql-editor-display .ql-align-justify{ text-align: justify; }
+    .ql-editor-display .ql-size-small { font-size: .75em; }
+    .ql-editor-display .ql-size-large { font-size: 1.5em; }
+    .ql-editor-display .ql-size-huge  { font-size: 2em; }
+    .ql-editor-display .ql-indent-1 { padding-left: 3em; }
+    .ql-editor-display .ql-indent-2 { padding-left: 6em; }
+    .ql-editor-display .ql-indent-3 { padding-left: 9em; }
+    .ql-editor-display pre.ql-syntax {
+      background: #1e293b; color: #e2e8f0; border-radius: 8px;
+      padding: 1rem 1.25rem; font-family: 'Fira Mono', monospace;
+      font-size: .88rem; overflow-x: auto; margin: 1rem 0;
+    }
+    .ql-editor-display blockquote {
+      border-left: 4px solid var(--blog-blue); padding-left: 1.2em;
+      margin: 1.5em 0; color: var(--blog-muted); font-style: italic;
+    }
+    .ql-editor-display ol, .ql-editor-display ul { padding-left: 1.5em; margin-bottom: 1.2em; }
+    .ql-editor-display li { margin-bottom: .3em; }
+    .ql-editor-display a { color: var(--blog-blue); text-decoration: underline; }
+    .ql-editor-display h1, .ql-editor-display h2 {
+      color: var(--blog-navy); font-weight: 800; margin: 1.6em 0 .7em; letter-spacing: -.02em;
+    }
+    .ql-editor-display h3 { color: var(--blog-navy); font-weight: 700; margin: 1.4em 0 .6em; }
+    .ql-editor-display p { margin-bottom: 1.2em; }
+    .ql-editor-display img { max-width: 100%; border-radius: 10px; margin: 1rem 0; }
+    .ql-editor-display .video-embed {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: 10px; margin: 1.5rem 0;
+    }
+    .ql-editor-display .video-embed iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+    }
+  </style>
+
+  <section class="post-page-hero">
+    <div class="post-page-hero-inner">
+      <a class="post-page-back" href="/blog">← Back to Blog</a>
+      <span class={`post-type-badge ${badgeClass(type)}`}>{type}</span>
+      <h1>{post.title || 'Untitled'}</h1>
+      <div class="post-page-meta">
+        <span class="author">{post.author || 'EIEI Staff'}</span>
+        {dateMillis > 0 && <span>{formatDate(dateMillis)}</span>}
+      </div>
+    </div>
+  </section>
+
+  <div class="post-page-body-wrap">
+    <div class="post-page-body-inner">
+      {post.imageUrl && (
+        <div class="post-page-img-wrap">
+          <img src={post.imageUrl} alt={post.title || ''} />
+        </div>
+      )}
+      <div class="post-page-content">
+        <div class="ql-editor-display" set:html={post.content || ''} />
+      </div>
+    </div>
+  </div>
+</Layout>
