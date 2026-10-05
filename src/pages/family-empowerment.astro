@@ -347,7 +347,90 @@ import GallerySection from '../components/GallerySection.astro';
       background: #ea580c;
     }
 
+    /* TIGGIE PARTNERSHIP */
+    .tiggie-section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 4rem 3rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      margin-bottom: 5rem;
+    }
+
+    .tiggie-intro {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 4rem;
+    }
+
+    .tiggie-intro h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .tiggie-intro p {
+      font-size: 1.15rem;
+      color: #475569;
+      line-height: 1.8;
+    }
+
+    .tiggie-why { align-items: start; margin-bottom: 2rem; }
+
+    .tiggie-tips {
+      background: #f8fafc;
+      border-left: 4px solid #f97316;
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .tiggie-tips h4 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 1rem;
+    }
+
+    .tiggie-tips ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .tiggie-tips li {
+      color: #475569;
+      line-height: 1.6;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .tiggie-tips li:last-child { border-bottom: none; }
+    .tiggie-tips strong { color: #1e293b; }
+
+    .tiggie-steps {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-bottom: 2rem;
+    }
+    .tiggie-steps .icon-wrapper { font-weight: 800; color: #f97316; }
+
+    .tiggie-cta { text-align: center; }
+    .tiggie-cta .cta-button { margin-top: 0; }
+
+    .tiggie-cta p {
+      color: #64748b;
+      margin-top: 1.5rem;
+    }
+
+    .tiggie-cta p a {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
     @media (max-width: 900px) {
+      .tiggie-section { padding: 2.5rem 1.25rem; }
+      .tiggie-intro h2 { font-size: 1.9rem; }
       .dual-pane { grid-template-columns: 1fr; }
       .service-hero { padding-top: 8rem; min-height: 40vh; }
       .cta-banner { padding: 3rem 1.5rem; }
@@ -414,6 +497,60 @@ import GallerySection from '../components/GallerySection.astro';
           <p>Immediate communication relays linking you directly to senior educational diagnosticians, developmental psychologists, and aggressive legal advocates.</p>
         </div>
       </div>
+
+      <section class="tiggie-section" id="tiggie">
+        <div class="tiggie-intro">
+          <span class="badge">New Partnership</span>
+          <h2>EIEI × Tiggie Parent Empowerment Program</h2>
+          <p>Development doesn't stop when a therapy session ends. Through our partnership with Tiggie, a digital platform for everyday learning and play, families can keep supporting their child's growth at home.</p>
+        </div>
+
+        <div class="dual-pane tiggie-why">
+          <div>
+            <h3>Why Everyday Play Matters</h3>
+            <p>A child's first years are when the brain grows fastest. Skills like language, attention, movement, and emotional regulation develop through repeated, everyday moments: naming objects at the grocery store, taking turns during a game, or singing a song during bath time.</p>
+            <p>That is why early intervention works best when parents are active partners. Short, regular practice at home builds on what your child learns with their providers. It also turns routines you already have into chances to learn.</p>
+          </div>
+          <div class="tiggie-tips">
+            <h4>Simple ways to turn routines into learning</h4>
+            <ul>
+              <li><strong>Narrate your day.</strong> Describe what you're doing ("I'm washing the red cup") to build vocabulary.</li>
+              <li><strong>Offer choices.</strong> "Apple or banana?" encourages communication and independence.</li>
+              <li><strong>Follow their lead.</strong> Join the play your child picks. Engagement grows when interest is high.</li>
+              <li><strong>Keep it short and frequent.</strong> A few minutes several times a day beats one long session.</li>
+              <li><strong>Celebrate small wins.</strong> Specific praise ("You stacked three blocks!") builds confidence.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h2>Getting Started with Tiggie</h2>
+          <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Three simple steps to bring guided learning and play into your home.</p>
+        </div>
+
+        <div class="services-grid tiggie-steps">
+          <div class="service-box">
+            <div class="icon-wrapper">1</div>
+            <h4>Open the EIEI Partner Link</h4>
+            <p>Use EIEI's dedicated partner link below so your account is connected to our program.</p>
+          </div>
+          <div class="service-box">
+            <div class="icon-wrapper">2</div>
+            <h4>Create Your Account</h4>
+            <p>Follow the on-screen steps to sign up. The Tiggie × EIEI Quick Guide walks you through each step. Ask your EIEI team for a copy.</p>
+          </div>
+          <div class="service-box">
+            <div class="icon-wrapper">3</div>
+            <h4>Play &amp; Learn Together</h4>
+            <p>Explore activities with your child, then share what you notice with your EIEI provider so you can keep supporting their progress together.</p>
+          </div>
+        </div>
+
+        <div class="tiggie-cta">
+          <a href="https://partner.tiggiekids.com/p/eiei~01KVVVSA4K8NQTDEXWEDNHJNJ1" target="_blank" rel="noopener" class="cta-button">Get Started with Tiggie &rarr;</a>
+          <p>Questions about the app? Contact Tiggie at <a href="mailto:support@tiggie.com">support@tiggie.com</a>.</p>
+        </div>
+      </section>
 
       <div class="section-header" style="margin-top: 8rem;">
         <h2>The Central Resource Vault</h2>
